@@ -1,0 +1,752 @@
+"use client";
+import React, { useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Settings,
+  History,
+  ArrowRight,
+  Loader2,
+  Star,
+  MessageSquare,
+  Bell,
+  Heart,
+  Calendar,
+  RefreshCw,
+  X,
+  MapPin,
+  CalendarDays,
+  Timer,
+} from "lucide-react";
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const modalBackdrop = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { duration: 0.3 } },
+  exit: { opacity: 0, transition: { duration: 0.2 } },
+};
+
+const modalContent = {
+  hidden: { opacity: 0, scale: 0.95, y: 10 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+  },
+  exit: { opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.2 } },
+};
+
+const EmptyState = ({ icon: Icon, title, action }) => (
+  <motion.div
+    variants={fadeUp}
+    className="flex flex-col items-center justify-center py-20 px-6 text-center bg-white rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)]"
+  >
+    {Icon && (
+      <div className="w-16 h-16 bg-[#F5F5F4] rounded-2xl flex items-center justify-center mb-6 border border-[#DCDCDA] shrink-0">
+        <Icon className="w-8 h-8 text-[#4A4E51]" />
+      </div>
+    )}
+    <h3 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
+      {title}
+    </h3>
+    <p className="text-[#4A4E51] font-medium mb-8 max-w-sm leading-relaxed">
+      When you interact with venues or book services, they will appear right
+      here.
+    </p>
+    {action && <div className="mt-2 w-full flex justify-center">{action}</div>}
+  </motion.div>
+);
+
+const ConfirmModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  description,
+  confirmText,
+  cancelText,
+  isDestructive,
+}) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          variants={modalBackdrop}
+          initial="hidden"
+          animate="show"
+          exit="exit"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-md"
+          onClick={onClose}
+        >
+          <motion.div
+            variants={modalContent}
+            className="bg-white w-[420px] max-w-full rounded-[2rem] p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col text-center outline-none"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6 shrink-0 ${
+                isDestructive
+                  ? "bg-[#DC2626]/10 text-[#DC2626]"
+                  : "bg-[#F5F5F4] text-[#121415]"
+              }`}
+            >
+              <X className="w-6 h-6" />
+            </div>
+            <h2 className="text-2xl font-semibold text-[#121415] mb-3 tracking-tight break-words">
+              {title}
+            </h2>
+            <p className="text-sm text-[#4A4E51] font-medium mb-8 leading-relaxed break-words">
+              {description}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 w-full">
+              <button
+                onClick={onClose}
+                className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"
+              >
+                <span className="truncate block">{cancelText}</span>
+              </button>
+              <button
+                onClick={onConfirm}
+                className={`flex-1 h-12 px-6 rounded-full font-medium text-sm text-white transition-all shadow-[0_8px_20px_rgba(0,0,0,0.08)] active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] ${
+                  isDestructive
+                    ? "bg-[#DC2626] hover:bg-[#B91C1C] shadow-[0_8px_20px_rgba(220,38,38,0.2)]"
+                    : "bg-[#121415] hover:bg-[#1E2123]"
+                }`}
+              >
+                <span className="truncate block">{confirmText}</span>
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const Skeleton = ({ className }) => (
+  <div className={`animate-pulse bg-[#DCDCDA]/40 ${className}`}></div>
+);
+
+// Интерактивный компонент KarmaTooltip с поповером
+const KarmaTooltip = ({ karma }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative inline-block">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}
+        className="group bg-[#F5F5F4] px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-[#DCDCDA] shadow-sm shrink-0 h-8 cursor-pointer hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+      >
+        <Star className="w-3.5 h-3.5 fill-[#8A2532] text-[#8A2532] shrink-0 group-hover:rotate-[72deg] group-hover:scale-110 transition-transform duration-500" />
+        <span className="text-xs uppercase tracking-widest font-bold text-[#121415] whitespace-nowrap">
+          Karma: {karma}%
+        </span>
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 5, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 5, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="absolute right-0 mt-2 w-64 p-4 bg-white rounded-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.15)] border border-[#DCDCDA] z-50 text-left"
+          >
+            <p className="text-xs font-semibold text-[#121415] mb-1">
+              Reliability Score ({karma}%)
+            </p>
+            <p className="text-[11px] text-[#4A4E51] font-medium leading-relaxed">
+              Your karma reflects your attendance history. Staying above 90%
+              ensures you can book without mandatory prepayments.
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const TABS = ["upcoming", "favorites", "history"];
+const DEFAULT_TAB = "upcoming";
+
+export default function ClientAccount() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const tabParam = searchParams.get("tab");
+  const activeTab = TABS.includes(tabParam) ? tabParam : DEFAULT_TAB;
+
+  const handleTabChange = (tabId) => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (tabId === DEFAULT_TAB) {
+          next.delete("tab");
+        } else {
+          next.set("tab", tabId);
+        }
+        return next;
+      },
+      { replace: true }
+    );
+  };
+
+  const user = { name: "Guest", role: "user", id: "guest" };
+  const clientKarma = 95;
+  const isLoading = false;
+
+  const upcomingBookings = [
+    {
+      id: "1",
+      date: "24.07",
+      time: "14:30",
+      venueName: "Chop-Chop Barbershop",
+      serviceName: "Haircut & Beard",
+      masterName: "Ali Ahmedov",
+      status: "upcoming",
+    },
+  ];
+
+  const favoriteVenues = [
+    {
+      id: "1",
+      name: "Chop-Chop Barbershop",
+      imageUrl:
+        "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=500&q=80",
+      rating: 4.9,
+      category: "Barbershop",
+      address: "Amir Temur St, 42",
+    },
+  ];
+
+  const historyList = [
+    {
+      id: "1",
+      date: "27.07",
+      serviceName: "Haircut & Beard",
+      venueName: "Chop-Chop Barbershop",
+      masterName: "Ali Ahmedov",
+      isReviewed: false,
+      rating: 0,
+    },
+    {
+      id: "2",
+      date: "28.07",
+      serviceName: "Haircut & Beard",
+      venueName: "Chop-Chop Barbershop",
+      masterName: "Ali Ahmedov",
+      isReviewed: true,
+      rating: 5,
+    },
+  ];
+
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+  const isReviewSubmitting = false;
+
+  useLockBodyScroll(cancelModalOpen || rescheduleModalOpen || reviewModalOpen);
+
+  return (
+    <div className="min-h-screen bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white flex flex-col">
+      {/* Review Modal */}
+      <AnimatePresence>
+        {reviewModalOpen && (
+          <motion.div
+            variants={modalBackdrop}
+            initial="hidden"
+            animate="show"
+            exit="exit"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-md"
+            onClick={() => setReviewModalOpen(false)}
+            role="dialog"
+            aria-modal="true"
+          >
+            <motion.div
+              variants={modalContent}
+              className="bg-white w-[480px] max-w-full rounded-[2rem] p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col relative outline-none"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="text-2xl font-semibold text-[#121415] mb-2 tracking-tight">
+                Rate your visit
+              </h2>
+              <p className="text-sm text-[#4A4E51] font-medium mb-8">
+                Venue:{" "}
+                <strong className="text-[#121415]">Chop-Chop Barbershop</strong>
+              </p>
+
+              <div className="flex gap-2 justify-center mb-8 shrink-0">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    aria-label={`Rate ${star} stars`}
+                    onClick={() => setRating(star)}
+                    onMouseEnter={() => setHoverRating(star)}
+                    onMouseLeave={() => setHoverRating(0)}
+                    className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full p-1 transition-transform active:scale-90"
+                  >
+                    <Star
+                      className={`w-10 h-10 transition-colors duration-300 ${
+                        star <= (hoverRating || rating)
+                          ? "fill-[#8A2532] text-[#8A2532]"
+                          : "fill-[#F5F5F4] text-[#DCDCDA] hover:text-[#8A2532]/50"
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+
+              <textarea
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                placeholder="What did you love? (optional)"
+                className="w-full h-32 max-h-64 p-4 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl text-sm font-medium outline-none focus:bg-white focus:border-[#121415] focus:ring-4 focus:ring-[#121415]/5 resize-y mb-8 transition-all duration-300 text-[#121415] placeholder:text-[#4A4E51]"
+              />
+
+              <div className="flex flex-col sm:flex-row gap-3 w-full">
+                <button
+                  disabled={isReviewSubmitting}
+                  onClick={() => setReviewModalOpen(false)}
+                  className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"
+                >
+                  <span className="truncate block">Cancel</span>
+                </button>
+                <button
+                  disabled={isReviewSubmitting}
+                  onClick={() => setReviewModalOpen(false)}
+                  className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-full font-medium text-sm hover:bg-[#731E29] shadow-[0_8px_20px_rgba(138,37,50,0.2)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"
+                >
+                  {isReviewSubmitting ? (
+                    <Loader2 className="w-5 h-5 animate-spin shrink-0" />
+                  ) : (
+                    <span className="truncate block">Submit Review</span>
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Reschedule Modal */}
+      <AnimatePresence>
+        {rescheduleModalOpen && (
+          <motion.div
+            variants={modalBackdrop}
+            initial="hidden"
+            animate="show"
+            exit="exit"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-md"
+            onClick={() => setRescheduleModalOpen(false)}
+            role="dialog"
+            aria-modal="true"
+          >
+            <motion.div
+              variants={modalContent}
+              className="bg-white w-[480px] max-w-full rounded-[2rem] p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col relative outline-none"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-14 h-14 rounded-full bg-[#F5F5F4] text-[#121415] flex items-center justify-center mb-6 border border-[#DCDCDA] shrink-0">
+                <CalendarDays className="w-6 h-6" />
+              </div>
+              <h2 className="text-2xl font-semibold text-[#121415] mb-2 tracking-tight">
+                Reschedule booking
+              </h2>
+              <p className="text-sm text-[#4A4E51] font-medium mb-8 leading-relaxed">
+                Plans changed? Pick a new time for your visit to maintain your
+                reliability rating.
+              </p>
+
+              <button className="w-full bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl p-5 mb-8 text-center cursor-pointer hover:bg-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] group">
+                <span className="font-semibold text-[#121415] block mb-1.5 group-hover:text-[#8A2532] transition-colors">
+                  Select new time
+                </span>
+                <span className="text-xs text-[#4A4E51] uppercase tracking-widest font-bold block">
+                  Available: Tomorrow, 14:00, 16:30
+                </span>
+              </button>
+
+              <div className="flex flex-col sm:flex-row gap-3 w-full">
+                <button
+                  onClick={() => setRescheduleModalOpen(false)}
+                  className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"
+                >
+                  <span className="truncate block">Cancel</span>
+                </button>
+                <button
+                  onClick={() => setRescheduleModalOpen(false)}
+                  className="flex-1 h-12 px-6 bg-[#121415] text-white rounded-full font-medium text-sm hover:bg-[#1E2123] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"
+                >
+                  <span className="truncate block">Confirm</span>
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Header */}
+      <header className="fixed top-0 inset-x-0 z-40 bg-[#ECECEA]/90 backdrop-blur-xl border-b border-[#DCDCDA]">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-4 w-full">
+          <div className="flex items-center gap-4 min-w-0">
+            <button
+              aria-label="Profile Initials"
+              className="w-10 h-10 rounded-full bg-[#121415] text-white flex items-center justify-center font-semibold text-lg shadow-sm hover:bg-[#1E2123] transition-colors shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+            >
+              {(user?.name ?? "G").substring(0, 1).toUpperCase()}
+            </button>
+            <div className="flex-col hidden sm:flex min-w-0">
+              <h1 className="text-sm font-semibold text-[#121415] tracking-tight truncate">
+                Hello, {user?.name ? user.name.split(" ")[0] : "Guest"}
+              </h1>
+              <span className="text-xs text-[#4A4E51] font-medium truncate">
+                Manage your bookings
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <KarmaTooltip karma={clientKarma} />
+            <div className="w-px h-6 bg-[#DCDCDA] hidden sm:block mx-1 shrink-0" />
+            <button
+              aria-label="Notifications"
+              className="p-2.5 text-[#4A4E51] hover:text-[#121415] rounded-full hover:bg-white border border-transparent hover:border-[#DCDCDA] transition-all active:scale-95 hidden sm:block shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+            >
+              <Bell className="w-5 h-5" />
+            </button>
+            <Link
+              href="/settings"
+              aria-label="Settings"
+              className="p-2.5 text-[#4A4E51] hover:text-[#121415] rounded-full hover:bg-white border border-transparent hover:border-[#DCDCDA] transition-all active:scale-95 shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+            >
+              <Settings className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 pt-20 w-full">
+        {/* Filter Tabs */}
+        <div className="bg-[#ECECEA] border-b border-[#DCDCDA] sticky top-20 z-30">
+          <div className="max-w-7xl mx-auto px-6 w-full flex items-center justify-center gap-3 overflow-x-auto no-scrollbar py-4">
+            {[
+              {
+                id: "upcoming",
+                label: "My Bookings",
+                count: upcomingBookings.length,
+              },
+              { id: "favorites", label: "Favorites" },
+              { id: "history", label: "History" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => handleTabChange(tab.id)}
+                className={`shrink-0 h-11 px-5 rounded-full text-sm font-medium transition-all duration-300 border active:scale-95 flex items-center gap-2 whitespace-nowrap min-w-[100px] justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 ${
+                  activeTab === tab.id
+                    ? "bg-[#121415] text-white border-[#121415]"
+                    : "bg-white text-[#121415] border-[#DCDCDA] hover:bg-[#F5F5F4]"
+                }`}
+              >
+                <span>{tab.label}</span>
+                {tab.count > 0 && (
+                  <span
+                    className={`w-5 h-5 flex items-center justify-center shrink-0 rounded-full text-[10px] font-bold ${
+                      activeTab === tab.id
+                        ? "bg-white/20 text-white"
+                        : "bg-[#F5F5F4] text-[#121415]"
+                    }`}
+                  >
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto px-6 py-8">
+          <AnimatePresence mode="wait">
+            {/* Upcoming Tab */}
+            {activeTab === "upcoming" && (
+              <motion.div
+                key="upcoming"
+                variants={staggerContainer}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                className="space-y-6"
+              >
+                {isLoading ? (
+                  <Skeleton className="w-full h-[240px] rounded-[2rem]" />
+                ) : upcomingBookings.length > 0 ? (
+                  upcomingBookings.map((booking) => (
+                    <motion.div
+                      key={booking.id}
+                      variants={fadeUp}
+                      className="bg-white rounded-[2rem] p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] relative overflow-hidden flex flex-col w-full group transition-all"
+                    >
+                      <div className="absolute top-0 left-0 w-1.5 h-full bg-[#8A2532]" />
+
+                      <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 gap-4 min-w-0">
+                        <div className="min-w-0 flex-1 pr-4">
+                          <div className="bg-[#8A2532]/10 px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 w-max mb-4">
+                            <div className="w-2 h-2 rounded-full bg-[#8A2532] animate-pulse shrink-0" />
+                            <span className="text-[10px] uppercase tracking-widest font-bold text-[#8A2532]">
+                              Active Booking
+                            </span>
+                          </div>
+                          <h2 className="text-3xl font-semibold text-[#121415] tracking-tight">
+                            {booking.date} at {booking.time}
+                          </h2>
+                          <p className="text-[#4A4E51] font-medium mt-2 flex items-center gap-1.5">
+                            <MapPin className="w-4 h-4 text-[#8A2532] shrink-0" />
+                            <span>{booking.venueName}</span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="bg-[#F5F5F4] rounded-2xl p-5 mb-8 border border-[#DCDCDA] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          <p className="font-semibold text-[#121415] leading-snug">
+                            {booking.serviceName}
+                          </p>
+                          <p className="text-sm text-[#4A4E51] font-medium mt-1">
+                            Professional: {booking.masterName}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2 bg-[#E8EFE9] px-3 py-1.5 rounded-lg border border-[#4A6B53]/20 w-max shrink-0">
+                          <Timer className="w-4 h-4 text-[#4A6B53] shrink-0" />
+                          <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A6B53]">
+                            Confirmed
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <Link
+                          href="/ticket"
+                          className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-full font-medium text-sm shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:bg-[#731E29] transition-all flex items-center justify-center gap-2 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2"
+                        >
+                          <span>LiveTracker</span>
+                          <ArrowRight className="w-4 h-4 shrink-0" />
+                        </Link>
+
+                        <div className="flex gap-4 sm:w-1/2">
+                          <button
+                            onClick={() => setRescheduleModalOpen(true)}
+                            className="flex-1 h-12 px-4 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm hover:bg-[#F5F5F4] rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                          >
+                            <RefreshCw className="w-4 h-4 text-[#4A4E51] shrink-0" />
+                            <span>Reschedule</span>
+                          </button>
+                          <button
+                            onClick={() => setCancelModalOpen(true)}
+                            className="w-12 h-12 shrink-0 bg-white border border-[#DCDCDA] text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5 hover:border-[#DC2626]/30 rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]"
+                            title="Cancel"
+                          >
+                            <X className="w-5 h-5 shrink-0" />
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))
+                ) : (
+                  <EmptyState
+                    icon={Calendar}
+                    title="No active bookings"
+                    action={
+                      <Link
+                        href="/search"
+                        className="h-12 px-8 bg-[#121415] text-white rounded-full font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                      >
+                        Find a venue
+                      </Link>
+                    }
+                  />
+                )}
+              </motion.div>
+            )}
+
+            {/* Favorites Tab */}
+            {activeTab === "favorites" && (
+              <motion.div
+                key="favorites"
+                variants={staggerContainer}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                className="space-y-4"
+              >
+                {isLoading ? (
+                  <Skeleton className="w-full h-[120px] rounded-[2rem]" />
+                ) : favoriteVenues.length > 0 ? (
+                  favoriteVenues.map((venue) => (
+                    <motion.div key={venue.id} variants={fadeUp}>
+                      <Link
+                        href="/booking"
+                        className="w-full text-left bg-white rounded-[2rem] p-5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center gap-5 active:scale-[0.98] group block outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                      >
+                        <div className="w-20 h-20 rounded-2xl overflow-hidden shrink-0">
+                          <img
+                            src={venue.imageUrl}
+                            alt={venue.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-[#121415] text-lg tracking-tight truncate group-hover:text-[#8A2532] transition-colors">
+                            {venue.name}
+                          </h3>
+                          <div className="flex items-center gap-2 text-sm text-[#4A4E51] font-medium mt-1 mb-2">
+                            <Star className="w-3.5 h-3.5 fill-[#8A2532] text-[#8A2532] shrink-0" />
+                            <span className="font-semibold text-[#121415] shrink-0">
+                              {venue.rating}
+                            </span>
+                            <span className="shrink-0">•</span>
+                            <span className="truncate">{venue.category}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 text-xs font-medium text-[#4A4E51]">
+                            <MapPin className="w-3.5 h-3.5 text-[#8A2532] shrink-0" />
+                            <span className="truncate">{venue.address}</span>
+                          </div>
+                        </div>
+                        <div className="w-10 h-10 rounded-full bg-[#F5F5F4] flex items-center justify-center shrink-0 group-hover:bg-[#121415] transition-colors hidden sm:flex">
+                          <ArrowRight className="w-4 h-4 text-[#4A4E51] group-hover:text-white transition-colors" />
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))
+                ) : (
+                  <EmptyState
+                    icon={Heart}
+                    title="No favorites yet"
+                    action={
+                      <Link
+                        href="/search"
+                        className="h-12 px-8 bg-[#121415] text-white rounded-full font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                      >
+                        Explore directory
+                      </Link>
+                    }
+                  />
+                )}
+              </motion.div>
+            )}
+
+            {/* History Tab */}
+            {activeTab === "history" && (
+              <motion.div
+                key="history"
+                variants={staggerContainer}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                className="space-y-4"
+              >
+                {isLoading ? (
+                  <Skeleton className="w-full h-[150px] rounded-[2rem]" />
+                ) : historyList.length > 0 ? (
+                  historyList.map((booking) => (
+                    <motion.div
+                      key={String(booking.id)}
+                      variants={fadeUp}
+                      className="bg-white rounded-[2rem] p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.08)] transition-all"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A4E51] bg-[#F5F5F4] px-2.5 py-1 rounded-lg border border-[#DCDCDA]">
+                            {booking.date}
+                          </span>
+                        </div>
+                        <h3 className="font-semibold text-[#121415] text-xl tracking-tight leading-snug">
+                          {booking.serviceName}
+                        </h3>
+                        <p className="text-sm text-[#4A4E51] font-medium mt-1 leading-relaxed">
+                          {booking.venueName} • Pro: {booking.masterName}
+                        </p>
+
+                        <div className="mt-5">
+                          {booking.isReviewed ? (
+                            <div className="inline-flex items-center gap-1.5 bg-[#F5F5F4] border border-[#DCDCDA] px-3 py-1.5 rounded-lg">
+                              <Star className="w-3.5 h-3.5 fill-[#8A2532] text-[#8A2532] shrink-0" />
+                              <span className="text-[10px] uppercase tracking-widest font-bold text-[#121415]">
+                                Rated {booking.rating}
+                              </span>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => setReviewModalOpen(true)}
+                              className="text-sm font-medium text-[#121415] hover:text-[#8A2532] flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:underline rounded"
+                            >
+                              <MessageSquare className="w-4 h-4 text-[#4A4E51] shrink-0" />
+                              <span>Leave a review</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="w-full sm:w-auto shrink-0 border-t border-[#DCDCDA] sm:border-0 pt-5 sm:pt-0">
+                        <Link
+                          href="/booking"
+                          className="w-full sm:w-auto h-12 px-6 bg-white hover:bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 active:scale-95 min-w-[140px] outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                        >
+                          <RefreshCw className="w-4 h-4 text-[#4A4E51] shrink-0" />
+                          <span>Book again</span>
+                        </Link>
+                      </div>
+                    </motion.div>
+                  ))
+                ) : (
+                  <EmptyState icon={History} title="No history found" />
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </main>
+
+      {/* Confirmation Modal */}
+      <ConfirmModal
+        isOpen={cancelModalOpen}
+        onClose={() => setCancelModalOpen(false)}
+        onConfirm={() => setCancelModalOpen(false)}
+        title="Cancel appointment?"
+        description="Canceling in advance helps professionals manage their time and boosts your reliability karma."
+        confirmText="Yes, cancel"
+        cancelText="Keep booking"
+        isDestructive={true}
+      />
+    </div>
+  );
+}

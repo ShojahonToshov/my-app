@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans:
+    "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-display:
+    "Inter Display", "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+
+  /* Brand & Conversion (Intentional signal: Primary CTAs & Live Status) */
+  --color-brand: #8a2532;
+  --color-brand-hover: #731e29;
+
+  /* Success (Sage Green) */
+  --color-success: #4a6b53;
+  --color-success-bg: #e8efe9;
+
+  /* Danger / Destructive */
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+
+  /* Neutral & Slate Surfaces */
+  --color-slate-dark: #121415;
+  --color-slate-dark-hover: #1e2123;
+  --color-slate-text: #4a4e51;
+  --color-slate-muted: #787d80;
+  --color-slate-faint: #8b9194;
+
+  /* Backgrounds */
+  --color-bg-base: #ececea;
+  --color-bg-light: #f5f5f4;
+  --color-bg-card: #ffffff;
+
+  /* Borders & Dividers */
+  --color-border: #dcdcda;
+  --color-border-hover: #a1a1a1;
+  --color-border-dark: #24282b;
+}
+
+/* Base custom styles & scrollbar utilities */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+html,
+body {
+  background-color: var(--color-bg-base);
+  color: var(--color-slate-dark);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  cursor: pointer;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+@media (hover: none) {
+  * {
+    /* Убирает грязную серую/синюю заливку при тапе на iOS и Android */
+    -webkit-tap-highlight-color: transparent;
+  }
+}
