@@ -8,9 +8,9 @@ import {
   Eye,
   EyeOff,
   User,
-  ArrowLeft,
   ArrowRight,
 } from "lucide-react";
+import { useSignup } from "./hooks/useAuth";
 import ElaraLogo from "@/components/ElaraLogo";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -38,30 +38,17 @@ const GoogleIcon = ({ className }) => (
 );
 
 export default function Signup() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || 'customer';
+  const { name, setName, login, setLogin, password, setPassword, showPassword, setShowPassword, isSubmitting, handleSubmit, errors } = useSignup(role, "/admin");
 
   const title = role === 'business' ? 'Create your business account' : 'Create your customer account';
   const subtitle = role === 'business' 
     ? 'Sign up to start managing your business with Elara.' 
     : 'Sign up to start booking premium services with Elara.';
 
-  const handleSignup = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    // Имитация API запроса
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-  };
-
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-[#ECECEA] font-sans selection:bg-[#8A2532] selection:text-white overflow-x-hidden text-[#121415] p-4 sm:p-6 relative">
-
-
       <Card className="w-full max-w-[480px] p-6 sm:p-8 md:p-12 flex flex-col">
         <div className="flex justify-center mb-8 shrink-0">
           <ElaraLogo />
@@ -75,7 +62,7 @@ export default function Signup() {
         </p>
 
         <form
-          onSubmit={handleSignup}
+          onSubmit={handleSubmit}
           className="space-y-5 flex flex-col w-full"
         >
           <Input
@@ -84,7 +71,10 @@ export default function Signup() {
             type="text"
             icon={User}
             placeholder="Jane Doe"
-            disabled={isLoading}
+            disabled={isSubmitting}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            error={errors.name}
           />
 
           <Input
@@ -93,7 +83,10 @@ export default function Signup() {
             type="email"
             icon={Mail}
             placeholder="name@example.com"
-            disabled={isLoading}
+            disabled={isSubmitting}
+            value={login}
+            onChange={(e) => setLogin(e.target.value)}
+            error={errors.login}
           />
 
           <Input
@@ -104,15 +97,18 @@ export default function Signup() {
             actionIcon={showPassword ? EyeOff : Eye}
             onActionClick={() => setShowPassword(!showPassword)}
             placeholder="••••••••"
-            disabled={isLoading}
+            disabled={isSubmitting}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={errors.password}
           />
 
           <Button
             type="submit"
             variant="primary"
             className="w-full mt-2 flex-row-reverse"
-            icon={!isLoading ? ArrowRight : undefined}
-            isLoading={isLoading}
+            icon={!isSubmitting ? ArrowRight : undefined}
+            isLoading={isSubmitting}
           >
             Create account
           </Button>

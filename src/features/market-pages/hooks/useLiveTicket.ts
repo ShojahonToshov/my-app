@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import BookingService from "../api/services/BookingService";
 import { queryKeys } from "../lib/queryKeys";
-import { Booking } from '@superqueue/types';
+import { Booking } from '@/types';
 
 interface ExtendedBooking extends Booking {
   time?: string;

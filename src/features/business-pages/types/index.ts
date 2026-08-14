@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import type { Booking as BaseBooking } from "@superqueue/types";
+import type { Booking as BaseBooking } from "@/types";
 
 export interface Master {
   id: string;

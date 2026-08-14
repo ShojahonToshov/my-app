@@ -8,7 +8,7 @@ import BookingService from "../api/services/BookingService";
 import { DATES } from "../constants/booking";
 import useAuthStore from "../stores/authStore";
 import { queryKeys } from "../lib/queryKeys";
-import { Booking, Business, Service } from '@superqueue/types';
+import { Booking, Business, Service } from '@/types';
 
 interface ExtendedBooking extends Omit<Booking, "status"> {
   venueId?: string;

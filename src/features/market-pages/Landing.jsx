@@ -145,14 +145,14 @@ export default function Landing() {
             >
               Log in
             </Link>
-            <button
+            <Button 
               onClick={() => setSignupModalOpen(true)}
-              className="outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full flex items-center justify-center"
+              variant="secondary" 
+              size="sm" 
+              className="px-6 py-2.5 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
             >
-              <Button variant="secondary" size="sm" className="px-6 py-2.5 rounded-full active:scale-95 pointer-events-none">
-                Sign up
-              </Button>
-            </button>
+              Sign up
+            </Button>
           </div>
 
           <button

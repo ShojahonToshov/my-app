@@ -7,7 +7,7 @@ import VenueService from "../api/services/VenueService";
 import { toast } from "sonner";
 import useAuthStore from "../stores/authStore";
 import { queryKeys } from "../lib/queryKeys";
-import { Business } from '@superqueue/types';
+import { Business } from '@/types';
 
 interface ExtendedBusiness extends Business {
   category?: string;

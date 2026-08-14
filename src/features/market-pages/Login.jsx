@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Mail, Lock, Eye, EyeOff, Check, ArrowLeft } from "lucide-react";
+import { useLogin } from "./hooks/useAuth";
 import ElaraLogo from "@/components/ElaraLogo";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -29,23 +30,10 @@ const GoogleIcon = ({ className }) => (
 );
 
 export default function Login() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    // Имитация API запроса
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-  };
+  const { login, setLogin, password, setPassword, showPassword, setShowPassword, isSubmitting, handleSubmit, errors, rememberMe, setRememberMe } = useLogin("/admin");
 
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-[#ECECEA] font-sans selection:bg-[#8A2532] selection:text-white overflow-x-hidden text-[#121415] p-4 sm:p-6 relative">
-
-
       <Card className="w-full max-w-[480px] p-6 sm:p-8 md:p-12 flex flex-col">
         <div className="flex justify-center mb-8 shrink-0">
           <ElaraLogo />
@@ -58,14 +46,17 @@ export default function Login() {
           Sign in to continue booking premium services with Elara.
         </p>
 
-        <form onSubmit={handleLogin} className="space-y-5 flex flex-col w-full">
+        <form onSubmit={handleSubmit} className="space-y-5 flex flex-col w-full">
           <Input
             id="email"
             label="Email or phone"
             type="text"
             icon={Mail}
             placeholder="name@example.com"
-            disabled={isLoading}
+            disabled={isSubmitting}
+            value={login}
+            onChange={(e) => setLogin(e.target.value)}
+            error={errors?.login}
           />
 
           <Input
@@ -76,7 +67,10 @@ export default function Login() {
             actionIcon={showPassword ? EyeOff : Eye}
             onActionClick={() => setShowPassword(!showPassword)}
             placeholder="••••••••"
-            disabled={isLoading}
+            disabled={isSubmitting}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={errors?.password}
           />
 
           <div className="flex items-center justify-between pt-1 pb-2 w-full shrink-0 gap-4">
@@ -84,13 +78,15 @@ export default function Login() {
               <div className="relative flex items-center justify-center w-5 h-5 shrink-0">
                 <input
                   type="checkbox"
-                  disabled={isLoading}
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  disabled={isSubmitting}
                   className="peer appearance-none w-5 h-5 border border-[#DCDCDA] rounded-md checked:bg-[#121415] checked:border-[#121415] transition-colors cursor-pointer shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 />
                 <Check className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity duration-200" />
               </div>
               <span
-                className={`text-sm font-medium transition-colors select-none truncate ${isLoading ? "text-[#4A4E51]/60" : "text-[#4A4E51] group-hover:text-[#121415]"}`}
+                className={`text-sm font-medium transition-colors select-none truncate ${isSubmitting ? "text-[#4A4E51]/60" : "text-[#4A4E51] group-hover:text-[#121415]"}`}
               >
                 Remember me
               </span>
@@ -98,7 +94,7 @@ export default function Login() {
 
             <button
               type="button"
-              disabled={isLoading}
+              disabled={isSubmitting}
               className="text-sm font-medium text-[#4A4E51] hover:text-[#121415] transition-colors outline-none focus-visible:underline truncate shrink-0 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               Forgot password?
@@ -109,7 +105,7 @@ export default function Login() {
             type="submit"
             variant="primary"
             className="w-full"
-            isLoading={isLoading}
+            isLoading={isSubmitting}
           >
             Log in
           </Button>
@@ -126,19 +122,19 @@ export default function Login() {
           </div>
 
           <div className="relative flex flex-col w-full shrink-0">
-  <Button
-    type="button"
-    variant="outline"
-    className="w-full opacity-60 cursor-not-allowed pointer-events-none transition-none shadow-none"
-    disabled
-    icon={GoogleIcon}
-  >
-    Continue with Google
-  </Button>
-  <span className="absolute top-1/2 -translate-y-1/2 right-4 bg-[#F5F5F4] text-[#4A4E51] text-[10px] uppercase font-bold px-2.5 py-1 rounded-lg shrink-0 pointer-events-none">
-    Soon
-  </span>
-</div>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full opacity-60 cursor-not-allowed pointer-events-none transition-none shadow-none"
+              disabled
+              icon={GoogleIcon}
+            >
+              Continue with Google
+            </Button>
+            <span className="absolute top-1/2 -translate-y-1/2 right-4 bg-[#F5F5F4] text-[#4A4E51] text-[10px] uppercase font-bold px-2.5 py-1 rounded-lg shrink-0 pointer-events-none">
+              Soon
+            </span>
+          </div>
 
           <p className="text-center text-sm text-[#4A4E51] font-medium mt-4 w-full">
             <span className="mr-1">New to Elara?</span>
