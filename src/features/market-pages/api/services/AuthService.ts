@@ -18,7 +18,7 @@ class AuthService {
     return createClient();
   }
 
-  // Вспомогательная функция для получения профиля пользователя из БД
+  // Helper to fetch user profile from Supabase database
   private async fetchProfile(userId: string): Promise<UserProfile | null> {
     const { data, error } = await this.supabase
       .from('profiles')
@@ -41,11 +41,11 @@ class AuthService {
     
     if (error) throw error;
     
-    // Подтягиваем данные публичного профиля
+    // Fetch public profile data
     if (data.user) {
       const profile = await this.fetchProfile(data.user.id);
       if (profile) {
-        // Добавляем данные профиля прямо в объект пользователя для удобства
+        // Attach profile directly to the user object
         (data.user as AppUser).profile = profile;
       }
     }
@@ -66,10 +66,10 @@ class AuthService {
 
     if (error) throw error;
     
-    // Профиль будет создан автоматически через SQL-триггер,
-    // но чтобы вернуть его сразу после регистрации:
+    // Profile is created automatically by SQL trigger,
+    // fetch it immediately after registration:
     if (data.user) {
-      // Даем триггеру долю секунды на создание профиля
+      // Allow trigger brief time to execute
       await new Promise(resolve => setTimeout(resolve, 500));
       const profile = await this.fetchProfile(data.user.id);
       if (profile) {
@@ -118,7 +118,7 @@ class AuthService {
   }
 
   async updateProfile(userId: string, userData: Partial<UserProfile>) {
-    // Обновляем данные в таблице profiles
+    // Update data in profiles table
     const { data, error } = await this.supabase
       .from('profiles')
       .update(userData)
@@ -128,7 +128,7 @@ class AuthService {
 
     if (error) throw error;
     
-    // Если меняется имя, обновляем и мету в auth.users
+    // If full_name is updated, also update metadata in auth.users
     if (userData.full_name) {
       await this.supabase.auth.updateUser({
         data: { full_name: userData.full_name }

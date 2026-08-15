@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 
 const handleGlobalError = (error: unknown) => {
   if (!navigator.onLine) {
-    toast.error("Нет подключения к сети", { description: "Проверьте интернет-соединение" });
+    toast.error("No internet connection", { description: "Please check your network connection" });
     return;
   }
 
@@ -13,22 +13,22 @@ const handleGlobalError = (error: unknown) => {
   switch (status) {
     case 401:
     case 403:
-      toast.error("Ошибка доступа", { description: "Пожалуйста, авторизуйтесь заново" });
+      toast.error("Access denied", { description: "Please sign in again" });
       break;
     case 404:
-      toast.error("Не найдено", { description: "Запрашиваемые данные отсутствуют" });
+      toast.error("Not found", { description: "The requested data does not exist" });
       break;
     case 500:
     case 502:
     case 503:
     case 504:
-      toast.error("Ошибка сервера", { description: "Мы уже работаем над устранением" });
+      toast.error("Server error", { description: "Our team is already working on a fix" });
       break;
     default:
       if (err?.message === 'Network Error') {
-        toast.error("Сетевая ошибка", { description: "Сервер недоступен" });
+        toast.error("Network error", { description: "Server is unreachable" });
       } else {
-        toast.error("Произошла ошибка", { description: err?.message || "Не удалось выполнить запрос" });
+        toast.error("An error occurred", { description: err?.message || "Failed to complete request" });
       }
       break;
   }

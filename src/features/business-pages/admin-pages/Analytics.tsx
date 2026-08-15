@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 export default function Analytics() {
-  // Статические мок-данные для визуализации (выбрана вкладка "Сегодня")
+  // Static mock data for visualization (Selected tab: "Today")
   const chartData = [
     { time: "10:00", value: 20 },
     { time: "12:00", value: 60 },
@@ -25,8 +25,8 @@ export default function Analytics() {
   ];
 
   const topServices = [
-    { name: "Стрижка + Борода", count: 8, revenue: "960 000 сум" },
-    { name: "Мужская стрижка", count: 4, revenue: "290 000 сум" }
+    { name: "Haircut + Beard", count: 8, revenue: "960,000 UZS" },
+    { name: "Men's Haircut", count: 4, revenue: "290,000 UZS" }
   ];
 
   return (
@@ -36,9 +36,9 @@ export default function Analytics() {
         {/* HEADER */}
         <header className="bg-[#ECECEA]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Аналитика</h1>
+            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Analytics</h1>
             <p className="text-sm text-[#4A4E51] font-medium mt-0.5">
-              Ключевые показатели и инсайты бизнеса
+              Key business metrics and actionable insights
             </p>
           </div>
 
@@ -47,62 +47,62 @@ export default function Analytics() {
               type="button"
               className="shrink-0 px-5 py-1.5 rounded-lg text-sm font-medium transition-all shadow-sm border bg-white text-[#121415] border-[#DCDCDA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
             >
-              Сегодня
+              Today
             </button>
             <button
               type="button"
               className="shrink-0 px-5 py-1.5 rounded-lg text-sm font-medium transition-all text-[#4A4E51] hover:text-[#121415] border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
             >
-              Неделя
+              Week
             </button>
             <button
               type="button"
               className="shrink-0 px-5 py-1.5 rounded-lg text-sm font-medium transition-all text-[#4A4E51] hover:text-[#121415] border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
             >
-              Месяц
+              Month
             </button>
           </div>
         </header>
 
         <main className="flex-1 p-6 md:p-10 overflow-x-hidden overflow-y-auto flex flex-col gap-6 pt-6">
           
-          {/* УМНЫЙ ИНСАЙТ (Smart Insights) */}
+          {/* SMART INSIGHTS */}
           <div className="p-5 rounded-2xl border flex items-start gap-4 shadow-sm bg-[#e8efe9]/50 border-[#4a6b53]/20">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-white border border-[#4a6b53]/30 text-[#4a6b53]">
               <Sparkles className="w-5 h-5" />
             </div>
             <div className="flex-1 pt-0.5">
-              <h3 className="text-sm font-semibold tracking-tight text-[#121415] mb-1">Отличное начало дня</h3>
+              <h3 className="text-sm font-semibold tracking-tight text-[#121415] mb-1">Great start to the day</h3>
               <p className="text-xs font-medium text-[#4a6b53] leading-relaxed">
-                Утренняя загрузка выше обычного на 15%. Основную выручку приносят комплексные услуги.
+                Morning occupancy is 15% higher than usual. Primary revenue is driven by combo grooming packages.
               </p>
             </div>
           </div>
 
           {/* KPI CARDS */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 shrink-0">
-            {/* Выручка */}
+            {/* Revenue */}
             <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
               <div className="flex items-center justify-between gap-2 text-[#4A4E51] mb-4">
                 <div className="flex items-center gap-2">
                   <Coins className="w-4 h-4" /> 
-                  <span className="text-xs font-medium uppercase tracking-wider">Выручка</span>
+                  <span className="text-xs font-medium uppercase tracking-wider">Revenue</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#e8efe9] text-[#4a6b53] border border-[#4a6b53]/30">
                   <ArrowUpRight className="w-3 h-3" /> +5.2%
                 </span>
               </div>
               <div className="text-3xl font-semibold text-[#121415] tracking-tight truncate">
-                1 250 000 <span className="text-sm font-medium text-[#8B9194]">сум</span>
+                1,250,000 <span className="text-sm font-medium text-[#8B9194]">UZS</span>
               </div>
             </div>
 
-            {/* Визиты */}
+            {/* Visits */}
             <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
               <div className="flex items-center justify-between gap-2 text-[#4A4E51] mb-4">
                 <div className="flex items-center gap-2">
                   <Activity className="w-4 h-4" /> 
-                  <span className="text-xs font-medium uppercase tracking-wider">Визиты</span>
+                  <span className="text-xs font-medium uppercase tracking-wider">Visits</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#e8efe9] text-[#4a6b53] border border-[#4a6b53]/30">
                   <ArrowUpRight className="w-3 h-3" /> +2
@@ -113,15 +113,15 @@ export default function Analytics() {
               </div>
             </div>
 
-            {/* Отмены */}
+            {/* Cancellations */}
             <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
               <div className="flex items-center justify-between gap-2 text-[#8A2532] mb-4">
                 <div className="flex items-center gap-2">
                   <CalendarX className="w-4 h-4" /> 
-                  <span className="text-xs font-medium uppercase tracking-wider">Отмены</span>
+                  <span className="text-xs font-medium uppercase tracking-wider">Cancellations</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium bg-[#F5F5F4] text-[#4A4E51] border border-[#DCDCDA]">
-                  Норма
+                  Normal
                 </span>
               </div>
               <div className="text-3xl font-semibold text-[#8A2532] tracking-tight truncate">
@@ -129,40 +129,40 @@ export default function Analytics() {
               </div>
             </div>
 
-            {/* Время ожидания */}
+            {/* Wait Time */}
             <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
               <div className="flex items-center justify-between gap-2 text-[#4A4E51] mb-4">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" /> 
-                  <span className="text-xs font-medium uppercase tracking-wider">В очереди</span>
+                  <span className="text-xs font-medium uppercase tracking-wider">Queue Wait</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#e8efe9] text-[#4a6b53] border border-[#4a6b53]/30">
-                  -1 мин
+                  -1 min
                 </span>
               </div>
               <div className="text-3xl font-semibold text-[#121415] tracking-tight truncate">
-                2 мин
+                2 min
               </div>
             </div>
           </div>
 
-          {/* ГРАФИКИ И УСЛУГИ */}
+          {/* CHARTS & TOP SERVICES */}
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-stretch flex-1 min-h-[400px]">
             
-            {/* ГРАФИК ЗАГРУЗКИ */}
+            {/* OCCUPANCY CHART */}
             <div className="xl:col-span-2 bg-white rounded-2xl border border-[#DCDCDA] shadow-sm p-5 md:p-6 flex flex-col justify-between">
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h3 className="text-lg font-semibold tracking-tight text-[#121415]">
-                    Загруженность зала
+                    Salon Occupancy Rate
                   </h3>
                   <p className="text-sm font-medium text-[#4A4E51] mt-0.5">
-                    Помогает определить время для вывода дополнительных мастеров
+                    Helps identify peak hours and schedule additional specialists
                   </p>
                 </div>
                 <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-[#4A4E51] bg-[#F5F5F4] px-3 py-1.5 rounded-xl border border-[#DCDCDA]">
                   <BarChart3 className="w-3.5 h-3.5" />
-                  <span>Анализ трафика</span>
+                  <span>Traffic Analysis</span>
                 </div>
               </div>
 
@@ -172,7 +172,7 @@ export default function Analytics() {
                     <div className="w-full bg-[#F5F5F4] rounded-t-xl flex items-end relative group-hover:bg-[#ECECEA] transition-colors border border-transparent group-hover:border-[#DCDCDA]/50">
                       {/* Tooltip */}
                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#121415] text-white text-[10px] font-medium py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-sm">
-                        Загрузка {col.value}%
+                        Occupancy {col.value}%
                       </div>
                       {/* Bar */}
                       <div 
@@ -188,14 +188,14 @@ export default function Analytics() {
               </div>
             </div>
 
-            {/* ПОПУЛЯРНЫЕ УСЛУГИ */}
+            {/* POPULAR SERVICES */}
             <div className="bg-white rounded-2xl border border-[#DCDCDA] shadow-sm p-5 md:p-6 flex flex-col justify-between overflow-hidden">
               <div>
                 <h3 className="text-lg font-semibold tracking-tight text-[#121415]">
-                  Топ услуг
+                  Top Services
                 </h3>
                 <p className="text-sm font-medium text-[#4A4E51] mt-0.5">
-                  Генераторы выручки за выбранный период
+                  Revenue drivers for selected period
                 </p>
               </div>
 
@@ -211,7 +211,7 @@ export default function Analytics() {
                           {service.name}
                         </span>
                         <span className="text-xs text-[#8B9194] font-medium mt-0.5">
-                          {service.count} визитов
+                          {service.count} visits
                         </span>
                       </div>
                     </div>

@@ -18,8 +18,8 @@ export function useLogin(redirectPath = "/account") {
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!login || login.trim().length === 0) newErrors.login = "Пожалуйста, введите корректный email.";
-    if (!password || password.trim().length === 0) newErrors.password = "Пожалуйста, введите пароль.";
+    if (!login || login.trim().length === 0) newErrors.login = "Please enter a valid email address.";
+    if (!password || password.trim().length === 0) newErrors.password = "Please enter your password.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -31,15 +31,15 @@ export function useLogin(redirectPath = "/account") {
       return data.user;
     },
     onSuccess: (user) => {
-      toast.success("Вход выполнен успешно");
+      toast.success("Signed in successfully");
       // @ts-expect-error user properties might slightly differ from StoreUser but it's safe here
       loginStore(user);
       const route = user.profile?.role === 'business' ? '/admin' : redirectPath;
       router.push(route);
     },
     onError: (error: Error) => {
-      setErrors({ auth: "Неверный логин или пароль." });
-      toast.error(error?.message || "Ошибка авторизации.");
+      setErrors({ auth: "Invalid login credentials." });
+      toast.error(error?.message || "Authentication error.");
     }
   });
 
@@ -73,9 +73,9 @@ export function useSignup(role = "user", redirectPath = "/account") {
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!name || name.trim().length === 0) newErrors.name = "Пожалуйста, введите ваше имя.";
-    if (!login || login.trim().length === 0) newErrors.login = "Пожалуйста, введите корректный email.";
-    if (!password || password.trim().length < 6) newErrors.password = "Пароль должен быть не менее 6 символов.";
+    if (!name || name.trim().length === 0) newErrors.name = "Please enter your name.";
+    if (!login || login.trim().length === 0) newErrors.login = "Please enter a valid email address.";
+    if (!password || password.trim().length < 6) newErrors.password = "Password must be at least 6 characters.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -92,14 +92,14 @@ export function useSignup(role = "user", redirectPath = "/account") {
       return data.user;
     },
     onSuccess: (user) => {
-      toast.success("Регистрация прошла успешно!");
+      toast.success("Registration completed successfully!");
       // @ts-expect-error user properties might slightly differ from StoreUser but it's safe here
       loginStore(user);
       const route = user.profile?.role === 'business' ? '/admin' : redirectPath;
       router.push(route);
     },
     onError: (error) => {
-      toast.error(error?.message || "Произошла ошибка при регистрации.");
+      toast.error(error?.message || "An error occurred during registration.");
     }
   });
 

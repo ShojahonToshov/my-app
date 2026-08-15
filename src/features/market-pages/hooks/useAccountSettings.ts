@@ -30,10 +30,10 @@ export default function useAccountSettings() {
     onSuccess: (data, variables) => {
       updateUser(variables as { id: string; name: string; login?: string; password?: string });
       queryClient.invalidateQueries({ queryKey: queryKeys.users.detail(currentUser?.id || "") });
-      toast.success("Р вЂќР В°Р Р…Р Р…РЎвЂ№Р Вµ Р С•Р В±Р Р…Р С•Р Р†Р В»Р ВµР Р…РЎвЂ№!");
+      toast.success("Profile details updated successfully!");
     },
     onError: () => {
-      toast.error("Р С›РЎв‚¬Р С‘Р В±Р С”Р В° Р С—РЎР‚Р С‘ РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…Р ВµР Р…Р С‘Р С‘.");
+      toast.error("Failed to save changes.");
     }
   });
 
@@ -47,7 +47,7 @@ export default function useAccountSettings() {
 
   const handleLogout = () => {
     logout();
-    toast.info("Р вЂ™РЎвЂ№ Р Р†РЎвЂ№РЎв‚¬Р В»Р С‘ Р С‘Р В· Р В°Р С”Р С”Р В°РЎС“Р Р…РЎвЂљР В°");
+    toast.info("You have logged out.");
     router.push("/login");
   };
 

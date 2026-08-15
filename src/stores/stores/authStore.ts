@@ -4,6 +4,8 @@ interface UserProfile {
   id: string;
   name?: string;
   email?: string;
+  phone?: string;
+  role?: string;
   [key: string]: unknown;
 }
 

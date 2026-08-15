@@ -41,7 +41,7 @@ export default function useBooking() {
   
   useEffect(() => {
     if (!id) {
-      toast.error("Р РЋР В°Р В»Р С•Р Р… Р Р…Р Вµ Р Р†РЎвЂ№Р В±РЎР‚Р В°Р Р…", { description: "Р СџР С•Р В¶Р В°Р В»РЎС“Р в„–РЎРѓРЎвЂљР В°, Р Р†РЎвЂ№Р В±Р ВµРЎР‚Р С‘РЎвЂљР Вµ Р В·Р В°Р Р†Р ВµР Т‘Р ВµР Р…Р С‘Р Вµ." });
+      toast.error("Salon not selected", { description: "Please select a venue to continue." });
       router.push("/search");
     }
   }, [id, router]);
@@ -84,12 +84,12 @@ export default function useBooking() {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.bookings.byVenue(venueId!) });
       queryClient.invalidateQueries({ queryKey: queryKeys.bookings.byUser(currentUser?.id || "") });
-      toast.success("Р вЂ™РЎвЂ№ РЎС“РЎРѓР С—Р ВµРЎв‚¬Р Р…Р С• Р В·Р В°Р С—Р С‘РЎРѓР В°Р Р…РЎвЂ№!", { description: "Р С›РЎвЂљРЎРѓР В»Р ВµР В¶Р С‘Р Р†Р В°Р в„–РЎвЂљР Вµ РЎРѓРЎвЂљР В°РЎвЂљРЎС“РЎРѓ Р С Р В°РЎРѓРЎвЂљР ВµРЎР‚Р В° Р Р† Р Т‘Р ВµР Р…РЎРЉ Р Р†Р С‘Р В·Р С‘РЎвЂљР В°." });
+      toast.success("Appointment booked successfully!", { description: "Track your queue and specialist status on visit day." });
       router.push(`/ticket/${variables.id}`);
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Ошибка при создании записи");
+      toast.error("Error creating appointment");
     }
   });
 
@@ -134,9 +134,9 @@ export default function useBooking() {
       userId: currentUser?.id || "guest",
       venueId: String((venueData as ExtendedBusiness)?.id || venueId),
       venueName: (venueData as ExtendedBusiness)?.name,
-      serviceName: serviceObj?.name || "Р Р€РЎРѓР В»РЎС“Р С–Р В°",
-      servicePrice: serviceObj?.price || "0 РЎРѓРЎС“Р С ",
-      masterName: masterObj?.name || "Р вЂєРЎР‹Р В±Р С•Р в„– РЎРѓР Р†Р С•Р В±Р С•Р Т‘Р Р…РЎвЂ№Р в„–",
+      serviceName: serviceObj?.name || "Service",
+      servicePrice: serviceObj?.price || "0 UZS",
+      masterName: masterObj?.name || "Any available specialist",
       date: selectedDate,
       time: selectedTime,
       startTime: selectedTime,

@@ -167,7 +167,7 @@ const Skeleton: React.FC<{ className?: string }> = ({ className }) => (
   <div className={`animate-pulse bg-[#DCDCDA]/40 ${className}`}></div>
 );
 
-// Интерактивный компонент KarmaTooltip с поповером
+// Interactive KarmaTooltip component with popover
 const KarmaTooltip: React.FC<{ karma: number }> = ({ karma }) => {
   const [isOpen, setIsOpen] = useState(false);
 

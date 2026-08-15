@@ -66,9 +66,9 @@ export default function useLiveTicket() {
       if (prevStatusRef.current && prevStatusRef.current !== (bookingData as ExtendedBooking).status) {
         if ((bookingData as ExtendedBooking).status === "in_progress") {
           if ("vibrate" in navigator) navigator.vibrate([200, 100, 200]);
-          toast.success("Ваша очередь подошла!", { description: "Мастер ждет вас.", duration: 8000 });
+          toast.success("It's your turn!", { description: "The specialist is ready for you.", duration: 8000 });
         } else if ((bookingData as ExtendedBooking).status === "completed") {
-          toast.info("Визит завершен...", { description: "Ждем вас снова!" });
+          toast.info("Visit completed...", { description: "We look forward to seeing you again!" });
           setTimeout(() => router.push("/account"), 3000);
         }
       }
@@ -80,11 +80,11 @@ export default function useLiveTicket() {
     mutationFn: (ticketId: string) => BookingService.deleteBooking(ticketId),
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: queryKeys.bookings.detail(id || "") });
-      toast.success("Запись отменена");
+      toast.success("Appointment cancelled");
       router.push("/account");
     },
     onError: () => {
-      toast.error("Ошибка при отмене");
+      toast.error("Failed to cancel appointment");
     }
   });
 
@@ -93,7 +93,7 @@ export default function useLiveTicket() {
   };
 
   const handleAction = (action: string) => {
-    if (action === "route") toast.info("Маршрут построен...", { description: "Открываем карты..." });
+    if (action === "route") toast.info("Route plotted...", { description: "Opening maps..." });
     if (action === "call") window.location.href = `tel:+998900000000`;
   };
 

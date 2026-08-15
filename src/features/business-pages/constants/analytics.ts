@@ -1,61 +1,61 @@
-﻿export const MOCK_DATA = {
-  "Р РЋР ВµР С–Р С•Р Т‘Р Р…РЎРЏ": {
-    revenue: "1 250 000", revTrend: "+5.2%", revUp: true,
+export const MOCK_DATA = {
+  "Today": {
+    revenue: "1,250,000", revTrend: "+5.2%", revUp: true,
     visits: 12, visitsTrend: "+2", visitsUp: true,
-    cancels: 1, cancelsTrend: "Р СњР С•РЎР‚Р С Р В°",
-    wait: "2 Р С Р С‘Р Р…", waitTrend: "-1 Р С Р С‘Р Р…", waitUp: true,
+    cancels: 1, cancelsTrend: "Normal",
+    wait: "2 min", waitTrend: "-1 min", waitUp: true,
     insight: {
       type: "success",
-      title: "Р С›РЎвЂљР В»Р С‘РЎвЂЎР Р…Р С•Р Вµ Р Р…Р В°РЎвЂЎР В°Р В»Р С• Р Т‘Р Р…РЎРЏ",
-      desc: "Р Р€РЎвЂљРЎР‚Р ВµР Р…Р Р…РЎРЏРЎРЏ Р В·Р В°Р С–РЎР‚РЎС“Р В·Р С”Р В° Р Р†РЎвЂ№РЎв‚¬Р Вµ Р С•Р В±РЎвЂ№РЎвЂЎР Р…Р С•Р С–Р С• Р Р…Р В° 15%. Р С›РЎРѓР Р…Р С•Р Р†Р Р…РЎС“РЎР‹ Р Р†РЎвЂ№РЎР‚РЎС“РЎвЂЎР С”РЎС“ Р С—РЎР‚Р С‘Р Р…Р С•РЎРѓРЎРЏРЎвЂљ Р С”Р С•Р С Р С—Р В»Р ВµР С”РЎРѓР Р…РЎвЂ№Р Вµ РЎС“РЎРѓР В»РЎС“Р С–Р С‘."
+      title: "Great start to the day",
+      desc: "Morning capacity is 15% higher than usual. Complex bundle services are generating the majority of revenue."
     },
     chartData: [
       { label: "10:00", value: 20 }, { label: "12:00", value: 60 }, { label: "14:00", value: 90 }, 
       { label: "16:00", value: 40 }, { label: "18:00", value: 100 }, { label: "20:00", value: 30 }
     ],
     services: [
-      { id: 1, name: "Р РЋРЎвЂљРЎР‚Р С‘Р В¶Р С”Р В° + Р вЂ Р С•РЎР‚Р С•Р Т‘Р В°", visits: 8, revenue: "960 000 РЎРѓРЎС“Р С " },
-      { id: 2, name: "Р СљРЎС“Р В¶РЎРѓР С”Р В°РЎРЏ РЎРѓРЎвЂљРЎР‚Р С‘Р В¶Р С”Р В°", visits: 4, revenue: "290 000 РЎРѓРЎС“Р С " },
+      { id: 1, name: "Haircut + Beard", visits: 8, revenue: "960,000 UZS" },
+      { id: 2, name: "Men's Haircut", visits: 4, revenue: "290,000 UZS" },
     ]
   },
-  "Р СњР ВµР Т‘Р ВµР В»РЎРЏ": {
-    revenue: "8 400 000", revTrend: "-2.1%", revUp: false,
+  "Week": {
+    revenue: "8,400,000", revTrend: "-2.1%", revUp: false,
     visits: 86, visitsTrend: "-4", visitsUp: false,
     cancels: 5, cancelsTrend: "+2",
-    wait: "5 Р С Р С‘Р Р…", waitTrend: "+1 Р С Р С‘Р Р…", waitUp: false,
+    wait: "5 min", waitTrend: "+1 min", waitUp: false,
     insight: {
       type: "warning",
-      title: "Р вЂ™РЎвЂ№РЎР‚Р С•РЎРѓР В»Р С‘ Р С•РЎвЂљР С Р ВµР Р…РЎвЂ№ Р Р† Р Р†Р ВµРЎвЂЎР ВµРЎР‚Р Р…Р ВµР Вµ Р Р†РЎР‚Р ВµР С РЎРЏ",
-      desc: "Р вЂ”Р В° Р Р…Р ВµР Т‘Р ВµР В»РЎР‹ Р С•РЎвЂљР С Р ВµР Р…Р ВµР Р…Р С• 5 Р В·Р В°Р С—Р С‘РЎРѓР ВµР в„– (Р Р† Р С•РЎРѓР Р…Р С•Р Р†Р Р…Р С•Р С  Р С—Р С•РЎРѓР В»Р Вµ 18:00). Р В Р ВµР С”Р С•Р С Р ВµР Р…Р Т‘РЎС“Р ВµР С  Р Р†Р С”Р В»РЎР‹РЎвЂЎР С‘РЎвЂљРЎРЉ SMS-Р Р…Р В°Р С—Р С•Р С Р С‘Р Р…Р В°Р Р…Р С‘РЎРЏ Р В·Р В° 2 РЎвЂЎР В°РЎРѓР В° Р Т‘Р С• Р Р†Р С‘Р В·Р С‘РЎвЂљР В°."
+      title: "Evening cancellations increased",
+      desc: "5 appointments were cancelled this week (mostly after 18:00). We recommend enabling SMS reminders 2 hours before the visit."
     },
     chartData: [
-      { label: "Р СџР Р…", value: 40 }, { label: "Р вЂ™РЎвЂљ", value: 35 }, { label: "Р РЋРЎР‚", value: 50 }, 
-      { label: "Р В§РЎвЂљ", value: 80 }, { label: "Р СџРЎвЂљ", value: 95 }, { label: "Р РЋР В±", value: 100 }, { label: "Р вЂ™РЎРѓ", value: 85 }
+      { label: "Mon", value: 40 }, { label: "Tue", value: 35 }, { label: "Wed", value: 50 }, 
+      { label: "Thu", value: 80 }, { label: "Fri", value: 95 }, { label: "Sat", value: 100 }, { label: "Sun", value: 85 }
     ],
     services: [
-      { id: 1, name: "Р РЋРЎвЂљРЎР‚Р С‘Р В¶Р С”Р В° + Р вЂ Р С•РЎР‚Р С•Р Т‘Р В°", visits: 45, revenue: "5 400 000 РЎРѓРЎС“Р С " },
-      { id: 2, name: "Р СљРЎС“Р В¶РЎРѓР С”Р В°РЎРЏ РЎРѓРЎвЂљРЎР‚Р С‘Р В¶Р С”Р В°", visits: 31, revenue: "2 480 000 РЎРѓРЎС“Р С " },
-      { id: 3, name: "Р вЂќР ВµРЎвЂљРЎРѓР С”Р В°РЎРЏ РЎРѓРЎвЂљРЎР‚Р С‘Р В¶Р С”Р В°", visits: 10, revenue: "520 000 РЎРѓРЎС“Р С " },
+      { id: 1, name: "Haircut + Beard", visits: 45, revenue: "5,400,000 UZS" },
+      { id: 2, name: "Men's Haircut", visits: 31, revenue: "2,480,000 UZS" },
+      { id: 3, name: "Kids' Haircut", visits: 10, revenue: "520,000 UZS" },
     ]
   },
-  "Р СљР ВµРЎРѓРЎРЏРЎвЂ ": {
-    revenue: "32 150 000", revTrend: "+14.8%", revUp: true,
+  "Month": {
+    revenue: "32,150,000", revTrend: "+14.8%", revUp: true,
     visits: 342, visitsTrend: "+45", visitsUp: true,
     cancels: 12, cancelsTrend: "-5",
-    wait: "4 Р С Р С‘Р Р…", waitTrend: "-3 Р С Р С‘Р Р…", waitUp: true,
+    wait: "4 min", waitTrend: "-3 min", waitUp: true,
     insight: {
       type: "success",
-      title: "Р В Р ВµР С”Р С•РЎР‚Р Т‘Р Р…Р В°РЎРЏ Р Р†РЎвЂ№РЎР‚РЎС“РЎвЂЎР С”Р В° Р В·Р В° Р С Р ВµРЎРѓРЎРЏРЎвЂ ",
-      desc: "Р вЂ Р В»Р В°Р С–Р С•Р Т‘Р В°РЎР‚РЎРЏ РЎРѓР Р…Р С‘Р В¶Р ВµР Р…Р С‘РЎР‹ Р Р†РЎР‚Р ВµР С Р ВµР Р…Р С‘ Р С•Р В¶Р С‘Р Т‘Р В°Р Р…Р С‘РЎРЏ (Р Т‘Р С• 4 Р С Р С‘Р Р…) Р С—РЎР‚Р С•Р С—РЎС“РЎРѓР С”Р Р…Р В°РЎРЏ РЎРѓР С—Р С•РЎРѓР С•Р В±Р Р…Р С•РЎРѓРЎвЂљРЎРЉ РЎРѓР В°Р В»Р С•Р Р…Р В° РЎС“Р Р†Р ВµР В»Р С‘РЎвЂЎР С‘Р В»Р В°РЎРѓРЎРЉ Р Р…Р В° 15%. Р С›РЎвЂљР В»Р С‘РЎвЂЎР Р…Р В°РЎРЏ РЎР‚Р В°Р В±Р С•РЎвЂљР В° Р С”Р С•Р С Р В°Р Р…Р Т‘РЎвЂ№!"
+      title: "Record monthly revenue",
+      desc: "By reducing wait times (down to 4 min), salon throughput increased by 15%. Excellent team performance!"
     },
     chartData: [
-      { label: "Р СњР ВµР Т‘ 1", value: 70 }, { label: "Р СњР ВµР Т‘ 2", value: 85 }, 
-      { label: "Р СњР ВµР Т‘ 3", value: 80 }, { label: "Р СњР ВµР Т‘ 4", value: 100 }
+      { label: "Week 1", value: 70 }, { label: "Week 2", value: 85 }, 
+      { label: "Week 3", value: 80 }, { label: "Week 4", value: 100 }
     ],
     services: [
-      { id: 1, name: "Р РЋРЎвЂљРЎР‚Р С‘Р В¶Р С”Р В° + Р вЂ Р С•РЎР‚Р С•Р Т‘Р В°", visits: 180, revenue: "21 600 000 РЎРѓРЎС“Р С " },
-      { id: 2, name: "Р СљРЎС“Р В¶РЎРѓР С”Р В°РЎРЏ РЎРѓРЎвЂљРЎР‚Р С‘Р В¶Р С”Р В°", visits: 120, revenue: "9 600 000 РЎРѓРЎС“Р С " },
-      { id: 3, name: "Р С™Р В°Р С РЎС“РЎвЂћР В»РЎРЏР В¶ РЎРѓР ВµР Т‘Р С‘Р Р…РЎвЂ№", visits: 42, revenue: "950 000 РЎРѓРЎС“Р С " },
+      { id: 1, name: "Haircut + Beard", visits: 180, revenue: "21,600,000 UZS" },
+      { id: 2, name: "Men's Haircut", visits: 120, revenue: "9,600,000 UZS" },
+      { id: 3, name: "Grey Camouflage", visits: 42, revenue: "950,000 UZS" },
     ]
   }
 };

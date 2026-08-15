@@ -7,7 +7,7 @@ import { ApiBookingDTO, TicketDTO } from "../types";
 
 export default function useDashboard() {
   const queryClient = useQueryClient();
-  const [activeMasterFilter, setActiveMasterFilter] = useState("Р вЂ™РЎРѓР Вµ");
+  const [activeMasterFilter, setActiveMasterFilter] = useState("All");
   const [masterDelays, setMasterDelays] = useState<Record<string, number>>({});
 
   const { data: tickets = [], isLoading, isError, refetch } = useQuery({
@@ -19,10 +19,10 @@ export default function useDashboard() {
       const mapped = res.map((item: ApiBookingDTO, index: number): TicketDTO => ({
         id: item.id,
         time: item.time || "10:00",
-        service: item.serviceName || "Р Р€РЎРѓР В»РЎС“Р С–Р В°",
-        name: item.clientName || "Р вЂњР С•РЎРѓРЎвЂљРЎРЉ",
+        service: item.serviceName || "Service",
+        name: item.clientName || "Guest",
         status: item.status === "upcoming" ? "waiting" : item.status === "in_progress" ? "in_progress" : "completed",
-        master: item.masterName || `Р СљР В°РЎРѓРЎвЂљР ВµРЎР‚ ${index % 5 + 1}`,
+        master: item.masterName || `Master ${index % 5 + 1}`,
         isDelayed: item.status === "upcoming" && index % 3 === 0 
       }));
       
@@ -45,7 +45,7 @@ export default function useDashboard() {
     const services = tickets.map((t: TicketDTO) => t.service);
     const topService = services.sort((a: string, b: string) =>
           services.filter((v: string) => v===a).length - services.filter((v: string) => v===b).length
-    ).pop() || "Р СњР ВµРЎвЂљ Р Т‘Р В°Р Р…Р Р…РЎвЂ№РЎвЂ¦";
+    ).pop() || "No data";
 
     return { total, inSalon: waiting + inProgress, totalDelayMins, topService };
   }, [tickets, masterDelays]);
@@ -64,11 +64,11 @@ export default function useDashboard() {
       return { previousTickets };
     },
     onSuccess: () => {
-      toast.success("Р С™Р В»Р С‘Р ВµР Р…РЎвЂљ Р С—РЎР‚Р С‘Р С–Р В»Р В°РЎв‚¬Р ВµР Р…", { description: "Push-РЎС“Р Р†Р ВµР Т‘Р С•Р С Р В»Р ВµР Р…Р С‘Р Вµ Р С•РЎвЂљР С—РЎР‚Р В°Р Р†Р В»Р ВµР Р…Р С• Р С”Р В»Р С‘Р ВµР Р…РЎвЂљРЎС“." });
+      toast.success("Client invited", { description: "Push notification sent to client." });
     },
     onError: (err, newTodo, context) => {
       queryClient.setQueryData(queryKeys.bookings.all, context?.previousTickets);
-      toast.error("Р С›РЎв‚¬Р С‘Р В±Р С”Р В° РЎРѓР С‘Р Р…РЎвЂ¦РЎР‚Р С•Р Р…Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘");
+      toast.error("Sync error");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all });
@@ -108,14 +108,14 @@ export default function useDashboard() {
     },
     onSuccess: (data, variables) => {
       if (data.nextMapped) {
-        toast.success("Р вЂ™Р С‘Р В·Р С‘РЎвЂљ Р В·Р В°Р Р†Р ВµРЎР‚РЎв‚¬Р ВµР Р…", { description: `${data.nextMapped.clientName || "Р вЂњР С•РЎРѓРЎвЂљРЎРЉ"} Р В°Р Р†РЎвЂљР С•Р С Р В°РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘ Р С—РЎР‚Р С‘Р С–Р В»Р В°РЎв‚¬Р ВµР Р…(Р В°) Р Р† Р С”РЎР‚Р ВµРЎРѓР В»Р С•.` });
+        toast.success("Visit completed", { description: `${data.nextMapped.clientName || "Guest"} was automatically called to the chair.` });
       } else {
-        toast.success("Р вЂ™Р С‘Р В·Р С‘РЎвЂљ Р В·Р В°Р Р†Р ВµРЎР‚РЎв‚¬Р ВµР Р…", { description: `Р С›РЎвЂЎР ВµРЎР‚Р ВµР Т‘РЎРЉ Р С” Р С Р В°РЎРѓРЎвЂљР ВµРЎР‚РЎС“ ${variables.master} Р С—РЎС“РЎРѓРЎвЂљР В°.` });
+        toast.success("Visit completed", { description: `Queue for ${variables.master} is now clear.` });
       }
     },
     onError: (err, newTodo, context) => {
       queryClient.setQueryData(queryKeys.bookings.all, context?.previousTickets);
-      toast.error("Р С›РЎв‚¬Р С‘Р В±Р С”Р В° Р С•Р В±Р Р…Р С•Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ РЎРѓРЎвЂљР В°РЎвЂљРЎС“РЎРѓР С•Р Р†");
+      toast.error("Error updating booking status");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all });
@@ -132,9 +132,9 @@ export default function useDashboard() {
       [master]: Math.max(0, (prev[master] || 0) + mins)
     }));
     if (mins > 0) {
-      toast.warning(`Р вЂњРЎР‚Р В°РЎвЂћР С‘Р С” РЎРѓР Т‘Р Р†Р С‘Р Р…РЎС“РЎвЂљ Р Р…Р В° +${mins} Р С Р С‘Р Р…`, { description: `Р С™Р В»Р С‘Р ВµР Р…РЎвЂљРЎвЂ№ Р С Р В°РЎРѓРЎвЂљР ВµРЎР‚Р В° ${master} РЎС“Р Р†Р ВµР Т‘Р С•Р С Р В»Р ВµР Р…РЎвЂ№.` });
+      toast.warning(`Schedule shifted by +${mins} min`, { description: `Clients of ${master} have been notified.` });
     } else {
-      toast.success(`Р СњР В°Р С–Р С•Р Р…РЎРЏР ВµР С  Р С–РЎР‚Р В°РЎвЂћР С‘Р С”`, { description: `Р вЂ”Р В°Р Т‘Р ВµРЎР‚Р В¶Р С”Р В° Р С Р В°РЎРѓРЎвЂљР ВµРЎР‚Р В° ${master} РЎС“Р С Р ВµР Р…РЎРЉРЎв‚¬Р ВµР Р…Р В°.` });
+      toast.success(`Schedule caught up`, { description: `Delay for ${master} was reduced.` });
     }
   }, []);
 
@@ -142,29 +142,29 @@ export default function useDashboard() {
     mutationFn: (newBooking: ApiBookingDTO) => BookingService.createBooking(newBooking as unknown as Parameters<typeof BookingService.createBooking>[0]),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all });
-      toast.success("Р вЂ”Р В°Р С—Р С‘РЎРѓРЎРЉ РЎРѓР С•Р В·Р Т‘Р В°Р Р…Р В°", { description: "Р СњР С•Р Р†РЎвЂ№Р в„– Р С–Р С•РЎРѓРЎвЂљРЎРЉ РЎС“РЎРѓР С—Р ВµРЎв‚¬Р Р…Р С• Р Т‘Р С•Р В±Р В°Р Р†Р В»Р ВµР Р…." });
+      toast.success("Appointment created", { description: "New guest successfully added to schedule." });
     },
     onError: () => {
-      toast.error("Р С›РЎв‚¬Р С‘Р В±Р С”Р В° Р С—РЎР‚Р С‘ Р Т‘Р С•Р В±Р В°Р Р†Р В»Р ВµР Р…Р С‘Р С‘");
+      toast.error("Error creating appointment");
     }
   });
 
   const handleAddTicket = (e: FormEvent<HTMLFormElement>, selectedService: string, callback?: () => void) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const clientName = (formData.get("clientName") as string) || "Р вЂ Р ВµР В· Р С‘Р С Р ВµР Р…Р С‘";
-    const selectedMaster = (formData.get("masterName") as string) || uniqueMasters[0] || "Р СљР В°РЎРѓРЎвЂљР ВµРЎР‚";
+    const clientName = (formData.get("clientName") as string) || "Guest";
+    const selectedMaster = (formData.get("masterName") as string) || uniqueMasters[0] || "Master";
     
     const newBooking = {
       id: Date.now().toString(),
       userId: "admin-manual",
       venueId: "1",
-      venueName: "Р вЂ Р С‘Р В·Р Р…Р ВµРЎРѓ Р СџРЎР‚Р С•РЎвЂћР С‘Р В»РЎРЉ",
+      venueName: "Business Profile",
       serviceName: selectedService,
-      servicePrice: selectedService === "Р РЋРЎвЂљРЎР‚Р С‘Р В¶Р С”Р В° + Р вЂ Р С•РЎР‚Р С•Р Т‘Р В°" ? "120 000 РЎРѓРЎС“Р С " : "80 000 РЎРѓРЎС“Р С ",
+      servicePrice: selectedService === "Haircut + Beard" ? "120,000 UZS" : "80,000 UZS",
       masterName: selectedMaster,
-      date: new Date().toLocaleDateString('ru-RU'),
-      time: new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'}),
+      date: new Date().toLocaleDateString('en-US'),
+      time: new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'}),
       clientName: clientName,
       clientPhone: "+998 90 000 00 00",
       status: "upcoming"
@@ -178,7 +178,7 @@ export default function useDashboard() {
   };
 
   const filteredTickets = useMemo(() => tickets.filter(
-    (tkt) => activeMasterFilter === "Р вЂ™РЎРѓР Вµ" || tkt.master === activeMasterFilter
+    (tkt) => activeMasterFilter === "All" || tkt.master === activeMasterFilter
   ), [tickets, activeMasterFilter]);
 
   const isSubmitting = callClientMutation.isPending || completeMutation.isPending || addTicketMutation.isPending;

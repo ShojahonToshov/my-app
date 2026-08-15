@@ -5,7 +5,7 @@ class BookingService {
     return createClient();
   }
 
-  // Получить предстоящие записи пользователя
+  // Fetch upcoming bookings for user
   async getUpcomingBookings(userId: string) {
     const { data, error } = await this.supabase
       .from('bookings')
@@ -29,7 +29,7 @@ class BookingService {
     return data;
   }
 
-  // Получить историю записей (завершенные или отмененные)
+  // Fetch booking history (completed or cancelled)
   async getHistoryBookings(userId: string) {
     const { data, error } = await this.supabase
       .from('bookings')
@@ -53,15 +53,27 @@ class BookingService {
     return data;
   }
 
-  // Получить любимые заведения
+  // Fetch favorite venues
   async getFavoriteVenues(userId: string) {
-    // В будущем здесь будет таблица favorites, пока возвращаем пустоту
+    // Stub for favorites table
     return [];
   }
 
   async getBookings() { return []; }
   async getBookingById(id: string): Promise<unknown> { return {}; }
-  async createBooking(data: Record<string, unknown>) { return { data }; }
+  async createBooking(data: Record<string, unknown>) {
+    const { data: result, error } = await this.supabase
+      .from('bookings')
+      .insert([data])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error creating booking:", error);
+      throw error;
+    }
+    return result;
+  }
   async updateBooking(id: string, data: Record<string, unknown>) { return { data }; }
   async deleteBooking(id: string) { return true; }
 

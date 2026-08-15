@@ -13,7 +13,7 @@ import {
   PhoneCall
 } from "lucide-react";
 
-// --- Встроенные компоненты для предотвращения ошибок Vite ---
+// --- Built-in components ---
 interface EmptyStateProps {
   icon?: React.ElementType;
   title: string;
@@ -48,10 +48,10 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }: Confir
         <p className="text-sm text-[#4A4E51] font-medium mb-6">{description}</p>
         <div className="flex gap-3 w-full mt-2">
           <button type="button" onClick={onClose} className="flex-1 py-3 bg-white text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm hover:bg-[#F5F5F4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
-            Отмена
+            Cancel
           </button>
           <button type="button" onClick={onConfirm} className="flex-1 py-3 rounded-xl font-medium text-sm text-white transition-all shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] bg-[#dc2626] hover:opacity-90">
-            Удалить
+            Delete
           </button>
         </div>
       </div>
@@ -60,17 +60,17 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }: Confir
 };
 // -------------------------------------------------------------
 
-// Статические мок-данные
+// Static mock data
 const INITIAL_CUSTOMERS = [
-  { id: 1, name: "Азамат Умаров", initials: "АУ", avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]", phone: "+998 90 123 45 67", status: "regular", statusColor: "bg-[#8A2532]/10 text-[#8A2532] border-[#8A2532]/20", visits: 24, ltv: "2 450 000 сум", lastVisit: "Вчера, 18:20" },
-  { id: 2, name: "Дилшод К.", initials: "ДК", avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]", phone: "+998 93 987 65 43", status: "new", statusColor: "bg-[#e8efe9] text-[#4a6b53] border-[#4a6b53]/30", visits: 1, ltv: "80 000 сум", lastVisit: "04 июля, 12:00" },
-  { id: 3, name: "Малика Х.", initials: "МХ", avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]", phone: "+998 99 444 55 66", status: "regular", statusColor: "bg-[#8A2532]/10 text-[#8A2532] border-[#8A2532]/20", visits: 12, ltv: "1 120 000 сум", lastVisit: "28 июня, 15:45" },
+  { id: 1, name: "Azamat Umarov", initials: "AU", avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]", phone: "+998 90 123 45 67", status: "regular", statusColor: "bg-[#8A2532]/10 text-[#8A2532] border-[#8A2532]/20", visits: 24, ltv: "2,450,000 UZS", lastVisit: "Yesterday, 18:20" },
+  { id: 2, name: "Dilshod K.", initials: "DK", avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]", phone: "+998 93 987 65 43", status: "new", statusColor: "bg-[#e8efe9] text-[#4a6b53] border-[#4a6b53]/30", visits: 1, ltv: "80,000 UZS", lastVisit: "04 July, 12:00" },
+  { id: 3, name: "Malika Kh.", initials: "MK", avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]", phone: "+998 99 444 55 66", status: "regular", statusColor: "bg-[#8A2532]/10 text-[#8A2532] border-[#8A2532]/20", visits: 12, ltv: "1,120,000 UZS", lastVisit: "28 June, 15:45" },
 ];
 
 const TABS = [
-  { id: "all", label: "Все" },
-  { id: "regular", label: "Постоянные" },
-  { id: "new", label: "Новые" }
+  { id: "all", label: "All" },
+  { id: "regular", label: "Regulars" },
+  { id: "new", label: "New" }
 ];
 
 export default function Customers() {
@@ -85,15 +85,15 @@ export default function Customers() {
         {/* HEADER */}
         <header className="bg-[#ECECEA]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">База клиентов</h1>
-            <p className="text-sm text-[#4A4E51] font-medium mt-0.5">История гостей и аналитика</p>
+            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Clients Directory</h1>
+            <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Guest history & loyalty analytics</p>
           </div>
           <div className="flex items-center gap-3">
             <button type="button" className="hidden sm:flex p-2.5 bg-white border border-[#DCDCDA] text-[#4A4E51] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 shadow-sm">
               <Download className="w-5 h-5" />
             </button>
             <button type="button" onClick={() => setModal(true)} className="bg-[#121415] text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
-              <Plus className="w-4 h-4" /> <span className="hidden sm:inline">Добавить</span>
+              <Plus className="w-4 h-4" /> <span className="hidden sm:inline">Add Client</span>
             </button>
           </div>
         </header>
@@ -107,7 +107,7 @@ export default function Customers() {
               <Search className="w-5 h-5 text-[#8B9194] absolute left-4 top-1/2 -translate-y-1/2 group-focus-within:text-[#121415] transition-colors" />
               <input 
                 type="text" 
-                placeholder="Поиск по имени или телефону..." 
+                placeholder="Search by name or phone..." 
                 className="w-full pl-12 pr-10 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium placeholder:text-[#8B9194] focus:outline-none focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 shadow-sm transition-all" 
               />
             </div>
@@ -136,11 +136,11 @@ export default function Customers() {
                     <th className="py-3 pl-6 pr-2 w-10">
                       <input type="checkbox" className="w-4 h-4 text-[#121415] bg-white border-[#DCDCDA] rounded focus:ring-[#121415] cursor-pointer accent-[#121415]" />
                     </th>
-                    <th className="py-3 px-6">Клиент</th>
-                    <th className="py-3 px-6">Статус</th>
-                    <th className="py-3 px-6">Визиты / LTV</th>
-                    <th className="py-3 px-6">Последний визит</th>
-                    <th className="py-3 px-6 text-right">Действия</th>
+                    <th className="py-3 px-6">Client</th>
+                    <th className="py-3 px-6">Status</th>
+                    <th className="py-3 px-6">Visits / LTV</th>
+                    <th className="py-3 px-6">Last Visit</th>
+                    <th className="py-3 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
 
@@ -163,26 +163,26 @@ export default function Customers() {
                       </td>
                       <td className="py-3 px-6">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider border ${customer.statusColor}`}>
-                          {customer.status === "regular" ? "Постоянный" : "Новый"}
+                          {customer.status === "regular" ? "Regular" : "New"}
                         </span>
                       </td>
                       <td className="py-3 px-6">
                         <div className="flex flex-col">
-                          <span className="text-[#121415] font-medium">{customer.visits} визитов</span>
+                          <span className="text-[#121415] font-medium">{customer.visits} visits</span>
                           <span className="text-xs font-medium text-[#8B9194] mt-0.5">{customer.ltv}</span>
                         </div>
                       </td>
                       <td className="py-3 px-6 text-[#4A4E51] font-medium">{customer.lastVisit}</td>
                       <td className="py-3 px-6 text-right">
                         <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button type="button" className="p-2 text-[#8B9194] hover:text-[#4a6b53] hover:bg-[#e8efe9] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]" title="Позвонить">
+                          <button type="button" className="p-2 text-[#8B9194] hover:text-[#4a6b53] hover:bg-[#e8efe9] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]" title="Call">
                             <PhoneCall className="w-4 h-4" />
                           </button>
-                          <button type="button" className="p-2 text-[#8B9194] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]" title="Написать">
+                          <button type="button" className="p-2 text-[#8B9194] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]" title="Message">
                             <MessageCircle className="w-4 h-4" />
                           </button>
                           <div className="w-px h-4 bg-[#DCDCDA] mx-1"></div>
-                          <button type="button" onClick={() => setDeleteModalOpen(true)} className="p-2 text-[#8B9194] hover:text-[#dc2626] hover:bg-[#dc2626]/10 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]" title="Удалить">
+                          <button type="button" onClick={() => setDeleteModalOpen(true)} className="p-2 text-[#8B9194] hover:text-[#dc2626] hover:bg-[#dc2626]/10 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]" title="Delete">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
@@ -207,27 +207,27 @@ export default function Customers() {
                         </div>
                       </div>
                       <span className={`inline-flex px-2 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider border ${customer.statusColor}`}>
-                        {customer.status === "regular" ? "Пост." : "Новый"}
+                        {customer.status === "regular" ? "Regular" : "New"}
                       </span>
                     </div>
                     
                     <div className="flex items-center justify-between bg-[#F5F5F4] p-3 rounded-xl border border-[#DCDCDA] mb-4">
                       <div>
-                        <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">Визиты</p>
+                        <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">Visits</p>
                         <p className="font-semibold text-[#121415]">{customer.visits}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">Выручка (LTV)</p>
+                        <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">Revenue (LTV)</p>
                         <p className="font-semibold text-[#121415]">{customer.ltv}</p>
                       </div>
                     </div>
 
                     <div className="flex gap-2">
                       <button type="button" className="flex-1 py-2.5 bg-[#e8efe9] hover:opacity-90 text-[#4a6b53] border border-[#4a6b53]/30 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]">
-                        <PhoneCall className="w-4 h-4" /> Позвонить
+                        <PhoneCall className="w-4 h-4" /> Call
                       </button>
                       <button type="button" className="flex-1 py-2.5 bg-[#F5F5F4] hover:bg-[#DCDCDA] text-[#121415] border border-[#DCDCDA] rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                        <MessageCircle className="w-4 h-4" /> Написать
+                        <MessageCircle className="w-4 h-4" /> Message
                       </button>
                     </div>
                   </div>
@@ -239,7 +239,7 @@ export default function Customers() {
         </main>
       </div>
 
-      {/* МОДАЛКА: ДОБАВИТЬ КЛИЕНТА */}
+      {/* ADD CLIENT MODAL */}
       {modal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm">
           <div className="bg-white w-full max-w-md rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
@@ -247,32 +247,32 @@ export default function Customers() {
               <X className="w-4 h-4" />
             </button>
             <div className="p-8 pb-4 shrink-0">
-              <h2 className="text-2xl font-semibold text-[#121415] tracking-tight">Новый гость</h2>
+              <h2 className="text-2xl font-semibold text-[#121415] tracking-tight">New Guest</h2>
             </div>
             <form className="px-8 pb-8 space-y-5">
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                <input autoFocus type="text" placeholder="Имя клиента" className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                <input autoFocus type="text" placeholder="Client name" className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
               </div>
               <div className="relative">
                 <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
                 <input type="tel" placeholder="+998 90 000 00 00" className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
               </div>
               <button type="button" onClick={() => setModal(false)} className="w-full mt-4 py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex justify-center items-center active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                Добавить в базу
+                Add to Directory
               </button>
             </form>
           </div>
         </div>
       )}
 
-      {/* МОДАЛКА: ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ */}
+      {/* CONFIRM DELETE MODAL */}
       <ConfirmModal 
         isOpen={deleteModalOpen} 
         onClose={() => setDeleteModalOpen(false)} 
         onConfirm={() => setDeleteModalOpen(false)} 
-        title="Удалить клиента?" 
-        description="Удалить данные клиента из базы?" 
+        title="Delete Client?" 
+        description="Are you sure you want to remove this client from the directory?" 
       />
     </div>
   );

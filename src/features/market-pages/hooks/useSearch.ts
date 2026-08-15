@@ -18,13 +18,13 @@ interface ExtendedBusiness extends Business {
   distance?: string;
 }
 
-export const CATEGORIES = ["Р В РІР‚в„ўР РЋР С“Р В Р’Вµ", "Р В РІР‚В Р В Р’В°Р РЋР вЂљР В Р’В±Р В Р’ВµР РЋР вЂљР РЋРІвЂљВ¬Р В РЎвЂўР В РЎвЂ”", "Р В Р Р‹Р В Р’В°Р В Р’В»Р В РЎвЂўР В Р вЂ¦ Р В РЎвЂќР РЋР вЂљР В Р’В°Р РЋР С“Р В РЎвЂўР РЋРІР‚С™Р РЋРІР‚в„–", "Р В РЎС™Р В Р’В°Р В Р вЂ¦Р В РЎвЂ Р В РЎвЂќР РЋР вЂ№Р РЋР вЂљ", "Р В Р Р‹Р В РЎвЂ”Р В Р’В°"];
+export const CATEGORIES = ["All", "Barbershop", "Beauty Salon", "Manicure", "Spa"];
 
 export const SORT_OPTIONS = [
-  { id: "relevance", label: "Р В РЎСџР В РЎвЂў Р РЋР вЂљР В Р’ВµР В Р’В»Р В Р’ВµР В Р вЂ Р В Р’В°Р В Р вЂ¦Р РЋРІР‚С™Р В Р вЂ¦Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В РЎвЂ " },
-  { id: "punctuality", label: "Р В Р Р‹Р В Р’В°Р В РЎВ Р РЋРІР‚в„–Р В Р’Вµ Р В РЎвЂ”Р РЋРЎвЂњР В Р вЂ¦Р В РЎвЂќР РЋРІР‚С™Р РЋРЎвЂњР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В Р’Вµ (Р В РЎСљР В РЎвЂўР В Р вЂ Р В РЎвЂўР В Р’Вµ)" }, 
-  { id: "rating", label: "Р В РЎСџР В РЎвЂў Р РЋР вЂљР В Р’ВµР В РІвЂћвЂ“Р РЋРІР‚С™Р В РЎвЂ Р В Р вЂ¦Р В РЎвЂ“Р РЋРЎвЂњ" },
-  { id: "distance", label: "Р В РЎСџР В РЎвЂў Р РЋР вЂљР В Р’В°Р РЋР С“Р РЋР С“Р РЋРІР‚С™Р В РЎвЂўР РЋР РЏР В Р вЂ¦Р В РЎвЂ Р РЋР вЂ№" },
+  { id: "relevance", label: "By Relevance" },
+  { id: "punctuality", label: "Most Punctual (Top)" }, 
+  { id: "rating", label: "By Rating" },
+  { id: "distance", label: "By Distance" },
 ];
 
 export default function useSearch() {
@@ -44,7 +44,7 @@ export default function useSearch() {
   const { user: currentUser } = useAuthStore();
   const userId = currentUser?.id || "guest";
 
-  const activeCategory = searchParams.get("category") || "Р В РІР‚в„ўР РЋР С“Р В Р’Вµ";
+  const activeCategory = searchParams.get("category") || "All";
   const isFavoritesTab = searchParams.get("favorites") === "true";
   const openNowOnly = searchParams.get("openNow") === "true";
   const sortBy = searchParams.get("sort") || "relevance";
@@ -111,12 +111,12 @@ export default function useSearch() {
     },
     onSuccess: ({ isFav, newFavs }) => {
       queryClient.setQueryData(['favorites', userId], newFavs);
-      if (isFav) toast.info("Р В Р в‚¬Р В РўвЂ Р В Р’В°Р В Р’В»Р В Р’ВµР В Р вЂ¦Р В РЎвЂў Р В РЎвЂ Р В Р’В· Р В РЎвЂ Р В Р’В·Р В Р’В±Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р В Р вЂ¦Р В РЎвЂўР В РЎвЂ“Р В РЎвЂў");
-      else toast.success("Р В РІР‚СњР В РЎвЂўР В Р’В±Р В Р’В°Р В Р вЂ Р В Р’В»Р В Р’ВµР В Р вЂ¦Р В РЎвЂў Р В Р вЂ  Р В РЎвЂ Р В Р’В·Р В Р’В±Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р В Р вЂ¦Р В РЎвЂўР В Р’Вµ");
+      if (isFav) toast.info("Removed from favorites");
+      else toast.success("Added to favorites");
     },
     onError: (error) => {
-      console.error("Р В РЎвЂєР РЋРІвЂљВ¬Р В РЎвЂ Р В Р’В±Р В РЎвЂќР В Р’В° Р РЋР С“Р В РЎвЂўР РЋРІР‚В¦Р РЋР вЂљР В Р’В°Р В Р вЂ¦Р В Р’ВµР В Р вЂ¦Р В РЎвЂ Р РЋР РЏ Р В Р’В·Р В Р’В°Р В РЎвЂќР В Р’В»Р В Р’В°Р В РўвЂ Р В РЎвЂўР В РЎвЂќ", error);
-      toast.error("Р В РЎвЂєР РЋРІвЂљВ¬Р В РЎвЂ Р В Р’В±Р В РЎвЂќР В Р’В° Р В РЎвЂўР В Р’В±Р В Р вЂ¦Р В РЎвЂўР В Р вЂ Р В Р’В»Р В Р’ВµР В Р вЂ¦Р В РЎвЂ Р РЋР РЏ Р В Р’В·Р В Р’В°Р В РЎвЂќР В Р’В»Р В Р’В°Р В РўвЂ Р В РЎвЂўР В РЎвЂќ");
+      console.error("Error saving favorites", error);
+      toast.error("Failed to update favorites");
     }
   });
 
@@ -135,7 +135,7 @@ export default function useSearch() {
       list = list.filter((v) => (favorites as string[]).includes(String(v.id)));
     } else {
       list = list.filter((v) =>
-        activeCategory === "Р В РІР‚в„ўР РЋР С“Р В Р’Вµ"
+        activeCategory === "All"
           ? true
           : String(v.category).toLowerCase().includes(activeCategory.toLowerCase()),
       );

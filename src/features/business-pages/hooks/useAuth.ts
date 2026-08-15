@@ -18,32 +18,32 @@ export function useLogin() {
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!login || login.trim().length === 0) newErrors.login = "Введите email или телефон.";
-    if (!password || password.trim().length === 0) newErrors.password = "Введите пароль.";
+    if (!login || login.trim().length === 0) newErrors.login = "Please enter your email or phone number.";
+    if (!password || password.trim().length === 0) newErrors.password = "Please enter your password.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const loginMutation = useMutation({
     mutationFn: async ({ login, password }: Record<string, string>) => {
-      // Имитация аутентификации через получение всех пользователей (ограничение json-server)
+      // Simulate authentication through retrieving users
       const users = await AuthService.getUsers();
       const user = users.find((item: { login?: string; password?: string; [key: string]: unknown }) => item.login === login && item.password === password);
       if (!user) throw new Error("User not found");
       return user;
     },
     onSuccess: (user) => {
-      toast.success("Успешный вход");
+      toast.success("Successfully signed in");
       loginStore(user);
       if (user.role === "admin" || user.role === "master") {
-        router.push("/portal");
+        router.push("/admin");
       } else {
         router.push("/account");
       }
     },
     onError: () => {
-      setErrors({ auth: "Аккаунт не найден." });
-      toast.error("Ошибка входа.");
+      setErrors({ auth: "Invalid credentials or account not found." });
+      toast.error("Sign in failed.");
     }
   });
 
@@ -64,7 +64,7 @@ export function useLogin() {
   };
 }
 
-export function useSignup(role = "admin", redirectPath = "/onboarding") {
+export function useSignup(role = "admin", redirectPath = "/admin") {
   const router = useRouter();
   
   const [name, setName] = useState("");
@@ -77,9 +77,9 @@ export function useSignup(role = "admin", redirectPath = "/onboarding") {
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!name || name.trim().length === 0) newErrors.name = "Введите ваше имя.";
-    if (!login || login.trim().length === 0) newErrors.login = "Введите email или телефон.";
-    if (!password || password.trim().length === 0) newErrors.password = "Введите пароль.";
+    if (!name || name.trim().length === 0) newErrors.name = "Please enter your name.";
+    if (!login || login.trim().length === 0) newErrors.login = "Please enter your email or phone number.";
+    if (!password || password.trim().length === 0) newErrors.password = "Please enter your password.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -93,16 +93,16 @@ export function useSignup(role = "admin", redirectPath = "/onboarding") {
       return await AuthService.register(newUser);
     },
     onSuccess: (user) => {
-      toast.success("Р В Р ВµР С–Р С‘РЎРѓРЎвЂљРЎР‚Р В°РЎвЂ Р С‘РЎРЏ РЎС“РЎРѓР С—Р ВµРЎв‚¬Р Р…Р В°!");
+      toast.success("Registration successful!");
       loginStore(user);
       router.push(redirectPath);
     },
     onError: (error) => {
       if (error.message === "UserExists") {
-        setErrors({ auth: "Р С’Р С”Р С”Р В°РЎС“Р Р…РЎвЂљ РЎРѓ РЎвЂљР В°Р С”Р С‘Р С  email РЎС“Р В¶Р Вµ РЎРѓРЎС“РЎвЂ°Р ВµРЎРѓРЎвЂљР Р†РЎС“Р ВµРЎвЂљ." });
-        toast.error("Р СџР С•Р В»РЎРЉР В·Р С•Р Р†Р В°РЎвЂљР ВµР В»РЎРЉ РЎС“Р В¶Р Вµ РЎРѓРЎС“РЎвЂ°Р ВµРЎРѓРЎвЂљР Р†РЎС“Р ВµРЎвЂљ.");
+        setErrors({ auth: "An account with this email/login already exists." });
+        toast.error("User already exists.");
       } else {
-        toast.error("Р СџРЎР‚Р С•Р С‘Р В·Р С•РЎв‚¬Р В»Р В° Р С•РЎв‚¬Р С‘Р В±Р С”Р В° Р С—РЎР‚Р С‘ РЎР‚Р ВµР С–Р С‘РЎРѓРЎвЂљРЎР‚Р В°РЎвЂ Р С‘Р С‘.");
+        toast.error("Error occurred during registration.");
       }
     }
   });

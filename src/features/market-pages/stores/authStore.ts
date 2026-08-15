@@ -5,6 +5,8 @@ interface StoreUser {
   id: string;
   name?: string;
   email?: string;
+  phone?: string;
+  role?: string;
   profile?: Record<string, unknown>;
   [key: string]: unknown;
 }

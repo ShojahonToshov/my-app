@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";;
+import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import AuthService from "../api/services/AuthService";
 import { toast } from "sonner";
@@ -25,12 +25,12 @@ export default function useProfile() {
     mutationFn: (updatedData: Record<string, unknown>) => AuthService.updateProfile(currentUser!.id as string, updatedData),
     onSuccess: (_, updatedData) => {
       updateUser(updatedData);
-      toast.success("Р вЂќР В°Р Р…Р Р…РЎвЂ№Р Вµ РЎС“РЎРѓР С—Р ВµРЎв‚¬Р Р…Р С• Р С•Р В±Р Р…Р С•Р Р†Р В»Р ВµР Р…РЎвЂ№", {
-        description: "Р вЂ™Р В°РЎв‚¬ Р С—РЎР‚Р С•РЎвЂћР С‘Р В»РЎРЉ Р В°Р Т‘Р С Р С‘Р Р…Р С‘РЎРѓРЎвЂљРЎР‚Р В°РЎвЂљР С•РЎР‚Р В° РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…Р ВµР Р…."
+      toast.success("Profile updated successfully", {
+        description: "Your administrator profile information has been saved."
       });
     },
     onError: () => {
-      toast.error("Р С›РЎв‚¬Р С‘Р В±Р С”Р В° Р С—РЎР‚Р С‘ РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…Р ВµР Р…Р С‘Р С‘.");
+      toast.error("Error saving profile.");
     }
   });
 
@@ -43,7 +43,7 @@ export default function useProfile() {
 
   const handleLogout = () => {
     logout();
-    toast.info("Р вЂ™РЎвЂ№ Р Р†РЎвЂ№РЎв‚¬Р В»Р С‘ Р С‘Р В· РЎРѓР С‘РЎРѓРЎвЂљР ВµР С РЎвЂ№");
+    toast.info("Logged out successfully");
     router.push("/login");
   };
 

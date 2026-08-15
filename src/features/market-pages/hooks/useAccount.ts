@@ -56,10 +56,10 @@ export default function useAccount() {
     mutationFn: (id: string) => BookingService.deleteBooking(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.bookings.byUser(currentUser?.id || "") });
-      toast.success("Р вЂ”Р В°Р С—Р С‘РЎРѓРЎРЉ РЎС“РЎРѓР С—Р ВµРЎв‚¬Р Р…Р С• Р С•РЎвЂљР С Р ВµР Р…Р ВµР Р…Р В°", { description: "Р РЋР С—Р В°РЎРѓР С‘Р В±Р С•, РЎвЂЎРЎвЂљР С• Р С—РЎР‚Р ВµР Т‘РЎС“Р С—РЎР‚Р ВµР Т‘Р С‘Р В»Р С‘ Р В·Р В°РЎР‚Р В°Р Р…Р ВµР Вµ." });
+      toast.success("Appointment successfully cancelled", { description: "Thank you for letting us know in advance." });
     },
     onError: () => {
-      toast.error("Р С›РЎв‚¬Р С‘Р В±Р С”Р В° Р С—РЎР‚Р С‘ Р С•РЎвЂљР С Р ВµР Р…Р Вµ Р В·Р В°Р С—Р С‘РЎРѓР С‘");
+      toast.error("Failed to cancel appointment");
     }
   });
 
@@ -81,9 +81,9 @@ export default function useAccount() {
 
   const handleReschedule = (bookingToReschedule: Booking, callback?: () => void) => {
     if (!bookingToReschedule.id) return;
-    updateMutation.mutate({ id: String(bookingToReschedule.id), data: { date: "Р вЂ”Р В°Р Р†РЎвЂљРЎР‚Р В°", time: "14:00" } }, {
+    updateMutation.mutate({ id: String(bookingToReschedule.id), data: { date: "Tomorrow", time: "14:00" } }, {
       onSuccess: () => {
-        toast.success("Р вЂ”Р В°Р С—Р С‘РЎРѓРЎРЉ Р С—Р ВµРЎР‚Р ВµР Р…Р ВµРЎРѓР ВµР Р…Р В°", { description: "Р СњР С•Р Р†Р С•Р Вµ Р Р†РЎР‚Р ВµР С РЎРЏ: Р вЂ”Р В°Р Р†РЎвЂљРЎР‚Р В° Р Р† 14:00" });
+        toast.success("Appointment rescheduled", { description: "New time: Tomorrow at 14:00" });
         if (callback) callback();
       }
     });
@@ -91,7 +91,7 @@ export default function useAccount() {
 
   const submitReview = (selectedBooking: Booking, rating: number, reviewText: string, callback?: () => void) => {
     if (rating === 0) {
-      toast.error("Р СџР С•Р В¶Р В°Р В»РЎС“Р в„–РЎРѓРЎвЂљР В°, Р С—Р С•РЎРѓРЎвЂљР В°Р Р†РЎРЉРЎвЂљР Вµ Р С•РЎвЂ Р ВµР Р…Р С”РЎС“");
+      toast.error("Please provide a rating");
       return;
     }
     if (!selectedBooking.id) return;
@@ -100,16 +100,16 @@ export default function useAccount() {
       isReviewed: true,
       rating: rating,
       reviewText: reviewText,
-      reviewDate: new Date().toLocaleDateString('ru-RU')
+      reviewDate: new Date().toLocaleDateString('en-US')
     };
 
     updateMutation.mutate({ id: String(selectedBooking.id), data: reviewData }, {
       onSuccess: () => {
-        toast.success("Р РЋР С—Р В°РЎРѓР С‘Р В±Р С•! Р вЂ™Р В°РЎв‚¬ Р С•РЎвЂљР В·РЎвЂ№Р Р† Р С•Р С—РЎС“Р В±Р В»Р С‘Р С”Р С•Р Р†Р В°Р Р….");
+        toast.success("Thank you! Your review has been submitted.");
         if (callback) callback();
       },
       onError: () => {
-        toast.error("Р СџРЎР‚Р С•Р С‘Р В·Р С•РЎв‚¬Р В»Р В° Р С•РЎв‚¬Р С‘Р В±Р С”Р В° Р С—РЎР‚Р С‘ Р С•РЎвЂљР С—РЎР‚Р В°Р Р†Р С”Р Вµ Р С•РЎвЂљР В·РЎвЂ№Р Р†Р В°.");
+        toast.error("An error occurred while submitting your review.");
       }
     });
   };

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React from "react";
 import Link from "next/link";
 import {
@@ -36,42 +36,42 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
           >
             <LayoutDashboard className="w-5 h-5" />
-            Очередь (Live)
+            Queue (Live)
           </Link>
           <Link
             href="/admin/schedule"
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
           >
             <Calendar className="w-5 h-5" />
-            Расписание
+            Schedule
           </Link>
           <Link
             href="/admin/customers"
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
           >
             <Users className="w-5 h-5" />
-            Клиенты
+            Clients
           </Link>
           <Link
             href="/admin/analytics"
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
           >
             <BarChart3 className="w-5 h-5" />
-            Аналитика
+            Analytics
           </Link>
           <Link
             href="/admin/billing"
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
           >
             <CreditCard className="w-5 h-5" />
-            Биллинг
+            Billing
           </Link>
           <Link
             href="/admin/settings"
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
           >
             <Settings className="w-5 h-5" />
-            Настройки
+            Settings
           </Link>
         </nav>
 
@@ -88,19 +88,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   <Bell className="w-5 h-5" />
                   <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#F5F5F4]"></span>
                 </div>
-                Уведомления
+                Notifications
               </div>
               <span className="bg-[#8A2532] text-white text-xs font-medium px-2 py-0.5 rounded-md">
                 2
               </span>
             </button>
 
-            {/* Выпадающее окно уведомлений (скрыто по умолчанию классом hidden) */}
+            {/* Notifications dropdown (hidden by default via 'hidden' class) */}
             <div className="hidden absolute bottom-full left-0 mb-3 w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden animate-in fade-in slide-in-from-bottom-2 z-50">
               <div className="flex items-center justify-between p-5 border-b border-[#DCDCDA] bg-white">
-                <span className="font-medium text-[#121415] text-base tracking-tight">Уведомления</span>
+                <span className="font-medium text-[#121415] text-base tracking-tight">Notifications</span>
                 <button type="button" className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded">
-                  Прочитать все
+                  Mark all read
                 </button>
               </div>
               <div className="max-h-[340px] overflow-y-auto">
@@ -110,9 +110,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       <CheckCircle2 className="w-4 h-4 text-[#4A6B53]" />
                     </div>
                     <div className="flex-1 min-w-0 pr-2">
-                      <p className="text-sm truncate font-medium text-[#121415]">Новая онлайн-запись</p>
-                      <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">Азамат записался на Стрижку (14:30)</p>
-                      <p className="text-xs font-medium text-[#8B9194] mt-2">5 мин назад</p>
+                      <p className="text-sm truncate font-medium text-[#121415]">New online booking</p>
+                      <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">Azamat booked a Haircut (14:30)</p>
+                      <p className="text-xs font-medium text-[#8B9194] mt-2">5 min ago</p>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-[#DCDCDA] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all shrink-0" />
@@ -123,9 +123,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       <X className="w-4 h-4 text-[#dc2626]" />
                     </div>
                     <div className="flex-1 min-w-0 pr-2">
-                      <p className="text-sm truncate font-medium text-[#121415]">Клиент отменил визит</p>
-                      <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">Алексей В. отменил свою запись</p>
-                      <p className="text-xs font-medium text-[#8B9194] mt-2">1 час назад</p>
+                      <p className="text-sm truncate font-medium text-[#121415]">Client cancelled appointment</p>
+                      <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">Alexey V. cancelled his appointment</p>
+                      <p className="text-xs font-medium text-[#8B9194] mt-2">1 hour ago</p>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-[#DCDCDA] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all shrink-0" />
@@ -136,9 +136,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       <AlertTriangle className="w-4 h-4 text-[#121415]" />
                     </div>
                     <div className="flex-1 min-w-0 pr-2">
-                      <p className="text-sm truncate font-medium text-[#4A4E51]">Системное уведомление</p>
-                      <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">Пакет SMS скоро закончится (осталось 110)</p>
-                      <p className="text-xs font-medium text-[#8B9194] mt-2">Вчера</p>
+                      <p className="text-sm truncate font-medium text-[#4A4E51]">System notification</p>
+                      <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">SMS package almost exhausted (110 remaining)</p>
+                      <p className="text-xs font-medium text-[#8B9194] mt-2">Yesterday</p>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-[#DCDCDA] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all shrink-0" />
@@ -152,11 +152,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-white border border-[#DCDCDA] shadow-sm hover:shadow-md hover:border-[#4A4E51] transition-all duration-200 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] mt-1"
           >
             <div className="w-10 h-10 rounded-lg bg-[#F5F5F4] text-[#121415] flex items-center justify-center font-medium text-sm border border-[#DCDCDA] group-hover:scale-105 transition-transform shrink-0">
-              ИИ
+              II
             </div>
             <div className="flex flex-col flex-1 min-w-0">
-              <span className="text-sm font-medium text-[#121415] truncate">Иван Иванов</span>
-              <span className="text-xs font-medium text-[#4A6B53] truncate mt-0.5">Владелец</span>
+              <span className="text-sm font-medium text-[#121415] truncate">Ivan Ivanov</span>
+              <span className="text-xs font-medium text-[#4A6B53] truncate mt-0.5">Owner</span>
             </div>
           </Link>
         </div>
@@ -182,12 +182,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </div>
 
-      {/* MOBILE MENU (скрыто по умолчанию классом hidden) */}
+      {/* MOBILE MENU (hidden by default via 'hidden' class) */}
       <div className="hidden md:hidden fixed inset-0 z-50 flex">
         <div className="absolute inset-0 bg-[#121415]/40 backdrop-blur-sm animate-in fade-in"></div>
         <aside className="relative w-72 max-w-[80vw] bg-[#F5F5F4] h-full flex flex-col shadow-2xl animate-in slide-in-from-left duration-300">
           <div className="h-16 flex items-center justify-between px-6 border-b border-[#DCDCDA]">
-            <span className="text-xl font-medium text-[#121415] tracking-tight">Меню</span>
+            <span className="text-xl font-medium text-[#121415] tracking-tight">Menu</span>
             <button
               type="button"
               className="p-2 bg-[#ECECEA] text-[#4A4E51] hover:text-[#121415] rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
@@ -197,31 +197,31 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
           <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
             <Link href="/admin" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
-              <LayoutDashboard className="w-5 h-5" /> Очередь (Live)
+              <LayoutDashboard className="w-5 h-5" /> Queue (Live)
             </Link>
             <Link href="/admin/schedule" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
-              <Calendar className="w-5 h-5" /> Расписание
+              <Calendar className="w-5 h-5" /> Schedule
             </Link>
             <Link href="/admin/customers" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
-              <Users className="w-5 h-5" /> Клиенты
+              <Users className="w-5 h-5" /> Clients
             </Link>
             <Link href="/admin/analytics" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
-              <BarChart3 className="w-5 h-5" /> Аналитика
+              <BarChart3 className="w-5 h-5" /> Analytics
             </Link>
             <Link href="/admin/billing" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
-              <CreditCard className="w-5 h-5" /> Биллинг
+              <CreditCard className="w-5 h-5" /> Billing
             </Link>
             <Link href="/admin/settings" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
-              <Settings className="w-5 h-5" /> Настройки
+              <Settings className="w-5 h-5" /> Settings
             </Link>
           </nav>
           <div className="p-4 border-t border-[#DCDCDA] flex flex-col gap-2">
             <Link href="/admin/profile" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] hover:bg-[#DCDCDA] active:scale-95 transition-all bg-[#ECECEA] text-[#121415]">
               <User className={`w-5 h-5`} />
-              <span className="font-medium text-sm">Профиль</span>
+              <span className="font-medium text-sm">Profile</span>
             </Link>
             <button type="button" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[#4A4E51] hover:text-[#dc2626] hover:bg-white font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] active:scale-95">
-              <LogOut className="w-5 h-5" /> Выйти
+              <LogOut className="w-5 h-5" /> Log out
             </button>
           </div>
         </aside>

@@ -16,11 +16,11 @@ export default function NotFound() {
           404
         </h1>
         <h2 className="text-2xl md:text-3xl font-semibold text-[#121415] tracking-tight mb-4">
-          Страница не найдена
+          Page not found
         </h2>
         <p className="text-[#4A4E51] font-medium leading-relaxed max-w-sm mb-10">
-          Возможно, адрес был введен неверно, или страница была перемещена
-          либо удалена.
+          The address may have been entered incorrectly, or the page has been
+          moved or deleted.
         </p>
 
         <Link
@@ -28,7 +28,7 @@ export default function NotFound() {
           className="outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full"
         >
           <Button variant="primary" size="md" icon={ArrowLeft}>
-            На главную
+            Go home
           </Button>
         </Link>
       </main>

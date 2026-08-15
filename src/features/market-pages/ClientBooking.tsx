@@ -1,6 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { format, addDays, startOfToday } from "date-fns";
+import { toast } from "sonner";
+import BookingService from "./api/services/BookingService";
+import useAuthStore from "./stores/authStore";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
@@ -118,35 +123,41 @@ const venueData = {
   },
 };
 
-const DATES = [
-  { id: "24.07", day: "Fri", dateNum: "24" },
-  { id: "25.07", day: "Sat", dateNum: "25" },
-  { id: "26.07", day: "Sun", dateNum: "26" },
-  { id: "27.07", day: "Mon", dateNum: "27" },
-  { id: "28.07", day: "Tue", dateNum: "28" },
-  { id: "29.07", day: "Wed", dateNum: "29" },
-];
 
-const AVAILABLE_TIMES = [
-  "10:00",
-  "10:30",
-  "11:00",
-  "11:30",
-  "14:00",
-  "14:30",
-  "16:00",
-];
 
 export default function ClientBooking() {
+  const router = useRouter();
+  const { user } = useAuthStore();
+  
+  const dates = useMemo(() => {
+    const today = startOfToday();
+    return Array.from({ length: 14 }).map((_, i) => {
+      const date = addDays(today, i);
+      return {
+        id: format(date, "yyyy-MM-dd"),
+        day: format(date, "EEE"),
+        dateNum: format(date, "dd"),
+      };
+    });
+  }, []);
+
   const [activeTab, setActiveTab] = useState("booking");
 
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [selectedMaster, setSelectedMaster] = useState<string | null>(null);
-  const [selectedDate, setSelectedDate] = useState(DATES[0].id);
+  const [selectedDate, setSelectedDate] = useState(dates[0].id);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
-  const [clientName, setClientName] = useState("John Doe");
-  const [clientPhone, setClientPhone] = useState("+1 234 567 8900");
+  const availableTimes = useMemo(() => {
+    // Basic dynamic generation based on date, could be replaced with real API call
+    const times = ["10:00", "10:30", "11:00", "11:30", "14:00", "14:30", "15:00", "16:00", "16:30", "17:00"];
+    // Pseudo-randomly remove some slots to simulate unavailability
+    return times.filter((_, i) => (selectedDate.charCodeAt(selectedDate.length - 1) + i) % 3 !== 0);
+  }, [selectedDate, selectedMaster]);
+
+  const [clientName, setClientName] = useState<string>(user?.name ? String(user.name) : "");
+  const [clientPhone, setClientPhone] = useState<string>(user?.phone ? String(user.phone) : "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -190,13 +201,39 @@ export default function ClientBooking() {
     scrollToElement("step-4");
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!policyAccepted) {
       setHasError(true);
       setTimeout(() => setHasError(false), 800);
       return;
     }
-    console.log("Booking confirmed!");
+
+    setIsSubmitting(true);
+    
+    try {
+      const bookingData = {
+        client_id: user?.id || null,
+        business_id: "1", // Typically this would be dynamic based on venue
+        service_id: selectedService,
+        date: selectedDate,
+        time: selectedTime,
+        guest_name: clientName,
+        guest_phone: clientPhone,
+        is_guest: !user,
+        status: "pending"
+      };
+
+      await BookingService.createBooking(bookingData);
+      toast.success("Booking confirmed successfully!");
+      
+      // Reset or navigate
+      // router.push("/search");
+    } catch (error) {
+      toast.error("Failed to confirm booking. Please try again.");
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -410,7 +447,7 @@ export default function ClientBooking() {
                   </h2>
 
                   <div className="flex gap-2.5 overflow-x-auto pb-4 pt-1 px-1 -mx-1 no-scrollbar">
-                    {DATES.map((date) => (
+                    {dates.map((date) => (
                       <button
                         key={date.id}
                         type="button"
@@ -438,7 +475,7 @@ export default function ClientBooking() {
                   </div>
 
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mt-4">
-                    {AVAILABLE_TIMES.map((time) => (
+                    {availableTimes.map((time) => (
                       <button
                         key={time}
                         type="button"
@@ -570,10 +607,10 @@ export default function ClientBooking() {
                 <button
                   type="button"
                   onClick={handleConfirm}
-                  disabled={!isStep5Unlocked}
-                  className="w-full py-4 rounded-full font-medium text-sm transition-all flex items-center justify-center gap-2 bg-[#8A2532] hover:bg-[#731E29] text-white shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:shadow-[0_12px_24px_rgba(138,37,50,0.3)] hover:-translate-y-0.5 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2"
+                  disabled={!isStep5Unlocked || isSubmitting}
+                  className="w-full py-4 rounded-full font-medium text-sm transition-all flex items-center justify-center gap-2 bg-[#8A2532] hover:bg-[#731E29] text-white shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:shadow-[0_12px_24px_rgba(138,37,50,0.3)] hover:-translate-y-0.5 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  Confirm Booking
+                  {isSubmitting ? "Confirming..." : "Confirm Booking"}
                 </button>
               </div>
             </motion.div>
@@ -775,14 +812,14 @@ export default function ClientBooking() {
           <button
             type="button"
             onClick={handleConfirm}
-            disabled={!isStep5Unlocked}
+            disabled={!isStep5Unlocked || isSubmitting}
             className={`w-full py-3.5 rounded-full font-medium text-sm flex items-center justify-center gap-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
-              isStep5Unlocked
+              isStep5Unlocked && !isSubmitting
                 ? "bg-[#8A2532] hover:bg-[#731E29] text-white shadow-[0_8px_20px_rgba(138,37,50,0.2)] active:scale-95 focus-visible:ring-[#8A2532]"
                 : "bg-[#DCDCDA] text-[#787D80] cursor-not-allowed"
             }`}
           >
-            <span className="truncate">Confirm Booking</span>
+            <span className="truncate">{isSubmitting ? "Confirming..." : "Confirm Booking"}</span>
           </button>
         ) : (
           <button

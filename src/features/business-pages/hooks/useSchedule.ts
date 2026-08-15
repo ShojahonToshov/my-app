@@ -7,11 +7,11 @@ import { queryKeys } from "../lib/queryKeys";
 import { ApiBookingDTO } from "../types";
 
 const DYNAMIC_MASTERS = [
-  { id: "1", name: "Р С’Р В»Р С‘ Р С’РЎвЂ¦Р С Р ВµР Т‘Р С•Р Р†", initials: "Р С’Р С’" },
-  { id: "2", name: "Р РЋР В°Р Р…Р В¶Р В°РЎР‚ Р В .", initials: "Р РЋР В " },
-  { id: "3", name: "Р СљР В°РЎР‚Р В°РЎвЂљ Р вЂ™.", initials: "Р СљР вЂ™" },
-  { id: "4", name: "Р вЂќР ВµР Р…Р С‘РЎРѓ Р С™.", initials: "Р вЂќР С™" },
-  { id: "5", name: "Р СћР С‘Р С РЎС“РЎР‚ Р вЂ .", initials: "Р СћР вЂ " },
+  { id: "1", name: "Ali Ahmedov", initials: "AA" },
+  { id: "2", name: "Sanjar B.", initials: "SB" },
+  { id: "3", name: "Marat V.", initials: "MV" },
+  { id: "4", name: "Denis K.", initials: "DK" },
+  { id: "5", name: "Timur G.", initials: "TG" },
 ];
 
 export default function useSchedule() {
@@ -39,12 +39,12 @@ export default function useSchedule() {
         return data.map((item: ApiBookingDTO, index: number) => ({
           id: item.id,
           masterId: masters[index % masters.length].id,
-          client: item.clientName || "Р вЂњР С•РЎРѓРЎвЂљРЎРЉ",
-          service: item.serviceName || "Р Р€РЎРѓР В»РЎС“Р С–Р В°",
+          client: item.clientName || "Guest",
+          service: item.serviceName || "Service",
           startTime: item.time || "10:00",
           duration: 45, 
-          price: item.servicePrice || "80 000 РЎРѓРЎС“Р С ",
-          status: item.status === "upcoming" ? "Р С›Р В¶Р С‘Р Т‘Р В°Р ВµРЎвЂљ" : "Р вЂ™ Р С”РЎР‚Р ВµРЎРѓР В»Р Вµ",
+          price: item.servicePrice || "80,000 UZS",
+          status: item.status === "upcoming" ? "Waiting" : "In Chair",
           date: item.date || "24.07"
         }));
       }
@@ -56,10 +56,10 @@ export default function useSchedule() {
     mutationFn: (newBooking: ApiBookingDTO) => BookingService.createBooking(newBooking as unknown as Parameters<typeof BookingService.createBooking>[0]),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all });
-      toast.success("Р вЂ”Р В°Р С—Р С‘РЎРѓРЎРЉ РЎС“РЎРѓР С—Р ВµРЎв‚¬Р Р…Р С• Р Т‘Р С•Р В±Р В°Р Р†Р В»Р ВµР Р…Р В°");
+      toast.success("Appointment successfully scheduled");
     },
     onError: () => {
-      toast.error("Р С›РЎв‚¬Р С‘Р В±Р С”Р В° РЎРѓР С•РЎвЂ¦РЎР‚Р В°Р Р…Р ВµР Р…Р С‘РЎРЏ");
+      toast.error("Error saving appointment");
     }
   });
 
@@ -73,12 +73,12 @@ export default function useSchedule() {
       userId: "admin-manual",
       venueId: "1",
       venueName: "SuperQueue Business",
-      serviceName: "Р СљРЎС“Р В¶РЎРѓР С”Р В°РЎРЏ РЎРѓРЎвЂљРЎР‚Р С‘Р В¶Р С”Р В°",
-      servicePrice: "80 000 РЎРѓРЎС“Р С ",
-      masterName: selectedMasterObj?.name || "Р СљР В°РЎРѓРЎвЂљР ВµРЎР‚",
+      serviceName: "Men's Haircut",
+      servicePrice: "80,000 UZS",
+      masterName: selectedMasterObj?.name || "Master",
       date: selectedDate,
       time: (formData.get("time") as string) || "12:00",
-      clientName: (formData.get("clientName") as string) || "Р СњР С•Р Р†РЎвЂ№Р в„– Р С™Р В»Р С‘Р ВµР Р…РЎвЂљ",
+      clientName: (formData.get("clientName") as string) || "New Client",
       status: "upcoming"
     };
     
@@ -93,10 +93,10 @@ export default function useSchedule() {
     mutationFn: (id: string) => BookingService.deleteBooking(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all });
-      toast.success("Р вЂ”Р В°Р С—Р С‘РЎРѓРЎРЉ Р С•РЎвЂљР С Р ВµР Р…Р ВµР Р…Р В°");
+      toast.success("Appointment cancelled");
     },
     onError: () => {
-      toast.error("Р С›РЎв‚¬Р С‘Р В±Р С”Р В° Р С—РЎР‚Р С‘ РЎС“Р Т‘Р В°Р В»Р ВµР Р…Р С‘Р С‘");
+      toast.error("Error cancelling appointment");
     }
   });
 

@@ -42,10 +42,10 @@ export default function useClients() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.clients.all });
       setSelectedIds([]);
-      toast.success("Р С™Р В»Р С‘Р ВµР Р…РЎвЂљРЎвЂ№ РЎС“Р Т‘Р В°Р В»Р ВµР Р…РЎвЂ№");
+      toast.success("Clients deleted");
     },
     onError: () => {
-      toast.error("Р С›РЎв‚¬Р С‘Р В±Р С”Р В° Р С—РЎР‚Р С‘ РЎС“Р Т‘Р В°Р В»Р ВµР Р…Р С‘Р С‘ Р С”Р В»Р С‘Р ВµР Р…РЎвЂљР С•Р Р†");
+      toast.error("Error deleting clients");
     }
   });
 
@@ -57,24 +57,24 @@ export default function useClients() {
     mutationFn: (newClient: Partial<Client>) => CustomerService.createCustomer(newClient),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.clients.all });
-      toast.success("Р С™Р В»Р С‘Р ВµР Р…РЎвЂљ РЎС“РЎРѓР С—Р ВµРЎв‚¬Р Р…Р С• Р Т‘Р С•Р В±Р В°Р Р†Р В»Р ВµР Р…");
+      toast.success("Client added successfully");
     },
     onError: () => {
-      toast.error("Р С›РЎв‚¬Р С‘Р В±Р С”Р В° Р С—РЎР‚Р С‘ Р Т‘Р С•Р В±Р В°Р Р†Р В»Р ВµР Р…Р С‘Р С‘ Р С”Р В»Р С‘Р ВµР Р…РЎвЂљР В°");
+      toast.error("Error adding client");
     }
   });
 
   const handleAddClient = useCallback((e: FormEvent<HTMLFormElement>, callback?: () => void) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const name = (formData.get("name") as string) || "Новый гость";
+    const name = (formData.get("name") as string) || "New Guest";
     const newClient: Partial<Client> = {
       id: Date.now().toString(),
       name: name,
       phone: (formData.get("phone") as string) || "",
       status: "new",
       visits: 0,
-      lastVisit: "Р СћР С•Р В»РЎРЉР С”Р С• РЎвЂЎРЎвЂљР С•",
+      lastVisit: "Just now",
     };
 
     addClientMutation.mutate(newClient, {
@@ -89,10 +89,10 @@ export default function useClients() {
     onSuccess: (_, deletedId) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.clients.all });
       setSelectedIds((prev: string[]) => prev.filter((id: string) => id !== deletedId));
-      toast.success("Р С™Р В»Р С‘Р ВµР Р…РЎвЂљ РЎС“Р Т‘Р В°Р В»Р ВµР Р…");
+      toast.success("Client removed");
     },
     onError: () => {
-      toast.error("Р С›РЎв‚¬Р С‘Р В±Р С”Р В° Р С—РЎР‚Р С‘ РЎС“Р Т‘Р В°Р В»Р ВµР Р…Р С‘Р С‘ Р С”Р В»Р С‘Р ВµР Р…РЎвЂљР В°");
+      toast.error("Error removing client");
     }
   });
 

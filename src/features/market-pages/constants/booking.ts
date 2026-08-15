@@ -1,10 +1,10 @@
 export const DATES = [
-  { id: "24.07", day: "Р СџРЎвЂљ", dateNum: "24" },
-  { id: "25.07", day: "Р РЋР В±", dateNum: "25" },
-  { id: "26.07", day: "Р вЂ™РЎРѓ", dateNum: "26" },
-  { id: "27.07", day: "Р СџР Р…", dateNum: "27" },
-  { id: "28.07", day: "Р вЂ™РЎвЂљ", dateNum: "28" },
-  { id: "29.07", day: "Р РЋРЎР‚", dateNum: "29" },
+  { id: "24.07", day: "Fri", dateNum: "24" },
+  { id: "25.07", day: "Sat", dateNum: "25" },
+  { id: "26.07", day: "Sun", dateNum: "26" },
+  { id: "27.07", day: "Mon", dateNum: "27" },
+  { id: "28.07", day: "Tue", dateNum: "28" },
+  { id: "29.07", day: "Wed", dateNum: "29" },
 ];
 
 export const AVAILABLE_TIMES = [

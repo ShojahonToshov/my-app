@@ -97,7 +97,7 @@ export default function Landing() {
 
   useLockBodyScroll(mobileMenuOpen);
 
-  // Кастомная функция для плавного скролла к секциям по центру экрана
+  // Custom smooth-scroll function that centers sections on screen
   const scrollToSection = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     const element = document.getElementById(id);

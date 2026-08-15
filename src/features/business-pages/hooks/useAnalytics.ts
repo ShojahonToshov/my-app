@@ -5,7 +5,7 @@ import { MOCK_DATA } from "../constants/analytics";
 
 
 export default function useAnalytics() {
-  const [period, setPeriod] = useState("Р В Р Р‹Р В Р’ВµР В РЎвЂ“Р В РЎвЂўР В РўвЂ Р В Р вЂ¦Р РЋР РЏ");
+  const [period, setPeriod] = useState("Today");
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['analytics', period],

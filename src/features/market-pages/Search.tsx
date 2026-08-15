@@ -68,12 +68,12 @@ function EmptyState({ query }: { query?: string }) {
         <SearchX className="w-7 h-7" />
       </div>
       <h3 className="text-xl font-semibold text-[#121415] tracking-tight mb-2">
-        Ничего не найдено
+        Nothing found
       </h3>
       <p className="text-[#4A4E51] font-medium leading-relaxed max-w-sm">
         {query
-          ? `По запросу «${query}» ничего не нашлось. Попробуйте изменить формулировку или сбросить фильтры.`
-          : "По выбранным фильтрам подходящих мест нет. Попробуйте выбрать другую категорию."}
+          ? `No results found for "${query}". Try adjusting your search or clearing the filters.`
+          : "No venues match the selected filters. Try choosing a different category."}
       </p>
     </div>
   );
@@ -708,7 +708,7 @@ export default function Search() {
           <div
             className={`${mobileView === "map" ? "block" : "hidden"} lg:block w-full lg:w-[45%] xl:w-[40%] relative mt-2 lg:mt-0`}
           >
-            {/* Окно карты, перехватывает PointerEvents (touch-none запрещает скролл страницы на телефоне во время перетаскивания карты) */}
+            {/* Map window — intercepts PointerEvents (touch-none prevents page scroll on mobile while dragging the map) */}
             <div
               className="lg:sticky lg:top-[160px] h-[500px] lg:h-[calc(100vh-180px)] min-h-[500px] w-full bg-[#F5F5F4] rounded-[2rem] border border-[#DCDCDA] shadow-inner overflow-hidden relative cursor-grab active:cursor-grabbing touch-none"
               onPointerDown={handlePointerDown}
@@ -716,7 +716,7 @@ export default function Search() {
               onPointerUp={handlePointerUp}
               onPointerLeave={handlePointerUp}
             >
-              {/* Контролы Зума */}
+              {/* Zoom controls */}
               <div className="absolute top-5 right-5 flex flex-col gap-2 z-20">
                 <button
                   onPointerDown={(e) => e.stopPropagation()}
@@ -740,13 +740,13 @@ export default function Search() {
                 </button>
               </div>
 
-              {/* Бейдж локации */}
+              {/* Location badge */}
               <div className="absolute bottom-5 right-5 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-xl text-[10px] uppercase font-bold text-[#121415] border border-[#DCDCDA] z-20 flex items-center gap-2 shadow-sm max-w-[80%] pointer-events-none">
                 <Navigation className="w-3.5 h-3.5 text-[#8A2532] fill-[#8A2532] shrink-0" />
                 <span>City Center</span>
               </div>
 
-              {/* ВИРТУАЛЬНЫЙ ХОЛСТ */}
+              {/* VIRTUAL CANVAS */}
               <div
                 ref={canvasRef}
                 className="absolute origin-center will-change-transform"
@@ -760,7 +760,7 @@ export default function Search() {
                   transform: `translate(${mapPositionRef.current.x}px, ${mapPositionRef.current.y}px) scale(${mapScale})`,
                 }}
               >
-                {/* SVG Подложка */}
+                {/* SVG Background */}
                 <div className="absolute inset-0 z-0 opacity-80 pointer-events-none">
                   <svg
                     width="100%"
@@ -815,7 +815,7 @@ export default function Search() {
                   </svg>
                 </div>
 
-                {/* Интерактивные Пины */}
+                {/* Interactive Pins */}
                 <button
                   onPointerDown={(e) => e.stopPropagation()}
                   className="absolute flex flex-col items-center cursor-pointer transition-transform duration-300 ease-out z-10 hover:z-20 hover:scale-110 hover:-translate-y-1 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 rounded-full"

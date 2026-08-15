@@ -23,14 +23,14 @@ export default function AdminSettings() {
         {/* HEADER */}
         <header className="bg-[#ECECEA]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Профиль администратора</h1>
+            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Administrator Profile</h1>
             <p className="text-sm text-[#4A4E51] font-medium mt-1 hidden sm:block">
-              Управление учетной записью и безопасностью
+              Account management and security settings
             </p>
           </div>
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#4a6b53]/10 border border-[#4a6b53]/20 text-[#4a6b53] text-xs font-semibold shadow-sm">
-              <ShieldCheck className="w-4 h-4" /> Владелец
+              <ShieldCheck className="w-4 h-4" /> Owner
             </span>
           </div>
         </header>
@@ -39,29 +39,29 @@ export default function AdminSettings() {
         <main className="flex-1 p-6 md:p-10 overflow-y-auto flex justify-center items-start">
           <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            {/* LEFT COLUMN: Личные данные */}
+            {/* LEFT COLUMN: Personal Details */}
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-white p-8 rounded-3xl shadow-sm border border-[#DCDCDA] animate-in fade-in duration-300">
                 <div className="mb-6">
-                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Личные данные</h2>
-                  <p className="text-sm text-[#4A4E51] font-medium mt-1">Они используются для входа в систему</p>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Personal Details</h2>
+                  <p className="text-sm text-[#4A4E51] font-medium mt-1">Used for signing in and system notifications</p>
                 </div>
 
                 <form className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-[#121415] mb-2">Имя</label>
+                    <label className="block text-sm font-medium text-[#121415] mb-2">Full Name</label>
                     <div className="relative">
                       <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
                       <input
                         type="text"
-                        defaultValue="Иван Иванов"
+                        defaultValue="Ivan Ivanov"
                         className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#121415] mb-2">Email / Логин</label>
+                    <label className="block text-sm font-medium text-[#121415] mb-2">Email / Login</label>
                     <div className="relative">
                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
                       <input
@@ -73,7 +73,7 @@ export default function AdminSettings() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#121415] mb-2">Пароль</label>
+                    <label className="block text-sm font-medium text-[#121415] mb-2">Password</label>
                     <div className="relative">
                       <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
                       <input
@@ -97,14 +97,14 @@ export default function AdminSettings() {
                       className="w-full sm:w-auto px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"
                     >
                       <Save className="w-4 h-4" />
-                      Сохранить изменения
+                      Save Changes
                     </button>
                   </div>
                 </form>
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Действия и Опасная зона */}
+            {/* RIGHT COLUMN: Actions & Danger Zone */}
             <div className="space-y-6">
               
               <div className="bg-white p-6 rounded-3xl shadow-sm border border-[#DCDCDA] flex items-center gap-4">
@@ -112,30 +112,30 @@ export default function AdminSettings() {
                   <Key className="w-5 h-5 text-[#4A4E51]" />
                 </div>
                 <div>
-                  <p className="font-semibold text-[#121415] text-sm">Двухфакторная защита</p>
+                  <p className="font-semibold text-[#121415] text-sm">Two-Factor Authentication</p>
                   <button type="button" className="text-xs font-medium text-[#4a6b53] hover:text-[#38513f] mt-0.5 transition-colors focus-visible:outline-none focus-visible:underline">
-                    Включить 2FA
+                    Enable 2FA
                   </button>
                 </div>
               </div>
 
               <div className="bg-white p-6 rounded-3xl shadow-sm border border-[#DCDCDA] flex flex-col gap-3">
-                <h3 className="text-xs font-semibold text-[#8B9194] uppercase tracking-wider mb-2">Управление сессией</h3>
+                <h3 className="text-xs font-semibold text-[#8B9194] uppercase tracking-wider mb-2">Session Management</h3>
                 <button type="button" className="w-full py-3 bg-white text-[#121415] hover:bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-sm transition-colors flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
-                  <LogOut className="w-4 h-4 text-[#4A4E51]" /> Выйти из аккаунта
+                  <LogOut className="w-4 h-4 text-[#4A4E51]" /> Log out of account
                 </button>
               </div>
 
               <div className="bg-white p-6 pl-7 rounded-3xl shadow-sm border border-[#dc2626]/30 flex flex-col gap-3 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-[#dc2626]"></div>
                 <h3 className="text-xs font-semibold text-[#dc2626] uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                  <ShieldAlert className="w-4 h-4" /> Опасная зона
+                  <ShieldAlert className="w-4 h-4" /> Danger Zone
                 </h3>
                 <p className="text-[12px] text-[#4A4E51] font-medium mb-3 leading-relaxed">
-                  Удаление аккаунта приведет к потере доступа к CRM и всем клиентским базам.
+                  Account deletion will permanently revoke CRM access and erase all client databases.
                 </p>
                 <button type="button" className="w-full py-3 bg-white text-[#dc2626] hover:bg-[#dc2626]/10 border border-[#dc2626] rounded-xl font-medium text-sm transition-colors flex items-center justify-center gap-2 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] active:scale-95">
-                  Удалить аккаунт
+                  Delete Account
                 </button>
               </div>
 
