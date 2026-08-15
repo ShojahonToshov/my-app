@@ -13,7 +13,17 @@ import {
 } from "lucide-react";
 
 // --- Встроенный компонент ConfirmModal для предотвращения ошибок Vite ---
-const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description, confirmText, cancelText, isDestructive }) => {
+interface ConfirmModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  description: string;
+  confirmText: string;
+  cancelText: string;
+  isDestructive?: boolean;
+}
+const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm, title, description, confirmText, cancelText, isDestructive }) => {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={onClose}>

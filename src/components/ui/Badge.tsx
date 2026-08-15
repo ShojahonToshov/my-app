@@ -1,7 +1,14 @@
 "use client";
-import React from "react";
+import React, { ElementType, ReactNode } from "react";
 
-export function Badge({ children, variant = "neutral", className = "", icon: Icon }) {
+export interface BadgeProps {
+  children: ReactNode;
+  variant?: "neutral" | "brand" | "success" | "dark";
+  className?: string;
+  icon?: ElementType;
+}
+
+export function Badge({ children, variant = "neutral", className = "", icon: Icon }: BadgeProps) {
   const variants = {
     neutral: "bg-bg-light border border-border text-slate-text",
     brand: "bg-brand/10 border border-transparent text-brand",

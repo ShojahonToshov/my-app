@@ -1,20 +1,21 @@
-import { create } from 'zustand';
+const fs = require('fs');
+const c = `import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-interface StoreUser {
+interface UserProfile {
   id: string;
   name?: string;
   email?: string;
-  profile?: Record<string, unknown>;
+  profile?: any;
   [key: string]: unknown;
 }
 
 interface AuthState {
-  user: StoreUser | null;
+  user: UserProfile | null;
   isAuthenticated: boolean;
-  login: (userData: StoreUser) => void;
+  login: (userData: UserProfile) => void;
   logout: () => void;
-  updateUser: (updatedData: Partial<StoreUser>) => void;
+  updateUser: (updatedData: Partial<UserProfile>) => void;
 }
 
 const useAuthStore = create<AuthState>()(
@@ -46,3 +47,6 @@ const useAuthStore = create<AuthState>()(
 );
 
 export default useAuthStore;
+`;
+
+fs.writeFileSync('src/features/market-pages/stores/authStore.ts', c);

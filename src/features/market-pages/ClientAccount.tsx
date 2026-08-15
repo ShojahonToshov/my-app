@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Settings,
@@ -28,7 +28,7 @@ const fadeUp = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: [0.16, 1, 0.3, 1],
+      ease: [0.16, 1, 0.3, 1] as const,
     },
   },
 };
@@ -55,12 +55,17 @@ const modalContent = {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const },
   },
   exit: { opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.2 } },
 };
 
-const EmptyState = ({ icon: Icon, title, action }) => (
+interface EmptyStateProps {
+  icon?: React.ElementType;
+  title: string;
+  action?: React.ReactNode;
+}
+const EmptyState: React.FC<EmptyStateProps> = ({ icon: Icon, title, action }) => (
   <motion.div
     variants={fadeUp}
     className="flex flex-col items-center justify-center py-20 px-6 text-center bg-white rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)]"
@@ -81,7 +86,18 @@ const EmptyState = ({ icon: Icon, title, action }) => (
   </motion.div>
 );
 
-const ConfirmModal = ({
+interface ConfirmModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  description: string;
+  confirmText: string;
+  cancelText: string;
+  isDestructive?: boolean;
+}
+
+const ConfirmModal: React.FC<ConfirmModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
@@ -147,12 +163,12 @@ const ConfirmModal = ({
   );
 };
 
-const Skeleton = ({ className }) => (
+const Skeleton: React.FC<{ className?: string }> = ({ className }) => (
   <div className={`animate-pulse bg-[#DCDCDA]/40 ${className}`}></div>
 );
 
 // Интерактивный компонент KarmaTooltip с поповером
-const KarmaTooltip = ({ karma }) => {
+const KarmaTooltip: React.FC<{ karma: number }> = ({ karma }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -197,24 +213,21 @@ const TABS = ["upcoming", "favorites", "history"];
 const DEFAULT_TAB = "upcoming";
 
 export default function ClientAccount() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const tabParam = searchParams.get("tab");
-  const activeTab = TABS.includes(tabParam) ? tabParam : DEFAULT_TAB;
+  const activeTab = TABS.includes(tabParam as string) ? tabParam : DEFAULT_TAB;
 
-  const handleTabChange = (tabId) => {
-    setSearchParams(
-      (prev) => {
-        const next = new URLSearchParams(prev);
-        if (tabId === DEFAULT_TAB) {
-          next.delete("tab");
-        } else {
-          next.set("tab", tabId);
-        }
-        return next;
-      },
-      { replace: true }
-    );
+  const handleTabChange = (tabId: string) => {
+    const next = new URLSearchParams(searchParams.toString());
+    if (tabId === DEFAULT_TAB) {
+      next.delete("tab");
+    } else {
+      next.set("tab", tabId);
+    }
+    router.replace(`${pathname}?${next.toString()}`, { scroll: false });
   };
 
   const user = { name: "Guest", role: "user", id: "guest" };
@@ -479,7 +492,7 @@ export default function ClientAccount() {
                 }`}
               >
                 <span>{tab.label}</span>
-                {tab.count > 0 && (
+                {(tab.count ?? 0) > 0 && (
                   <span
                     className={`w-5 h-5 flex items-center justify-center shrink-0 rounded-full text-[10px] font-bold ${
                       activeTab === tab.id

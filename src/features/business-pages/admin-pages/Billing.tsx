@@ -20,7 +20,14 @@ import {
 
 // --- ВСТРОЕННЫЕ UI-КОМПОНЕНТЫ ---
 
-function UsageBar({ label, current, max, unit = "" }) {
+interface UsageBarProps {
+  label: string;
+  current: number;
+  max: number;
+  unit?: string;
+}
+
+function UsageBar({ label, current, max, unit = "" }: UsageBarProps) {
   const percentage = Math.min((current / max) * 100, 100);
   
   // Использование цветов дизайн-системы: успех (#4a6b53), внимание (amber) и опасность (#dc2626)
@@ -43,7 +50,12 @@ function UsageBar({ label, current, max, unit = "" }) {
   );
 }
 
-function FeatureItem({ text, isDark = false }) {
+interface FeatureItemProps {
+  text: string;
+  isDark?: boolean;
+}
+
+function FeatureItem({ text, isDark = false }: FeatureItemProps) {
   return (
     <div className="flex items-start gap-3">
       <div className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${isDark ? 'bg-white/10' : 'bg-[#e8efe9]'}`}>

@@ -5,11 +5,16 @@ import { X, User, Briefcase, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLockBodyScroll } from "../hooks/useLockBodyScroll";
 
-export default function SignupRoleModal({ isOpen, onClose }) {
+export interface SignupRoleModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function SignupRoleModal({ isOpen, onClose }: SignupRoleModalProps) {
   const router = useRouter();
   useLockBodyScroll(isOpen);
 
-  const handleSelect = (role) => {
+  const handleSelect = (role: string) => {
     onClose();
     router.push(`/signup?role=${role}`);
   };

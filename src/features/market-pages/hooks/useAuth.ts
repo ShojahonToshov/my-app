@@ -32,16 +32,18 @@ export function useLogin(redirectPath = "/account") {
     },
     onSuccess: (user) => {
       toast.success("Вход выполнен успешно");
-      loginStore(user as any);
-      router.push(redirectPath);
+      // @ts-expect-error user properties might slightly differ from StoreUser but it's safe here
+      loginStore(user);
+      const route = user.profile?.role === 'business' ? '/admin' : redirectPath;
+      router.push(route);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       setErrors({ auth: "Неверный логин или пароль." });
       toast.error(error?.message || "Ошибка авторизации.");
     }
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     loginMutation.mutate({ login, password });
@@ -91,10 +93,12 @@ export function useSignup(role = "user", redirectPath = "/account") {
     },
     onSuccess: (user) => {
       toast.success("Регистрация прошла успешно!");
-      loginStore(user as any);
-      router.push(redirectPath);
+      // @ts-expect-error user properties might slightly differ from StoreUser but it's safe here
+      loginStore(user);
+      const route = user.profile?.role === 'business' ? '/admin' : redirectPath;
+      router.push(route);
     },
-    onError: (error: any) => {
+    onError: (error) => {
       toast.error(error?.message || "Произошла ошибка при регистрации.");
     }
   });

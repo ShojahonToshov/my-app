@@ -14,7 +14,13 @@ import {
 } from "lucide-react";
 
 // --- Встроенные компоненты для предотвращения ошибок Vite ---
-const EmptyState = ({ icon: Icon, title, description }) => (
+interface EmptyStateProps {
+  icon?: React.ElementType;
+  title: string;
+  description?: string;
+}
+
+const EmptyState = ({ icon: Icon, title, description }: EmptyStateProps) => (
   <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
     {Icon && <Icon className="w-12 h-12 text-[#8B9194] mx-auto mb-4" />}
     <h3 className="text-lg font-medium text-[#121415] mb-2">{title}</h3>
@@ -22,11 +28,19 @@ const EmptyState = ({ icon: Icon, title, description }) => (
   </div>
 );
 
-const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }) => {
+interface ConfirmModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  description: string;
+}
+
+const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }: ConfirmModalProps) => {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={onClose}>
-      <div className="bg-white w-[400px] max-w-full rounded-[2rem] p-8 shadow-2xl flex flex-col text-center animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+      <div className="bg-white w-[400px] max-w-full rounded-[2rem] p-8 shadow-2xl flex flex-col text-center animate-in fade-in zoom-in-95 duration-200" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
         <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-[#dc2626]/10 text-[#dc2626]">
           <X className="w-6 h-6" />
         </div>

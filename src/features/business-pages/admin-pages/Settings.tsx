@@ -7,7 +7,13 @@ import {
 } from "lucide-react";
 
 // --- ВСТРОЕННЫЕ UI-КОМПОНЕНТЫ ---
-const EmptyState = ({ icon: Icon, title, description }) => (
+interface EmptyStateProps {
+  icon?: React.ElementType;
+  title: string;
+  description?: string;
+}
+
+const EmptyState: React.FC<EmptyStateProps> = ({ icon: Icon, title, description }) => (
   <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
     {Icon && <Icon className="w-12 h-12 text-[#DCDCDA] mx-auto mb-4" />}
     <h3 className="text-lg font-semibold text-[#121415] mb-2">{title}</h3>
@@ -15,7 +21,15 @@ const EmptyState = ({ icon: Icon, title, description }) => (
   </div>
 );
 
-const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }) => {
+interface ConfirmModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  description: string;
+}
+
+const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm, title, description }) => {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={onClose}>
@@ -38,15 +52,22 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }) => {
   );
 };
 
-function CustomSelect({ value, options, onChange, className }) {
+interface CustomSelectProps {
+  value: string;
+  options: string[];
+  onChange: (value: string) => void;
+  className?: string;
+}
+
+function CustomSelect({ value, options, onChange, className }: CustomSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) setIsOpen(false);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) setIsOpen(false);
     };
-    const handleEscape = (e) => { if (e.key === "Escape") setIsOpen(false); };
+    const handleEscape = (e: KeyboardEvent) => { if (e.key === "Escape") setIsOpen(false); };
     
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscape);
@@ -158,30 +179,30 @@ export default function Settings() {
   const [isMasterModalOpen, setIsMasterModalOpen] = useState(false);
   const [newMasterRole, setNewMasterRole] = useState(ROLE_OPTIONS[0]); 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
+  const [itemToDelete, setItemToDelete] = useState<{type: string; id: string; name: string} | null>(null);
 
   // Визуальные функции переключения
-  const toggleDay = (index) => {
+  const toggleDay = (index: number) => {
     const newSchedule = [...schedule];
     newSchedule[index].isActive = !newSchedule[index].isActive;
     setSchedule(newSchedule);
   };
 
-  const updateScheduleTime = (index, field, value) => {
+  const updateScheduleTime = (index: number, field: "start" | "end", value: string) => {
     const newSchedule = [...schedule];
     newSchedule[index][field] = value;
     setSchedule(newSchedule);
   };
 
-  const handleToggleService = (id) => {
+  const handleToggleService = (id: string) => {
     setServices(services.map(s => s.id === id ? { ...s, isActive: !s.isActive } : s));
   };
 
-  const handleToggleMaster = (id) => {
+  const handleToggleMaster = (id: string) => {
     setTeam(team.map(m => m.id === id ? { ...m, isActive: !m.isActive } : m));
   };
 
-  const preventDefaultSubmit = (e) => e.preventDefault();
+  const preventDefaultSubmit = (e: React.FormEvent) => e.preventDefault();
 
   return (
     <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white">

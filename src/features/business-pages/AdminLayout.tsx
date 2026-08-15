@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import ElaraLogo from "@/components/ElaraLogo";
 
-export default function AdminLayout({ children }) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white overflow-hidden">
       

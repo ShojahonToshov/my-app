@@ -1,5 +1,14 @@
 "use client";
-import React from "react";
+import React, { InputHTMLAttributes, ElementType } from "react";
+
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  icon?: ElementType;
+  error?: string;
+  className?: string;
+  actionIcon?: ElementType;
+  onActionClick?: () => void;
+}
 
 export function Input({
   label,
@@ -12,7 +21,7 @@ export function Input({
   onActionClick,
   placeholder = " ",
   ...props
-}) {
+}: InputProps) {
   return (
     <div className={`w-full flex flex-col gap-1.5 shrink-0 ${className}`}>
       <div className="relative group w-full">

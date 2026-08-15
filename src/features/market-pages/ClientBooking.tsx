@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 
-const Instagram = ({ className }) => (
+const Instagram: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -42,7 +42,7 @@ const fadeUp = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: [0.16, 1, 0.3, 1],
+      ease: [0.16, 1, 0.3, 1] as const,
     },
   },
   exit: {
@@ -68,7 +68,7 @@ const shakeAnimation = {
   initial: { x: 0 },
   error: {
     x: [-8, 8, -8, 8, 0],
-    transition: { duration: 0.4, ease: "easeInOut" },
+    transition: { duration: 0.4, ease: "easeInOut" as const },
   },
 };
 
@@ -140,10 +140,10 @@ const AVAILABLE_TIMES = [
 export default function ClientBooking() {
   const [activeTab, setActiveTab] = useState("booking");
 
-  const [selectedService, setSelectedService] = useState(null);
-  const [selectedMaster, setSelectedMaster] = useState(null);
+  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [selectedMaster, setSelectedMaster] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState(DATES[0].id);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
   const [clientName, setClientName] = useState("John Doe");
   const [clientPhone, setClientPhone] = useState("+1 234 567 8900");
@@ -167,7 +167,7 @@ export default function ClientBooking() {
     return 20;
   };
 
-  const scrollToElement = (id) => {
+  const scrollToElement = (id: string) => {
     setTimeout(() => {
       document
         .getElementById(id)
@@ -175,17 +175,17 @@ export default function ClientBooking() {
     }, 200);
   };
 
-  const handleServiceSelect = (id) => {
+  const handleServiceSelect = (id: string) => {
     setSelectedService(id);
     if (!selectedMaster) scrollToElement("step-2");
   };
 
-  const handleMasterSelect = (id) => {
+  const handleMasterSelect = (id: string) => {
     setSelectedMaster(id);
     if (!selectedTime) scrollToElement("step-3");
   };
 
-  const handleTimeSelect = (time) => {
+  const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
     scrollToElement("step-4");
   };

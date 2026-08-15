@@ -1,22 +1,14 @@
 import React from "react";
 import Link from "next/link";
 
-export default function ElaraLogo({ dark = false, disableLink = false }) {
-  const Component = disableLink ? "div" : Link;
-  const linkProps = disableLink 
-    ? {} 
-    : { 
-        href: "/", 
-        onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }) 
-      };
+export interface ElaraLogoProps {
+  dark?: boolean;
+  disableLink?: boolean;
+}
 
-  return (
-    <Component
-      {...linkProps}
-      className={`flex items-center gap-[10px] w-max shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-lg ${
-        disableLink ? "" : "group cursor-pointer"
-      }`}
-    >
+export default function ElaraLogo({ dark = false, disableLink = false }: ElaraLogoProps) {
+  const content = (
+    <>
       <svg
         width="32"
         height="32"
@@ -56,6 +48,24 @@ export default function ElaraLogo({ dark = false, disableLink = false }) {
       <span className={`font-semibold tracking-[0.2em] text-[18px] uppercase leading-[32px] block m-0 p-0 flex-none select-none transition-colors ${dark ? "text-white" : "text-[#121415]"}`}>
         Elara
       </span>
-    </Component>
+    </>
+  );
+
+  const className = `flex items-center gap-[10px] w-max shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-lg ${
+    disableLink ? "" : "group cursor-pointer"
+  }`;
+
+  if (disableLink) {
+    return <div className={className}>{content}</div>;
+  }
+
+  return (
+    <Link
+      href="/"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      className={className}
+    >
+      {content}
+    </Link>
   );
 }

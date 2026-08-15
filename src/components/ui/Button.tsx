@@ -1,6 +1,15 @@
 "use client";
-import React from "react";
+import React, { ButtonHTMLAttributes, ElementType, ReactNode } from "react";
 import { Loader2 } from "lucide-react";
+
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children?: ReactNode;
+  variant?: "primary" | "secondary" | "danger" | "outline" | "ghost";
+  size?: "sm" | "md" | "lg" | "icon";
+  className?: string;
+  icon?: ElementType;
+  isLoading?: boolean;
+}
 
 export function Button({
   children,
@@ -11,11 +20,9 @@ export function Button({
   isLoading = false,
   disabled,
   ...props
-}) {
+}: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center gap-2 font-medium transition-all duration-300 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-slate-dark focus-visible:ring-offset-2 shrink-0 w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none active:scale-95"; // <--- добавили сюда
-
-  // ... остальной код
+    "inline-flex items-center justify-center gap-2 font-medium transition-all duration-300 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-slate-dark focus-visible:ring-offset-2 shrink-0 w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none active:scale-95";
 
   const variants = {
     primary:

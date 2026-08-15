@@ -23,7 +23,7 @@ const fadeUp = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: [0.16, 1, 0.3, 1],
+      ease: [0.16, 1, 0.3, 1] as const,
     },
   },
 };
@@ -40,12 +40,23 @@ const modalContent = {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const },
   },
   exit: { opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.2 } },
 };
 
-const ConfirmModal = ({
+interface ConfirmModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  description: string;
+  confirmText: string;
+  cancelText: string;
+  isDestructive?: boolean;
+}
+
+const ConfirmModal: React.FC<ConfirmModalProps> = ({
   isOpen,
   onClose,
   onConfirm,

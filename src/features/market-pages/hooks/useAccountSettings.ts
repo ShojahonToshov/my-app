@@ -23,9 +23,9 @@ export default function useAccountSettings() {
   }, [currentUser, router]);
 
   const updateProfileMutation = useMutation({
-    mutationFn: (updatedData: Partial<typeof currentUser>) => {
+    mutationFn: (updatedData: Partial<NonNullable<typeof currentUser>>) => {
       if (!currentUser) throw new Error("No user");
-      return AuthService.updateProfile(currentUser.id, updatedData);
+      return AuthService.updateProfile(currentUser.id, updatedData as Record<string, unknown>);
     },
     onSuccess: (data, variables) => {
       updateUser(variables as { id: string; name: string; login?: string; password?: string });

@@ -27,6 +27,8 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
+import BookingService from "./api/services/BookingService";
+import useAuthStore from "./stores/authStore";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -35,7 +37,7 @@ const fadeUp = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.16, 1, 0.3, 1],
+      ease: [0.16, 1, 0.3, 1] as const,
     },
   },
 };
@@ -50,53 +52,7 @@ const staggerContainer = {
   },
 };
 
-const MOCK_VENUES = [
-  {
-    id: 1,
-    name: "Chop-Chop Barbershop",
-    category: "Barbershop",
-    distance: "0.6 km",
-    address: "Amir Temur St, 42",
-    rating: 4.9,
-    reviews: 214,
-    price: "$$",
-    time: "TODAY at 15:30",
-    image:
-      "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=500&q=80",
-    tags: ["Haircut", "Beard Trim", "Styling"],
-    badges: ["Popular", "98% on time"],
-  },
-  {
-    id: 2,
-    name: "Beauty Lab",
-    category: "Beauty Salon",
-    distance: "1.4 km",
-    address: "Shota Rustaveli St, 15",
-    rating: 4.7,
-    reviews: 302,
-    price: "$$$",
-    time: "TOMORROW at 10:00",
-    image:
-      "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=500&q=80",
-    tags: ["Coloring", "Blowout"],
-    badges: ["88% on time"],
-  },
-  {
-    id: 3,
-    name: "Slate Studio",
-    category: "Nail Bar",
-    distance: "0.5 km",
-    address: "Taras Shevchenko St, 11",
-    rating: 4.8,
-    reviews: 420,
-    price: "$$",
-    time: "TODAY at 12:00",
-    image:
-      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500&q=80",
-    tags: ["Manicure", "Pedicure"],
-    badges: ["New", "100% on time"],
-  },
-];
+
 
 const SORT_OPTIONS = [
   { id: "relevance", label: "By relevance", shortLabel: "relevance" },
@@ -105,7 +61,7 @@ const SORT_OPTIONS = [
   { id: "distance", label: "By distance", shortLabel: "distance" },
 ];
 
-function EmptyState({ query }) {
+function EmptyState({ query }: { query?: string }) {
   return (
     <div className="flex flex-col items-center justify-center text-center py-20 px-6 bg-white border border-[#DCDCDA] rounded-[2rem]">
       <div className="w-14 h-14 rounded-2xl bg-[#8A2532]/10 text-[#8A2532] flex items-center justify-center mb-6">
@@ -123,7 +79,71 @@ function EmptyState({ query }) {
   );
 }
 
+export interface VenueData {
+  id: string;
+  name: string;
+  category: string;
+  rating: number;
+  reviews: number;
+  address: string;
+  image: string;
+  tags: string[];
+  badges: string[];
+  coordinates: { x: number; y: number };
+  price: string;
+  distance: string;
+  time: string;
+}
+
+export interface DBBusiness {
+  id: string;
+  name: string;
+  category?: string;
+  rating?: number;
+  reviews_count?: number;
+  address?: string;
+  image_url?: string;
+  tags?: string[];
+  badges?: string[];
+  coordinates?: { x: number; y: number };
+  [key: string]: unknown;
+}
+
 export default function Search() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const { isAuthenticated, user } = useAuthStore();
+  const accountLink = user?.profile?.role === "business" ? "/admin" : "/account";
+
+  const [venues, setVenues] = useState<VenueData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    BookingService.getBusinesses().then((data: unknown) => {
+      const businesses = (data as DBBusiness[]) || [];
+      const formatted = businesses.map((b: DBBusiness) => ({
+        id: b.id,
+        name: b.name,
+        category: b.category || "General",
+        rating: b.rating || 5,
+        reviews: b.reviews_count || 0,
+        coordinates: b.coordinates || { x: 0, y: 0 },
+        address: b.address || "",
+        distance: "1 km",
+        image: b.image_url || "",
+        price: "$10 - $50",
+        time: "10:00 - 20:00",
+        tags: b.tags || [b.category || "General"],
+        priceRange: "$",
+        badges: b.badges || [],
+        isNew: true,
+      }));
+      setVenues(formatted);
+      setIsLoading(false);
+    });
+  }, []);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("All");
   const [mobileView, setMobileView] = useState("list");
@@ -138,11 +158,11 @@ export default function Search() {
 
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [sortOption, setSortOption] = useState("relevance");
-  const sortRef = useRef(null);
+  const sortRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (sortRef.current && !sortRef.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
         setIsSortOpen(false);
       }
     }
@@ -150,7 +170,7 @@ export default function Search() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const filteredVenues = MOCK_VENUES.filter((venue) => {
+  const filteredVenues = venues.filter((venue) => {
     const query = searchQuery.trim().toLowerCase();
     const matchesQuery =
       query === "" ||
@@ -160,7 +180,7 @@ export default function Search() {
     const matchesFilter =
       activeFilter === "All" ||
       venue.category.toLowerCase().includes(activeFilter.toLowerCase()) ||
-      venue.tags.some((tag) =>
+      venue.tags.some((tag: string) =>
         tag.toLowerCase().includes(activeFilter.toLowerCase()),
       );
 
@@ -168,7 +188,7 @@ export default function Search() {
   });
 
   const [mapScale, setMapScale] = useState(1);
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
   const mapPositionRef = useRef({ x: 0, y: 0 });
   const isDragging = useRef(false);
   const dragStart = useRef({ x: 0, y: 0 });
@@ -179,7 +199,7 @@ export default function Search() {
   const handleZoomIn = () => setMapScale((prev) => Math.min(prev + 0.3, 3));
   const handleZoomOut = () => setMapScale((prev) => Math.max(prev - 0.3, 0.5));
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     isDragging.current = true;
     e.currentTarget.setPointerCapture(e.pointerId);
     dragStart.current = {
@@ -188,7 +208,7 @@ export default function Search() {
     };
   };
 
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDragging.current) return;
     mapPositionRef.current = {
       x: e.clientX - dragStart.current.x,
@@ -199,7 +219,7 @@ export default function Search() {
     }
   };
 
-  const handlePointerUp = (e) => {
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     isDragging.current = false;
     e.currentTarget.releasePointerCapture(e.pointerId);
   };
@@ -576,7 +596,7 @@ export default function Search() {
                           )}
 
                           <Badge variant="dark" icon={Timer}>
-                            {venue.badges.find((b) => b.includes("time")) ||
+                            {venue.badges.find((b: string) => b.includes("time")) ||
                               "Verified"}
                           </Badge>
                         </div>
@@ -635,7 +655,7 @@ export default function Search() {
                         </div>
 
                         <div className="flex flex-wrap gap-2 mt-5 max-w-full">
-                          {venue.tags.map((tag) => (
+                          {venue.tags.map((tag: string) => (
                             <Badge key={tag} variant="neutral">
                               {tag}
                             </Badge>

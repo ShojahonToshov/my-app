@@ -1,6 +1,11 @@
+import RoleGuard from '@/components/RoleGuard';
 import Landing from '@/features/market-pages/Landing';
 
 export default function Page() {
-  return <Landing />;
+  return (
+    <RoleGuard allowedRoles={['customer', 'guest']} requireAuth={false}>
+      <Landing />
+    </RoleGuard>
+  );
 }
 

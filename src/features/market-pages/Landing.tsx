@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useId } from "react";
+import React, { useState, useEffect, useId } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -16,6 +16,7 @@ import Footer from "@/components/Footer";
 import ElaraLogo from "@/components/ElaraLogo";
 import SignupRoleModal from "@/components/SignupRoleModal";
 import { Button } from "@/components/ui/Button";
+import useAuthStore from "./stores/authStore";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
 const fadeUp = {
@@ -25,7 +26,7 @@ const fadeUp = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.16, 1, 0.3, 1],
+      ease: [0.16, 1, 0.3, 1] as const,
     },
   },
 };
@@ -40,7 +41,7 @@ const staggerContainer = {
   },
 };
 
-function FaqItem({ q, a }) {
+function FaqItem({ q, a }: { q: string; a: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const answerId = useId();
 
@@ -85,13 +86,19 @@ function FaqItem({ q, a }) {
 }
 
 export default function Landing() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const { isAuthenticated, user } = useAuthStore();
+  const accountLink = user?.profile?.role === "business" ? "/admin" : "/account";
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
 
   useLockBodyScroll(mobileMenuOpen);
 
   // Кастомная функция для плавного скролла к секциям по центру экрана
-  const scrollToSection = (e, id) => {
+  const scrollToSection = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
@@ -138,22 +145,35 @@ export default function Landing() {
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center gap-4 shrink-0">
-            <Link
-              href="/login"
-              className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center"
-            >
-              Log in
-            </Link>
-            <Button 
-              onClick={() => setSignupModalOpen(true)}
-              variant="secondary" 
-              size="sm" 
-              className="px-6 py-2.5 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
-            >
-              Sign up
-            </Button>
-          </div>
+          
+            <div className="hidden md:flex items-center gap-4 shrink-0">
+              {mounted && isAuthenticated ? (
+                <Link
+                  href={accountLink}
+                  className="px-5 py-2.5 text-sm font-medium text-white bg-[#121415] hover:bg-[#1E2123] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center"
+                >
+                  My Account
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center"
+                  >
+                    Log in
+                  </Link>
+                  <Button 
+                    onClick={() => setSignupModalOpen(true)}
+                    variant="secondary" 
+                    size="sm" 
+                    className="px-5 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                  >
+                    Sign up
+                  </Button>
+                </>
+              )}
+            </div>
+
 
           <button
             className="md:hidden p-2 text-[#121415] outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-lg active:scale-95 transition-transform"
@@ -286,7 +306,7 @@ export default function Landing() {
             transition={{
               duration: 0.8,
               delay: 0.3,
-              ease: [0.16, 1, 0.3, 1],
+              ease: [0.16, 1, 0.3, 1] as const,
             }}
             className="w-full max-w-5xl mx-auto mt-24 relative z-10"
           >
