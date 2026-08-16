@@ -41,7 +41,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       
       {/* DESKTOP SIDEBAR */}
       <aside className={`hidden md:flex ${isCollapsed ? "w-[88px]" : "w-[260px]"} bg-[#F5F5F4] border-r border-[#DCDCDA] flex-col shrink-0 z-40 relative transition-all duration-300 ease-in-out`}>
-        <div className={`group h-20 flex items-center relative ${isCollapsed ? "justify-center px-0" : "px-6 justify-between"} border-b border-[#DCDCDA] shrink-0 transition-all duration-300`}>
+        <div className={`group h-20 flex items-center relative ${isCollapsed ? "justify-center px-0" : "px-7 justify-between"} border-b border-[#DCDCDA] shrink-0 transition-all duration-300`}>
           
           {/* LOGO */}
           <div className={`transition-all duration-300 flex items-center ${isCollapsed ? "group-hover:opacity-0" : ""}`}>
@@ -62,11 +62,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </button>
         </div>
 
-        <nav className="flex-1 p-5 space-y-2 overflow-y-auto scrollbar-hide">
+        <nav className="flex-1 py-5 px-4 space-y-2 overflow-y-auto scrollbar-hide">
           <Link
             href="/admin"
             title="Queue (Live)"
-            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-3"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
             <LayoutDashboard className="w-5 h-5 shrink-0" />
             {!isCollapsed && <span className="truncate">Queue (Live)</span>}
@@ -74,7 +74,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/schedule"
             title="Schedule"
-            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-3"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
             <Calendar className="w-5 h-5 shrink-0" />
             {!isCollapsed && <span className="truncate">Schedule</span>}
@@ -82,7 +82,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/customers"
             title="Clients"
-            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-3"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
             <Users className="w-5 h-5 shrink-0" />
             {!isCollapsed && <span className="truncate">Clients</span>}
@@ -90,7 +90,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/analytics"
             title="Analytics"
-            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-3"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
             <BarChart3 className="w-5 h-5 shrink-0" />
             {!isCollapsed && <span className="truncate">Analytics</span>}
@@ -98,7 +98,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/billing"
             title="Billing"
-            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-3"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
             <CreditCard className="w-5 h-5 shrink-0" />
             {!isCollapsed && <span className="truncate">Billing</span>}
@@ -106,7 +106,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/settings"
             title="Settings"
-            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-3"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
             <Settings className="w-5 h-5 shrink-0" />
             {!isCollapsed && <span className="truncate">Settings</span>}
@@ -114,13 +114,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* BOTTOM USER & NOTIFICATIONS SECTION */}
-        <div className="p-4 border-t border-[#DCDCDA] flex flex-col gap-2 shrink-0 bg-[#F5F5F4] relative">
+        <div className="py-4 px-4 border-t border-[#DCDCDA] flex flex-col gap-2 shrink-0 bg-[#F5F5F4] relative">
           
           <div className="relative">
             <button
               type="button"
               title="Notifications"
-              className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "justify-between px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]`}
+              className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "justify-between px-3"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]`}
             >
               <div className={`flex items-center ${isCollapsed ? "justify-center" : "gap-3"} font-medium text-sm`}>
                 <div className="relative shrink-0">
@@ -191,7 +191,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/profile"
             title="Profile"
-            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent hover:bg-[#ECECEA] text-left group mt-1`}
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-3"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent hover:bg-[#ECECEA] text-left group mt-1`}
           >
             <Avatar
               name={displayName}
@@ -245,27 +245,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </button>
           </div>
           <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-            <Link href="/admin" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
+            <Link href="/admin" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
               <LayoutDashboard className="w-5 h-5" /> Queue (Live)
             </Link>
-            <Link href="/admin/schedule" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
+            <Link href="/admin/schedule" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
               <Calendar className="w-5 h-5" /> Schedule
             </Link>
-            <Link href="/admin/customers" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
+            <Link href="/admin/customers" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
               <Users className="w-5 h-5" /> Clients
             </Link>
-            <Link href="/admin/analytics" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
+            <Link href="/admin/analytics" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
               <BarChart3 className="w-5 h-5" /> Analytics
             </Link>
-            <Link href="/admin/billing" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
+            <Link href="/admin/billing" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
               <CreditCard className="w-5 h-5" /> Billing
             </Link>
-            <Link href="/admin/settings" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
+            <Link href="/admin/settings" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent">
               <Settings className="w-5 h-5" /> Settings
             </Link>
           </nav>
           <div className="p-4 border-t border-[#DCDCDA] flex flex-col gap-2">
-            <Link href="/admin/profile" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-left hover:bg-[#ECECEA] group">
+            <Link href="/admin/profile" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-left hover:bg-[#ECECEA] group">
               <Avatar
                 name={displayName}
                 src={avatarUrl || null}
@@ -277,7 +277,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <span className="text-xs text-[#4A4E51] truncate mt-0.5">Free</span>
               </div>
             </Link>
-            <button type="button" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[#4A4E51] hover:text-[#dc2626] hover:bg-white font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] active:scale-95">
+            <button type="button" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[#4A4E51] hover:text-[#dc2626] hover:bg-white font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] active:scale-95">
               <LogOut className="w-5 h-5" /> Log out
             </button>
           </div>

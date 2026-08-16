@@ -109,71 +109,8 @@ export default function Dashboard() {
           {/* KANBAN BOARD */}
           <div className="flex-1 flex gap-6 px-6 md:px-10 pb-10 overflow-x-auto items-start touch-pan-x">
             
-            {/* COLUMN 1: IN CHAIR */}
-            <div className="w-[340px] flex-shrink-0 flex flex-col rounded-[2rem] border p-4 shadow-sm transition-colors duration-200 bg-[#e8efe9]/50 border-[#4a6b53]/20">
-              <div className="flex justify-between items-center mb-5 px-2">
-                <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-lg tracking-tight">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#4a6b53] animate-pulse"></span>
-                  In Chair
-                </h2>
-                <span className="text-xs font-medium text-[#4a6b53] bg-[#e8efe9] border border-[#4a6b53]/30 px-2.5 py-1 rounded-lg">2</span>
-              </div>
-              
-              <div className="space-y-4 pb-4">
-                {/* In Progress Card 1 */}
-                <div className="bg-white p-5 rounded-2xl shadow-sm border border-[#4a6b53]/30 relative group touch-pan-y cursor-grab active:cursor-grabbing">
-                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#4a6b53] rounded-l-2xl"></div>
-                  <div className="flex justify-between items-start mb-4 pl-2">
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-[#4a6b53] uppercase tracking-wider mb-1">Master: Ali Ahmedov</span>
-                      <span className="text-lg font-semibold text-[#121415] tracking-tight leading-tight">Azamat Umarov</span>
-                      <span className="text-sm font-medium text-[#4A4E51] mt-0.5">Haircut + Beard</span>
-                    </div>
-                    <div className="bg-[#F5F5F4] px-2.5 py-1 rounded-lg border border-[#DCDCDA] text-xs font-medium text-[#4A4E51] flex items-center gap-1.5">
-                      <Clock className="w-3 h-3" /> 14:00
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2 pl-2 border-t border-[#DCDCDA] pt-4">
-                    <button type="button" className="w-full py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                      <CheckCircle2 className="w-4 h-4 text-white/70" /> Complete & Call Next
-                    </button>
-                    <div className="flex items-center gap-2">
-                      <button type="button" className="flex-1 py-2.5 bg-white text-[#121415] hover:bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-xs transition-colors flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                        <TimerReset className="w-3.5 h-3.5" /> +10 min delay
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* In Progress Card 2 */}
-                <div className="bg-white p-5 rounded-2xl shadow-sm border border-[#4a6b53]/30 relative group touch-pan-y cursor-grab active:cursor-grabbing">
-                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#4a6b53] rounded-l-2xl"></div>
-                  <div className="flex justify-between items-start mb-4 pl-2">
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-[#4a6b53] uppercase tracking-wider mb-1">Master: Sanjar B.</span>
-                      <span className="text-lg font-semibold text-[#121415] tracking-tight leading-tight">Dilshod K.</span>
-                      <span className="text-sm font-medium text-[#4A4E51] mt-0.5">Men's Haircut</span>
-                    </div>
-                    <div className="bg-[#F5F5F4] px-2.5 py-1 rounded-lg border border-[#DCDCDA] text-xs font-medium text-[#4A4E51] flex items-center gap-1.5">
-                      <Clock className="w-3 h-3" /> 14:15
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2 pl-2 border-t border-[#DCDCDA] pt-4">
-                    <button type="button" className="w-full py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                      <CheckCircle2 className="w-4 h-4 text-white/70" /> Complete & Call Next
-                    </button>
-                    <div className="flex items-center gap-2">
-                      <button type="button" className="flex-1 py-2.5 bg-white text-[#121415] hover:bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-xs transition-colors flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                        <TimerReset className="w-3.5 h-3.5" /> +10 min delay
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* COLUMN 2: WAITING */}
-            <div className="w-[340px] flex-shrink-0 flex flex-col rounded-[2rem] border p-4 shadow-sm transition-colors duration-200 bg-[#F5F5F4]/80 border-[#DCDCDA]">
+            {/* COLUMN 1: WAITING */}
+            <div className="flex-1 min-w-[300px] flex flex-col rounded-[2rem] border p-4 shadow-sm transition-colors duration-200 bg-[#F5F5F4]/80 border-[#DCDCDA]">
               <div className="flex justify-between items-center mb-5 px-2">
                 <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-lg tracking-tight">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#8A2532]"></span>
@@ -184,8 +121,8 @@ export default function Dashboard() {
               
               <div className="space-y-4 pb-4">
                 {/* Waiting Card 1 */}
-                <div className="bg-white p-4 rounded-2xl shadow-sm border transition-all duration-200 relative group touch-pan-y cursor-grab active:cursor-grabbing border-[#8A2532]/30">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-[#8A2532] rounded-l-2xl"></div>
+                <div className="bg-white p-4 rounded-2xl shadow-sm border transition-all duration-200 relative group touch-pan-y cursor-grab active:cursor-grabbing border-[#8A2532]/30 overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-[#8A2532]"></div>
                   <div className="flex justify-between items-start mb-3 pl-1">
                     <div className="flex flex-col">
                       <span className="text-sm font-semibold text-[#121415]">Guest 123</span>
@@ -227,8 +164,71 @@ export default function Dashboard() {
               </div>
             </div>
 
+            {/* COLUMN 2: IN CHAIR */}
+            <div className="flex-1 min-w-[300px] flex flex-col rounded-[2rem] border p-4 shadow-sm transition-colors duration-200 bg-[#e8efe9]/50 border-[#4a6b53]/20">
+              <div className="flex justify-between items-center mb-5 px-2">
+                <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-lg tracking-tight">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#4a6b53] animate-pulse"></span>
+                  In Chair
+                </h2>
+                <span className="text-xs font-medium text-[#4a6b53] bg-[#e8efe9] border border-[#4a6b53]/30 px-2.5 py-1 rounded-lg">2</span>
+              </div>
+              
+              <div className="space-y-4 pb-4">
+                {/* In Progress Card 1 */}
+                <div className="bg-white p-5 rounded-2xl shadow-sm border border-[#4a6b53]/30 relative group touch-pan-y cursor-grab active:cursor-grabbing overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#4a6b53]"></div>
+                  <div className="flex justify-between items-start mb-4 pl-2">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-[#4a6b53] uppercase tracking-wider mb-1">Master: Ali Ahmedov</span>
+                      <span className="text-lg font-semibold text-[#121415] tracking-tight leading-tight">Azamat Umarov</span>
+                      <span className="text-sm font-medium text-[#4A4E51] mt-0.5">Haircut + Beard</span>
+                    </div>
+                    <div className="bg-[#F5F5F4] px-2.5 py-1 rounded-lg border border-[#DCDCDA] text-xs font-medium text-[#4A4E51] flex items-center gap-1.5">
+                      <Clock className="w-3 h-3" /> 14:00
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 pl-2 border-t border-[#DCDCDA] pt-4">
+                    <button type="button" className="w-full py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                      <CheckCircle2 className="w-4 h-4 text-white/70" /> Complete & Call Next
+                    </button>
+                    <div className="flex items-center gap-2">
+                      <button type="button" className="flex-1 py-2.5 bg-white text-[#121415] hover:bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-xs transition-colors flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                        <TimerReset className="w-3.5 h-3.5" /> +10 min delay
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* In Progress Card 2 */}
+                <div className="bg-white p-5 rounded-2xl shadow-sm border border-[#4a6b53]/30 relative group touch-pan-y cursor-grab active:cursor-grabbing overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#4a6b53]"></div>
+                  <div className="flex justify-between items-start mb-4 pl-2">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-[#4a6b53] uppercase tracking-wider mb-1">Master: Sanjar B.</span>
+                      <span className="text-lg font-semibold text-[#121415] tracking-tight leading-tight">Dilshod K.</span>
+                      <span className="text-sm font-medium text-[#4A4E51] mt-0.5">Men's Haircut</span>
+                    </div>
+                    <div className="bg-[#F5F5F4] px-2.5 py-1 rounded-lg border border-[#DCDCDA] text-xs font-medium text-[#4A4E51] flex items-center gap-1.5">
+                      <Clock className="w-3 h-3" /> 14:15
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 pl-2 border-t border-[#DCDCDA] pt-4">
+                    <button type="button" className="w-full py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                      <CheckCircle2 className="w-4 h-4 text-white/70" /> Complete & Call Next
+                    </button>
+                    <div className="flex items-center gap-2">
+                      <button type="button" className="flex-1 py-2.5 bg-white text-[#121415] hover:bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-xs transition-colors flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                        <TimerReset className="w-3.5 h-3.5" /> +10 min delay
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* COLUMN 3: COMPLETED */}
-            <div className="w-[300px] flex-shrink-0 flex flex-col rounded-[2rem] border p-4 shadow-sm transition-colors duration-200 bg-[#ECECEA]/30 border-[#DCDCDA]/50 opacity-70 hover:opacity-100">
+            <div className="flex-1 min-w-[300px] flex flex-col rounded-[2rem] border p-4 shadow-sm transition-colors duration-200 bg-[#ECECEA]/30 border-[#DCDCDA]/50 opacity-70 hover:opacity-100">
               <div className="flex justify-between items-center mb-5 px-2">
                 <h2 className="font-medium text-[#8B9194] flex items-center gap-2 text-sm uppercase tracking-widest">
                   Completed
