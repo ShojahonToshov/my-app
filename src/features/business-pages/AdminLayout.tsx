@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import {
   LayoutDashboard,
@@ -19,12 +19,56 @@ import {
   ChevronRight,
   PanelLeft,
 } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "sonner";
 import ElaraLogo from "@/components/ElaraLogo";
 import useAuthStore from "@/features/market-pages/stores/authStore";
 import Avatar from "@/components/ui/Avatar";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [isCollapsed, setIsCollapsed] = React.useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showMobileNotifications, setShowMobileNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      type: "success",
+      title: "New online booking",
+      message: "Azamat booked a Haircut (14:30)",
+      time: "5 min ago",
+    },
+    {
+      id: 2,
+      type: "cancel",
+      title: "Client cancelled appointment",
+      message: "Alexey V. cancelled his appointment for today",
+      time: "1 hour ago",
+    },
+    {
+      id: 3,
+      type: "warning",
+      title: "System notification",
+      message: "SMS package almost exhausted (110 remaining)",
+      time: "Yesterday",
+    },
+  ]);
+
+  const notifRef = useRef<HTMLDivElement>(null);
+  const mobileNotifRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showNotifications && !showMobileNotifications) return;
+    const handler = (e: MouseEvent) => {
+      if (showNotifications && notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setShowNotifications(false);
+      }
+      if (showMobileNotifications && mobileNotifRef.current && !mobileNotifRef.current.contains(e.target as Node)) {
+        setShowMobileNotifications(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showNotifications, showMobileNotifications]);
   const { user: authUser } = useAuthStore();
   const displayName: string =
     (authUser?.profile?.full_name as string) ||
@@ -116,76 +160,80 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* BOTTOM USER & NOTIFICATIONS SECTION */}
         <div className="py-4 px-4 border-t border-[#DCDCDA] flex flex-col gap-2 shrink-0 bg-[#F5F5F4] relative">
           
-          <div className="relative">
+          <div className="relative" ref={notifRef}>
             <button
               type="button"
               title="Notifications"
+              onClick={() => {
+                if (notifications.length > 0) {
+                  setShowNotifications(!showNotifications);
+                } else {
+                  toast("У вас нет новых уведомлений");
+                }
+              }}
               className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "justify-between px-3"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]`}
             >
               <div className={`flex items-center ${isCollapsed ? "justify-center" : "gap-3"} font-medium text-sm`}>
                 <div className="relative shrink-0">
                   <Bell className="w-5 h-5 shrink-0" />
-                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#F5F5F4]"></span>
+                  {notifications.length > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#F5F5F4]"></span>
+                  )}
                 </div>
                 {!isCollapsed && <span className="truncate">Notifications</span>}
               </div>
-              {!isCollapsed && (
+              {!isCollapsed && notifications.length > 0 && (
                 <span className="bg-[#8A2532] text-white text-xs font-medium px-2 py-0.5 rounded-md shrink-0">
-                  2
+                  {notifications.length}
                 </span>
               )}
             </button>
 
-            {/* Notifications dropdown (hidden by default via 'hidden' class) */}
-            <div className="hidden absolute bottom-full left-0 mb-3 w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden animate-in fade-in slide-in-from-bottom-2 z-50">
-              <div className="flex items-center justify-between p-5 border-b border-[#DCDCDA] bg-white">
-                <span className="font-medium text-[#121415] text-base tracking-tight">Notifications</span>
-                <button type="button" className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded">
-                  Mark all read
-                </button>
-              </div>
-              <div className="max-h-[340px] overflow-y-auto">
-                <button type="button" className="w-full text-left p-4 border-b border-[#DCDCDA] hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] bg-white">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border bg-[#F5F5F4] border-[#DCDCDA]">
-                      <CheckCircle2 className="w-4 h-4 text-[#4A6B53]" />
-                    </div>
-                    <div className="flex-1 min-w-0 pr-2">
-                      <p className="text-sm truncate font-medium text-[#121415]">New online booking</p>
-                      <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">Azamat booked a Haircut (14:30)</p>
-                      <p className="text-xs font-medium text-[#8B9194] mt-2">5 min ago</p>
-                    </div>
+            <AnimatePresence>
+              {showNotifications && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute bottom-full left-0 mb-3 w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden origin-bottom-left z-50 whitespace-normal"
+                >
+                  <div className="flex items-center justify-between p-5 border-b border-[#DCDCDA] bg-white">
+                    <span className="font-medium text-[#121415] text-base tracking-tight">Notifications</span>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        setNotifications([]);
+                        setShowNotifications(false);
+                        toast.success("Все уведомления прочитаны");
+                      }}
+                      className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
+                    >
+                      Mark all read
+                    </button>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-[#DCDCDA] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all shrink-0" />
-                </button>
-                <button type="button" className="w-full text-left p-4 border-b border-[#DCDCDA] hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] bg-white">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border bg-[#F5F5F4] border-[#DCDCDA]">
-                      <X className="w-4 h-4 text-[#dc2626]" />
-                    </div>
-                    <div className="flex-1 min-w-0 pr-2">
-                      <p className="text-sm truncate font-medium text-[#121415]">Client cancelled appointment</p>
-                      <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">Alexey V. cancelled his appointment</p>
-                      <p className="text-xs font-medium text-[#8B9194] mt-2">1 hour ago</p>
-                    </div>
+                  <div className="max-h-[340px] overflow-y-auto">
+                    {notifications.map((notif) => (
+                      <button key={notif.id} type="button" className="w-full text-left p-4 border-b border-[#DCDCDA] last:border-0 hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] bg-white">
+                        <div className="flex items-start gap-3">
+                          <div className={`mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${notif.type === 'warning' ? 'bg-[#ECECEA] border-transparent' : 'bg-[#F5F5F4] border-[#DCDCDA]'}`}>
+                            {notif.type === "success" && <CheckCircle2 className="w-4 h-4 text-[#4A6B53]" />}
+                            {notif.type === "cancel" && <X className="w-4 h-4 text-[#dc2626]" />}
+                            {notif.type === "warning" && <AlertTriangle className="w-4 h-4 text-[#121415]" />}
+                          </div>
+                          <div className="flex-1 min-w-0 pr-2">
+                            <p className={`text-sm truncate font-medium ${notif.type === 'warning' ? 'text-[#4A4E51]' : 'text-[#121415]'}`}>{notif.title}</p>
+                            <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">{notif.message}</p>
+                            <p className="text-xs font-medium text-[#8B9194] mt-2">{notif.time}</p>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-[#DCDCDA] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all shrink-0" />
+                      </button>
+                    ))}
                   </div>
-                  <ChevronRight className="w-4 h-4 text-[#DCDCDA] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all shrink-0" />
-                </button>
-                <button type="button" className="w-full text-left p-4 border-b border-[#DCDCDA] hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] bg-white">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border bg-[#ECECEA] border-transparent">
-                      <AlertTriangle className="w-4 h-4 text-[#121415]" />
-                    </div>
-                    <div className="flex-1 min-w-0 pr-2">
-                      <p className="text-sm truncate font-medium text-[#4A4E51]">System notification</p>
-                      <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">SMS package almost exhausted (110 remaining)</p>
-                      <p className="text-xs font-medium text-[#8B9194] mt-2">Yesterday</p>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-[#DCDCDA] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all shrink-0" />
-                </button>
-              </div>
-            </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           <Link
@@ -215,13 +263,70 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="md:hidden absolute top-0 left-0 right-0 h-16 bg-[#ECECEA]/90 backdrop-blur-xl border-b border-[#DCDCDA] z-40 flex items-center justify-between px-4">
         <ElaraLogo />
         <div className="flex items-center gap-1">
-          <button
-            type="button"
-            className="p-2 text-[#4A4E51] hover:text-[#121415] transition-colors relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-xl active:scale-95"
-          >
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-[#8A2532] rounded-full border border-[#ECECEA]"></span>
-          </button>
+          <div className="relative" ref={mobileNotifRef}>
+            <button
+              type="button"
+              onClick={() => {
+                if (notifications.length > 0) {
+                  setShowMobileNotifications(!showMobileNotifications);
+                } else {
+                  toast("У вас нет новых уведомлений");
+                }
+              }}
+              className="p-2 text-[#4A4E51] hover:text-[#121415] transition-colors relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-xl active:scale-95"
+            >
+              <Bell className="w-5 h-5" />
+              {notifications.length > 0 && (
+                <span className="absolute top-2 right-2 w-2 h-2 bg-[#8A2532] rounded-full border border-[#ECECEA]"></span>
+              )}
+            </button>
+
+            <AnimatePresence>
+              {showMobileNotifications && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-full right-0 mt-2 w-[300px] sm:w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden origin-top-right z-50 whitespace-normal"
+                >
+                  <div className="flex items-center justify-between p-4 border-b border-[#DCDCDA] bg-white">
+                    <span className="font-medium text-[#121415] text-sm sm:text-base tracking-tight">Notifications</span>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        setNotifications([]);
+                        setShowMobileNotifications(false);
+                        toast.success("Все уведомления прочитаны");
+                      }}
+                      className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
+                    >
+                      Mark all read
+                    </button>
+                  </div>
+                  <div className="max-h-[300px] overflow-y-auto">
+                    {notifications.map((notif) => (
+                      <button key={notif.id} type="button" className="w-full text-left p-3 sm:p-4 border-b border-[#DCDCDA] last:border-0 hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] bg-white">
+                        <div className="flex items-start gap-3">
+                          <div className={`mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${notif.type === 'warning' ? 'bg-[#ECECEA] border-transparent' : 'bg-[#F5F5F4] border-[#DCDCDA]'}`}>
+                            {notif.type === "success" && <CheckCircle2 className="w-4 h-4 text-[#4A6B53]" />}
+                            {notif.type === "cancel" && <X className="w-4 h-4 text-[#dc2626]" />}
+                            {notif.type === "warning" && <AlertTriangle className="w-4 h-4 text-[#121415]" />}
+                          </div>
+                          <div className="flex-1 min-w-0 pr-2">
+                            <p className={`text-sm truncate font-medium ${notif.type === 'warning' ? 'text-[#4A4E51]' : 'text-[#121415]'}`}>{notif.title}</p>
+                            <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">{notif.message}</p>
+                            <p className="text-xs font-medium text-[#8B9194] mt-1 sm:mt-2">{notif.time}</p>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-[#DCDCDA] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all shrink-0" />
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           <button
             type="button"
             className="p-2 bg-white text-[#121415] rounded-xl border border-[#DCDCDA] hover:bg-[#F5F5F4] transition-colors ml-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"

@@ -75,8 +75,34 @@ const TABS = [
 
 export default function Customers() {
   const [activeTab, setActiveTab] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [modal, setModal] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const filteredCustomers = INITIAL_CUSTOMERS.filter((customer) => {
+    const matchesTab = activeTab === "all" || customer.status === activeTab;
+    const q = searchQuery.trim().toLowerCase();
+    const matchesSearch = q === "" || 
+      customer.name.toLowerCase().includes(q) || 
+      customer.phone.toLowerCase().includes(q);
+    return matchesTab && matchesSearch;
+  });
+
+  const allFilteredSelected = filteredCustomers.length > 0 && filteredCustomers.every(c => selectedIds.includes(c.id));
+  const someSelected = filteredCustomers.some(c => selectedIds.includes(c.id)) && !allFilteredSelected;
+
+  const toggleSelectAll = () => {
+    if (allFilteredSelected) {
+      setSelectedIds(prev => prev.filter(id => !filteredCustomers.find(c => c.id === id)));
+    } else {
+      setSelectedIds(prev => [...new Set([...prev, ...filteredCustomers.map(c => c.id)])]);
+    }
+  };
+
+  const toggleSelect = (id: number) => {
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
 
   return (
     <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white relative">
@@ -104,12 +130,23 @@ export default function Customers() {
           {/* SEARCH & TABS */}
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-between shrink-0">
             <div className="w-full sm:w-96 relative group">
-              <Search className="w-5 h-5 text-[#8B9194] absolute left-4 top-1/2 -translate-y-1/2 group-focus-within:text-[#121415] transition-colors" />
+              <Search className="w-5 h-5 text-[#8B9194] absolute left-4 top-1/2 -translate-y-1/2 group-focus-within:text-[#121415] transition-colors pointer-events-none" />
               <input 
                 type="text" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by name or phone..." 
                 className="w-full pl-12 pr-10 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium placeholder:text-[#8B9194] focus:outline-none focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 shadow-sm transition-all" 
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-full bg-[#DCDCDA] hover:bg-[#121415] text-[#4A4E51] hover:text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
             </div>
 
             <div className="flex items-center gap-1 bg-[#F5F5F4] p-1.5 rounded-xl border border-[#DCDCDA] w-full sm:w-auto overflow-x-auto scrollbar-hide">
@@ -120,7 +157,7 @@ export default function Customers() {
                   onClick={() => setActiveTab(tab.id)} 
                   className={`shrink-0 px-5 py-1.5 rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] whitespace-nowrap ${activeTab === tab.id ? "bg-white text-[#121415] shadow-sm border border-[#DCDCDA]" : "text-[#4A4E51] hover:text-[#121415] border border-transparent"}`}
                 >
-                  {tab.label} {tab.id === "all" && `(${INITIAL_CUSTOMERS.length})`}
+                  {tab.label}
                 </button>
               ))}
             </div>
@@ -134,7 +171,13 @@ export default function Customers() {
                 <thead>
                   <tr className="bg-[#F5F5F4]/80 border-b border-[#DCDCDA] text-[10px] font-medium text-[#8B9194] uppercase tracking-wider sticky top-0 z-10 backdrop-blur-sm">
                     <th className="py-3 pl-6 pr-2 w-10">
-                      <input type="checkbox" className="w-4 h-4 text-[#121415] bg-white border-[#DCDCDA] rounded focus:ring-[#121415] cursor-pointer accent-[#121415]" />
+                      <input 
+                        type="checkbox" 
+                        ref={el => { if (el) el.indeterminate = someSelected; }}
+                        checked={allFilteredSelected}
+                        onChange={toggleSelectAll}
+                        className="w-4 h-4 text-[#121415] bg-white border-[#DCDCDA] rounded focus:ring-[#121415] cursor-pointer accent-[#121415]" 
+                      />
                     </th>
                     <th className="py-3 px-6">Client</th>
                     <th className="py-3 px-6">Status</th>
@@ -145,10 +188,25 @@ export default function Customers() {
                 </thead>
 
                 <tbody className="divide-y divide-[#F5F5F4] text-sm">
-                  {INITIAL_CUSTOMERS.map((customer) => (
-                    <tr key={customer.id} className="transition-colors group hover:bg-[#F5F5F4]/50">
+                  {filteredCustomers.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-8">
+                        <EmptyState 
+                          title={searchQuery ? "No results found" : "No clients found"} 
+                          description={searchQuery ? `No clients match "${searchQuery}". Try a different name or phone number.` : `There are no ${activeTab === "regular" ? "regular" : activeTab === "new" ? "new" : ""} clients.`} 
+                        />
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredCustomers.map((customer) => (
+                    <tr key={customer.id} className={`transition-colors group ${selectedIds.includes(customer.id) ? "bg-[#F5F5F4]" : "hover:bg-[#F5F5F4]/50"}`}>
                       <td className="py-3 pl-6 pr-2">
-                        <input type="checkbox" className="w-4 h-4 text-[#121415] bg-white border-[#DCDCDA] rounded focus:ring-[#121415] cursor-pointer accent-[#121415]" />
+                        <input 
+                          type="checkbox" 
+                          checked={selectedIds.includes(customer.id)}
+                          onChange={() => toggleSelect(customer.id)}
+                          className="w-4 h-4 text-[#121415] bg-white border-[#DCDCDA] rounded focus:ring-[#121415] cursor-pointer accent-[#121415]" 
+                        />
                       </td>
                       <td className="py-3 px-6">
                         <div className="flex items-center gap-3">
@@ -174,64 +232,73 @@ export default function Customers() {
                       </td>
                       <td className="py-3 px-6 text-[#4A4E51] font-medium">{customer.lastVisit}</td>
                       <td className="py-3 px-6 text-right">
-                        <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button type="button" className="p-2 text-[#8B9194] hover:text-[#4a6b53] hover:bg-[#e8efe9] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]" title="Call">
+                        <div className="flex items-center justify-end gap-1 transition-opacity">
+                          <button type="button" className="p-2 text-[#4A4E51] hover:text-[#4a6b53] hover:bg-[#e8efe9] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]" title="Call">
                             <PhoneCall className="w-4 h-4" />
                           </button>
-                          <button type="button" className="p-2 text-[#8B9194] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]" title="Message">
+                          <button type="button" className="p-2 text-[#4A4E51] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]" title="Message">
                             <MessageCircle className="w-4 h-4" />
                           </button>
                           <div className="w-px h-4 bg-[#DCDCDA] mx-1"></div>
-                          <button type="button" onClick={() => setDeleteModalOpen(true)} className="p-2 text-[#8B9194] hover:text-[#dc2626] hover:bg-[#dc2626]/10 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]" title="Delete">
+                          <button type="button" onClick={() => setDeleteModalOpen(true)} className="p-2 text-[#4A4E51] hover:text-[#dc2626] hover:bg-[#dc2626]/10 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]" title="Delete">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  )))}
                 </tbody>
               </table>
 
               {/* MOBILE VIEW */}
               <div className="lg:hidden flex flex-col divide-y divide-[#F5F5F4]">
-                {INITIAL_CUSTOMERS.map((customer) => (
-                  <div key={customer.id} className="p-5 bg-white hover:bg-[#F5F5F4] transition-colors">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-12 h-12 rounded-xl font-medium flex items-center justify-center shrink-0 ${customer.avatarColor}`}>
-                          {customer.initials}
-                        </div>
-                        <div>
-                          <p className="font-semibold text-[#121415] text-base tracking-tight leading-tight">{customer.name}</p>
-                          <p className="text-sm text-[#4A4E51] mt-0.5">{customer.phone}</p>
-                        </div>
-                      </div>
-                      <span className={`inline-flex px-2 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider border ${customer.statusColor}`}>
-                        {customer.status === "regular" ? "Regular" : "New"}
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center justify-between bg-[#F5F5F4] p-3 rounded-xl border border-[#DCDCDA] mb-4">
-                      <div>
-                        <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">Visits</p>
-                        <p className="font-semibold text-[#121415]">{customer.visits}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">Revenue (LTV)</p>
-                        <p className="font-semibold text-[#121415]">{customer.ltv}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <button type="button" className="flex-1 py-2.5 bg-[#e8efe9] hover:opacity-90 text-[#4a6b53] border border-[#4a6b53]/30 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]">
-                        <PhoneCall className="w-4 h-4" /> Call
-                      </button>
-                      <button type="button" className="flex-1 py-2.5 bg-[#F5F5F4] hover:bg-[#DCDCDA] text-[#121415] border border-[#DCDCDA] rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                        <MessageCircle className="w-4 h-4" /> Message
-                      </button>
-                    </div>
+                {filteredCustomers.length === 0 ? (
+                  <div className="p-8">
+                    <EmptyState 
+                      title={searchQuery ? "No results found" : "No clients found"} 
+                      description={searchQuery ? `No clients match "${searchQuery}". Try a different name or phone number.` : `There are no ${activeTab === "regular" ? "regular" : activeTab === "new" ? "new" : ""} clients.`} 
+                    />
                   </div>
-                ))}
+                ) : (
+                  filteredCustomers.map((customer) => (
+                    <div key={customer.id} className="p-5 bg-white hover:bg-[#F5F5F4] transition-colors">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-12 h-12 rounded-xl font-medium flex items-center justify-center shrink-0 ${customer.avatarColor}`}>
+                            {customer.initials}
+                          </div>
+                          <div>
+                            <p className="font-semibold text-[#121415] text-base tracking-tight leading-tight">{customer.name}</p>
+                            <p className="text-sm text-[#4A4E51] mt-0.5">{customer.phone}</p>
+                          </div>
+                        </div>
+                        <span className={`inline-flex px-2 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider border ${customer.statusColor}`}>
+                          {customer.status === "regular" ? "Regular" : "New"}
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center justify-between bg-[#F5F5F4] p-3 rounded-xl border border-[#DCDCDA] mb-4">
+                        <div>
+                          <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">Visits</p>
+                          <p className="font-semibold text-[#121415]">{customer.visits}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">Revenue (LTV)</p>
+                          <p className="font-semibold text-[#121415]">{customer.ltv}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <button type="button" className="flex-1 py-2.5 bg-[#e8efe9] hover:opacity-90 text-[#4a6b53] border border-[#4a6b53]/30 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]">
+                          <PhoneCall className="w-4 h-4" /> Call
+                        </button>
+                        <button type="button" className="flex-1 py-2.5 bg-[#F5F5F4] hover:bg-[#DCDCDA] text-[#121415] border border-[#DCDCDA] rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                          <MessageCircle className="w-4 h-4" /> Message
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
 
             </div>

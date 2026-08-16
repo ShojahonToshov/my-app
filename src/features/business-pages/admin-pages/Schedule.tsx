@@ -1,5 +1,22 @@
 "use client";
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  format,
+  addDays,
+  subDays,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  isToday,
+  startOfWeek,
+  endOfWeek,
+  startOfToday
+} from "date-fns";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Calendar as CalendarIcon,
   ChevronLeft,
@@ -45,11 +62,105 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm,
     </div>
   );
 };
+function CalendarPopover({ selectedDate, onSelect }: { selectedDate: Date, onSelect: (date: Date) => void }) {
+  const [currentMonth, setCurrentMonth] = useState(startOfMonth(selectedDate));
+  
+  const days = eachDayOfInterval({
+    start: startOfWeek(startOfMonth(currentMonth), { weekStartsOn: 1 }),
+    end: endOfWeek(endOfMonth(currentMonth), { weekStartsOn: 1 })
+  });
+
+  const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
+  const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
+  
+  const weekDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
+  return (
+    <div className="flex flex-col">
+      <div className="flex items-center justify-between mb-4">
+        <button 
+          onClick={prevMonth} 
+          className="p-1.5 hover:bg-[#F5F5F4] rounded-lg transition-colors text-[#4A4E51] hover:text-[#121415] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <div className="font-semibold text-sm text-[#121415]">
+          {format(currentMonth, "MMMM yyyy")}
+        </div>
+        <button 
+          onClick={nextMonth} 
+          className="p-1.5 hover:bg-[#F5F5F4] rounded-lg transition-colors text-[#4A4E51] hover:text-[#121415] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+      <div className="grid grid-cols-7 gap-1 mb-2">
+        {weekDays.map(day => (
+          <div key={day} className="text-center text-[10px] uppercase font-bold text-[#8B9194] tracking-wider">
+            {day}
+          </div>
+        ))}
+      </div>
+      <div className="grid grid-cols-7 gap-1">
+        {days.map(day => {
+          const isSelected = isSameDay(day, selectedDate);
+          const isCurrentMonth = isSameMonth(day, currentMonth);
+          const isCurrentDay = isToday(day);
+          
+          return (
+            <button
+              key={day.toString()}
+              onClick={() => onSelect(day)}
+              className={`
+                h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]
+                ${!isCurrentMonth ? 'text-[#DCDCDA] hover:bg-[#F5F5F4]' : ''}
+                ${isCurrentMonth && !isSelected && !isCurrentDay ? 'text-[#121415] hover:bg-[#F5F5F4]' : ''}
+                ${isCurrentMonth && isCurrentDay && !isSelected ? 'text-[#8A2532] bg-red-50 hover:bg-red-100' : ''}
+                ${isSelected ? 'bg-[#121415] text-white shadow-sm' : ''}
+              `}
+            >
+              {format(day, "d")}
+            </button>
+          );
+        })}
+      </div>
+      <div className="mt-4 pt-3 border-t border-[#DCDCDA] flex justify-center">
+        <button 
+          onClick={() => {
+            onSelect(startOfToday());
+          }}
+          className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded px-2 py-1"
+        >
+          Go to Today
+        </button>
+      </div>
+    </div>
+  );
+}
 // -----------------------------------------------------------------
 
 export default function Schedule() {
-  // Static mock data for visualization
-  const selectedDate = "24.07";
+  const [currentDate, setCurrentDate] = useState<Date>(startOfToday());
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const calendarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) {
+        setIsCalendarOpen(false);
+      }
+    };
+    if (isCalendarOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isCalendarOpen]);
+
+  const handlePrevDay = () => setCurrentDate(prev => subDays(prev, 1));
+  const handleNextDay = () => setCurrentDate(prev => addDays(prev, 1));
+
   const currentTimeTop = 270; // 12:15 in pixels from 10:00 (135 mins * 2px)
   const showTimeLine = true;
 
@@ -66,23 +177,55 @@ export default function Schedule() {
       <div className="flex-1 flex flex-col overflow-hidden relative">
         
         {/* HEADER */}
-        <header className="bg-[#ECECEA]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <header className="bg-[#ECECEA]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Schedule</h1>
             <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Manage appointments and specialists</p>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1 bg-[#F5F5F4] p-1.5 rounded-xl border border-[#DCDCDA]">
-              <button type="button" className="p-1.5 hover:bg-white rounded-lg transition-colors text-[#4A4E51] hover:text-[#121415] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+            <div className="flex items-center gap-1 bg-[#F5F5F4] p-1.5 rounded-xl border border-[#DCDCDA] relative" ref={calendarRef}>
+              <button 
+                type="button" 
+                onClick={handlePrevDay}
+                className="p-1.5 hover:bg-white rounded-lg transition-colors text-[#4A4E51] hover:text-[#121415] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+              >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <div className="px-4 py-1 font-medium text-sm text-[#121415] bg-white rounded-lg shadow-sm border border-[#DCDCDA]">
-                {selectedDate}
-              </div>
-              <button type="button" className="p-1.5 hover:bg-white rounded-lg transition-colors text-[#4A4E51] hover:text-[#121415] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+              <button 
+                type="button"
+                onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                className="px-4 py-1.5 font-medium text-sm text-[#121415] bg-white rounded-lg shadow-sm border border-[#DCDCDA] hover:bg-gray-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+              >
+                {format(currentDate, "dd.MM")} 
+              </button>
+              <button 
+                type="button" 
+                onClick={handleNextDay}
+                className="p-1.5 hover:bg-white rounded-lg transition-colors text-[#4A4E51] hover:text-[#121415] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+              >
                 <ChevronRight className="w-4 h-4" />
               </button>
+
+              <AnimatePresence>
+                {isCalendarOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl border border-[#DCDCDA] p-4 w-[280px] z-50 origin-top"
+                  >
+                    <CalendarPopover 
+                      selectedDate={currentDate} 
+                      onSelect={(date) => {
+                        setCurrentDate(date);
+                        setIsCalendarOpen(false);
+                      }} 
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
             <button type="button" className="bg-[#121415] text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
               <Plus className="w-4 h-4" /> <span className="hidden sm:inline">New Appointment</span>
@@ -148,7 +291,7 @@ export default function Schedule() {
                       <span className="font-semibold text-[#121415] text-sm truncate pr-4">Guest</span>
                       <span className="text-[10px] font-medium bg-[#F5F5F4] px-1.5 py-0.5 rounded-md text-[#4A4E51] border border-[#DCDCDA]">10:00</span>
                     </div>
-                    <p className="text-xs text-[#4A4E51] truncate pl-2 mt-0.5">Men's Haircut</p>
+                    <p className="text-xs text-[#4A4E51] truncate pl-2 mt-0.5">Men&apos;s Haircut</p>
                     <div className="mt-auto flex items-center justify-between pl-2">
                        <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-[#F5F5F4] text-[#4A4E51] border border-[#DCDCDA]">Waiting</span>
                        <button type="button" className="text-[#8B9194] hover:text-[#dc2626] transition-colors opacity-0 group-hover/card:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] rounded"><Trash2 className="w-3.5 h-3.5" /></button>

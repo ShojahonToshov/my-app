@@ -46,15 +46,15 @@ export default function ElaraLogo({ dark = false, disableLink = false, showText 
         />
       </svg>
 
-      {showText && (
-        <span className={`font-semibold tracking-[0.2em] text-[18px] uppercase leading-[32px] block m-0 p-0 flex-none select-none transition-colors ${dark ? "text-white" : "text-[#121415]"}`}>
+      <div className={`transition-all duration-300 overflow-hidden ${showText ? "max-w-[120px] ml-[10px] opacity-100" : "max-w-0 ml-0 opacity-0"}`}>
+        <span className={`font-semibold tracking-[0.2em] text-[18px] uppercase leading-[32px] block m-0 p-0 flex-none select-none ${dark ? "text-white" : "text-[#121415]"}`}>
           Elara
         </span>
-      )}
+      </div>
     </>
   );
 
-  const className = `flex items-center gap-[10px] w-max shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-lg ${
+  const className = `flex items-center w-max shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-lg ${
     disableLink ? "" : "group cursor-pointer"
   }`;
 
