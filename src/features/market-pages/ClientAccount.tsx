@@ -18,8 +18,13 @@ import {
   MapPin,
   CalendarDays,
   Timer,
+  CheckCircle2,
+  ChevronRight,
 } from "lucide-react";
+import { toast } from "sonner";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
+import useAuthStore from "@/features/market-pages/stores/authStore";
+import Avatar from "@/components/ui/Avatar";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -217,6 +222,24 @@ export default function ClientAccount() {
   const router = useRouter();
   const pathname = usePathname();
 
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      title: "Booking confirmed",
+      message: "Your appointment at Chop-Chop Barbershop is confirmed for tomorrow 14:00.",
+      time: "2 hours ago",
+      type: "success"
+    },
+    {
+      id: 2,
+      title: "Review reminder",
+      message: "How was your visit to Glow Beauty Studio? Leave a review!",
+      time: "1 day ago",
+      type: "info"
+    }
+  ]);
+
   const tabParam = searchParams.get("tab");
   const activeTab = TABS.includes(tabParam as string) ? tabParam : DEFAULT_TAB;
 
@@ -230,7 +253,15 @@ export default function ClientAccount() {
     router.replace(`${pathname}?${next.toString()}`, { scroll: false });
   };
 
-  const user = { name: "Guest", role: "user", id: "guest" };
+  // ── Real user from auth store ───────────────────────────────────────────────
+  const { user: authUser } = useAuthStore();
+  const displayName: string =
+    (authUser?.profile?.full_name as string) ||
+    (authUser?.name as string) ||
+    (authUser?.email as string)?.split("@")[0] ||
+    "Guest";
+  const userEmail: string = (authUser?.email as string) ?? "";
+  const avatarUrl: string = (authUser?.profile?.avatar_url as string) ?? "";
   const clientKarma = 95;
   const isLoading = false;
 
@@ -431,19 +462,20 @@ export default function ClientAccount() {
       {/* Header */}
       <header className="fixed top-0 inset-x-0 z-40 bg-[#ECECEA]/90 backdrop-blur-xl border-b border-[#DCDCDA]">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-4 w-full">
-          <div className="flex items-center gap-4 min-w-0">
-            <button
-              aria-label="Profile Initials"
-              className="w-10 h-10 rounded-full bg-[#121415] text-white flex items-center justify-center font-semibold text-lg shadow-sm hover:bg-[#1E2123] transition-colors shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
-            >
-              {(user?.name ?? "G").substring(0, 1).toUpperCase()}
-            </button>
+          <div className="flex items-center gap-3.5 min-w-0">
+            <Avatar
+              name={displayName}
+              src={avatarUrl || null}
+              size="md"
+              ring
+              className="hover:scale-105 cursor-default shadow-sm"
+            />
             <div className="flex-col hidden sm:flex min-w-0">
               <h1 className="text-sm font-semibold text-[#121415] tracking-tight truncate">
-                Hello, {user?.name ? user.name.split(" ")[0] : "Guest"}
+                Hello, {displayName.split(" ")[0]}
               </h1>
               <span className="text-xs text-[#4A4E51] font-medium truncate">
-                Manage your bookings
+                {userEmail || "Manage your bookings"}
               </span>
             </div>
           </div>
@@ -451,12 +483,70 @@ export default function ClientAccount() {
           <div className="flex items-center gap-3 shrink-0">
             <KarmaTooltip karma={clientKarma} />
             <div className="w-px h-6 bg-[#DCDCDA] hidden sm:block mx-1 shrink-0" />
-            <button
-              aria-label="Notifications"
-              className="p-2.5 text-[#4A4E51] hover:text-[#121415] rounded-full hover:bg-white border border-transparent hover:border-[#DCDCDA] transition-all active:scale-95 hidden sm:block shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
-            >
-              <Bell className="w-5 h-5" />
-            </button>
+            
+            {/* Notifications Container */}
+            <div className="relative hidden sm:block shrink-0">
+              <button
+                aria-label="Notifications"
+                onClick={() => {
+                  if (notifications.length > 0) {
+                    setShowNotifications(!showNotifications);
+                  } else {
+                    toast("У вас нет новых уведомлений");
+                  }
+                }}
+                className="relative p-2.5 text-[#4A4E51] hover:text-[#121415] rounded-full hover:bg-white border border-transparent hover:border-[#DCDCDA] transition-all active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+              >
+                <Bell className="w-5 h-5" />
+                {notifications.length > 0 && (
+                  <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#ECECEA]"></span>
+                )}
+              </button>
+
+              <AnimatePresence>
+                {showNotifications && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full right-0 mt-2 w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden z-50 origin-top-right"
+                  >
+                    <div className="flex items-center justify-between p-5 border-b border-[#DCDCDA] bg-white">
+                      <span className="font-medium text-[#121415] text-base tracking-tight">Notifications</span>
+                      <button 
+                        type="button" 
+                        onClick={() => {
+                          setNotifications([]);
+                          setShowNotifications(false);
+                          toast.success("Все уведомления прочитаны");
+                        }}
+                        className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
+                      >
+                        Mark all read
+                      </button>
+                    </div>
+                    <div className="max-h-[340px] overflow-y-auto">
+                      {notifications.map((notif) => (
+                        <button key={notif.id} type="button" className="w-full text-left p-4 border-b border-[#DCDCDA] last:border-0 hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] bg-white">
+                          <div className="flex items-start gap-3">
+                            <div className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border bg-[#F5F5F4] border-[#DCDCDA]">
+                              {notif.type === "success" ? <CheckCircle2 className="w-4 h-4 text-[#4A6B53]" /> : <Bell className="w-4 h-4 text-[#4A4E51]" />}
+                            </div>
+                            <div className="flex-1 min-w-0 pr-2">
+                              <p className="text-sm truncate font-medium text-[#121415]">{notif.title}</p>
+                              <p className="text-xs text-[#4A4E51] mt-0.5 leading-relaxed break-words line-clamp-2">{notif.message}</p>
+                              <p className="text-xs font-medium text-[#8B9194] mt-2">{notif.time}</p>
+                            </div>
+                          </div>
+                          <ChevronRight className="w-4 h-4 text-[#DCDCDA] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all shrink-0" />
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             <Link
               href="/settings"
               aria-label="Settings"

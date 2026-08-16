@@ -3,9 +3,8 @@ import Landing from '@/features/market-pages/Landing';
 
 export default function Page() {
   return (
-    <RoleGuard allowedRoles={['customer', 'guest']} requireAuth={false}>
+    <RoleGuard allowedRoles={['guest']} requireAuth={false}>
       <Landing />
     </RoleGuard>
   );
 }
-

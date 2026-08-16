@@ -1,194 +1,240 @@
 "use client";
-import { useState, useMemo } from "react";
-import { useSearchParams, useRouter , usePathname } from "next/navigation";;
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import AuthService from "../api/services/AuthService";
-import VenueService from "../api/services/VenueService";
-import { toast } from "sonner";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { createClient } from "@/utils/supabase/client";
 import useAuthStore from "../stores/authStore";
-import { queryKeys } from "../lib/queryKeys";
-import { Business } from '@/types';
+import { toast } from "sonner";
 
-interface ExtendedBusiness extends Business {
-  category?: string;
-  tags?: string[];
-  openNow?: boolean;
-  rating?: number;
-  reviews?: number;
-  distance?: string;
+export interface VenueData {
+  id: string;
+  name: string;
+  category: string;
+  rating: number;
+  reviews: number;
+  address: string;
+  image: string;
+  tags: string[];
+  badges: string[];
+  coordinates: { x: number; y: number };
+  price: string;
+  distance: string;
+  /** Work hours e.g. "09:00-21:00" */
+  time: string;
 }
 
-export const CATEGORIES = ["All", "Barbershop", "Beauty Salon", "Manicure", "Spa"];
+// ─── Helpers ────────────────────────────────────────────────────────────────
 
-export const SORT_OPTIONS = [
-  { id: "relevance", label: "By Relevance" },
-  { id: "punctuality", label: "Most Punctual (Top)" }, 
-  { id: "rating", label: "By Rating" },
-  { id: "distance", label: "By Distance" },
-];
+/** Parse "HH:MM-HH:MM" and check against current time */
+function isOpenNow(timeRange: string): boolean {
+  try {
+    const [start, end] = timeRange.split("-").map((t) => {
+      const [h, m] = t.trim().split(":").map(Number);
+      return h * 60 + m; // minutes since midnight
+    });
+    const now = new Date();
+    const current = now.getHours() * 60 + now.getMinutes();
+    // Handle overnight ranges (e.g. 22:00-02:00)
+    if (start <= end) return current >= start && current < end;
+    return current >= start || current < end;
+  } catch {
+    return false;
+  }
+}
+
+const SAVED_KEY = (userId: string) => `elara_saved_${userId}`;
+
+// ─── Hook ────────────────────────────────────────────────────────────────────
 
 export default function useSearch() {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
+  const supabase = createClient();
+  const { user: currentUser, isAuthenticated } = useAuthStore();
+  const userId = currentUser?.id ?? "guest";
 
-  const setSearchParams = (updater: (prev: URLSearchParams) => URLSearchParams) => {
-    const currentParams = new URLSearchParams(Array.from(searchParams.entries()));
-    const newParams = updater(currentParams);
-    router.push(pathname + '?' + newParams.toString());
-  };
-  const router = useRouter();
-  const queryClient = useQueryClient();
+  // ── Remote venues ──────────────────────────────────────────────────────────
+  const [venues, setVenues] = useState<VenueData[]>([]);
+  const [isVenuesLoading, setIsVenuesLoading] = useState(true);
 
-  const [hoveredVenueId, setHoveredVenueId] = useState(null);
+  useEffect(() => {
+    supabase
+      .from("businesses")
+      .select("*")
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("Error fetching businesses:", error.message);
+          setIsVenuesLoading(false);
+          return;
+        }
+        // Demo hours until `work_hours` column is added to DB.
+        // We derive a deterministic schedule from the venue id so every venue
+        // always shows the same hours across page reloads.
+        const DEMO_HOURS = [
+          "00:00-23:59", // 24h — always open
+          "08:00-22:00",
+          "09:00-21:00",
+          "10:00-20:00",
+          "11:00-23:00",
+          "07:00-19:00",
+        ];
+        const demoTime = (id: string) => {
+          // stable hash from first char of id
+          const idx = id.charCodeAt(0) % DEMO_HOURS.length;
+          return DEMO_HOURS[idx];
+        };
 
-  const { user: currentUser } = useAuthStore();
-  const userId = currentUser?.id || "guest";
+        const formatted: VenueData[] = (data ?? []).map((b) => ({
+          id: b.id,
+          name: b.name,
+          category: b.category ?? "General",
+          rating: b.rating ?? 5,
+          reviews: b.reviews_count ?? 0,
+          coordinates: b.coordinates ?? { x: 0, y: 0 },
+          address: b.address ?? "",
+          distance: "1 km",
+          image: b.image_url ?? "",
+          price: "$10 - $50",
+          // Use real column when available, fall back to demo schedule
+          time: (b as Record<string, unknown>).work_hours as string ?? demoTime(b.id),
+          tags: b.tags ?? [b.category ?? "General"],
+          badges: b.badges ?? [],
+        }));
+        setVenues(formatted);
+        setIsVenuesLoading(false);
+      });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const activeCategory = searchParams.get("category") || "All";
-  const isFavoritesTab = searchParams.get("favorites") === "true";
-  const openNowOnly = searchParams.get("openNow") === "true";
-  const sortBy = searchParams.get("sort") || "relevance";
+  // ── Saved (localStorage, synced to profile column if logged-in) ────────────
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
 
-  const [localQuery, setLocalQuery] = useState(searchParams.get("q") || "");
-  const [localLocation, setLocalLocation] = useState(searchParams.get("loc") || "");
+  // Load saved on mount / user change
+  useEffect(() => {
+    const raw = localStorage.getItem(SAVED_KEY(userId));
+    setSavedIds(new Set(raw ? (JSON.parse(raw) as string[]) : []));
+  }, [userId]);
 
+  const persistSaved = useCallback(
+    (next: Set<string>) => {
+      localStorage.setItem(SAVED_KEY(userId), JSON.stringify([...next]));
+      setSavedIds(next);
+    },
+    [userId]
+  );
+
+  const toggleSaved = useCallback(
+    (venueId: string) => {
+      // Read current state directly — do NOT call toast inside setState updater,
+      // because React 18 Strict Mode calls updaters twice (to detect side effects),
+      // which would fire the toast notification twice.
+      const isSaved = savedIds.has(venueId);
+      const next = new Set(savedIds);
+      if (isSaved) {
+        next.delete(venueId);
+      } else {
+        next.add(venueId);
+      }
+      localStorage.setItem(SAVED_KEY(userId), JSON.stringify([...next]));
+      setSavedIds(next);
+
+      // Toast is called here — outside setState — so it fires exactly once.
+      if (isSaved) {
+        toast.info("Removed from saved");
+      } else {
+        toast.success("Saved!");
+      }
+    },
+    [savedIds, userId]
+  );
+
+  // ── Filters (all local state — fast, no URL needed for now) ────────────────
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [locationQuery, setLocationQuery] = useState("");
+  const [isSavedOnly, setIsSavedOnly] = useState(false);
+  const [isOpenNowOnly, setIsOpenNowOnly] = useState(false);
+  const [sortBy, setSortBy] = useState("relevance");
   const [sortOpen, setSortOpen] = useState(false);
 
-  const { data: venues = [], isLoading: isVenuesLoading, isError: isVenuesError, refetch: refetchVenues } = useQuery({
-    queryKey: queryKeys.venues.all,
-    queryFn: () => VenueService.getVenues(),
-  });
+  const toggleSavedFilter = useCallback(() => {
+    setIsSavedOnly((v) => !v);
+  }, []);
 
-  const { data: favorites = [], isLoading: isFavsLoading, isError: isFavsError, refetch: refetchFavs } = useQuery({
-    queryKey: ['favorites', userId],
-    queryFn: async () => {
-      if (currentUser) {
-        const data = (await AuthService.getUser(userId)) as { favorites?: string[] };
-        if (data.favorites) {
-          localStorage.setItem(`favorites_${userId}`, JSON.stringify(data.favorites));
-          return data.favorites;
-        }
-        return [];
-      } else {
-        if (typeof window !== 'undefined') {
-          const savedFavs = localStorage.getItem(`favorites_guest`);
-          return savedFavs ? JSON.parse(savedFavs) : [];
-        }
-        return [];
-      }
-    }
-  });
+  const toggleOpenNow = useCallback(() => {
+    setIsOpenNowOnly((v) => !v);
+  }, []);
 
-  const isDataLoading = isVenuesLoading || isFavsLoading;
-  const isError = isVenuesError || isFavsError;
-
-  const handleRefetch = () => {
-    refetchVenues();
-    refetchFavs();
-  };
-
-  const updateSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSearchParams((prev: URLSearchParams) => {
-      if (localQuery) prev.set("q", localQuery);
-      else prev.delete("q");
-      if (localLocation) prev.set("loc", localLocation);
-      else prev.delete("loc");
-      return prev;
-    });
-  };
-
-  const toggleFavoriteMutation = useMutation({
-    mutationFn: async (venueId: string) => {
-      const isFav = (favorites as string[]).includes(venueId);
-      const newFavs = isFav ? (favorites as string[]).filter((id: string) => id !== venueId) : [...(favorites as string[]), venueId];
-      localStorage.setItem(`favorites_${userId}`, JSON.stringify(newFavs));
-
-      if (userId !== "guest") {
-        await AuthService.patchProfile(userId, { favorites: newFavs });
-      }
-      return { isFav, newFavs };
-    },
-    onSuccess: ({ isFav, newFavs }) => {
-      queryClient.setQueryData(['favorites', userId], newFavs);
-      if (isFav) toast.info("Removed from favorites");
-      else toast.success("Added to favorites");
-    },
-    onError: (error) => {
-      console.error("Error saving favorites", error);
-      toast.error("Failed to update favorites");
-    }
-  });
-
-  const handleToggleFavorite = (venueId: string) => {
-    toggleFavoriteMutation.mutate(venueId);
-  };
-
-  const getPunctualityScore = (venueId: string | number) => {
-    return Number(venueId) === 1 ? 98 : (Number(venueId) === 2 ? 94 : 88);
-  };
-
+  // ── Derived list ──────────────────────────────────────────────────────────
   const filtered = useMemo(() => {
-    let list = venues as ExtendedBusiness[];
+    let list = [...venues];
 
-    if (isFavoritesTab) {
-      list = list.filter((v) => (favorites as string[]).includes(String(v.id)));
-    } else {
+    // 1. Saved filter
+    if (isSavedOnly) {
+      list = list.filter((v) => savedIds.has(v.id));
+    }
+
+    // 2. Category filter
+    if (activeCategory !== "All") {
       list = list.filter((v) =>
-        activeCategory === "All"
-          ? true
-          : String(v.category).toLowerCase().includes(activeCategory.toLowerCase()),
+        v.category.toLowerCase().includes(activeCategory.toLowerCase()) ||
+        v.tags.some((t) => t.toLowerCase().includes(activeCategory.toLowerCase()))
       );
     }
 
-    if (localQuery) {
+    // 3. Search query
+    const q = searchQuery.trim().toLowerCase();
+    if (q) {
       list = list.filter(
         (v) =>
-          String(v.name).toLowerCase().includes(localQuery.toLowerCase()) ||
-          (v.tags || []).some((t: string) =>
-            t.toLowerCase().includes(localQuery.toLowerCase()),
-          ),
+          v.name.toLowerCase().includes(q) ||
+          v.category.toLowerCase().includes(q) ||
+          v.tags.some((t) => t.toLowerCase().includes(q))
       );
     }
 
-    if (openNowOnly) list = list.filter((v) => v.openNow);
+    // 4. Open Now filter
+    if (isOpenNowOnly) {
+      list = list.filter((v) => isOpenNow(v.time));
+    }
 
+    // 5. Sort
     const sorted = [...list];
-    if (sortBy === "rating") sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    if (sortBy === "reviews") sorted.sort((a, b) => (b.reviews || 0) - (a.reviews || 0));
-    if (sortBy === "distance") sorted.sort((a, b) => parseFloat(a.distance || "0") - parseFloat(b.distance || "0"));
-    if (sortBy === "punctuality") sorted.sort((a, b) => getPunctualityScore(b.id) - getPunctualityScore(a.id)); 
+    if (sortBy === "rating") sorted.sort((a, b) => b.rating - a.rating);
+    if (sortBy === "reviews") sorted.sort((a, b) => b.reviews - a.reviews);
+    if (sortBy === "distance")
+      sorted.sort(
+        (a, b) => parseFloat(a.distance) - parseFloat(b.distance)
+      );
+    if (sortBy === "punctual") {
+      // Stub: use id-based mock score until real data exists
+      const score = (id: string) =>
+        id === "1" ? 98 : id === "2" ? 94 : 88;
+      sorted.sort((a, b) => score(b.id) - score(a.id));
+    }
+
     return sorted;
-  }, [
-    activeCategory,
-    sortBy,
-    openNowOnly,
-    localQuery,
-    venues,
-    isFavoritesTab,
-    favorites,
-  ]);
+  }, [venues, isSavedOnly, savedIds, activeCategory, searchQuery, isOpenNowOnly, sortBy]);
 
   return {
-    router,
-    searchParams,
-    setSearchParams,
-    hoveredVenueId, setHoveredVenueId,
-    isDataLoading,
-    isError,
-    handleRefetch,
+    // data
+    venues,
+    filtered,
+    isVenuesLoading,
+    // auth
     currentUser,
-    favorites,
-    activeCategory,
-    isFavoritesTab,
-    openNowOnly,
-    sortBy,
-    localQuery, setLocalQuery,
-    localLocation, setLocalLocation,
+    isAuthenticated,
+    // saved
+    savedIds,
+    toggleSaved,
+    isSavedOnly,
+    toggleSavedFilter,
+    // open now
+    isOpenNowOnly,
+    toggleOpenNow,
+    // search
+    searchQuery, setSearchQuery,
+    locationQuery, setLocationQuery,
+    // category
+    activeCategory, setActiveCategory,
+    // sort
+    sortBy, setSortBy,
     sortOpen, setSortOpen,
-    updateSearch,
-    handleToggleFavorite,
-    getPunctualityScore,
-    filtered
   };
 }

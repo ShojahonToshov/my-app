@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React from "react";
 import Link from "next/link";
 import {
@@ -19,8 +19,21 @@ import {
   ChevronRight,
 } from "lucide-react";
 import ElaraLogo from "@/components/ElaraLogo";
+import useAuthStore from "@/features/market-pages/stores/authStore";
+import Avatar from "@/components/ui/Avatar";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const { user: authUser } = useAuthStore();
+  const displayName: string =
+    (authUser?.profile?.full_name as string) ||
+    (authUser?.name as string) ||
+    (authUser?.email as string)?.split("@")[0] ||
+    "Owner";
+  const userEmail: string = (authUser?.email as string) ?? "";
+  const avatarUrl: string = (authUser?.profile?.avatar_url as string) ?? "";
+  const roleLabel = "Owner";
+
+
   return (
     <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white overflow-hidden">
       
@@ -151,12 +164,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             href="/admin/profile"
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-white border border-[#DCDCDA] shadow-sm hover:shadow-md hover:border-[#4A4E51] transition-all duration-200 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] mt-1"
           >
-            <div className="w-10 h-10 rounded-lg bg-[#F5F5F4] text-[#121415] flex items-center justify-center font-medium text-sm border border-[#DCDCDA] group-hover:scale-105 transition-transform shrink-0">
-              II
-            </div>
+            <Avatar
+              name={displayName}
+              src={avatarUrl || null}
+              size="sm"
+              ring
+              className="group-hover:scale-105 transition-transform rounded-lg"
+            />
             <div className="flex flex-col flex-1 min-w-0">
-              <span className="text-sm font-medium text-[#121415] truncate">Ivan Ivanov</span>
-              <span className="text-xs font-medium text-[#4A6B53] truncate mt-0.5">Owner</span>
+              <span className="text-sm font-medium text-[#121415] truncate">{displayName}</span>
+              <span className="text-xs font-medium text-[#4A6B53] truncate mt-0.5">
+                {userEmail || roleLabel}
+              </span>
             </div>
           </Link>
         </div>
@@ -217,8 +236,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </nav>
           <div className="p-4 border-t border-[#DCDCDA] flex flex-col gap-2">
             <Link href="/admin/profile" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] hover:bg-[#DCDCDA] active:scale-95 transition-all bg-[#ECECEA] text-[#121415]">
-              <User className={`w-5 h-5`} />
-              <span className="font-medium text-sm">Profile</span>
+              <Avatar
+                name={displayName}
+                src={avatarUrl || null}
+                size="sm"
+                className="shrink-0"
+              />
+              <div className="flex flex-col min-w-0">
+                <span className="font-medium text-sm truncate">{displayName}</span>
+                {userEmail && <span className="text-xs text-[#4A4E51] truncate">{userEmail}</span>}
+              </div>
             </Link>
             <button type="button" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[#4A4E51] hover:text-[#dc2626] hover:bg-white font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] active:scale-95">
               <LogOut className="w-5 h-5" /> Log out

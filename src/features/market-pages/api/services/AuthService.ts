@@ -67,13 +67,27 @@ class AuthService {
     if (error) throw error;
     
     // Profile is created automatically by SQL trigger,
-    // fetch it immediately after registration:
+    // fetch it immediately after registration with retry logic:
     if (data.user) {
-      // Allow trigger brief time to execute
-      await new Promise(resolve => setTimeout(resolve, 500));
-      const profile = await this.fetchProfile(data.user.id);
+      let profile = null;
+      for (let i = 0; i < 4; i++) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const { data: pData } = await this.supabase.from('profiles').select('*').eq('id', data.user.id).single();
+        if (pData) {
+          profile = pData;
+          break;
+        }
+      }
+      
       if (profile) {
         (data.user as AppUser).profile = profile;
+      } else {
+        // Fallback to provided options data so the frontend doesn't break
+        (data.user as AppUser).profile = {
+          id: data.user.id,
+          role: (options?.data?.role as string) || 'customer',
+          full_name: (options?.data?.full_name as string) || '',
+        };
       }
     }
 
