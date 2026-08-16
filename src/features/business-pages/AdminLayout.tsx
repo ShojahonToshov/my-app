@@ -162,19 +162,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           <Link
             href="/admin/profile"
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-white border border-[#DCDCDA] shadow-sm hover:shadow-md hover:border-[#4A4E51] transition-all duration-200 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] mt-1"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent hover:bg-[#ECECEA] text-left group mt-1"
           >
             <Avatar
               name={displayName}
               src={avatarUrl || null}
               size="sm"
-              ring
-              className="group-hover:scale-105 transition-transform rounded-lg"
+              className="group-hover:scale-105 transition-transform"
             />
             <div className="flex flex-col flex-1 min-w-0">
               <span className="text-sm font-medium text-[#121415] truncate">{displayName}</span>
-              <span className="text-xs font-medium text-[#4A6B53] truncate mt-0.5">
-                {userEmail || roleLabel}
+              <span className="text-xs font-medium text-[#4A4E51] truncate mt-0.5">
+                Free
               </span>
             </div>
           </Link>
@@ -235,16 +234,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </Link>
           </nav>
           <div className="p-4 border-t border-[#DCDCDA] flex flex-col gap-2">
-            <Link href="/admin/profile" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] hover:bg-[#DCDCDA] active:scale-95 transition-all bg-[#ECECEA] text-[#121415]">
+            <Link href="/admin/profile" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-left hover:bg-[#ECECEA] group">
               <Avatar
                 name={displayName}
                 src={avatarUrl || null}
                 size="sm"
-                className="shrink-0"
+                className="shrink-0 group-hover:scale-105 transition-transform"
               />
               <div className="flex flex-col min-w-0">
-                <span className="font-medium text-sm truncate">{displayName}</span>
-                {userEmail && <span className="text-xs text-[#4A4E51] truncate">{userEmail}</span>}
+                <span className="font-medium text-sm text-[#121415] truncate">{displayName}</span>
+                <span className="text-xs text-[#4A4E51] truncate mt-0.5">Free</span>
               </div>
             </Link>
             <button type="button" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[#4A4E51] hover:text-[#dc2626] hover:bg-white font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] active:scale-95">
