@@ -17,12 +17,14 @@ import {
   CheckCircle2,
   AlertTriangle,
   ChevronRight,
+  PanelLeft,
 } from "lucide-react";
 import ElaraLogo from "@/components/ElaraLogo";
 import useAuthStore from "@/features/market-pages/stores/authStore";
 import Avatar from "@/components/ui/Avatar";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
   const { user: authUser } = useAuthStore();
   const displayName: string =
     (authUser?.profile?.full_name as string) ||
@@ -38,53 +40,76 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white overflow-hidden">
       
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden md:flex w-[260px] bg-[#F5F5F4] border-r border-[#DCDCDA] flex-col shrink-0 z-40 relative">
-        <div className="h-20 flex items-center px-8 border-b border-[#DCDCDA] shrink-0">
-          <ElaraLogo />
+      <aside className={`hidden md:flex ${isCollapsed ? "w-[88px]" : "w-[260px]"} bg-[#F5F5F4] border-r border-[#DCDCDA] flex-col shrink-0 z-40 relative transition-all duration-300 ease-in-out`}>
+        <div className={`group h-20 flex items-center relative ${isCollapsed ? "justify-center px-0" : "px-6 justify-between"} border-b border-[#DCDCDA] shrink-0 transition-all duration-300`}>
+          
+          {/* LOGO */}
+          <div className={`transition-all duration-300 flex items-center ${isCollapsed ? "group-hover:opacity-0" : ""}`}>
+            <ElaraLogo showText={!isCollapsed} disableLink={isCollapsed} />
+          </div>
+
+          {/* TOGGLE BUTTON */}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className={`flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all duration-300 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shrink-0 ${
+              isCollapsed 
+                ? "absolute w-10 h-10 opacity-0 group-hover:opacity-100 hover:bg-[#DCDCDA]/50 z-10"
+                : "p-2 opacity-100 hover:bg-[#DCDCDA]/50 relative"
+            }`}
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            <PanelLeft className="w-5 h-5" />
+          </button>
         </div>
 
         <nav className="flex-1 p-5 space-y-2 overflow-y-auto scrollbar-hide">
           <Link
             href="/admin"
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
+            title="Queue (Live)"
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
-            <LayoutDashboard className="w-5 h-5" />
-            Queue (Live)
+            <LayoutDashboard className="w-5 h-5 shrink-0" />
+            {!isCollapsed && <span className="truncate">Queue (Live)</span>}
           </Link>
           <Link
             href="/admin/schedule"
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
+            title="Schedule"
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
-            <Calendar className="w-5 h-5" />
-            Schedule
+            <Calendar className="w-5 h-5 shrink-0" />
+            {!isCollapsed && <span className="truncate">Schedule</span>}
           </Link>
           <Link
             href="/admin/customers"
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
+            title="Clients"
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
-            <Users className="w-5 h-5" />
-            Clients
+            <Users className="w-5 h-5 shrink-0" />
+            {!isCollapsed && <span className="truncate">Clients</span>}
           </Link>
           <Link
             href="/admin/analytics"
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
+            title="Analytics"
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
-            <BarChart3 className="w-5 h-5" />
-            Analytics
+            <BarChart3 className="w-5 h-5 shrink-0" />
+            {!isCollapsed && <span className="truncate">Analytics</span>}
           </Link>
           <Link
             href="/admin/billing"
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
+            title="Billing"
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
-            <CreditCard className="w-5 h-5" />
-            Billing
+            <CreditCard className="w-5 h-5 shrink-0" />
+            {!isCollapsed && <span className="truncate">Billing</span>}
           </Link>
           <Link
             href="/admin/settings"
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent"
+            title="Settings"
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent`}
           >
-            <Settings className="w-5 h-5" />
-            Settings
+            <Settings className="w-5 h-5 shrink-0" />
+            {!isCollapsed && <span className="truncate">Settings</span>}
           </Link>
         </nav>
 
@@ -94,18 +119,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="relative">
             <button
               type="button"
-              className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]"
+              title="Notifications"
+              className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "justify-between px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]`}
             >
-              <div className="flex items-center gap-3 font-medium text-sm">
-                <div className="relative">
-                  <Bell className="w-5 h-5" />
+              <div className={`flex items-center ${isCollapsed ? "justify-center" : "gap-3"} font-medium text-sm`}>
+                <div className="relative shrink-0">
+                  <Bell className="w-5 h-5 shrink-0" />
                   <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#F5F5F4]"></span>
                 </div>
-                Notifications
+                {!isCollapsed && <span className="truncate">Notifications</span>}
               </div>
-              <span className="bg-[#8A2532] text-white text-xs font-medium px-2 py-0.5 rounded-md">
-                2
-              </span>
+              {!isCollapsed && (
+                <span className="bg-[#8A2532] text-white text-xs font-medium px-2 py-0.5 rounded-md shrink-0">
+                  2
+                </span>
+              )}
             </button>
 
             {/* Notifications dropdown (hidden by default via 'hidden' class) */}
@@ -162,20 +190,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           <Link
             href="/admin/profile"
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent hover:bg-[#ECECEA] text-left group mt-1"
+            title="Profile"
+            className={`w-full flex items-center ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"} py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent hover:bg-[#ECECEA] text-left group mt-1`}
           >
             <Avatar
               name={displayName}
               src={avatarUrl || null}
               size="sm"
-              className="group-hover:scale-105 transition-transform"
+              className="group-hover:scale-105 transition-transform shrink-0"
             />
-            <div className="flex flex-col flex-1 min-w-0">
-              <span className="text-sm font-medium text-[#121415] truncate">{displayName}</span>
-              <span className="text-xs font-medium text-[#4A4E51] truncate mt-0.5">
-                Free
-              </span>
-            </div>
+            {!isCollapsed && (
+              <div className="flex flex-col flex-1 min-w-0">
+                <span className="text-sm font-medium text-[#121415] truncate">{displayName}</span>
+                <span className="text-xs font-medium text-[#4A4E51] truncate mt-0.5">
+                  Free
+                </span>
+              </div>
+            )}
           </Link>
         </div>
       </aside>

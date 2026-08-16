@@ -4,9 +4,10 @@ import Link from "next/link";
 export interface ElaraLogoProps {
   dark?: boolean;
   disableLink?: boolean;
+  showText?: boolean;
 }
 
-export default function ElaraLogo({ dark = false, disableLink = false }: ElaraLogoProps) {
+export default function ElaraLogo({ dark = false, disableLink = false, showText = true }: ElaraLogoProps) {
   const content = (
     <>
       <svg
@@ -45,9 +46,11 @@ export default function ElaraLogo({ dark = false, disableLink = false }: ElaraLo
         />
       </svg>
 
-      <span className={`font-semibold tracking-[0.2em] text-[18px] uppercase leading-[32px] block m-0 p-0 flex-none select-none transition-colors ${dark ? "text-white" : "text-[#121415]"}`}>
-        Elara
-      </span>
+      {showText && (
+        <span className={`font-semibold tracking-[0.2em] text-[18px] uppercase leading-[32px] block m-0 p-0 flex-none select-none transition-colors ${dark ? "text-white" : "text-[#121415]"}`}>
+          Elara
+        </span>
+      )}
     </>
   );
 
