@@ -110,7 +110,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin"
             title="Queue (Live)"
-            className="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap"
+            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"}`}
           >
             <LayoutDashboard className="w-5 h-5 shrink-0" />
             <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Queue (Live)</span>
@@ -118,7 +118,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/schedule"
             title="Schedule"
-            className="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap"
+            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"}`}
           >
             <Calendar className="w-5 h-5 shrink-0" />
             <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Schedule</span>
@@ -126,7 +126,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/customers"
             title="Clients"
-            className="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap"
+            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"}`}
           >
             <Users className="w-5 h-5 shrink-0" />
             <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Clients</span>
@@ -134,7 +134,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/analytics"
             title="Analytics"
-            className="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap"
+            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"}`}
           >
             <BarChart3 className="w-5 h-5 shrink-0" />
             <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Analytics</span>
@@ -142,7 +142,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/billing"
             title="Billing"
-            className="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap"
+            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"}`}
           >
             <CreditCard className="w-5 h-5 shrink-0" />
             <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Billing</span>
@@ -150,7 +150,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/settings"
             title="Settings"
-            className="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap"
+            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"}`}
           >
             <Settings className="w-5 h-5 shrink-0" />
             <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Settings</span>
@@ -158,7 +158,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* BOTTOM USER & NOTIFICATIONS SECTION */}
-        <div className="py-4 px-4 border-t border-[#DCDCDA] flex flex-col gap-2 shrink-0 bg-[#F5F5F4] relative overflow-hidden whitespace-nowrap">
+        <div className="py-4 px-4 border-t border-[#DCDCDA] flex flex-col gap-2 shrink-0 bg-[#F5F5F4] relative whitespace-nowrap">
           
           <div className="relative" ref={notifRef}>
             <button
@@ -171,7 +171,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   toast("У вас нет новых уведомлений");
                 }
               }}
-              className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] overflow-hidden whitespace-nowrap"
+              className={`w-full flex items-center justify-between py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"}`}
             >
               <div className="flex items-center font-medium text-sm">
                 <div className="relative shrink-0">
@@ -237,7 +237,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link
             href="/admin/profile"
             title="Profile"
-            className="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent hover:bg-[#ECECEA] text-left group mt-1 overflow-hidden whitespace-nowrap"
+            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent hover:bg-[#ECECEA] text-left group mt-1 overflow-hidden whitespace-nowrap ${isCollapsed ? "px-3" : "px-4"}`}
           >
             <Avatar
               name={displayName}
