@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { toast } from "sonner";
 import {
   Plus, Scissors, Edit2, UserPlus, X, Clock, Banknote, ImagePlus,
   CalendarClock, Users, Store, Phone, MapPin, Trash2, Loader2,
@@ -136,6 +137,7 @@ const TIME_OPTIONS = Array.from({ length: 36 }).map((_, i) => {
 });
 
 const ROLE_OPTIONS = ["Barber", "Senior Barber", "Top Specialist"];
+const STANDARD_SERVICES = ["Men's Haircut", "Haircut + Beard", "Beard Trim", "Kids Haircut", "Buzz Cut", "Hair Coloring", "Head Shave", "Face Massage", "Styling"];
 const CANCEL_WINDOWS = ["2 hours before", "12 hours before", "24 hours before", "Allow anytime"];
 
 export default function Settings() {
@@ -181,6 +183,116 @@ export default function Settings() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<{type: string; id: string; name: string} | null>(null);
 
+  // Service form state
+  const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
+  const [serviceFormName, setServiceFormName] = useState("");
+  const [serviceFormDuration, setServiceFormDuration] = useState("45");
+  const [serviceFormPrice, setServiceFormPrice] = useState("");
+
+  // Specialist form state
+  const [specialistFormName, setSpecialistFormName] = useState("");
+
+  const handleProfileSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Profile saved successfully");
+  };
+
+  const handleSpecialistSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!specialistFormName.trim()) return;
+    
+    const parts = specialistFormName.trim().split(" ");
+    const initials = parts.length > 1 
+      ? (parts[0][0] + parts[1][0]).toUpperCase()
+      : parts[0].substring(0, 2).toUpperCase();
+
+    setTeam([...team, {
+      id: Date.now().toString(),
+      name: specialistFormName.trim(),
+      role: newMasterRole,
+      initials: initials,
+      isActive: true
+    }]);
+    
+    toast.success("Specialist added successfully");
+    setIsMasterModalOpen(false);
+    setSpecialistFormName("");
+    setNewMasterRole(ROLE_OPTIONS[0]);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (itemToDelete?.type === 'service') {
+      setServices(services.filter(s => s.id !== itemToDelete.id));
+      toast.success("Service deleted successfully");
+    } else if (itemToDelete?.type === 'master') {
+      setTeam(team.filter(m => m.id !== itemToDelete.id));
+      toast.success("Specialist deleted successfully");
+    }
+    setDeleteModalOpen(false);
+    setItemToDelete(null);
+  };
+
+  const openServiceModal = (service?: typeof services[0]) => {
+    if (service) {
+      setEditingServiceId(service.id);
+      setServiceFormName(service.name);
+      
+      // Extract numeric duration
+      const match = service.duration.match(/\d+/g);
+      let mins = "45";
+      if (match) {
+        if (service.duration.includes("hr") && match.length >= 2) {
+          mins = String(parseInt(match[0]) * 60 + parseInt(match[1]));
+        } else if (service.duration.includes("hr")) {
+          mins = String(parseInt(match[0]) * 60);
+        } else {
+          mins = match[0];
+        }
+      }
+      setServiceFormDuration(mins);
+      setServiceFormPrice(service.price.replace(/[^\d]/g, ""));
+    } else {
+      setEditingServiceId(null);
+      setServiceFormName(STANDARD_SERVICES[0]);
+      setServiceFormDuration("45");
+      setServiceFormPrice("");
+    }
+    setIsServiceModalOpen(true);
+  };
+
+  const handleServiceSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const durationNum = parseInt(serviceFormDuration) || 0;
+    const hrs = Math.floor(durationNum / 60);
+    const mins = durationNum % 60;
+    const formattedDuration = hrs > 0 
+      ? `${hrs} hr${mins > 0 ? ` ${mins} min` : ''}` 
+      : `${mins} min`;
+    
+    const formattedPrice = parseInt(serviceFormPrice || "0").toLocaleString("en-US").replace(/,/g, " ") + " UZS";
+
+    if (editingServiceId) {
+      setServices(services.map(s => s.id === editingServiceId ? {
+        ...s,
+        name: serviceFormName,
+        duration: formattedDuration,
+        price: formattedPrice
+      } : s));
+      toast.success("Service updated successfully");
+    } else {
+      setServices([...services, {
+        id: Date.now().toString(),
+        name: serviceFormName,
+        duration: formattedDuration,
+        price: formattedPrice,
+        isActive: true
+      }]);
+      toast.success("Service added successfully");
+    }
+    setIsServiceModalOpen(false);
+  };
+
   // Toggle handlers
   const toggleDay = (index: number) => {
     const newSchedule = [...schedule];
@@ -196,10 +308,12 @@ export default function Settings() {
 
   const handleToggleService = (id: string) => {
     setServices(services.map(s => s.id === id ? { ...s, isActive: !s.isActive } : s));
+    toast.success("Service status updated");
   };
 
   const handleToggleMaster = (id: string) => {
     setTeam(team.map(m => m.id === id ? { ...m, isActive: !m.isActive } : m));
+    toast.success("Specialist status updated");
   };
 
   const preventDefaultSubmit = (e: React.FormEvent) => e.preventDefault();
@@ -243,7 +357,7 @@ export default function Settings() {
                   <p className="text-sm text-[#4A4E51] font-medium mt-1">This information will be displayed to clients on the booking page</p>
                 </div>
 
-                <form onSubmit={preventDefaultSubmit} className="space-y-6">
+                <form onSubmit={handleProfileSubmit} className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-[#121415] mb-3">Business Logo</label>
                     <div className="flex items-center gap-6">
@@ -335,7 +449,7 @@ export default function Settings() {
                 </div>
 
                 <div className="pt-6 border-t border-[#DCDCDA] flex justify-end">
-                  <button type="button" className="px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 w-full sm:w-auto">
+                  <button type="button" onClick={() => toast.success("Working hours saved successfully")} className="px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 w-full sm:w-auto">
                     Save Working Hours
                   </button>
                 </div>
@@ -350,7 +464,7 @@ export default function Settings() {
                     <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Services & Pricing</h2>
                     <p className="text-sm text-[#4A4E51] font-medium mt-1">Configure services visible in online booking</p>
                   </div>
-                  <button type="button" onClick={() => setIsServiceModalOpen(true)} className="bg-[#121415] text-white px-5 py-3 rounded-xl text-sm font-medium shadow-sm hover:opacity-90 transition-all flex justify-center items-center gap-2 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
+                  <button type="button" onClick={() => openServiceModal()} className="bg-[#121415] text-white px-5 py-3 rounded-xl text-sm font-medium shadow-sm hover:opacity-90 transition-all flex justify-center items-center gap-2 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
                     <Plus className="w-4 h-4" /> Add Service
                   </button>
                 </div>
@@ -373,7 +487,7 @@ export default function Settings() {
                         <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto">
                           <span className="font-semibold text-[#121415] text-lg whitespace-nowrap">{service.price}</span>
                           <div className="flex gap-2 shrink-0">
-                            <button type="button" className="p-2.5 text-[#8B9194] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"><Edit2 className="w-4 h-4" /></button>
+                            <button type="button" onClick={() => openServiceModal(service)} className="p-2.5 text-[#8B9194] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"><Edit2 className="w-4 h-4" /></button>
                             <button type="button" onClick={() => { setItemToDelete({type: 'service', id: service.id, name: service.name}); setDeleteModalOpen(true); }} className="p-2.5 text-[#8B9194] hover:text-[#dc2626] hover:bg-[#dc2626]/10 rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]"><Trash2 className="w-4 h-4" /></button>
                           </div>
                         </div>
@@ -392,7 +506,7 @@ export default function Settings() {
                     <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Team</h2>
                     <p className="text-sm text-[#4A4E51] font-medium mt-1">Manage specialists and their availability</p>
                   </div>
-                  <button type="button" onClick={() => setIsMasterModalOpen(true)} className="bg-white text-[#121415] border border-[#DCDCDA] px-5 py-3 rounded-xl text-sm font-medium hover:bg-[#F5F5F4] hover:border-[#121415] hover:shadow-sm transition-all flex justify-center items-center gap-2 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
+                  <button type="button" onClick={() => { setIsMasterModalOpen(true); setSpecialistFormName(""); }} className="bg-[#121415] text-white px-5 py-3 rounded-xl text-sm font-medium shadow-sm hover:opacity-90 transition-all flex justify-center items-center gap-2 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
                     <UserPlus className="w-4 h-4" /> Add Specialist
                   </button>
                 </div>
@@ -471,7 +585,7 @@ export default function Settings() {
                 </div>
 
                 <div className="pt-8 mt-6 border-t border-[#DCDCDA] flex justify-end">
-                  <button type="button" className="px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 w-full sm:w-auto">
+                  <button type="button" onClick={() => toast.success("Policies saved successfully")} className="px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 w-full sm:w-auto">
                     <Save className="w-4 h-4" /> Save Policies
                   </button>
                 </div>
@@ -488,34 +602,36 @@ export default function Settings() {
           <div className="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
             <button type="button" aria-label="Close" onClick={() => setIsServiceModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">
-              <h2 className="text-xl font-semibold text-[#121415] tracking-tight">New Service</h2>
+              <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{editingServiceId ? "Edit Service" : "New Service"}</h2>
             </div>
-            <form onSubmit={preventDefaultSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleServiceSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Service Name</label>
-                <div className="relative">
-                  <Scissors className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-                  <input autoFocus required name="name" type="text" placeholder="Haircut" className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
-                </div>
+                <CustomSelect 
+                  value={serviceFormName} 
+                  options={STANDARD_SERVICES} 
+                  onChange={setServiceFormName} 
+                  className="w-full"
+                />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Duration (min)</label>
                   <div className="relative">
                     <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-                    <input required name="time" type="number" placeholder="45" defaultValue="45" className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                    <input required name="time" type="number" placeholder="45" value={serviceFormDuration} onChange={(e) => setServiceFormDuration(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Price (UZS)</label>
                   <div className="relative">
                     <Banknote className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-                    <input required name="price" type="number" placeholder="80000" className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                    <input required name="price" type="number" placeholder="80000" value={serviceFormPrice} onChange={(e) => setServiceFormPrice(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
                   </div>
                 </div>
               </div>
-              <button type="submit" onClick={() => setIsServiceModalOpen(false)} className="w-full mt-4 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm hover:opacity-90 transition-all flex justify-center items-center shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
-                Save Service
+              <button type="submit" className="w-full mt-4 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm hover:opacity-90 transition-all flex justify-center items-center shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
+                {editingServiceId ? "Save Changes" : "Save Service"}
               </button>
             </form>
           </div>
@@ -530,12 +646,12 @@ export default function Settings() {
             <div className="p-6 border-b border-[#DCDCDA]">
               <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Specialist</h2>
             </div>
-            <form onSubmit={preventDefaultSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSpecialistSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Full Name</label>
                 <div className="relative">
                   <UserPlus className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-                  <input autoFocus required name="name" type="text" placeholder="Alexey K." className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                  <input autoFocus required name="name" type="text" placeholder="Alexey K." value={specialistFormName} onChange={(e) => setSpecialistFormName(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
                 </div>
               </div>
               <div>
@@ -547,7 +663,7 @@ export default function Settings() {
                   className="w-full"
                 />
               </div>
-              <button type="submit" onClick={() => setIsMasterModalOpen(false)} className="w-full mt-4 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm hover:opacity-90 transition-all shadow-sm flex justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
+              <button type="submit" className="w-full mt-4 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm hover:opacity-90 transition-all shadow-sm flex justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
                 Save Specialist
               </button>
             </form>
@@ -559,7 +675,7 @@ export default function Settings() {
       <ConfirmModal 
         isOpen={deleteModalOpen} 
         onClose={() => setDeleteModalOpen(false)} 
-        onConfirm={() => setDeleteModalOpen(false)} 
+        onConfirm={handleDeleteConfirm} 
         title="Confirm Deletion" 
         description={`Are you sure you want to delete "${itemToDelete?.name}"? This action cannot be undone.`} 
       />

@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { toast } from "sonner";
 import {
-  User,
   Mail,
   Lock,
   Save,
@@ -14,13 +13,16 @@ import {
   EyeOff,
   Phone,
   CreditCard,
-  X
+  X,
+  Loader2
 } from "lucide-react";
 
 export default function AdminSettings() {
   const [showPassword, setShowPassword] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   
-  const [modal, setModal] = useState(false);
+  const [activeModal, setActiveModal] = useState<"payment" | "2fa" | "logout" | "delete" | null>(null);
+  
   const [cardLast4, setCardLast4] = useState("4242");
   const [cardExpiry, setCardExpiry] = useState("12/28");
   const [cardType, setCardType] = useState("VISA");
@@ -28,6 +30,10 @@ export default function AdminSettings() {
   const [inputCardNumber, setInputCardNumber] = useState("");
   const [inputExpiry, setInputExpiry] = useState("");
   const [inputCvc, setInputCvc] = useState("");
+  
+  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+  const [code2FA, setCode2FA] = useState("");
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value.replace(/\D/g, "");
@@ -73,11 +79,48 @@ export default function AdminSettings() {
       setCardType("CARD");
     }
     
-    setModal(false);
+    setActiveModal(null);
     setInputCardNumber("");
     setInputExpiry("");
     setInputCvc("");
     toast.success("Card updated successfully");
+  };
+
+  const handleSaveSecurity = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
+    setTimeout(() => {
+      setIsSaving(false);
+      toast.success("Security info updated successfully");
+    }, 1000);
+  };
+
+  const handleEnable2FA = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (code2FA.length < 6) {
+      toast.error("Please enter a valid 6-digit code");
+      return;
+    }
+    setIs2FAEnabled(true);
+    setActiveModal(null);
+    setCode2FA("");
+    toast.success("Two-factor authentication enabled successfully");
+  };
+
+  const handleLogout = () => {
+    setActiveModal(null);
+    toast.success("Logged out successfully");
+  };
+
+  const handleDeleteAccount = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (deleteConfirmText !== "DELETE") {
+      toast.error("Please type DELETE to confirm");
+      return;
+    }
+    setActiveModal(null);
+    setDeleteConfirmText("");
+    toast.loading("Scheduling account deletion...", { duration: 2000 });
   };
 
   return (
@@ -101,31 +144,18 @@ export default function AdminSettings() {
 
         {/* MAIN CONTENT */}
         <main className="flex-1 p-6 md:p-10 overflow-y-auto flex justify-center items-start">
-          <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="w-full max-w-3xl flex flex-col gap-6">
             
-            {/* LEFT COLUMN: Security Details */}
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-white p-8 rounded-3xl shadow-sm border border-[#DCDCDA] animate-in fade-in duration-300">
+            <div className="bg-white rounded-3xl shadow-sm border border-[#DCDCDA] flex flex-col animate-in fade-in duration-300">
+              
+              {/* 1. Business Security Info */}
+              <div className="p-6 sm:p-8 border-b border-[#DCDCDA]">
                 <div className="mb-6">
                   <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Business Security Info</h2>
-                  <p className="text-sm text-[#4A4E51] font-medium mt-1">Primary contact, recovery details, and billing information</p>
+                  <p className="text-sm text-[#4A4E51] font-medium mt-1">Primary contact, recovery details, and authentication settings</p>
                 </div>
 
-                <form className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-medium text-[#121415] mb-2">Account Owner</label>
-                    <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                      <input
-                        type="text"
-                        value="Владелец бизнеса"
-                        disabled
-                        readOnly
-                        className="w-full pl-12 pr-4 py-3 bg-[#EAEAEA] border border-[#DCDCDA] rounded-xl text-[#8B9194] font-medium outline-none cursor-not-allowed select-none"
-                      />
-                    </div>
-                  </div>
-
+                <form className="space-y-6" onSubmit={handleSaveSecurity}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-[#121415] mb-2">Email (Google / Recovery)</label>
@@ -170,68 +200,96 @@ export default function AdminSettings() {
                     </div>
                   </div>
 
-                  <div className="pt-6 flex justify-end border-t border-[#DCDCDA]">
+                  <div className="pt-6 flex justify-end">
                     <button
-                      type="button"
-                      className="w-full sm:w-auto px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"
+                      type="submit"
+                      disabled={isSaving}
+                      className="w-full sm:w-auto px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 disabled:opacity-70 disabled:pointer-events-none"
                     >
-                      <Save className="w-4 h-4" />
-                      Save Security Info
+                      {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                      {isSaving ? "Saving..." : "Save Security Info"}
                     </button>
                   </div>
                 </form>
               </div>
-            </div>
 
-            {/* RIGHT COLUMN: Actions & Danger Zone */}
-            <div className="space-y-6">
-              
-              <div className="bg-white rounded-3xl p-6 border border-[#DCDCDA] shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
-                <div className="space-y-1 w-full">
-                  <span className="text-xs font-semibold text-[#8B9194] uppercase tracking-wider">Payment Method</span>
-                  <div className="flex items-center gap-4 mt-3 p-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl w-full">
+              {/* 2. Payment Method */}
+              <div className="p-6 sm:p-8 border-b border-[#DCDCDA] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">Payment Method</h3>
+                  <p className="text-sm text-[#4A4E51] font-medium">Manage your billing and payment details.</p>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                  <div className="flex items-center gap-3 p-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl">
                     <div className="w-12 h-8 bg-[#121415] rounded flex items-center justify-center text-xs text-white font-semibold shrink-0 shadow-sm">{cardType}</div>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col pr-2">
                       <span className="text-sm font-semibold text-[#121415] tracking-tight">•••• {cardLast4}</span>
                       <span className="text-[10px] text-[#8B9194] font-medium mt-0.5 uppercase">Expires {cardExpiry}</span>
                     </div>
                   </div>
-                </div>
-                <div className="pt-5">
-                  <button type="button" onClick={() => setModal(true)} className="w-full py-2.5 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm rounded-xl hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-colors shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                    Update Card
+                  <button type="button" onClick={() => setActiveModal("payment")} className="px-5 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm rounded-xl hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-colors shadow-sm active:scale-95 shrink-0">
+                    Update
                   </button>
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-3xl shadow-sm border border-[#DCDCDA] flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-[#F5F5F4] flex items-center justify-center shrink-0 border border-[#DCDCDA]">
-                  <Key className="w-5 h-5 text-[#4A4E51]" />
-                </div>
+              {/* 3. Security (2FA) */}
+              <div className="p-6 sm:p-8 border-b border-[#DCDCDA] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
-                  <p className="font-semibold text-[#121415] text-sm">Two-Factor Authentication</p>
-                  <button type="button" className="text-xs font-medium text-[#4a6b53] hover:text-[#38513f] mt-0.5 transition-colors focus-visible:outline-none focus-visible:underline">
-                    Enable 2FA
+                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">Two-Factor Authentication</h3>
+                  <p className="text-sm text-[#4A4E51] font-medium">Add an extra layer of security to your account.</p>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                  <div className="flex items-center gap-3 p-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl min-w-[140px]">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border shadow-sm ${is2FAEnabled ? 'bg-[#4a6b53]/10 border-[#4a6b53]/20' : 'bg-white border-[#DCDCDA]'}`}>
+                      <Key className={`w-4 h-4 ${is2FAEnabled ? 'text-[#4a6b53]' : 'text-[#4A4E51]'}`} />
+                    </div>
+                    <div className="flex flex-col pr-4">
+                      <span className="text-sm font-semibold text-[#121415] tracking-tight">Status</span>
+                      <span className={`text-[10px] font-medium mt-0.5 uppercase ${is2FAEnabled ? 'text-[#4a6b53]' : 'text-[#8B9194]'}`}>
+                        {is2FAEnabled ? 'Enabled' : 'Disabled'}
+                      </span>
+                    </div>
+                  </div>
+                  {!is2FAEnabled && (
+                    <button type="button" onClick={() => setActiveModal("2fa")} className="px-5 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm rounded-xl hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-colors shadow-sm active:scale-95 shrink-0">
+                      Enable 2FA
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* 4. Session Management */}
+              <div className="p-6 sm:p-8 border-b border-[#DCDCDA] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">Session Management</h3>
+                  <p className="text-sm text-[#4A4E51] font-medium">Manage your active sessions and devices.</p>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                  <div className="flex items-center gap-3 p-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl min-w-[140px]">
+                    <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0 border border-[#DCDCDA] shadow-sm">
+                      <ShieldCheck className="w-4 h-4 text-[#4a6b53]" />
+                    </div>
+                    <div className="flex flex-col pr-4">
+                      <span className="text-sm font-semibold text-[#121415] tracking-tight">Current Device</span>
+                      <span className="text-[10px] text-[#4a6b53] font-medium mt-0.5 uppercase">Active</span>
+                    </div>
+                  </div>
+                  <button type="button" onClick={() => setActiveModal("logout")} className="px-5 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm rounded-xl hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-colors shadow-sm flex items-center justify-center gap-2 active:scale-95 shrink-0">
+                    <LogOut className="w-4 h-4 text-[#4A4E51]" /> Log out
                   </button>
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-3xl shadow-sm border border-[#DCDCDA] flex flex-col gap-3">
-                <h3 className="text-xs font-semibold text-[#8B9194] uppercase tracking-wider mb-2">Session Management</h3>
-                <button type="button" className="w-full py-3 bg-white text-[#121415] hover:bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-sm transition-colors flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
-                  <LogOut className="w-4 h-4 text-[#4A4E51]" /> Log out of account
-                </button>
-              </div>
-
-              <div className="bg-white p-6 pl-7 rounded-3xl shadow-sm border border-[#dc2626]/30 flex flex-col gap-3 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#dc2626]"></div>
-                <h3 className="text-xs font-semibold text-[#dc2626] uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                  <ShieldAlert className="w-4 h-4" /> Danger Zone
-                </h3>
-                <p className="text-[12px] text-[#4A4E51] font-medium mb-3 leading-relaxed">
-                  Account deletion will permanently revoke CRM access and erase all client databases.
-                </p>
-                <button type="button" className="w-full py-3 bg-white text-[#dc2626] hover:bg-[#dc2626]/10 border border-[#dc2626] rounded-xl font-medium text-sm transition-colors flex items-center justify-center gap-2 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] active:scale-95">
+              {/* 5. Danger Zone */}
+              <div className="p-6 sm:p-8 bg-[#fef2f2]/50 rounded-b-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-[#dc2626] tracking-tight mb-1 flex items-center gap-2">
+                    <ShieldAlert className="w-5 h-5" /> Danger Zone
+                  </h3>
+                  <p className="text-sm text-[#991b1b] font-medium">Account deletion will permanently revoke CRM access and erase all data.</p>
+                </div>
+                <button type="button" onClick={() => setActiveModal("delete")} className="w-full sm:w-auto px-5 py-2.5 bg-white text-[#dc2626] hover:bg-[#dc2626]/10 border border-[#dc2626] rounded-xl font-medium text-sm transition-colors shadow-sm active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]">
                   Delete Account
                 </button>
               </div>
@@ -241,70 +299,162 @@ export default function AdminSettings() {
         </main>
       </div>
       
-      {modal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={() => setModal(false)}>
+      {activeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={() => setActiveModal(null)}>
           <div className="bg-white w-full max-w-md rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]" onClick={e => e.stopPropagation()}>
-            <button type="button" onClick={() => setModal(false)} className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-[#F5F5F4] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] transition-colors z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+            <button type="button" onClick={() => setActiveModal(null)} className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-[#F5F5F4] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] transition-colors z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
               <X className="w-4 h-4" />
             </button>
-            <div className="p-8 pb-4 text-center shrink-0">
-              <div className="w-12 h-12 bg-[#F5F5F4] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#DCDCDA]">
-                <Lock className="w-6 h-6 text-[#121415]" />
-              </div>
-              <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Secure Payment</h2>
-              <p className="text-xs text-[#4A4E51] font-medium mt-2">Card details are encrypted via PCI DSS standards. We never store your CVV.</p>
-            </div>
-            <form className="px-8 pb-8 flex-1 overflow-y-auto" onSubmit={handleUpdateCard}>
-              <div className="p-5 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">Card Number</label>
-                  <input 
-                    type="text" 
-                    inputMode="numeric"
-                    autoComplete="off"
-                    placeholder="0000 0000 0000 0000" 
-                    maxLength={19}
-                    value={inputCardNumber}
-                    onChange={handleCardNumberChange}
-                    className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" 
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">Expiry Date</label>
-                    <input 
-                      type="text" 
-                      inputMode="numeric"
-                      autoComplete="off"
-                      placeholder="MM/YY" 
-                      maxLength={5}
-                      value={inputExpiry}
-                      onChange={handleExpiryChange}
-                      className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] text-center outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" 
-                    />
+
+            {activeModal === "payment" && (
+              <>
+                <div className="p-8 pb-4 text-center shrink-0">
+                  <div className="w-12 h-12 bg-[#F5F5F4] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#DCDCDA]">
+                    <CreditCard className="w-6 h-6 text-[#121415]" />
                   </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">CVC/CVV</label>
-                    <input 
-                      type="text" 
-                      inputMode="numeric"
-                      autoComplete="off"
-                      placeholder="123" 
-                      maxLength={4}
-                      value={inputCvc}
-                      onChange={handleCvcChange}
-                      className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] text-center outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" 
-                    />
-                  </div>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Secure Payment</h2>
+                  <p className="text-xs text-[#4A4E51] font-medium mt-2">Card details are encrypted via PCI DSS standards. We never store your CVV.</p>
                 </div>
-              </div>
-              <div className="flex items-center justify-center gap-1.5 mt-5 mb-6 text-xs font-medium text-[#4a6b53]">
-                <ShieldCheck className="w-3.5 h-3.5" /> Protected by 256-bit SSL encryption
-              </div>
-              <button type="submit" className="w-full py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                Link Payment Card
-              </button>
-            </form>
+                <form className="px-8 pb-8 flex-1 overflow-y-auto" onSubmit={handleUpdateCard}>
+                  <div className="p-5 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl space-y-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">Card Number</label>
+                      <input 
+                        type="text" 
+                        inputMode="numeric"
+                        autoComplete="off"
+                        placeholder="0000 0000 0000 0000" 
+                        maxLength={19}
+                        value={inputCardNumber}
+                        onChange={handleCardNumberChange}
+                        className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" 
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">Expiry Date</label>
+                        <input 
+                          type="text" 
+                          inputMode="numeric"
+                          autoComplete="off"
+                          placeholder="MM/YY" 
+                          maxLength={5}
+                          value={inputExpiry}
+                          onChange={handleExpiryChange}
+                          className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] text-center outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">CVC/CVV</label>
+                        <input 
+                          type="text" 
+                          inputMode="numeric"
+                          autoComplete="off"
+                          placeholder="123" 
+                          maxLength={4}
+                          value={inputCvc}
+                          onChange={handleCvcChange}
+                          className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] text-center outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center gap-1.5 mt-5 mb-6 text-xs font-medium text-[#4a6b53]">
+                    <ShieldCheck className="w-3.5 h-3.5" /> Protected by 256-bit SSL encryption
+                  </div>
+                  <button type="submit" className="w-full py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                    Link Payment Card
+                  </button>
+                </form>
+              </>
+            )}
+
+            {activeModal === "2fa" && (
+              <>
+                <div className="p-8 pb-4 text-center shrink-0">
+                  <div className="w-12 h-12 bg-[#F5F5F4] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#DCDCDA]">
+                    <Key className="w-6 h-6 text-[#121415]" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Enable 2FA</h2>
+                  <p className="text-xs text-[#4A4E51] font-medium mt-2">Enter the 6-digit code from your authenticator app to enable Two-Factor Authentication.</p>
+                </div>
+                <form className="px-8 pb-8 flex-1 overflow-y-auto" onSubmit={handleEnable2FA}>
+                  <div className="p-5 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl space-y-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider text-center">Authentication Code</label>
+                      <input 
+                        type="text" 
+                        inputMode="numeric"
+                        autoComplete="off"
+                        placeholder="000000" 
+                        maxLength={6}
+                        value={code2FA}
+                        onChange={(e) => setCode2FA(e.target.value.replace(/\D/g, ""))}
+                        className="w-full bg-white border border-[#DCDCDA] px-4 py-4 rounded-xl font-bold text-[#121415] text-center text-xl tracking-[0.2em] outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all placeholder:text-[#8B9194]" 
+                      />
+                    </div>
+                  </div>
+                  <button type="submit" className="w-full mt-6 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                    Enable Authentication
+                  </button>
+                </form>
+              </>
+            )}
+
+            {activeModal === "logout" && (
+              <>
+                <div className="p-8 pb-4 text-center shrink-0">
+                  <div className="w-12 h-12 bg-[#F5F5F4] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#DCDCDA]">
+                    <LogOut className="w-6 h-6 text-[#121415]" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Log Out</h2>
+                  <p className="text-xs text-[#4A4E51] font-medium mt-2">Are you sure you want to log out of your current session?</p>
+                </div>
+                <div className="px-8 pb-8 flex items-center gap-3">
+                  <button type="button" onClick={() => setActiveModal(null)} className="flex-1 py-3.5 bg-white border border-[#DCDCDA] text-[#121415] rounded-xl font-medium text-sm shadow-sm hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                    Cancel
+                  </button>
+                  <button type="button" onClick={handleLogout} className="flex-1 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                    Log Out
+                  </button>
+                </div>
+              </>
+            )}
+
+            {activeModal === "delete" && (
+              <>
+                <div className="p-8 pb-4 text-center shrink-0">
+                  <div className="w-12 h-12 bg-[#fef2f2] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#fca5a5]">
+                    <ShieldAlert className="w-6 h-6 text-[#dc2626]" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Delete Account</h2>
+                  <p className="text-xs text-[#991b1b] font-medium mt-2">This action is permanent and irreversible. All your data will be permanently erased.</p>
+                </div>
+                <form className="px-8 pb-8 flex-1 overflow-y-auto" onSubmit={handleDeleteAccount}>
+                  <div className="p-5 bg-[#fef2f2] border border-[#fca5a5] rounded-2xl space-y-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#991b1b] mb-2 uppercase tracking-wider">Type DELETE to confirm</label>
+                      <input 
+                        type="text" 
+                        autoComplete="off"
+                        placeholder="DELETE" 
+                        value={deleteConfirmText}
+                        onChange={(e) => setDeleteConfirmText(e.target.value)}
+                        className="w-full bg-white border border-[#fca5a5] px-4 py-3 rounded-xl font-medium text-[#121415] outline-none focus:border-[#dc2626] focus:ring-2 focus:ring-[#dc2626]/10 transition-all text-sm placeholder:text-[#fca5a5]" 
+                      />
+                    </div>
+                  </div>
+                  <button 
+                    type="submit" 
+                    disabled={deleteConfirmText !== "DELETE"}
+                    className="w-full mt-6 py-3.5 bg-[#dc2626] text-white rounded-xl font-medium text-sm shadow-sm hover:bg-[#b91c1c] transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] disabled:opacity-50 disabled:pointer-events-none"
+                  >
+                    Permanently Delete
+                  </button>
+                </form>
+              </>
+            )}
+
           </div>
         </div>
       )}
