@@ -32,6 +32,7 @@ export default function Dashboard() {
   const [service, setService] = useState("Haircut");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const [isPaused, setIsPaused] = useState(false);
   
   const mastersList = ["Ali Ahmedov", "Sanjar B.", "Timur G."];
 
@@ -113,18 +114,33 @@ export default function Dashboard() {
   };
 
   const handleAddDelay = (guestId: number) => {
-    setInChairGuests(prev => prev.map(guest => {
-      if (guest.id === guestId) {
-        toast.warning(`+10 min delay added for ${guest.name}`);
-        return {
-          ...guest,
-          oldTime: guest.oldTime || guest.time,
-          time: addMinutesToTime(guest.time, 10),
-          delay: "Delay +10m"
-        };
+    const guestInChair = inChairGuests.find(g => g.id === guestId);
+    if (!guestInChair) return;
+    
+    setWaitingGuests(prev => {
+      let updatedCount = 0;
+      const nextList = prev.map(waitingGuest => {
+        if (waitingGuest.master === guestInChair.master) {
+          updatedCount++;
+          const currentDelayMatch = waitingGuest.delay ? waitingGuest.delay.match(/\+?(\d+)m/) : null;
+          const currentDelay = currentDelayMatch ? parseInt(currentDelayMatch[1], 10) : 0;
+          return {
+            ...waitingGuest,
+            oldTime: waitingGuest.oldTime || waitingGuest.time,
+            time: addMinutesToTime(waitingGuest.time, 10),
+            delay: `Delay +${currentDelay + 10}m`
+          };
+        }
+        return waitingGuest;
+      });
+      
+      if (updatedCount > 0) {
+        toast.warning(`+10 min delay applied to queue for ${guestInChair.master}`);
+      } else {
+        toast.info(`No clients waiting for ${guestInChair.master}`);
       }
-      return guest;
-    }));
+      return nextList;
+    });
   };
 
   const onDragEnd = (result: DropResult) => {
@@ -214,10 +230,20 @@ export default function Dashboard() {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm border bg-white text-[#121415] hover:bg-[#F5F5F4] border-[#DCDCDA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
+              onClick={() => {
+                setIsPaused(!isPaused);
+                toast.success(isPaused ? "Bookings resumed" : "Bookings paused");
+              }}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-95 text-white ${
+                isPaused 
+                  ? "bg-[#8A2532] hover:bg-[#8A2532]/90 focus-visible:ring-[#8A2532]" 
+                  : "bg-[#4a6b53] hover:bg-[#4a6b53]/90 focus-visible:ring-[#4a6b53]"
+              }`}
             >
               <Power className="w-4 h-4" /> 
-              <span className="hidden sm:inline">Pause Bookings</span>
+              <span className="hidden sm:inline">
+                {isPaused ? "Resume Bookings" : "Pause Bookings"}
+              </span>
             </button>
 
             <button
@@ -317,7 +343,7 @@ export default function Dashboard() {
                             {...provided.dragHandleProps}
                             className={`bg-white p-4 rounded-2xl border transition-all duration-200 relative group touch-pan-y ${guest.delay ? 'border-[#8A2532]/30' : 'border-[#DCDCDA]'} overflow-hidden ${snapshot.isDragging ? 'shadow-xl scale-[1.02] z-50 ring-2 ring-[#121415]/20' : 'shadow-sm'}`}
                           >
-                            {guest.delay && <div className="absolute top-0 left-0 w-1 h-full bg-[#8A2532]"></div>}
+                            <div className="absolute top-0 left-0 w-1.5 h-full bg-[#8A2532]"></div>
                             <div className="flex justify-between items-start mb-3 pl-1">
                               <div className="flex flex-col">
                                 <span className="text-sm font-semibold text-[#121415]">{guest.name}</span>

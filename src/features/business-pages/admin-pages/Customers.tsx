@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { toast } from "sonner";
 import {
   Search,
   Download,
@@ -74,13 +75,50 @@ const TABS = [
 ];
 
 export default function Customers() {
+  const [customers, setCustomers] = useState(INITIAL_CUSTOMERS);
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [modal, setModal] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [customerToDelete, setCustomerToDelete] = useState<number | null>(null);
 
-  const filteredCustomers = INITIAL_CUSTOMERS.filter((customer) => {
+  const [newClientName, setNewClientName] = useState("");
+  const [newClientPhone, setNewClientPhone] = useState("");
+
+  const handleAddClient = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newClientName.trim() || !newClientPhone.trim()) {
+      toast.error("Please enter name and phone number");
+      return;
+    }
+
+    const words = newClientName.trim().split(/\s+/);
+    const initials = words.length >= 2 
+      ? (words[0][0] + words[1][0]).toUpperCase() 
+      : words[0].substring(0, 2).toUpperCase();
+
+    const newClient = {
+      id: Date.now(),
+      name: newClientName,
+      initials,
+      avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]",
+      phone: newClientPhone,
+      status: "new",
+      statusColor: "bg-[#e8efe9] text-[#4a6b53] border-[#4a6b53]/30",
+      visits: 0,
+      ltv: "0 UZS",
+      lastVisit: "Never"
+    };
+
+    setCustomers(prev => [newClient, ...prev]);
+    setModal(false);
+    setNewClientName("");
+    setNewClientPhone("");
+    toast.success("Client added successfully");
+  };
+
+  const filteredCustomers = customers.filter((customer) => {
     const matchesTab = activeTab === "all" || customer.status === activeTab;
     const q = searchQuery.trim().toLowerCase();
     const matchesSearch = q === "" || 
@@ -240,7 +278,10 @@ export default function Customers() {
                             <MessageCircle className="w-4 h-4" />
                           </button>
                           <div className="w-px h-4 bg-[#DCDCDA] mx-1"></div>
-                          <button type="button" onClick={() => setDeleteModalOpen(true)} className="p-2 text-[#4A4E51] hover:text-[#dc2626] hover:bg-[#dc2626]/10 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]" title="Delete">
+                          <button type="button" onClick={() => {
+                            setCustomerToDelete(customer.id);
+                            setDeleteModalOpen(true);
+                          }} className="p-2 text-[#4A4E51] hover:text-[#dc2626] hover:bg-[#dc2626]/10 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]" title="Delete">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
@@ -316,16 +357,29 @@ export default function Customers() {
             <div className="p-8 pb-4 shrink-0">
               <h2 className="text-2xl font-semibold text-[#121415] tracking-tight">New Guest</h2>
             </div>
-            <form className="px-8 pb-8 space-y-5">
+            <form className="px-8 pb-8 space-y-5" onSubmit={handleAddClient}>
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                <input autoFocus type="text" placeholder="Client name" className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                <input 
+                  autoFocus 
+                  type="text" 
+                  value={newClientName}
+                  onChange={e => setNewClientName(e.target.value)}
+                  placeholder="Client name" 
+                  className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
+                />
               </div>
               <div className="relative">
                 <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                <input type="tel" placeholder="+998 90 000 00 00" className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                <input 
+                  type="tel" 
+                  value={newClientPhone}
+                  onChange={e => setNewClientPhone(e.target.value)}
+                  placeholder="+998 90 000 00 00" 
+                  className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
+                />
               </div>
-              <button type="button" onClick={() => setModal(false)} className="w-full mt-4 py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex justify-center items-center active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+              <button type="submit" className="w-full mt-4 py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex justify-center items-center active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
                 Add to Directory
               </button>
             </form>
@@ -336,8 +390,19 @@ export default function Customers() {
       {/* CONFIRM DELETE MODAL */}
       <ConfirmModal 
         isOpen={deleteModalOpen} 
-        onClose={() => setDeleteModalOpen(false)} 
-        onConfirm={() => setDeleteModalOpen(false)} 
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setCustomerToDelete(null);
+        }} 
+        onConfirm={() => {
+          if (customerToDelete !== null) {
+            setCustomers(prev => prev.filter(c => c.id !== customerToDelete));
+            setSelectedIds(prev => prev.filter(id => id !== customerToDelete));
+            toast.success("Client deleted successfully");
+          }
+          setDeleteModalOpen(false);
+          setCustomerToDelete(null);
+        }} 
         title="Delete Client?" 
         description="Are you sure you want to remove this client from the directory?" 
       />

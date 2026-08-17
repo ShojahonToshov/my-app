@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { toast } from "sonner";
 import {
   CheckCircle2,
   Download,
@@ -40,6 +41,59 @@ function UsageBar({ label, current, max, unit = "" }: UsageBarProps) {
 
 export default function Billing() {
   const [modal, setModal] = useState(false);
+  const [cardLast4, setCardLast4] = useState("4242");
+  const [cardExpiry, setCardExpiry] = useState("12/28");
+  const [cardType, setCardType] = useState("VISA");
+
+  const [inputCardNumber, setInputCardNumber] = useState("");
+  const [inputExpiry, setInputExpiry] = useState("");
+  const [inputCvc, setInputCvc] = useState("");
+
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value.replace(/\D/g, "");
+    val = val.replace(/(.{4})/g, "$1 ").trim();
+    setInputCardNumber(val);
+  };
+
+  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value.replace(/\D/g, "");
+    if (val.length >= 2) {
+      val = val.substring(0, 2) + "/" + val.substring(2, 4);
+    }
+    setInputExpiry(val);
+  };
+
+  const handleUpdateCard = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputCardNumber || !inputExpiry || !inputCvc) {
+      toast.error("Please fill in all card details");
+      return;
+    }
+    
+    const cleanedNumber = inputCardNumber.replace(/\D/g, "");
+    if (cleanedNumber.length < 4) {
+      toast.error("Invalid card number");
+      return;
+    }
+    const last4 = cleanedNumber.slice(-4);
+    
+    setCardLast4(last4);
+    setCardExpiry(inputExpiry);
+    
+    if (cleanedNumber.startsWith("4")) {
+      setCardType("VISA");
+    } else if (cleanedNumber.startsWith("5")) {
+      setCardType("MASTER");
+    } else {
+      setCardType("CARD");
+    }
+    
+    setModal(false);
+    setInputCardNumber("");
+    setInputExpiry("");
+    setInputCvc("");
+    toast.success("Card updated successfully");
+  };
 
   return (
     <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white">
@@ -83,10 +137,10 @@ export default function Billing() {
                 <div className="space-y-1 w-full">
                   <span className="text-xs font-semibold text-[#8B9194] uppercase tracking-wider">Payment Method</span>
                   <div className="flex items-center gap-4 mt-3 p-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl w-full">
-                    <div className="w-12 h-8 bg-[#121415] rounded flex items-center justify-center text-xs text-white font-semibold shrink-0 shadow-sm">VISA</div>
+                    <div className="w-12 h-8 bg-[#121415] rounded flex items-center justify-center text-xs text-white font-semibold shrink-0 shadow-sm">{cardType}</div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-[#121415] tracking-tight">•••• 4242</span>
-                      <span className="text-[10px] text-[#8B9194] font-medium mt-0.5 uppercase">Expires 12/28</span>
+                      <span className="text-sm font-semibold text-[#121415] tracking-tight">•••• {cardLast4}</span>
+                      <span className="text-[10px] text-[#8B9194] font-medium mt-0.5 uppercase">Expires {cardExpiry}</span>
                     </div>
                   </div>
                 </div>
@@ -166,27 +220,48 @@ export default function Billing() {
               <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Secure Payment</h2>
               <p className="text-xs text-[#4A4E51] font-medium mt-2">Card details are encrypted via PCI DSS standards. We never store your CVV.</p>
             </div>
-            <form className="px-8 pb-8 flex-1 overflow-y-auto">
+            <form className="px-8 pb-8 flex-1 overflow-y-auto" onSubmit={handleUpdateCard}>
               <div className="p-5 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">Card Number</label>
-                  <input type="text" placeholder="0000 0000 0000 0000" maxLength={19} className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" />
+                  <input 
+                    type="text" 
+                    placeholder="0000 0000 0000 0000" 
+                    maxLength={19}
+                    value={inputCardNumber}
+                    onChange={handleCardNumberChange}
+                    className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" 
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">Expiry Date</label>
-                    <input type="text" placeholder="MM/YY" maxLength={5} className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] text-center outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" />
+                    <input 
+                      type="text" 
+                      placeholder="MM/YY" 
+                      maxLength={5}
+                      value={inputExpiry}
+                      onChange={handleExpiryChange}
+                      className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] text-center outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" 
+                    />
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">CVC/CVV</label>
-                    <input type="password" placeholder="..." maxLength={4} className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] text-center outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" />
+                    <input 
+                      type="password" 
+                      placeholder="..." 
+                      maxLength={4}
+                      value={inputCvc}
+                      onChange={e => setInputCvc(e.target.value)}
+                      className="w-full bg-white border border-[#DCDCDA] px-4 py-3 rounded-xl font-medium text-[#121415] text-center outline-none focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all text-sm placeholder:text-[#8B9194]" 
+                    />
                   </div>
                 </div>
               </div>
               <div className="flex items-center justify-center gap-1.5 mt-5 mb-6 text-xs font-medium text-[#4a6b53]">
                 <ShieldCheck className="w-3.5 h-3.5" /> Protected by 256-bit SSL encryption
               </div>
-              <button type="button" onClick={() => setModal(false)} className="w-full py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+              <button type="submit" className="w-full py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
                 Link Payment Card
               </button>
             </form>
