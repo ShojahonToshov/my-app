@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import useAuthStore from '@/features/market-pages/stores/authStore';
 
 type Role = 'customer' | 'business' | 'guest';
@@ -28,6 +28,7 @@ export default function RoleGuard({
   requireAuth = true,
 }: RoleGuardProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { isAuthenticated, user } = useAuthStore();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -50,7 +51,19 @@ export default function RoleGuard({
 
     const rawRole = user.profile?.role as string;
     const userRole: Role = (rawRole === 'business' || rawRole === 'customer') ? rawRole : 'customer';
-    const homeRoute = HOME_ROUTES[userRole] || '/search';
+    const onboardingStep = (user.profile?.onboarding_step as number) || 0;
+    const isUnonboardedBusiness = userRole === 'business' && onboardingStep < 3;
+    
+    let homeRoute = HOME_ROUTES[userRole] || '/search';
+    if (isUnonboardedBusiness) {
+      homeRoute = '/onboarding';
+    }
+
+    // Force redirect un-onboarded businesses to /onboarding
+    if (isUnonboardedBusiness && !pathname.startsWith('/onboarding')) {
+      setTimeout(() => router.replace('/onboarding'), 0);
+      return;
+    }
 
     // If allowedRoles includes their role, authorize them
     if (allowedRoles.includes(userRole)) {

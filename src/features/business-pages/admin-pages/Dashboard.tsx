@@ -27,6 +27,16 @@ export default function Dashboard() {
   }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+interface Guest {
+  id: number;
+  name: string;
+  service?: string;
+  time: string;
+  oldTime?: string | null;
+  master: string;
+  delay?: string | null;
+}
+
   const [clientName, setClientName] = useState("");
   const [masterName, setMasterName] = useState("Ali Ahmedov");
   const [service, setService] = useState("Haircut");
@@ -36,17 +46,17 @@ export default function Dashboard() {
   
   const mastersList = ["Ali Ahmedov", "Sanjar B.", "Timur G."];
 
-  const [waitingGuests, setWaitingGuests] = useState([
+  const [waitingGuests, setWaitingGuests] = useState<Guest[]>([
     { id: 101, name: "Guest 123", service: "Royal Shave", time: "14:55", oldTime: "14:45", master: "Ali Ahmedov", delay: "Delay +10m" },
     { id: 102, name: "Malika Kh.", service: "Women's Haircut", time: "15:00", oldTime: null, master: "Timur G.", delay: null }
   ]);
 
-  const [inChairGuests, setInChairGuests] = useState([
+  const [inChairGuests, setInChairGuests] = useState<Guest[]>([
     { id: 201, name: "Azamat Umarov", service: "Haircut + Beard", time: "14:00", master: "Ali Ahmedov" },
     { id: 202, name: "Dilshod K.", service: "Men's Haircut", time: "14:15", master: "Sanjar B." }
   ]);
 
-  const [completedGuests, setCompletedGuests] = useState([
+  const [completedGuests, setCompletedGuests] = useState<Guest[]>([
     { id: 301, name: "Mikhail V.", time: "13:00", master: "Timur G." },
     { id: 302, name: "Ivan M.", time: "12:30", master: "Ali Ahmedov" }
   ]);
@@ -521,7 +531,7 @@ export default function Dashboard() {
               <h2 className="text-2xl font-semibold text-[#121415] tracking-tight">New Appointment</h2>
               <p className="text-sm text-[#4A4E51] font-medium mt-1">Add guest to the daily schedule</p>
             </div>
-            <form className="flex-1 overflow-y-auto px-8 py-2" onSubmit={(e) => { e.preventDefault(); handleAddGuest(); }}>
+            <form className="px-8 py-2" onSubmit={(e) => { e.preventDefault(); handleAddGuest(); }}>
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-[#121415] mb-2">Client Name</label>

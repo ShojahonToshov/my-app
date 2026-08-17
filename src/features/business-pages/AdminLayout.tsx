@@ -81,11 +81,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return () => document.removeEventListener("mousedown", handler);
   }, [showNotifications, showMobileNotifications]);
   const { user: authUser } = useAuthStore();
-  const displayName: string =
-    (authUser?.profile?.full_name as string) ||
-    (authUser?.name as string) ||
-    (authUser?.email as string)?.split("@")[0] ||
-    "Owner";
+  const displayName: string = "Владелец";
   const userEmail: string = (authUser?.email as string) ?? "";
   const avatarUrl: string = (authUser?.profile?.avatar_url as string) ?? "";
   const roleLabel = "Owner";

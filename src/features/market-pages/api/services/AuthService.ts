@@ -6,6 +6,7 @@ export interface UserProfile {
   role?: string;
   full_name?: string;
   avatar_url?: string;
+  onboarding_step?: number;
   [key: string]: unknown;
 }
 
@@ -132,11 +133,10 @@ class AuthService {
   }
 
   async updateProfile(userId: string, userData: Partial<UserProfile>) {
-    // Update data in profiles table
+    // Upsert data in profiles table in case it's missing
     const { data, error } = await this.supabase
       .from('profiles')
-      .update(userData)
-      .eq('id', userId)
+      .upsert({ id: userId, ...userData })
       .select()
       .single();
 
