@@ -562,12 +562,14 @@ export default function Search() {
                       <Card className="group hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.09)] transition-all duration-300 cursor-pointer flex flex-col sm:flex-row h-auto">
                         {/* Image */}
                         <div className="relative w-full sm:w-[280px] md:w-[320px] h-[240px] sm:h-auto shrink-0 overflow-hidden p-3 pb-0 sm:pb-3 sm:pr-0">
-                          <div className="w-full h-full rounded-2xl overflow-hidden relative">
-                            <img
-                              src={venue.image}
-                              alt={venue.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                            />
+                          <div className="w-full h-full rounded-2xl overflow-hidden relative bg-[#DCDCDA]">
+                            {venue.image && (
+                              <img
+                                src={venue.image}
+                                alt={venue.name}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                              />
+                            )}
                             <div className="absolute inset-0 bg-gradient-to-t from-[#121415]/60 via-transparent to-transparent pointer-events-none" />
 
                             <div className="absolute top-3 left-3 flex flex-col gap-2 items-start max-w-[90%]">
