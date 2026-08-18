@@ -265,7 +265,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* MOBILE HEADER */}
-      <div className="md:hidden absolute top-0 left-0 right-0 h-16 bg-[#ECECEA]/90 backdrop-blur-xl border-b border-[#DCDCDA] z-40 flex items-center justify-between px-4">
+      <div className="md:hidden absolute top-0 left-0 right-0 h-16 bg-[#F5F5F4]/90 backdrop-blur-xl border-b border-[#DCDCDA] z-40 flex items-center justify-between px-4">
         <ElaraLogo />
         <div className="flex items-center gap-1">
           <div className="relative" ref={mobileNotifRef}>

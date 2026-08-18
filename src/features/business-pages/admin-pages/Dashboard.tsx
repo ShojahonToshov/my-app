@@ -231,7 +231,7 @@ interface Guest {
         <div className="flex-1 flex flex-col overflow-hidden relative">
         
         {/* HEADER */}
-        <header className="bg-[#ECECEA]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Dashboard</h1>
             <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Real-time client flow & queue management</p>
