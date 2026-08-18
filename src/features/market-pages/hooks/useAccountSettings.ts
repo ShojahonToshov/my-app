@@ -45,7 +45,8 @@ export default function useAccountSettings() {
     updateProfileMutation.mutate(updatedData);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await AuthService.logout();
     logout();
     toast.info("You have logged out.");
     router.push("/login");

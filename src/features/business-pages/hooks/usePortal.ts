@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import useAuthStore from "../stores/authStore";
+import AuthService from "../api/services/AuthService";
 
 export default function usePortal() {
   const router = useRouter();
@@ -21,7 +22,8 @@ export default function usePortal() {
     });
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await AuthService.logout();
     logout();
     toast.info("Session ended");
     router.push("/login");

@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface StoreUser {
   id: string;
@@ -17,34 +16,31 @@ interface AuthState {
   login: (userData: StoreUser) => void;
   logout: () => void;
   updateUser: (updatedData: Partial<StoreUser>) => void;
+  setAuth: (user: StoreUser | null) => void;
 }
 
-const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      isAuthenticated: false,
-      
-      login: (userData) => {
-        set({ user: userData, isAuthenticated: true });
-      },
-      
-      logout: () => {
-        set({ user: null, isAuthenticated: false });
-      },
+const useAuthStore = create<AuthState>((set) => ({
+  user: null,
+  isAuthenticated: false,
+  
+  login: (userData) => {
+    set({ user: userData, isAuthenticated: true });
+  },
+  
+  logout: () => {
+    set({ user: null, isAuthenticated: false });
+  },
 
-      updateUser: (updatedData) => {
-        set((state) => {
-          const newUser = state.user ? { ...state.user, ...updatedData } : null;
-          return { user: newUser };
-        });
-      }
-    }),
-    {
-      name: 'elara-auth-storage', // name of item in the storage (must be unique)
-      storage: createJSONStorage(() => localStorage), // (optional) by default the 'localStorage' is used
-    }
-  )
-);
+  updateUser: (updatedData) => {
+    set((state) => {
+      const newUser = state.user ? { ...state.user, ...updatedData } : null;
+      return { user: newUser };
+    });
+  },
+
+  setAuth: (user) => {
+    set({ user, isAuthenticated: !!user });
+  }
+}));
 
 export default useAuthStore;
