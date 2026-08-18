@@ -5,7 +5,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import BookingService from "../api/services/BookingService";
 import VenueService from "../api/services/VenueService";
 import { toast } from "sonner";
-import useAuthStore from "../stores/authStore";
+import useUser from "@/hooks/useUser";
+
 import { queryKeys } from "../lib/queryKeys";
 import { Booking, Business } from '@/types';
 
@@ -16,7 +17,7 @@ interface ExtendedBooking extends Booking {
 export default function useAccount() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user: currentUser } = useAuthStore();
+  const { user: currentUser } = useUser();
   
   const [activeTab, setActiveTab] = useState("upcoming");
   const clientKarma = 95;

@@ -16,7 +16,8 @@ import Footer from "@/components/Footer";
 import ElaraLogo from "@/components/ElaraLogo";
 import SignupRoleModal from "@/components/SignupRoleModal";
 import { Button } from "@/components/ui/Button";
-import useAuthStore from "./stores/authStore";
+import useUser from "@/hooks/useUser";
+
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
 const fadeUp = {
@@ -89,7 +90,7 @@ export default function Landing() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user } = useUser();
   const accountLink = user?.profile?.role === "business" ? "/admin" : "/account";
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

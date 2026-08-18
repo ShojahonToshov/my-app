@@ -3,7 +3,8 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";;
 import { useMutation } from "@tanstack/react-query";
 import AuthService from "../api/services/AuthService";
-import useAuthStore from "../stores/authStore";
+import useUser from "@/hooks/useUser";
+
 import { toast } from "sonner";
 
 export function useLogin() {
@@ -14,7 +15,7 @@ export function useLogin() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [rememberMe, setRememberMe] = useState(false);
 
-  const { login: loginStore } = useAuthStore();
+  const { login: loginStore } = useUser();
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -32,7 +33,7 @@ export function useLogin() {
     },
     onSuccess: (user) => {
       toast.success("Successfully signed in");
-      // @ts-expect-error user properties might slightly differ from StoreUser but it's safe here
+
       loginStore(user);
       if (user.profile?.role === "admin" || user.profile?.role === "master") {
         router.push("/admin");
@@ -72,7 +73,7 @@ export function useSignup(role = "admin", redirectPath = "/admin") {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const { login: loginStore } = useAuthStore();
+  const { login: loginStore } = useUser();
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -96,7 +97,7 @@ export function useSignup(role = "admin", redirectPath = "/admin") {
     },
     onSuccess: (user) => {
       toast.success("Registration successful!");
-      // @ts-expect-error user properties might slightly differ from StoreUser but it's safe here
+
       loginStore(user);
       router.push(redirectPath);
     },

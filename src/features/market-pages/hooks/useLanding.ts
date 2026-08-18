@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import useAuthStore from "../stores/authStore";
+import useUser from "@/hooks/useUser";
+
 
 export default function useLanding() {
   const [activeSection, setActiveSection] = useState("");
-  const { user: currentUser } = useAuthStore();
+  const { user: currentUser } = useUser();
   const [openFaq, setOpenFaq] = useState(null);
   const [showStickyCta, setShowStickyCta] = useState(false);
 

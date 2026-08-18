@@ -4,13 +4,14 @@ import { useRouter } from "next/navigation";;
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import AuthService from "../api/services/AuthService";
 import { toast } from "sonner";
-import useAuthStore from "../stores/authStore";
+import useUser from "@/hooks/useUser";
+
 import { queryKeys } from "../lib/queryKeys";
 
 export default function useAccountSettings() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user: currentUser, updateUser, logout } = useAuthStore();
+  const { user: currentUser, updateUser, logout } = useUser();
   
   const [name, setName] = useState(currentUser?.name || "");
   const [login, setLogin] = useState(currentUser?.login || "");
@@ -28,7 +29,7 @@ export default function useAccountSettings() {
       return AuthService.updateProfile(currentUser.id, updatedData as Record<string, unknown>);
     },
     onSuccess: (data, variables) => {
-      updateUser(variables as { id: string; name: string; login?: string; password?: string });
+      updateUser(variables as any);
       queryClient.invalidateQueries({ queryKey: queryKeys.users.detail(currentUser?.id || "") });
       toast.success("Profile details updated successfully!");
     },

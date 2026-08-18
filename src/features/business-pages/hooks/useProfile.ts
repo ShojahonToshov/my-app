@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import AuthService from "../api/services/AuthService";
 import { toast } from "sonner";
-import useAuthStore from "../stores/authStore";
+import useUser from "@/hooks/useUser";
 
 export default function useProfile() {
   const router = useRouter();
-  const { user: currentUser, updateUser, logout } = useAuthStore();
+  const { user: currentUser, updateUser, logout } = useUser();
   
   const [name, setName] = useState(currentUser?.name || "");
   const [login, setLogin] = useState(currentUser?.login || "");

@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { format, addDays, startOfToday } from "date-fns";
 import { toast } from "sonner";
 import BookingService from "./api/services/BookingService";
-import useAuthStore from "./stores/authStore";
+import useUser from "@/hooks/useUser";
+
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
@@ -127,7 +128,7 @@ const venueData = {
 
 export default function ClientBooking() {
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { user } = useUser();
   
   const dates = useMemo(() => {
     const today = startOfToday();

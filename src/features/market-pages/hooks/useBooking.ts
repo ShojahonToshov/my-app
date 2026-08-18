@@ -6,7 +6,8 @@ import { toast } from "sonner";
 import VenueService from "../api/services/VenueService";
 import BookingService from "../api/services/BookingService";
 import { DATES } from "../constants/booking";
-import useAuthStore from "../stores/authStore";
+import useUser from "@/hooks/useUser";
+
 import { queryKeys } from "../lib/queryKeys";
 import { Booking, Business, Service } from '@/types';
 
@@ -37,7 +38,7 @@ export default function useBooking() {
   const params = useParams();
   const id = params?.id as string;
   const queryClient = useQueryClient();
-  const { user: currentUser } = useAuthStore();
+  const { user: currentUser } = useUser();
   
   useEffect(() => {
     if (!id) {

@@ -2,12 +2,12 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import useAuthStore from "../stores/authStore";
+import useUser from "@/hooks/useUser";
 import AuthService from "../api/services/AuthService";
 
 export default function usePortal() {
   const router = useRouter();
-  const { user: currentUser, logout } = useAuthStore();
+  const { user: currentUser, logout } = useUser();
 
   useEffect(() => {
     if (!currentUser) {

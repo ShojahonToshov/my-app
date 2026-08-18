@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
-import useAuthStore from "../stores/authStore";
+import useUser from "@/hooks/useUser";
 import { toast } from "sonner";
 
 export interface VenueData {
@@ -46,7 +46,7 @@ const SAVED_KEY = (userId: string) => `elara_saved_${userId}`;
 
 export default function useSearch() {
   const supabase = createClient();
-  const { user: currentUser, isAuthenticated } = useAuthStore();
+  const { user: currentUser, isAuthenticated } = useUser();
   const userId = currentUser?.id ?? "guest";
 
   // ── Remote venues ──────────────────────────────────────────────────────────

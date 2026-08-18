@@ -5,7 +5,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import VenueService from "../api/services/VenueService";
 import { Scissors, Store, HeartPulse, MoreHorizontal } from "lucide-react";
-import useAuthStore from "../stores/authStore";
+import useUser from "@/hooks/useUser";
+
 import { queryKeys } from "../lib/queryKeys";
 
 export const CATEGORIES = [
@@ -18,7 +19,7 @@ export const CATEGORIES = [
 export default function useOnboarding() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user: currentUser } = useAuthStore();
+  const { user: currentUser } = useUser();
   const [step, setStep] = useState(1);
   
   const [venueName, setVenueName] = useState("");

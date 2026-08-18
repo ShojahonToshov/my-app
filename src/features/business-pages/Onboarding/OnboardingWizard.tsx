@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import useAuthStore from "@/features/market-pages/stores/authStore";
+import useUser from "@/hooks/useUser";
 import AuthService from "@/features/market-pages/api/services/AuthService";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
@@ -12,7 +12,7 @@ import { MapPin, Phone, Store, Briefcase } from "lucide-react";
 
 export default function OnboardingWizard() {
   const router = useRouter();
-  const { user, updateUser } = useAuthStore();
+  const { user, updateUser } = useUser();
   const supabase = createClient();
 
   const [step, setStep] = useState(0);

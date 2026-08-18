@@ -22,7 +22,8 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
 import ElaraLogo from "@/components/ElaraLogo";
-import useAuthStore from "@/features/market-pages/stores/authStore";
+import useUser from "@/hooks/useUser";
+
 import Avatar from "@/components/ui/Avatar";
 
 import { usePathname } from "next/navigation";
@@ -80,7 +81,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [showNotifications, showMobileNotifications]);
-  const { user: authUser } = useAuthStore();
+  const { user: authUser } = useUser();
   const displayName: string = "Владелец";
   const userEmail: string = (authUser?.email as string) ?? "";
   const avatarUrl: string = (authUser?.profile?.avatar_url as string) ?? "";

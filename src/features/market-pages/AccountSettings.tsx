@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
 import AuthService from "@/features/market-pages/api/services/AuthService";
-import useAuthStore from "@/features/market-pages/stores/authStore";
+import useUser from "@/hooks/useUser";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -59,7 +59,7 @@ function generateAvatarColors(): string {
 
 export default function AccountSettings() {
   const router = useRouter();
-  const { user, updateUser, logout } = useAuthStore();
+  const { user, updateUser, logout } = useUser();
   
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");

@@ -23,7 +23,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
-import useAuthStore from "@/features/market-pages/stores/authStore";
+import useUser from "@/hooks/useUser";
+
 import Avatar from "@/components/ui/Avatar";
 
 const fadeUp = {
@@ -254,7 +255,7 @@ export default function ClientAccount() {
   };
 
   // ── Real user from auth store ───────────────────────────────────────────────
-  const { user: authUser } = useAuthStore();
+  const { user: authUser } = useUser();
   const displayName: string =
     (authUser?.profile?.full_name as string) ||
     (authUser?.name as string) ||
