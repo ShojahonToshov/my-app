@@ -1,19 +1,3 @@
-const { Client } = require('pg');
-
-const run = async () => {
-  // Let's try the direct connection URI pattern:
-  // postgresql://postgres.[project-id]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres
-  const connectionString = 'postgresql://postgres.hhlbquuxnesiuwknscyq:QQdLzR5Ldv0z6kL0@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres';
-  
-  const client = new Client({
-    connectionString,
-  });
-
-  try {
-    await client.connect();
-    console.log("Connected successfully!");
-
-    const sql = `
 -- 1. Таблица заведений (businesses)
 create table if not exists public.businesses (
   id uuid default gen_random_uuid() primary key,
@@ -65,16 +49,3 @@ create policy "Services are viewable by everyone." on services for select using 
 
 -- Клиенты могут видеть только свои записи
 create policy "Clients can view own bookings." on bookings for select using (auth.uid() = client_id);
-    `;
-
-    await client.query(sql);
-    console.log("SQL executed successfully!");
-
-  } catch (err) {
-    console.error("Connection failed:", err.message);
-  } finally {
-    await client.end();
-  }
-};
-
-run();
