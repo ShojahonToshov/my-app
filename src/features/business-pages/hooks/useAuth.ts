@@ -26,16 +26,15 @@ export function useLogin() {
 
   const loginMutation = useMutation({
     mutationFn: async ({ login, password }: Record<string, string>) => {
-      // Simulate authentication through retrieving users
-      const users = await AuthService.getUsers();
-      const user = users.find((item: { login?: string; password?: string; [key: string]: unknown }) => item.login === login && item.password === password);
-      if (!user) throw new Error("User not found");
-      return user;
+      const data = await AuthService.login(login, password);
+      if (!data.user) throw new Error("User not found");
+      return data.user;
     },
     onSuccess: (user) => {
       toast.success("Successfully signed in");
+      // @ts-expect-error user properties might slightly differ from StoreUser but it's safe here
       loginStore(user);
-      if (user.role === "admin" || user.role === "master") {
+      if (user.profile?.role === "admin" || user.profile?.role === "master") {
         router.push("/admin");
       } else {
         router.push("/account");
@@ -86,24 +85,24 @@ export function useSignup(role = "admin", redirectPath = "/admin") {
 
   const signupMutation = useMutation({
     mutationFn: async (newUser: Record<string, string>) => {
-      const usersData = await AuthService.getUsers();
-      const userExists = usersData.find((item: { login?: string }) => item.login === newUser.login);
-      if (userExists) throw new Error("UserExists");
-      
-      return await AuthService.register(newUser);
+      const data = await AuthService.signup(newUser.login, newUser.password, {
+        data: {
+          full_name: newUser.name,
+          role: newUser.role || role,
+        }
+      });
+      if (!data.user) throw new Error("User not created");
+      return data.user;
     },
     onSuccess: (user) => {
       toast.success("Registration successful!");
+      // @ts-expect-error user properties might slightly differ from StoreUser but it's safe here
       loginStore(user);
       router.push(redirectPath);
     },
-    onError: (error) => {
-      if (error.message === "UserExists") {
-        setErrors({ auth: "An account with this email/login already exists." });
-        toast.error("User already exists.");
-      } else {
-        toast.error("Error occurred during registration.");
-      }
+    onError: (error: Error) => {
+      setErrors({ auth: "An error occurred during registration." });
+      toast.error(error?.message || "Error occurred during registration.");
     }
   });
 

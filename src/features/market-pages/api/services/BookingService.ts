@@ -59,8 +59,18 @@ class BookingService {
     return [];
   }
 
-  async getBookings() { return []; }
-  async getBookingById(id: string): Promise<unknown> { return {}; }
+  async getBookings() {
+    const { data, error } = await this.supabase.from('bookings').select('*');
+    if (error) throw error;
+    return data;
+  }
+
+  async getBookingById(id: string): Promise<unknown> {
+    const { data, error } = await this.supabase.from('bookings').select('*').eq('id', id).single();
+    if (error) throw error;
+    return data;
+  }
+
   async createBooking(data: Record<string, unknown>) {
     const { data: result, error } = await this.supabase
       .from('bookings')
@@ -74,8 +84,18 @@ class BookingService {
     }
     return result;
   }
-  async updateBooking(id: string, data: Record<string, unknown>) { return { data }; }
-  async deleteBooking(id: string) { return true; }
+
+  async updateBooking(id: string, updateData: Record<string, unknown>) {
+    const { data, error } = await this.supabase.from('bookings').update(updateData).eq('id', id).select().single();
+    if (error) throw error;
+    return data;
+  }
+
+  async deleteBooking(id: string) {
+    const { data, error } = await this.supabase.from('bookings').delete().eq('id', id).select().single();
+    if (error) throw error;
+    return data;
+  }
 
   async getBusinesses() {
     const { data, error } = await this.supabase
@@ -89,5 +109,3 @@ class BookingService {
   }
 }
 export default new BookingService();
-
-

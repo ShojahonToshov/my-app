@@ -1,17 +1,39 @@
-import { apiClient } from "../client";
+import { createClient } from "@/utils/supabase/client";
 import type { Client } from "../../types";
 
 class CustomerService {
+  private get supabase() {
+    return createClient();
+  }
+
   async getCustomers(): Promise<Client[]> {
-    return (await apiClient.get("/customers")) as unknown as Client[];
+    const { data, error } = await this.supabase
+      .from('profiles')
+      .select('*')
+      .eq('role', 'customer');
+    if (error) throw error;
+    return data as unknown as Client[];
   }
 
   async createCustomer(customerData: Partial<Client>): Promise<Client> {
-    return (await apiClient.post("/customers", customerData)) as unknown as Client;
+    const { data, error } = await this.supabase
+      .from('profiles')
+      .insert([{ ...customerData, role: 'customer' }])
+      .select()
+      .single();
+    if (error) throw error;
+    return data as unknown as Client;
   }
 
   async deleteCustomer(id: string): Promise<Client> {
-    return (await apiClient.delete(`/customers/${id}`)) as unknown as Client;
+    const { data, error } = await this.supabase
+      .from('profiles')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single();
+    if (error) throw error;
+    return data as unknown as Client;
   }
 }
 

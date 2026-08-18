@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import BookingService from "../api/services/BookingService";
 import { queryKeys } from "../lib/queryKeys";
 import { Booking } from '@/types';
+import { createClient } from "@/utils/supabase/client";
 
 interface ExtendedBooking extends Booking {
   time?: string;
@@ -38,26 +39,33 @@ export default function useLiveTicket() {
 
   useEffect(() => {
     if (!id) return;
-    const eventSource = new EventSource(`http://localhost:3001/api/liveticket/stream?id=${id}`);
     
-    eventSource.onmessage = (event) => {
-      try {
-        const newBooking = JSON.parse(event.data);
-        if (newBooking && !newBooking.error) {
-          queryClient.setQueryData(queryKeys.bookings.detail(id || ""), newBooking);
+    // Subscribe to realtime changes using Supabase
+    const supabase = createClient();
+    const channel = supabase
+      .channel(`live-ticket-${id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'bookings',
+          filter: `id=eq.${id}`
+        },
+        (payload) => {
+          if (payload.new) {
+            queryClient.setQueryData(queryKeys.bookings.detail(id), payload.new);
+          }
         }
-      } catch (err) {
-        console.error("Failed to parse SSE data", err);
-      }
-    };
-
-    eventSource.onerror = (err) => {
-      console.error("SSE connection error", err);
-      eventSource.close();
-    };
+      )
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          console.log('Subscribed to realtime booking updates');
+        }
+      });
 
     return () => {
-      eventSource.close();
+      supabase.removeChannel(channel);
     };
   }, [id, queryClient]);
 
