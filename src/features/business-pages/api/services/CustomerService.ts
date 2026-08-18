@@ -2,12 +2,16 @@ import { createClient } from "@/utils/supabase/client";
 import type { Client } from "../../types";
 
 class CustomerService {
+  private getClient(client?: any) {
+    return client || createClient();
+  }
+  
   private get supabase() {
-    return createClient();
+    return this.getClient();
   }
 
-  async getCustomers(): Promise<Client[]> {
-    const { data, error } = await this.supabase
+  async getCustomers(client?: any): Promise<Client[]> {
+    const { data, error } = await this.getClient(client)
       .from('profiles')
       .select('*')
       .eq('role', 'customer');

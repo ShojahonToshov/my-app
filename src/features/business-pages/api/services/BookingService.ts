@@ -3,12 +3,16 @@ import { z } from "zod";
 import { createClient } from "@/utils/supabase/client";
 
 class BookingService {
+  private getClient(client?: any) {
+    return client || createClient();
+  }
+  
   private get supabase() {
-    return createClient();
+    return this.getClient();
   }
 
-  async getBookings() {
-    const { data, error } = await this.supabase
+  async getBookings(client?: any) {
+    const { data, error } = await this.getClient(client)
       .from('bookings')
       .select('*');
     if (error) throw error;
