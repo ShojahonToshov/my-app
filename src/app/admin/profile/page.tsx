@@ -1,4 +1,4 @@
-import AdminSettings from '@/features/business-pages/admin-pages/AdminSettings';
+import AdminSettings from '@/components/admin-pages/AdminSettings';
 
 export default function Page() {
   return <AdminSettings />;

@@ -1,4 +1,4 @@
-import Settings from '@/features/business-pages/admin-pages/Settings';
+import Settings from '@/components/admin-pages/Settings';
 
 export default function Page() {
   return <Settings />;

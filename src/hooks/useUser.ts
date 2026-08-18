@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import AuthService, { AppUser } from "@/features/market-pages/api/services/AuthService";
+import AuthService, { AppUser } from "@/services/AuthService";
 
 export type StoreUser = AppUser & Record<string, any>;
 

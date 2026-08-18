@@ -1,4 +1,4 @@
-import Signup from '@/features/market-pages/Signup';
+import Signup from '@/components/Signup';
 import { Suspense } from 'react';
 
 export default function Page() {

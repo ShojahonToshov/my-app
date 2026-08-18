@@ -1,4 +1,4 @@
-import LiveTicket from '@/features/market-pages/LiveTicket';
+import LiveTicket from '@/components/LiveTicket';
 
 export default function Page() {
   return (

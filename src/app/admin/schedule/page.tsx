@@ -1,4 +1,4 @@
-import Schedule from '@/features/business-pages/admin-pages/Schedule';
+import Schedule from '@/components/admin-pages/Schedule';
 
 export default function Page() {
   return <Schedule />;

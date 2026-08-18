@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import ElaraLogo from "./ElaraLogo";
-import SignupRoleModal from "./SignupRoleModal";
+import ElaraLogo from "@/components/ElaraLogo";
+import SignupRoleModal from "@/components/SignupRoleModal";
 
 export default function Footer() {
   const [signupModalOpen, setSignupModalOpen] = useState(false);

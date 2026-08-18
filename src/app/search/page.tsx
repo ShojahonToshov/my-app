@@ -1,4 +1,4 @@
-import Search from '@/features/market-pages/Search';
+import Search from '@/components/Search';
 
 export default function Page() {
   return (

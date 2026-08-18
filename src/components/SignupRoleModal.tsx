@@ -3,7 +3,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, User, Briefcase, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useLockBodyScroll } from "../hooks/useLockBodyScroll";
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
 export interface SignupRoleModalProps {
   isOpen: boolean;

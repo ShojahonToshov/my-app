@@ -1,4 +1,4 @@
-import ClientAccount from '@/features/market-pages/ClientAccount';
+import ClientAccount from '@/components/ClientAccount';
 import { Suspense } from 'react';
 
 export default function Page() {

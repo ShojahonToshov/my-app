@@ -1,9 +1,9 @@
-import Dashboard from '@/features/business-pages/admin-pages/Dashboard';
+import Dashboard from '@/components/admin-pages/Dashboard';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import BookingService from '@/features/business-pages/api/services/BookingService';
+import BookingService from '@/services/BookingService';
 import { createClient } from '@/utils/supabase/server';
-import { queryKeys } from '@/features/business-pages/lib/queryKeys';
-import { ApiBookingDTO, TicketDTO } from '@/features/business-pages/types';
+import { queryKeys } from '@/lib/queryKeys';
+import { ApiBookingDTO, TicketDTO } from '@/types';
 
 export default async function Page() {
   const queryClient = new QueryClient();

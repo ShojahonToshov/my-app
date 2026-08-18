@@ -1,9 +1,9 @@
-import Customers from '@/features/business-pages/admin-pages/Customers';
+import Customers from '@/components/admin-pages/Customers';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import CustomerService from '@/features/business-pages/api/services/CustomerService';
+import CustomerService from '@/services/CustomerService';
 import { createClient } from '@/utils/supabase/server';
-import { queryKeys } from '@/features/business-pages/lib/queryKeys';
-import { INITIAL_CLIENTS } from '@/features/business-pages/constants/clients';
+import { queryKeys } from '@/lib/queryKeys';
+import { INITIAL_CLIENTS } from '@/constants/clients';
 
 export default async function Page() {
   const queryClient = new QueryClient();

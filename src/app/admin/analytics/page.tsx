@@ -1,8 +1,8 @@
-import Analytics from '@/features/business-pages/admin-pages/Analytics';
+import Analytics from '@/components/admin-pages/Analytics';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import BookingService from '@/features/business-pages/api/services/BookingService';
+import BookingService from '@/services/BookingService';
 import { createClient } from '@/utils/supabase/server';
-import { MOCK_DATA } from '@/features/business-pages/constants/analytics';
+import { MOCK_DATA } from '@/constants/analytics';
 
 export default async function Page() {
   const queryClient = new QueryClient();

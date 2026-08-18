@@ -1,4 +1,4 @@
-import AccountSettings from '@/features/market-pages/AccountSettings';
+import AccountSettings from '@/components/AccountSettings';
 
 export default function Page() {
   return (

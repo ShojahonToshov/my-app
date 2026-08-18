@@ -1,4 +1,4 @@
-import Login from '@/features/market-pages/Login';
+import Login from '@/components/Login';
 
 export default function Page() {
   return (

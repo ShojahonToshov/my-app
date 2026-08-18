@@ -1,4 +1,4 @@
-import OnboardingWizard from '@/features/business-pages/Onboarding/OnboardingWizard';
+import OnboardingWizard from '@/components/Onboarding/OnboardingWizard';
 import { Suspense } from 'react';
 
 export default function OnboardingPage() {

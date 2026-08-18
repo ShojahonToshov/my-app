@@ -1,4 +1,4 @@
-import Landing from '@/features/market-pages/Landing';
+import Landing from '@/components/Landing';
 
 export default function Page() {
   return (

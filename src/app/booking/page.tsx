@@ -1,4 +1,4 @@
-import ClientBooking from '@/features/market-pages/ClientBooking';
+import ClientBooking from '@/components/ClientBooking';
 
 export default function Page() {
   return (
