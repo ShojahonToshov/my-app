@@ -1,6 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import bookingService from "@/services/client/BookingService";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -123,17 +125,62 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 };
 
 export default function LiveTicket() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [bookingData, setBookingData] = useState<{
+    venueName: string;
+    serviceName: string;
+    masterName: string;
+    date: string;
+    time: string;
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const bookingData = {
-    venueName: "Chop-Chop Barbershop",
-    serviceName: "Haircut & Beard",
-    masterName: "Ali Ahmedov",
-    date: "24.07.2026",
-    time: "14:30",
-  };
+  useEffect(() => {
+    async function fetchBooking() {
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const data = await bookingService.getBookingById(id);
+        if (data) {
+          setBookingData({
+            venueName: (data as any).businesses?.name || "Unknown Venue",
+            serviceName: (data as any).services?.name || "Unknown Service",
+            masterName: "Any available",
+            date: data.date || "",
+            time: data.time || "",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching booking:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBooking();
+  }, [id]);
 
   useLockBodyScroll(isCancelModalOpen);
+
+  if (loading) {
+    return (
+      <div className="min-h-[100dvh] flex items-center justify-center bg-[#ECECEA]">
+        <div className="w-8 h-8 rounded-full border-2 border-[#DCDCDA] border-t-[#121415] animate-spin" />
+      </div>
+    );
+  }
+
+  if (!bookingData) {
+    return (
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-[#ECECEA] p-4 text-center">
+        <h2 className="text-xl font-semibold mb-2">Booking not found</h2>
+        <Link href="/account" className="text-sm font-medium text-[#4A4E51] underline">Back to profile</Link>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[100dvh] flex flex-col font-sans bg-[#ECECEA] text-[#121415] selection:bg-[#8A2532] selection:text-white relative overflow-hidden items-center justify-center p-4">

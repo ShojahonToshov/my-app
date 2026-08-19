@@ -108,6 +108,7 @@ export default function OnboardingWizard() {
       });
 
       if (final) {
+        await supabase.auth.refreshSession();
         toast.success("Setup complete! Welcome to your dashboard.");
         router.push("/admin");
       } else {
@@ -166,14 +167,23 @@ export default function OnboardingWizard() {
       subtitle: "What is your main service area?",
       content: (
         <div className="space-y-4 w-full">
-          <Input
-            id="category"
-            label="Category"
-            icon={Briefcase}
-            placeholder="e.g. Hair Salon, Barbershop"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          />
+          <div className="relative group w-full">
+            <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194] group-focus-within:text-[#121415] z-10 transition-colors" />
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="peer w-full pl-12 pr-4 py-4 rounded-2xl outline-none transition-all duration-300 text-sm font-medium border bg-[#F5F5F4] focus:bg-white focus:ring-4 focus:border-[#121415] focus:ring-[#121415]/5 text-[#121415] border-[#DCDCDA] appearance-none"
+            >
+              <option value="" disabled>Select a category</option>
+              <option value="Barbershop">Barbershop</option>
+              <option value="Beauty Salon">Beauty Salon</option>
+              <option value="Manicure">Manicure</option>
+            </select>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+              ▼
+            </div>
+          </div>
           <p className="text-xs text-[#4A4E51] mt-2">
              You can add more details later in the dashboard.
           </p>

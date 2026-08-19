@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import BookingService from "@/services/client/BookingService";
 import useAuthStore from "@/stores/authStore";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 
 export default function Dashboard() {
+  const queryClient = useQueryClient();
   const [isMounted, setIsMounted] = useState(false);
   
   useEffect(() => {
@@ -153,6 +154,7 @@ interface Guest {
     
     try {
       await BookingService.updateBookingStatus(guestId.toString(), "in_progress");
+      await queryClient.invalidateQueries({ queryKey: ['adminBookings'] });
       toast.success(`${guest.name} called to chair`);
     } catch (err) {
       toast.error("Failed to update status");
@@ -182,6 +184,8 @@ interface Guest {
       } else {
         toast.info(`No waiting clients left for ${guest.master}`);
       }
+      
+      await queryClient.invalidateQueries({ queryKey: ['adminBookings'] });
     } catch (err) {
       toast.error("Failed to complete session");
     }
@@ -278,9 +282,11 @@ interface Guest {
       else if (destination.droppableId === 'completed') newStatus = "completed";
 
       if (newStatus) {
-        BookingService.updateBookingStatus(String(guestId), newStatus).catch(() => {
-          toast.error("Failed to update status in DB");
-        });
+        BookingService.updateBookingStatus(String(guestId), newStatus)
+          .then(() => queryClient.invalidateQueries({ queryKey: ['adminBookings'] }))
+          .catch(() => {
+            toast.error("Failed to update status in DB");
+          });
       }
 
       if (destination.droppableId === 'inChair' && source.droppableId === 'waiting') {

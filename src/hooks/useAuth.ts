@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { createClient } from "@/utils/supabase/client";
 
 const loginSchema = z.object({
   login: z.string().min(1, "Please enter your email or phone number."),
@@ -36,9 +37,13 @@ export function useLogin(defaultRedirectPath = "/account") {
       if (!data.user) throw new Error("User not found");
       return data.user;
     },
-    onSuccess: (user) => {
+    onSuccess: async (user) => {
       toast.success("Successfully signed in");
       loginStore(user);
+      
+      const supabase = createClient();
+      await supabase.auth.refreshSession();
+      
       const role = user.profile?.role;
       if (role === "admin" || role === "master" || role === "business") {
         router.push("/admin");
@@ -97,9 +102,13 @@ export function useSignup(defaultRole = "user", defaultRedirectPath = "/account"
       if (!data.user) throw new Error("User not created");
       return data.user;
     },
-    onSuccess: (user) => {
+    onSuccess: async (user) => {
       toast.success("Registration successful!");
       loginStore(user);
+      
+      const supabase = createClient();
+      await supabase.auth.refreshSession();
+      
       const role = user.profile?.role;
       if (role === "admin" || role === "master" || role === "business") {
         router.push("/admin");

@@ -3,9 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { Toaster } from "sonner";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,57 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const headersList = await headers();
-  const pathname = headersList.get('x-pathname') || '/';
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  // Define route requirements
-  const guestOnlyRoutes = ['/', '/login', '/signup'];
-  const customerOnlyRoutes = ['/account', '/booking', '/settings'];
-  const businessOnlyRoutes = ['/admin', '/onboarding'];
-  const customerOrGuestRoutes = ['/search', '/ticket'];
-
-  if (!user) {
-    if (
-      customerOnlyRoutes.some(route => pathname.startsWith(route)) ||
-      businessOnlyRoutes.some(route => pathname.startsWith(route))
-    ) {
-      redirect('/login');
-    }
-  } else {
-    // Get custom claims from the session token
-    const { data: { session } } = await supabase.auth.getSession();
-    const rawRole = session?.user?.app_metadata?.role as string;
-    const userRole = (rawRole === 'business' || rawRole === 'customer') ? rawRole : 'customer';
-    const onboardingStep = (session?.user?.app_metadata?.onboarding_step as number) || 0;
-    const isUnonboardedBusiness = userRole === 'business' && onboardingStep < 3;
-
-    let homeRoute = userRole === 'business' ? '/admin' : '/search';
-    if (isUnonboardedBusiness) {
-      homeRoute = '/onboarding';
-    }
-
-    if (guestOnlyRoutes.includes(pathname)) {
-      redirect(homeRoute);
-    }
-
-    if (isUnonboardedBusiness && !pathname.startsWith('/onboarding')) {
-      redirect('/onboarding');
-    }
-
-    if (userRole === 'customer' && businessOnlyRoutes.some(route => pathname.startsWith(route))) {
-      redirect(homeRoute);
-    }
-
-    if (userRole === 'business' && (
-      customerOnlyRoutes.some(route => pathname.startsWith(route)) ||
-      customerOrGuestRoutes.some(route => pathname.startsWith(route))
-    )) {
-      redirect(homeRoute);
-    }
-  }
 
   return (
     <html

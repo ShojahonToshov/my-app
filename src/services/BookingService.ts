@@ -19,7 +19,7 @@ export class BookingService {
   async getBookingById(id: string) {
     const { data, error } = await this.supabase
       .from('bookings')
-      .select('*')
+      .select('*, businesses(name), services(name)')
       .eq('id', id)
       .single();
     if (error) throw error;

@@ -6,6 +6,24 @@ import {
   CalendarClock, Users, Store, Phone, MapPin, Trash2, Loader2,
   ChevronDown, CheckCircle2, ShieldAlert, Save, ShieldCheck
 } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
+
+const Instagram: React.FC<{ className?: string }> = ({ className }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
 
 // --- BUILT-IN UI COMPONENTS ---
 interface EmptyStateProps {
@@ -143,38 +161,56 @@ const CANCEL_WINDOWS = ["2 hours before", "12 hours before", "24 hours before", 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
 
-  // Static state data for tab views
-  const [venueProfile, setVenueProfile] = useState({ 
-    name: 'Chop-Chop Barbershop', 
-    phone: '+998 90 123 45 67', 
-    address: '42 Amir Temur street' 
-  });
-  
-  const [policies, setPolicies] = useState({
-    cancelWindow: "12 hours before",
-    requireCardForLowKarma: true,
-    autoBlacklist: false
-  });
-  
-  const [services, setServices] = useState([
-    { id: "1", name: "Men's Haircut", duration: "45 min", price: "80,000 UZS", isActive: true },
-    { id: "2", name: "Haircut + Beard", duration: "1 hr 15 min", price: "120,000 UZS", isActive: true },
-  ]);
-  
-  const [team, setTeam] = useState([
-    { id: "1", name: "Ali Ahmedov", role: "Top Specialist", initials: "AA", isActive: true },
-    { id: "2", name: "Sanjar B.", role: "Barber", initials: "SB", isActive: true },
-  ]);
+  // Real state data for tab views
+  const [venueProfile, setVenueProfile] = useState({ name: '', phone: '', address: '', description: '', instagram: '' });
+  const [policies, setPolicies] = useState({ cancelWindow: "12 hours before", requireCardForLowKarma: true, autoBlacklist: false });
+  const [services, setServices] = useState<any[]>([]);
+  const [team, setTeam] = useState<any[]>([]);
+  const [schedule, setSchedule] = useState<any[]>([]);
+  const [businessId, setBusinessId] = useState<string | null>(null);
 
-  const [schedule, setSchedule] = useState([
-    { day: "Monday", isActive: true, start: "10:00", end: "20:00" },
-    { day: "Tuesday", isActive: true, start: "10:00", end: "20:00" },
-    { day: "Wednesday", isActive: true, start: "10:00", end: "20:00" },
-    { day: "Thursday", isActive: true, start: "10:00", end: "20:00" },
-    { day: "Friday", isActive: true, start: "10:00", end: "20:00" },
-    { day: "Saturday", isActive: true, start: "10:00", end: "18:00" },
-    { day: "Sunday", isActive: false, start: "10:00", end: "18:00" },
-  ]);
+  useEffect(() => {
+    async function loadBusinessData() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      
+      const { data: business } = await supabase.from('businesses').select('*').eq('owner_id', user.id).single();
+        
+      if (business) {
+        setBusinessId(business.id);
+        setVenueProfile({
+          name: business.name || '',
+          phone: business.phone || '',
+          address: business.address || '',
+          description: business.description || '',
+          instagram: business.instagram || ''
+        });
+        if (business.policies_data && Object.keys(business.policies_data).length > 0) setPolicies(business.policies_data);
+        if (business.team_data && business.team_data.length > 0) setTeam(business.team_data);
+        
+        if (business.schedule_data && business.schedule_data.length > 0) {
+          setSchedule(business.schedule_data);
+        } else {
+          setSchedule([
+            { day: "Monday", isActive: true, start: "10:00", end: "20:00" },
+            { day: "Tuesday", isActive: true, start: "10:00", end: "20:00" },
+            { day: "Wednesday", isActive: true, start: "10:00", end: "20:00" },
+            { day: "Thursday", isActive: true, start: "10:00", end: "20:00" },
+            { day: "Friday", isActive: true, start: "10:00", end: "20:00" },
+            { day: "Saturday", isActive: true, start: "10:00", end: "18:00" },
+            { day: "Sunday", isActive: false, start: "10:00", end: "18:00" },
+          ]);
+        }
+        
+        const { data: srvs } = await supabase.from('services').select('*').eq('business_id', business.id);
+        if (srvs) setServices(srvs.map((s: any) => ({
+          id: s.id, name: s.name, duration: s.duration_minutes + " min", price: s.price + " UZS", isActive: true
+        })));
+      }
+    }
+    loadBusinessData();
+  }, []);
 
   // Modal states
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
@@ -192,9 +228,28 @@ export default function Settings() {
   // Specialist form state
   const [specialistFormName, setSpecialistFormName] = useState("");
 
-  const handleProfileSubmit = (e: React.FormEvent) => {
+  const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Profile saved successfully");
+    if (!businessId) {
+      toast.error("Business ID not found");
+      return;
+    }
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.from('businesses').update({
+        name: venueProfile.name,
+        phone: venueProfile.phone,
+        address: venueProfile.address,
+        description: venueProfile.description,
+        instagram: venueProfile.instagram
+      }).eq('id', businessId);
+      
+      if (error) throw error;
+      toast.success("Profile saved successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to save profile");
+    }
   };
 
   const handleSpecialistSubmit = (e: React.FormEvent) => {
@@ -260,37 +315,71 @@ export default function Settings() {
     setIsServiceModalOpen(true);
   };
 
-  const handleServiceSubmit = (e: React.FormEvent) => {
+  const handleServiceSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const durationNum = parseInt(serviceFormDuration) || 0;
-    const hrs = Math.floor(durationNum / 60);
-    const mins = durationNum % 60;
-    const formattedDuration = hrs > 0 
-      ? `${hrs} hr${mins > 0 ? ` ${mins} min` : ''}` 
-      : `${mins} min`;
-    
-    const formattedPrice = parseInt(serviceFormPrice || "0").toLocaleString("en-US").replace(/,/g, " ") + " UZS";
+    if (!serviceFormName.trim() || !serviceFormPrice.trim() || !businessId) {
+      toast.error("Please fill in required fields");
+      return;
+    }
+    const supabase = createClient();
 
+    const rawPrice = parseFloat(serviceFormPrice.replace(/[^0-9.]/g, ''));
     if (editingServiceId) {
+      await supabase.from('services').update({
+        name: serviceFormName,
+        duration_minutes: parseInt(serviceFormDuration),
+        price: rawPrice
+      }).eq('id', editingServiceId);
+      
       setServices(services.map(s => s.id === editingServiceId ? {
         ...s,
         name: serviceFormName,
-        duration: formattedDuration,
-        price: formattedPrice
+        duration: serviceFormDuration + " min",
+        price: serviceFormPrice + " UZS"
       } : s));
       toast.success("Service updated successfully");
     } else {
-      setServices([...services, {
-        id: Date.now().toString(),
+      const { data, error } = await supabase.from('services').insert({
+        business_id: businessId,
         name: serviceFormName,
-        duration: formattedDuration,
-        price: formattedPrice,
+        duration_minutes: parseInt(serviceFormDuration),
+        price: rawPrice
+      }).select().single();
+      
+      if (error) {
+         toast.error(error.message);
+         return;
+      }
+      
+      setServices([...services, {
+        id: data.id,
+        name: data.name,
+        duration: data.duration_minutes + " min",
+        price: data.price + " UZS",
         isActive: true
       }]);
       toast.success("Service added successfully");
     }
+
     setIsServiceModalOpen(false);
+    setEditingServiceId(null);
+    setServiceFormName("");
+    setServiceFormDuration("45");
+    setServiceFormPrice("");
+  };
+
+  const saveWorkingHours = async () => {
+    if (!businessId) return;
+    const supabase = createClient();
+    await supabase.from('businesses').update({ schedule_data: schedule }).eq('id', businessId);
+    toast.success("Working hours saved successfully");
+  };
+
+  const savePolicies = async () => {
+    if (!businessId) return;
+    const supabase = createClient();
+    await supabase.from('businesses').update({ policies_data: policies }).eq('id', businessId);
+    toast.success("Policies saved successfully");
   };
 
   // Toggle handlers
@@ -308,11 +397,16 @@ export default function Settings() {
 
   const handleToggleService = (id: string) => {
     setServices(services.map(s => s.id === id ? { ...s, isActive: !s.isActive } : s));
-    toast.success("Service status updated");
+    toast.success("Service status updated (Demo)");
   };
 
-  const handleToggleMaster = (id: string) => {
-    setTeam(team.map(m => m.id === id ? { ...m, isActive: !m.isActive } : m));
+  const handleToggleMaster = async (id: string) => {
+    const newTeam = team.map(m => m.id === id ? { ...m, isActive: !m.isActive } : m);
+    setTeam(newTeam);
+    if (businessId) {
+       const supabase = createClient();
+       await supabase.from('businesses').update({ team_data: newTeam }).eq('id', businessId);
+    }
     toast.success("Specialist status updated");
   };
 
@@ -322,8 +416,12 @@ export default function Settings() {
     <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white">
       <div className="flex-1 flex flex-col overflow-hidden relative">
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
+          <div className="flex items-center gap-3">
             <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Settings</h1>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#4a6b53]/10 border border-[#4a6b53]/20 text-[#4a6b53] text-xs font-semibold" title="Settings are not saved to database in Demo Mode">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Demo Mode</span>
+            </div>
           </div>
         </header>
 
@@ -389,10 +487,25 @@ export default function Settings() {
                   </div>
 
                   <div>
+                    <label className="block text-sm font-medium text-[#121415] mb-2">Instagram Username</label>
+                    <div className="relative">
+                      <Instagram className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
+                      <input type="text" value={venueProfile.instagram} onChange={(e) => setVenueProfile({...venueProfile, instagram: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" placeholder="@your.instagram" />
+                    </div>
+                  </div>
+
+                  <div>
                     <label className="block text-sm font-medium text-[#121415] mb-2">Address</label>
                     <div className="relative">
                       <MapPin className="absolute left-4 top-4 w-5 h-5 text-[#8B9194]" />
                       <textarea rows={2} value={venueProfile.address} onChange={(e) => setVenueProfile({...venueProfile, address: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all resize-none placeholder:text-[#8B9194]"></textarea>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[#121415] mb-2">About us</label>
+                    <div className="relative">
+                      <textarea rows={4} value={venueProfile.description} onChange={(e) => setVenueProfile({...venueProfile, description: e.target.value})} className="w-full px-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all resize-none placeholder:text-[#8B9194]" placeholder="Tell your clients about your business..."></textarea>
                     </div>
                   </div>
 
@@ -449,7 +562,7 @@ export default function Settings() {
                 </div>
 
                 <div className="pt-6 border-t border-[#DCDCDA] flex justify-end">
-                  <button type="button" onClick={() => toast.success("Working hours saved successfully")} className="px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 w-full sm:w-auto">
+                  <button type="button" onClick={saveWorkingHours} className="px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 w-full sm:w-auto">
                     Save Working Hours
                   </button>
                 </div>
@@ -585,7 +698,7 @@ export default function Settings() {
                 </div>
 
                 <div className="pt-8 mt-6 border-t border-[#DCDCDA] flex justify-end">
-                  <button type="button" onClick={() => toast.success("Policies saved successfully")} className="px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 w-full sm:w-auto">
+                  <button type="button" onClick={savePolicies} className="px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 w-full sm:w-auto">
                     <Save className="w-4 h-4" /> Save Policies
                   </button>
                 </div>

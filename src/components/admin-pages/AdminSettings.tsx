@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { createClient } from "@/utils/supabase/client";
 import {
   Mail,
   Lock,
@@ -18,6 +19,22 @@ import {
 } from "lucide-react";
 
 export default function AdminSettings() {
+  const [email, setEmail] = useState("Loading...");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    async function loadUser() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setEmail(user.email || "");
+        setPhone(user.phone || "");
+      }
+    }
+    loadUser();
+  }, []);
+
   const [showPassword, setShowPassword] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   
@@ -66,33 +83,40 @@ export default function AdminSettings() {
       toast.error("Invalid card number");
       return;
     }
-    const last4 = cleanedNumber.slice(-4);
     
-    setCardLast4(last4);
+    setCardLast4(cleanedNumber.slice(-4));
     setCardExpiry(inputExpiry);
     
-    if (cleanedNumber.startsWith("4")) {
+    if (inputCardNumber.startsWith("4")) {
       setCardType("VISA");
-    } else if (cleanedNumber.startsWith("5")) {
-      setCardType("MASTER");
+    } else if (inputCardNumber.startsWith("5")) {
+      setCardType("MASTERCARD");
     } else {
       setCardType("CARD");
     }
     
     setActiveModal(null);
-    setInputCardNumber("");
-    setInputExpiry("");
-    setInputCvc("");
     toast.success("Card updated successfully");
   };
 
-  const handleSaveSecurity = (e: React.FormEvent) => {
+  const handleSaveSecurity = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
+    const supabase = createClient();
+    const updates: any = {};
+    if (email) updates.email = email;
+    if (phone) updates.phone = phone;
+    if (password) updates.password = password;
+
+    const { error } = await supabase.auth.updateUser(updates);
+    setIsSaving(false);
+    
+    if (error) {
+      toast.error(error.message);
+    } else {
       toast.success("Security info updated successfully");
-    }, 1000);
+      setPassword(""); // Clear password field
+    }
   };
 
   const handleEnable2FA = (e: React.FormEvent) => {
@@ -104,12 +128,13 @@ export default function AdminSettings() {
     setIs2FAEnabled(true);
     setActiveModal(null);
     setCode2FA("");
-    toast.success("Two-factor authentication enabled successfully");
+    toast.success("Two-factor authentication enabled successfully (Demo)");
   };
 
-  const handleLogout = () => {
-    setActiveModal(null);
-    toast.success("Logged out successfully");
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = "/login";
   };
 
   const handleDeleteAccount = (e: React.FormEvent) => {
@@ -118,9 +143,9 @@ export default function AdminSettings() {
       toast.error("Please type DELETE to confirm");
       return;
     }
+    toast.success("Account deletion requested (Demo)");
     setActiveModal(null);
     setDeleteConfirmText("");
-    toast.loading("Scheduling account deletion...", { duration: 2000 });
   };
 
   return (
@@ -163,7 +188,8 @@ export default function AdminSettings() {
                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
                         <input
                           type="email"
-                          defaultValue="admin@business.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                           className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]"
                         />
                       </div>
@@ -174,7 +200,9 @@ export default function AdminSettings() {
                         <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
                         <input
                           type="tel"
-                          defaultValue="+998 90 000 00 00"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          placeholder="+998"
                           className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]"
                         />
                       </div>
@@ -187,7 +215,9 @@ export default function AdminSettings() {
                       <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
                       <input
                         type={showPassword ? "text" : "password"}
-                        defaultValue="password123"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
                         className="w-full pl-12 pr-12 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]"
                       />
                       <button

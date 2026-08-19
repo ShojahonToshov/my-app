@@ -1,0 +1,1 @@
+alter table public.businesses add column if not exists phone text, add column if not exists team_data jsonb default '[]'::jsonb, add column if not exists schedule_data jsonb default '[]'::jsonb, add column if not exists policies_data jsonb default '{}'::jsonb;

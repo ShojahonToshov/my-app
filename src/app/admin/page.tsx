@@ -16,11 +16,11 @@ export default async function Page() {
       const res = await bookingService.getBookings();
       if (!res || res.length === 0) return [];
       
-      const mapped = res.map((item: ApiBookingDTO, index: number): TicketDTO => ({
+      const mapped = res.map((item: any, index: number): TicketDTO => ({
         id: item.id,
         time: item.time || "10:00",
-        service: item.serviceName || "Service",
-        name: item.clientName || "Guest",
+        service: item.service_name || item.serviceName || item.service_id || "Service",
+        name: item.guest_name || item.clientName || "Guest",
         status: item.status === "upcoming" ? "waiting" : item.status === "in_progress" ? "in_progress" : "completed",
         master: item.masterName || ("Master " + (index % 5 + 1)),
         isDelayed: item.status === "upcoming" && index % 3 === 0 

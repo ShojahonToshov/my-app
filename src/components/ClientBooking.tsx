@@ -3,6 +3,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { format, addDays, startOfToday } from "date-fns";
+import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import BookingService from "@/services/client/BookingService";
 import useUser from "@/hooks/useUser";
@@ -80,11 +81,15 @@ const shakeAnimation = {
 
 const defaultVenueData = {
   name: "Chop-Chop Barbershop",
-  address: "Amir Temur St, 42",
-  rating: 4.9,
-  reviewsCount: 214,
-  imageUrl:
-    "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=500&q=80",
+  address: "Tashkent, Yunusabad 19, 15",
+  rating: 5.0,
+  reviewsCount: 0,
+  imageUrl: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074&auto=format&fit=crop",
+  scheduleData: null as any,
+  policies: {
+    cancelWindow: "12 hours before",
+    requireCardForLowKarma: true,
+  },
   services: [
     {
       id: "1",
@@ -136,18 +141,76 @@ export default function ClientBooking() {
 
   useEffect(() => {
     if (venueId) {
-      import('@/services/client/VenueService').then(({ default: VenueService }) => {
-        VenueService.getVenueById(venueId).then((data) => {
-          if (data) {
-            setVenueData(prev => ({
-              ...prev,
-              name: data.name || prev.name,
-              address: data.address || prev.address,
-              imageUrl: data.avatarUrl || prev.imageUrl,
-            }));
+      async function fetchActualData() {
+        try {
+          const supabase = createClient();
+          const { data: business } = await supabase.from('businesses').select('*').eq('id', venueId).single();
+          if (business) {
+            let actualServices = null;
+            let actualMasters = null;
+            let actualSchedule = null;
+
+            const { data: dbServices } = await supabase.from('services').select('*').eq('business_id', venueId);
+            if (dbServices) {
+              actualServices = dbServices.map((s: any) => ({
+                id: s.id,
+                name: s.name,
+                duration: s.duration_minutes + ' min',
+                price: s.price + ' UZS'
+              }));
+            }
+
+            if (business.team_data) {
+              const activeTeam = business.team_data.filter((m: any) => m.isActive);
+              actualMasters = [
+                { id: "any", name: "Any available", initials: "AA", role: "First available professional" },
+                ...activeTeam.map((m: any) => ({
+                  id: m.id,
+                  name: m.name,
+                  initials: m.initials || m.name.substring(0,2).toUpperCase(),
+                  role: m.role || "Specialist"
+                }))
+              ];
+            }
+            
+            if (business.schedule_data) {
+              actualSchedule = business.schedule_data;
+            }
+
+            setVenueData((prev: any) => {
+              const newAboutSchedule = actualSchedule 
+                ? actualSchedule.filter((s: any) => s.isActive).map((s: any) => ({ days: s.day, time: `${s.start} - ${s.end}` }))
+                : prev.about.schedule;
+                
+              return {
+                ...prev,
+                name: business.name || prev.name,
+                address: business.address || prev.address,
+                imageUrl: business.image_url || prev.imageUrl,
+                rating: business.rating ?? prev.rating,
+                reviewsCount: business.reviews_count ?? prev.reviewsCount,
+                services: actualServices || prev.services,
+                masters: actualMasters || prev.masters,
+                scheduleData: actualSchedule,
+                policies: business.policies_data && Object.keys(business.policies_data).length > 0 ? business.policies_data : prev.policies,
+                about: {
+                  ...prev.about,
+                  description: business.description || prev.about.description,
+                  schedule: newAboutSchedule.length > 0 ? newAboutSchedule : prev.about.schedule,
+                  contacts: {
+                    ...prev.about.contacts,
+                    phone: business.phone || prev.about.contacts.phone,
+                    instagram: business.instagram || prev.about.contacts.instagram
+                  }
+                }
+              };
+            });
           }
-        }).catch(console.error);
-      });
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      fetchActualData();
     }
   }, [venueId]);
 
@@ -169,11 +232,58 @@ export default function ClientBooking() {
   const [selectedDate, setSelectedDate] = useState(dates[0].id);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (venueData.scheduleData) {
+      const [year, month, day] = selectedDate.split('-').map(Number);
+      const dateObj = new Date(year, month - 1, day);
+      const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+      const currentDaySchedule = venueData.scheduleData.find((d: any) => d.day === dayName);
+      
+      if (currentDaySchedule && !currentDaySchedule.isActive) {
+        const firstActiveDate = dates.find(d => {
+          const [y, m, dNum] = d.id.split('-').map(Number);
+          const dObj = new Date(y, m - 1, dNum);
+          const dName = dObj.toLocaleDateString('en-US', { weekday: 'long' });
+          const schedule = venueData.scheduleData.find((s: any) => s.day === dName);
+          return schedule ? schedule.isActive : true;
+        });
+        
+        if (firstActiveDate && firstActiveDate.id !== selectedDate) {
+          setSelectedDate(firstActiveDate.id);
+        }
+      }
+    }
+  }, [venueData.scheduleData, selectedDate, dates]);
+
   const availableTimes = useMemo(() => {
+    if (venueData.scheduleData) {
+      const scheduleData = venueData.scheduleData;
+      const [year, month, day] = selectedDate.split('-').map(Number);
+      const dateObj = new Date(year, month - 1, day);
+      const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+      
+      const daySchedule = scheduleData.find((d: any) => d.day === dayName);
+      if (!daySchedule || !daySchedule.isActive) return [];
+      
+      const slots = [];
+      let [startH, startM] = daySchedule.start.split(':').map(Number);
+      const [endH, endM] = daySchedule.end.split(':').map(Number);
+      
+      while (startH < endH || (startH === endH && startM < endM)) {
+        const timeString = `${startH.toString().padStart(2, '0')}:${startM.toString().padStart(2, '0')}`;
+        slots.push(timeString);
+        startM += 30;
+        if (startM >= 60) {
+          startH += 1;
+          startM -= 60;
+        }
+      }
+      return slots;
+    }
+    
     const times = ["10:00", "10:30", "11:00", "11:30", "14:00", "14:30", "15:00", "16:00", "16:30", "17:00"];
-    // Pseudo-randomly remove some slots to simulate unavailability
-    return times.filter((_, i) => (selectedDate.charCodeAt(selectedDate.length - 1) + i) % 3 !== 0);
-  }, [selectedDate, selectedMaster]);
+    return times;
+  }, [selectedDate, selectedMaster, venueData.scheduleData]);
 
   const [clientName, setClientName] = useState<string>(user?.name ? String(user.name) : "");
   const [clientPhone, setClientPhone] = useState<string>(user?.phone ? String(user.phone) : "");
@@ -467,31 +577,42 @@ export default function ClientBooking() {
                   </h2>
 
                   <div className="flex gap-2.5 overflow-x-auto pb-4 pt-1 px-1 -mx-1 no-scrollbar">
-                    {dates.map((date) => (
-                      <button
-                        key={date.id}
-                        type="button"
-                        onClick={() => setSelectedDate(date.id)}
-                        className={`shrink-0 flex flex-col items-center justify-center w-[72px] h-[84px] rounded-2xl border transition-all active:scale-95 px-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-1 ${
-                          selectedDate === date.id
-                            ? "border-[#121415] bg-[#121415] text-white shadow-md"
-                            : "border-[#DCDCDA] bg-white text-[#121415] hover:bg-[#F5F5F4]"
-                        }`}
-                      >
-                        <span
-                          className={`text-xs font-medium mb-1 ${
-                            selectedDate === date.id
-                              ? "text-white/80"
-                              : "text-[#4A4E51]"
+                    {dates.map((date) => {
+                      const [year, month, day] = date.id.split('-').map(Number);
+                      const dateObj = new Date(year, month - 1, day);
+                      const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+                      const daySchedule = venueData.scheduleData?.find((d: any) => d.day === dayName);
+                      const isDayOff = daySchedule ? !daySchedule.isActive : false;
+
+                      return (
+                        <button
+                          key={date.id}
+                          type="button"
+                          onClick={() => !isDayOff && setSelectedDate(date.id)}
+                          disabled={isDayOff}
+                          className={`shrink-0 flex flex-col items-center justify-center w-[72px] h-[84px] rounded-2xl border px-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-1 ${
+                            isDayOff
+                              ? "opacity-40 cursor-not-allowed pointer-events-none transition-none bg-[#F5F5F4] border-[#DCDCDA]"
+                              : selectedDate === date.id
+                                ? "border-[#121415] bg-[#121415] text-white shadow-md active:scale-95 transition-all"
+                                : "border-[#DCDCDA] bg-white text-[#121415] hover:bg-[#F5F5F4] active:scale-95 transition-all"
                           }`}
                         >
-                          {date.day}
-                        </span>
-                        <span className="text-xl font-semibold">
-                          {date.dateNum}
-                        </span>
-                      </button>
-                    ))}
+                          <span
+                            className={`text-xs font-medium mb-1 ${
+                              selectedDate === date.id && !isDayOff
+                                ? "text-white/80"
+                                : "text-[#4A4E51]"
+                            }`}
+                          >
+                            {date.day}
+                          </span>
+                          <span className={`text-xl font-semibold ${isDayOff ? "text-[#4A4E51]" : ""}`}>
+                            {date.dateNum}
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
 
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mt-4">
@@ -567,22 +688,24 @@ export default function ClientBooking() {
                       <ShieldCheck className="w-6 h-6 text-[#121415] shrink-0" />
                       <div>
                         <p className="font-semibold text-[#121415] text-base mb-1">
-                          Free cancellation up to 12 hours
+                          Free cancellation up to {venueData.policies.cancelWindow.replace(' before', '')}
                         </p>
                         <p className="text-sm font-medium text-[#4A4E51] leading-relaxed">
-                          Please respect the professionals' time. Frequent late
-                          cancellations or no-shows will lower your karma score,
-                          requiring prepayments for future bookings.
+                          {venueData.policies.requireCardForLowKarma
+                            ? "Please respect the professionals' time. Frequent late cancellations or no-shows will lower your karma score, requiring prepayments for future bookings."
+                            : "Please respect the professionals' time. We kindly ask you to arrive on time or cancel your appointment in advance."}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-xl border border-[#DCDCDA] mb-6 w-max max-w-full shadow-sm">
-                      <Star className="w-4 h-4 fill-[#8A2532] text-[#8A2532] shrink-0" />
-                      <span className="text-xs font-bold uppercase tracking-widest text-[#121415] truncate">
-                        Karma: {userKarma}%. No prepayment needed.
-                      </span>
-                    </div>
+                    {venueData.policies.requireCardForLowKarma && (
+                      <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-xl border border-[#DCDCDA] mb-6 w-max max-w-full shadow-sm">
+                        <Star className="w-4 h-4 fill-[#8A2532] text-[#8A2532] shrink-0" />
+                        <span className="text-xs font-bold uppercase tracking-widest text-[#121415] truncate">
+                          Karma: {userKarma}%. No prepayment needed.
+                        </span>
+                      </div>
+                    )}
 
                     <motion.label
                       variants={shakeAnimation}
@@ -650,7 +773,7 @@ export default function ClientBooking() {
                 <h2 className="text-xl font-semibold text-[#121415] mb-4 tracking-tight">
                   About us
                 </h2>
-                <p className="text-[#4A4E51] font-medium leading-relaxed text-sm md:text-base">
+                <p className="text-[#4A4E51] font-medium leading-relaxed text-sm md:text-base whitespace-pre-wrap">
                   {venueData.about.description}
                 </p>
               </section>
@@ -774,24 +897,7 @@ export default function ClientBooking() {
                     </div>
                   </a>
 
-                  <a
-                    href={`https://${venueData.about.contacts.website}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-3 p-4 rounded-2xl border border-[#DCDCDA] hover:bg-[#F5F5F4] bg-white transition-colors group sm:col-span-2 min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-[#F5F5F4] flex items-center justify-center group-hover:bg-[#121415] transition-colors shrink-0">
-                      <Globe className="w-4 h-4 text-[#4A4E51] group-hover:text-white transition-colors" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs uppercase tracking-widest font-bold text-[#4A4E51] mb-1 truncate">
-                        Website
-                      </p>
-                      <p className="text-sm font-semibold text-[#121415] truncate">
-                        {venueData.about.contacts.website}
-                      </p>
-                    </div>
-                  </a>
+
                 </div>
               </section>
 
@@ -816,11 +922,15 @@ export default function ClientBooking() {
                     Only clients who have successfully completed their visit can
                     leave a review.
                   </p>
-                  <button className="mt-4 px-6 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5">
+                  <button 
+                    onClick={() => toast.info("Client reviews will be available soon.")}
+                    className="mt-4 px-6 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                  >
                     Read all reviews
                   </button>
                 </div>
               </section>
+
             </motion.div>
           )}
         </AnimatePresence>

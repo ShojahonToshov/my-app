@@ -96,6 +96,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
         time: b.time,
         serviceName: b.services?.name || "Unknown Service",
         venueName: b.businesses?.name || "Unknown Venue",
+        venueId: b.business_id,
         masterName: "Any available",
         isReviewed: b.rating !== null && b.rating > 0,
         rating: b.rating || 0,
@@ -159,7 +160,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <Link href="/ticket" className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-full font-medium text-sm shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:bg-[#731E29] transition-all flex items-center justify-center gap-2 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2">
+                    <Link href={`/ticket?id=${booking.id}`} className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-full font-medium text-sm shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:bg-[#731E29] transition-all flex items-center justify-center gap-2 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2">
                       <span>LiveTracker</span>
                       <ArrowRight className="w-4 h-4 shrink-0" />
                     </Link>
@@ -200,7 +201,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
                     ) : (
                       <ReviewAction venueName={booking.venueName} bookingId={booking.id} />
                     )}
-                    <Link href="/booking" className="text-sm font-medium text-[#121415] hover:text-[#8A2532] flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:underline rounded mt-0 sm:mt-2">
+                    <Link href={`/booking?id=${booking.venueId}`} className="text-sm font-medium text-[#121415] hover:text-[#8A2532] flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:underline rounded mt-0 sm:mt-2">
                       <RefreshCw className="w-4 h-4 text-[#4A4E51] shrink-0" />
                       <span>Book again</span>
                     </Link>

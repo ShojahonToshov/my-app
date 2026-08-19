@@ -100,7 +100,6 @@ export function AccountTabs({ upcomingCount }: { upcomingCount: number }) {
       <div className="max-w-7xl mx-auto px-6 w-full flex items-center justify-center gap-3 overflow-x-auto no-scrollbar py-4">
         {[
           { id: "upcoming", label: "My Bookings", count: upcomingCount },
-          { id: "favorites", label: "Favorites" },
           { id: "history", label: "History" },
         ].map((tab) => (
           <button
@@ -254,7 +253,7 @@ export function FavoritesList({ initialVenues, currentUserId }: { initialVenues:
     <AnimatedList className="space-y-4">
       {favoriteVenues.length > 0 ? favoriteVenues.map((venue) => (
         <AnimatedListItem key={venue.id}>
-          <Link href="/booking" className="w-full text-left bg-white rounded-[2rem] p-5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center gap-5 active:scale-[0.98] group block outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+          <Link href={`/booking?id=${venue.id}`} className="w-full text-left bg-white rounded-[2rem] p-5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center gap-5 active:scale-[0.98] group block outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
             <div className="w-20 h-20 rounded-2xl overflow-hidden shrink-0">
               <img src={venue.imageUrl || venue.image} alt={venue.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             </div>
