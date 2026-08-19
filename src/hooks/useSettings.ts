@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import VenueService from "@/services/VenueService";
+import VenueService from "@/services/client/VenueService";
 import { queryKeys } from "@/lib/queryKeys";
 
 export default function useSettings() {

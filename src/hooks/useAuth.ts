@@ -1,39 +1,43 @@
 "use client";
-import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";;
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import AuthService from "@/services/AuthService";
+import AuthService from "@/services/client/AuthService";
 import useUser from "@/hooks/useUser";
-
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const loginSchema = z.object({
+  login: z.string().min(1, "Please enter your email or phone number."),
+  password: z.string().min(1, "Please enter your password."),
+  rememberMe: z.boolean().optional(),
+});
+export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function useLogin(defaultRedirectPath = "/account") {
   const router = useRouter();
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [rememberMe, setRememberMe] = useState(false);
-
   const { login: loginStore } = useUser();
 
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
-    if (!login || login.trim().length === 0) newErrors.login = "Please enter your email or phone number.";
-    if (!password || password.trim().length === 0) newErrors.password = "Please enter your password.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      login: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
 
   const loginMutation = useMutation({
-    mutationFn: async ({ login, password }: Record<string, string>) => {
-      const data = await AuthService.login(login, password);
+    mutationFn: async (values: LoginFormValues) => {
+      const data = await AuthService.login(values.login, values.password);
       if (!data.user) throw new Error("User not found");
       return data.user;
     },
     onSuccess: (user) => {
       toast.success("Successfully signed in");
-
       loginStore(user);
       const role = user.profile?.role;
       if (role === "admin" || role === "master" || role === "business") {
@@ -43,54 +47,51 @@ export function useLogin(defaultRedirectPath = "/account") {
       }
     },
     onError: () => {
-      setErrors({ auth: "Invalid credentials or account not found." });
+      form.setError("root", { type: "manual", message: "Invalid credentials or account not found." });
       toast.error("Sign in failed.");
     }
   });
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-    loginMutation.mutate({ login, password });
-  };
+  const handleSubmit = form.handleSubmit((values) => {
+    loginMutation.mutate(values);
+  });
 
   return {
-    login, setLogin,
-    password, setPassword,
-    showPassword, setShowPassword,
-    rememberMe, setRememberMe,
-    isSubmitting: loginMutation.isPending, 
-    errors, setErrors,
-    handleSubmit
+    form,
+    showPassword,
+    setShowPassword,
+    isSubmitting: loginMutation.isPending,
+    handleSubmit,
   };
 }
 
+const signupSchema = z.object({
+  name: z.string().min(1, "Please enter your name."),
+  login: z.string().min(1, "Please enter your email or phone number."),
+  password: z.string().min(1, "Please enter your password."),
+});
+export type SignupFormValues = z.infer<typeof signupSchema>;
+
 export function useSignup(defaultRole = "user", defaultRedirectPath = "/account") {
   const router = useRouter();
-  
-  const [name, setName] = useState("");
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
   const { login: loginStore } = useUser();
 
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
-    if (!name || name.trim().length === 0) newErrors.name = "Please enter your name.";
-    if (!login || login.trim().length === 0) newErrors.login = "Please enter your email or phone number.";
-    if (!password || password.trim().length === 0) newErrors.password = "Please enter your password.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const form = useForm<SignupFormValues>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      name: "",
+      login: "",
+      password: "",
+    },
+  });
 
   const signupMutation = useMutation({
-    mutationFn: async (newUser: Record<string, string>) => {
-      const data = await AuthService.signup(newUser.login, newUser.password, {
+    mutationFn: async (values: SignupFormValues) => {
+      const data = await AuthService.signup(values.login, values.password, {
         data: {
-          full_name: newUser.name,
-          role: newUser.role || defaultRole,
+          full_name: values.name,
+          role: defaultRole,
         }
       });
       if (!data.user) throw new Error("User not created");
@@ -98,7 +99,6 @@ export function useSignup(defaultRole = "user", defaultRedirectPath = "/account"
     },
     onSuccess: (user) => {
       toast.success("Registration successful!");
-
       loginStore(user);
       const role = user.profile?.role;
       if (role === "admin" || role === "master" || role === "business") {
@@ -108,25 +108,20 @@ export function useSignup(defaultRole = "user", defaultRedirectPath = "/account"
       }
     },
     onError: (error: Error) => {
-      setErrors({ auth: "An error occurred during registration." });
+      form.setError("root", { type: "manual", message: "An error occurred during registration." });
       toast.error(error?.message || "Error occurred during registration.");
     }
   });
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-    
-    signupMutation.mutate({ name, login, password, role: defaultRole });
-  };
+  const handleSubmit = form.handleSubmit((values) => {
+    signupMutation.mutate(values);
+  });
 
   return {
-    name, setName,
-    login, setLogin,
-    password, setPassword,
-    showPassword, setShowPassword,
-    isSubmitting: signupMutation.isPending, 
-    errors, setErrors,
-    handleSubmit
+    form,
+    showPassword,
+    setShowPassword,
+    isSubmitting: signupMutation.isPending,
+    handleSubmit,
   };
 }

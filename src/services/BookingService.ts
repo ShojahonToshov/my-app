@@ -1,20 +1,17 @@
 import { Booking, BookingSchema } from "@/types";
 import { z } from "zod";
-import { createClient } from "@/utils/supabase/client";
 
-class BookingService {
-  private getClient(client?: any) {
-    return client || createClient();
-  }
-  
+export class BookingService {
+  constructor(private client: any) {}
+
   private get supabase() {
-    return this.getClient();
+    return this.client;
   }
 
-  async getBookings(client?: any) {
-    const { data, error } = await this.getClient(client)
+  async getBookings() {
+    const { data, error } = await this.supabase
       .from('bookings')
-      .select('*');
+      .select('*, businesses(owner_id)');
     if (error) throw error;
     return z.array(BookingSchema).parse(data);
   }
@@ -34,8 +31,14 @@ class BookingService {
       .from('bookings')
       .insert([bookingData])
       .select()
-      .single();
-    if (error) throw error;
+      .maybeSingle();
+
+    if (error) {
+      if (error.code === 'PGRST116' && !bookingData.client_id) {
+        return null;
+      }
+      throw error;
+    }
     return data;
   }
 
@@ -72,5 +75,3 @@ class BookingService {
     return data;
   }
 }
-
-export default new BookingService();

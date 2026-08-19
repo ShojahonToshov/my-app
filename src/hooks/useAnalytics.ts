@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import BookingService from "@/services/BookingService";
+import BookingService from "@/services/client/BookingService";
 import { MOCK_DATA } from "@/constants/analytics";
 
 

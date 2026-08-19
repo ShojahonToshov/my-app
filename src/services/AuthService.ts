@@ -1,4 +1,3 @@
-import { createClient } from '@/utils/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import type { RegisterData, UpdateProfileData } from "@/types";
 
@@ -14,9 +13,11 @@ export type AppUser = User & {
   profile?: UserProfile;
 };
 
-class AuthService {
+export class AuthService {
+  constructor(private client: any) {}
+
   private get supabase() {
-    return createClient();
+    return this.client;
   }
 
   // Helper to fetch user profile from Supabase database
@@ -66,25 +67,11 @@ class AuthService {
     if (error) throw error;
     
     if (data.user) {
-      let profile = null;
-      for (let i = 0; i < 4; i++) {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        const { data: pData } = await this.supabase.from('profiles').select('*').eq('id', data.user.id).single();
-        if (pData) {
-          profile = pData;
-          break;
-        }
-      }
-      
-      if (profile) {
-        (data.user as AppUser).profile = profile;
-      } else {
-        (data.user as AppUser).profile = {
-          id: data.user.id,
-          role: (options?.data?.role as string) || 'admin',
-          full_name: (options?.data?.full_name as string) || '',
-        };
-      }
+      (data.user as AppUser).profile = {
+        id: data.user.id,
+        role: (options?.data?.role as string) || 'admin',
+        full_name: (options?.data?.full_name as string) || '',
+      };
     }
 
     return { ...data, user: data.user as AppUser | null };
@@ -129,5 +116,3 @@ class AuthService {
     return data;
   }
 }
-
-export default new AuthService();

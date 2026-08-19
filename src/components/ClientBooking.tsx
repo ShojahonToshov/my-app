@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { format, addDays, startOfToday } from "date-fns";
 import { toast } from "sonner";
-import BookingService from "@/services/BookingService";
+import BookingService from "@/services/client/BookingService";
 import useUser from "@/hooks/useUser";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -78,7 +78,7 @@ const shakeAnimation = {
   },
 };
 
-const venueData = {
+const defaultVenueData = {
   name: "Chop-Chop Barbershop",
   address: "Amir Temur St, 42",
   rating: 4.9,
@@ -128,8 +128,29 @@ const venueData = {
 
 export default function ClientBooking() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const venueId = searchParams.get('id');
   const { user } = useUser();
   
+  const [venueData, setVenueData] = useState(defaultVenueData);
+
+  useEffect(() => {
+    if (venueId) {
+      import('@/services/client/VenueService').then(({ default: VenueService }) => {
+        VenueService.getVenueById(venueId).then((data) => {
+          if (data) {
+            setVenueData(prev => ({
+              ...prev,
+              name: data.name || prev.name,
+              address: data.address || prev.address,
+              imageUrl: data.avatarUrl || prev.imageUrl,
+            }));
+          }
+        }).catch(console.error);
+      });
+    }
+  }, [venueId]);
+
   const dates = useMemo(() => {
     const today = startOfToday();
     return Array.from({ length: 14 }).map((_, i) => {
@@ -143,14 +164,12 @@ export default function ClientBooking() {
   }, []);
 
   const [activeTab, setActiveTab] = useState("booking");
-
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [selectedMaster, setSelectedMaster] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState(dates[0].id);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
   const availableTimes = useMemo(() => {
-    // Basic dynamic generation based on date, could be replaced with real API call
     const times = ["10:00", "10:30", "11:00", "11:30", "14:00", "14:30", "15:00", "16:00", "16:30", "17:00"];
     // Pseudo-randomly remove some slots to simulate unavailability
     return times.filter((_, i) => (selectedDate.charCodeAt(selectedDate.length - 1) + i) % 3 !== 0);
@@ -214,9 +233,9 @@ export default function ClientBooking() {
     try {
       const bookingData = {
         client_id: user?.id || undefined,
-        business_id: "1", // Typically this would be dynamic based on venue
+        business_id: venueId || "11111111-1111-1111-1111-111111111111", // Fallback to seed UUID if venueId missing
         service_id: selectedService || undefined,
-        date: format(selectedDate, "yyyy-MM-dd"),
+        date: selectedDate,
         time: selectedTime || undefined,
         guest_name: clientName,
         guest_phone: clientPhone,
@@ -228,7 +247,7 @@ export default function ClientBooking() {
       toast.success("Booking confirmed successfully!");
       
       // Reset or navigate
-      // router.push("/search");
+      router.push("/account");
     } catch (error) {
       toast.error("Failed to confirm booking. Please try again.");
       console.error(error);

@@ -1,6 +1,6 @@
 import Dashboard from '@/components/admin-pages/Dashboard';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import BookingService from '@/services/BookingService';
+import { BookingService } from "@/services/BookingService";
 import { createClient } from '@/utils/supabase/server';
 import { queryKeys } from '@/lib/queryKeys';
 import { ApiBookingDTO, TicketDTO } from '@/types';
@@ -12,7 +12,8 @@ export default async function Page() {
   await queryClient.prefetchQuery({
     queryKey: queryKeys.bookings.all,
     queryFn: async () => {
-      const res = await BookingService.getBookings(supabase);
+      const bookingService = new BookingService(supabase);
+      const res = await bookingService.getBookings();
       if (!res || res.length === 0) return [];
       
       const mapped = res.map((item: ApiBookingDTO, index: number): TicketDTO => ({

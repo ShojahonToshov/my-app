@@ -3,7 +3,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
-import AuthService from "@/services/AuthService";
+import AuthService from "@/services/client/AuthService";
+import useAuthStore from "@/stores/authStore";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -25,19 +26,21 @@ export function Providers({ children }: { children: React.ReactNode }) {
       const user = session?.user;
       
       if (!user) {
-        queryClient.setQueryData(['user'], null);
+        useAuthStore.getState().setUser(null);
+        useAuthStore.getState().setLoading(false);
         return;
       }
 
       // Optimistic update with whatever data we have
       const tempUser = { ...user } as any;
-      queryClient.setQueryData(['user'], tempUser);
+      useAuthStore.getState().setUser(tempUser);
 
       // Fetch the full profile to ensure .profile exists
       const fullUser = await AuthService.getCurrentUser();
       if (fullUser) {
-        queryClient.setQueryData(['user'], fullUser);
+        useAuthStore.getState().setUser(fullUser as any);
       }
+      useAuthStore.getState().setLoading(false);
     });
 
     return () => {

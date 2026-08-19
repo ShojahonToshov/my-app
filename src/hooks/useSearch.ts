@@ -44,63 +44,13 @@ const SAVED_KEY = (userId: string) => `elara_saved_${userId}`;
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
 
-export default function useSearch() {
-  const supabase = createClient();
+export default function useSearch(initialVenues: VenueData[] = []) {
   const { user: currentUser, isAuthenticated } = useUser();
   const userId = currentUser?.id ?? "guest";
 
   // ── Remote venues ──────────────────────────────────────────────────────────
-  const [venues, setVenues] = useState<VenueData[]>([]);
-  const [isVenuesLoading, setIsVenuesLoading] = useState(true);
-
-  useEffect(() => {
-    supabase
-      .from("businesses")
-      .select("*")
-      .then(({ data, error }) => {
-        if (error) {
-          console.error("Error fetching businesses:", error.message);
-          setIsVenuesLoading(false);
-          return;
-        }
-        // Demo hours until `work_hours` column is added to DB.
-        // We derive a deterministic schedule from the venue id so every venue
-        // always shows the same hours across page reloads.
-        const DEMO_HOURS = [
-          "00:00-23:59", // 24h — always open
-          "08:00-22:00",
-          "09:00-21:00",
-          "10:00-20:00",
-          "11:00-23:00",
-          "07:00-19:00",
-        ];
-        const demoTime = (id: string) => {
-          // stable hash from first char of id
-          const idx = id.charCodeAt(0) % DEMO_HOURS.length;
-          return DEMO_HOURS[idx];
-        };
-
-        const formatted: VenueData[] = (data ?? []).map((b) => ({
-          id: b.id,
-          name: b.name,
-          category: b.category ?? "General",
-          rating: b.rating ?? 5,
-          reviews: b.reviews_count ?? 0,
-          coordinates: b.coordinates ?? { x: 0, y: 0 },
-          address: b.address ?? "",
-          distance: "1 km",
-          image: b.image_url ?? "",
-          price: "$10 - $50",
-          // Use real column when available, fall back to demo schedule
-          time: (b as Record<string, unknown>).work_hours as string ?? demoTime(b.id),
-          tags: b.tags ?? [b.category ?? "General"],
-          badges: b.badges ?? [],
-        }));
-        setVenues(formatted);
-        setIsVenuesLoading(false);
-      });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [venues, setVenues] = useState<VenueData[]>(initialVenues);
+  const isVenuesLoading = false;
 
   // ── Saved (localStorage, synced to profile column if logged-in) ────────────
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
@@ -238,3 +188,6 @@ export default function useSearch() {
     sortOpen, setSortOpen,
   };
 }
+
+
+

@@ -1,6 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import BookingService from "@/services/client/BookingService";
+import useAuthStore from "@/stores/authStore";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import {
   Plus,
@@ -28,7 +31,7 @@ export default function Dashboard() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 interface Guest {
-  id: number;
+  id: string | number;
   name: string;
   service?: string;
   time: string;
@@ -46,26 +49,72 @@ interface Guest {
   
   const mastersList = ["Ali Ahmedov", "Sanjar B.", "Timur G."];
 
-  const [waitingGuests, setWaitingGuests] = useState<Guest[]>([
-    { id: 101, name: "Guest 123", service: "Royal Shave", time: "14:55", oldTime: "14:45", master: "Ali Ahmedov", delay: "Delay +10m" },
-    { id: 102, name: "Malika Kh.", service: "Women's Haircut", time: "15:00", oldTime: null, master: "Timur G.", delay: null }
-  ]);
+  const [waitingGuests, setWaitingGuests] = useState<Guest[]>([]);
+  const [inChairGuests, setInChairGuests] = useState<Guest[]>([]);
+  const [completedGuests, setCompletedGuests] = useState<Guest[]>([]);
 
-  const [inChairGuests, setInChairGuests] = useState<Guest[]>([
-    { id: 201, name: "Azamat Umarov", service: "Haircut + Beard", time: "14:00", master: "Ali Ahmedov" },
-    { id: 202, name: "Dilshod K.", service: "Men's Haircut", time: "14:15", master: "Sanjar B." }
-  ]);
+  // Keep a ref of all guests to preserve local state like `delay` and `oldTime` during refetch
+  const allGuestsRef = React.useRef<Map<string | number, Guest>>(new Map());
 
-  const [completedGuests, setCompletedGuests] = useState<Guest[]>([
-    { id: 301, name: "Mikhail V.", time: "13:00", master: "Timur G." },
-    { id: 302, name: "Ivan M.", time: "12:30", master: "Ali Ahmedov" }
-  ]);
+  // Update ref whenever lists change
+  useEffect(() => {
+    const map = new Map<string | number, Guest>();
+    [...waitingGuests, ...inChairGuests, ...completedGuests].forEach(g => {
+      map.set(g.id, g);
+    });
+    allGuestsRef.current = map;
+  }, [waitingGuests, inChairGuests, completedGuests]);
+
+  const { user: currentUser } = useAuthStore();
+
+  const { data: bookings } = useQuery({
+    queryKey: ['adminBookings'],
+    queryFn: () => BookingService.getBookings(),
+    refetchInterval: 2000,
+  });
+
+  useEffect(() => {
+    if (!bookings) return;
+    
+    const venueBookings = bookings.filter((b: any) => {
+      // Filter by current user ID acting as the business owner
+      if (currentUser?.id && b.businesses?.owner_id) {
+        return b.businesses.owner_id === currentUser.id;
+      }
+      return false;
+    });
+
+    const waiting: Guest[] = [];
+    const inChair: Guest[] = [];
+    const completed: Guest[] = [];
+
+    venueBookings.forEach((b: any) => {
+      const existing = allGuestsRef.current.get(b.id);
+      const guest: Guest = {
+        id: b.id,
+        name: b.guest_name || b.clientName || "Guest",
+        service: b.service_id || b.serviceName || "Service",
+        time: b.time || b.startTime || "12:00",
+        oldTime: existing?.oldTime || null,
+        master: b.masterName || "Ali Ahmedov",
+        delay: existing?.delay || null
+      };
+      
+      if (b.status === "in_progress") inChair.push(guest);
+      else if (b.status === "completed" || b.status === "done") completed.push(guest);
+      else waiting.push(guest);
+    });
+
+    setWaitingGuests(waiting);
+    setInChairGuests(inChair);
+    setCompletedGuests(completed);
+  }, [bookings]);
 
   const handleAddGuest = () => {
     if (!clientName.trim()) return;
     
     const newGuest = {
-      id: Date.now(),
+      id: Date.now().toString(),
       name: clientName,
       service: service,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -94,36 +143,51 @@ interface Guest {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
   };
 
-  const handleCallIn = (guestId: number) => {
+  const handleCallIn = async (guestId: string | number) => {
     const guest = waitingGuests.find(g => g.id === guestId);
     if (!guest) return;
     
+    // Optimistic UI update
     setWaitingGuests(prev => prev.filter(g => g.id !== guestId));
     setInChairGuests(prev => [...prev, { ...guest, delay: null }]);
-    toast.success(`${guest.name} called to chair`);
-  };
-
-  const handleComplete = (guestId: number) => {
-    const guest = inChairGuests.find(g => g.id === guestId);
-    if (!guest) return;
     
-    // Move current guest to completed
-    setInChairGuests(prev => prev.filter(g => g.id !== guestId));
-    setCompletedGuests(prev => [...prev, { ...guest, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) }]);
-    toast.success(`Session with ${guest.name} completed`);
-    
-    // Find next waiting guest for this master and call them in
-    const nextGuest = waitingGuests.find(g => g.master === guest.master);
-    if (nextGuest) {
-      setWaitingGuests(prev => prev.filter(g => g.id !== nextGuest.id));
-      setInChairGuests(prev => [...prev, { ...nextGuest, delay: null }]);
-      toast.info(`${nextGuest.name} was automatically called in`);
-    } else {
-      toast.info(`No waiting clients left for ${guest.master}`);
+    try {
+      await BookingService.updateBookingStatus(guestId.toString(), "in_progress");
+      toast.success(`${guest.name} called to chair`);
+    } catch (err) {
+      toast.error("Failed to update status");
+      // Could revert here on failure
     }
   };
 
-  const handleAddDelay = (guestId: number) => {
+  const handleComplete = async (guestId: string | number) => {
+    const guest = inChairGuests.find(g => g.id === guestId);
+    if (!guest) return;
+    
+    // Optimistic UI update
+    setInChairGuests(prev => prev.filter(g => g.id !== guestId));
+    setCompletedGuests(prev => [...prev, { ...guest, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) }]);
+    
+    try {
+      await BookingService.updateBookingStatus(guestId.toString(), "completed");
+      toast.success(`Session with ${guest.name} completed`);
+      
+      // Find next waiting guest for this master and call them in
+      const nextGuest = waitingGuests.find(g => g.master === guest.master);
+      if (nextGuest) {
+        setWaitingGuests(prev => prev.filter(g => g.id !== nextGuest.id));
+        setInChairGuests(prev => [...prev, { ...nextGuest, delay: null }]);
+        await BookingService.updateBookingStatus(nextGuest.id.toString(), "in_progress");
+        toast.info(`${nextGuest.name} was automatically called in`);
+      } else {
+        toast.info(`No waiting clients left for ${guest.master}`);
+      }
+    } catch (err) {
+      toast.error("Failed to complete session");
+    }
+  };
+
+  const handleAddDelay = (guestId: string | number) => {
     const guestInChair = inChairGuests.find(g => g.id === guestId);
     if (!guestInChair) return;
     
@@ -159,8 +223,8 @@ interface Guest {
     if (source.droppableId === destination.droppableId && source.index === destination.index) return;
 
     const allGuests = [...waitingGuests, ...inChairGuests, ...completedGuests];
-    const guestId = parseInt(draggableId, 10);
-    const guest = allGuests.find(g => g.id === guestId);
+    const guestId = draggableId;
+    const guest = allGuests.find(g => String(g.id) === guestId);
     if (!guest) return;
 
     // Helper to get setter
@@ -186,7 +250,7 @@ interface Guest {
       sourceSetter(prev => {
         const arr = Array.from(prev);
         // Find index of actual item in the state array (since visual index might be filtered)
-        const actualSourceIndex = arr.findIndex(g => g.id === guestId);
+        const actualSourceIndex = arr.findIndex(g => String(g.id) === guestId);
         if (actualSourceIndex === -1) return prev;
         
         arr.splice(actualSourceIndex, 1);
@@ -200,12 +264,24 @@ interface Guest {
       });
     } else {
       // Move between lists
-      sourceSetter(prev => prev.filter(g => g.id !== guestId));
+      sourceSetter(prev => prev.filter(g => String(g.id) !== guestId));
       destSetter(prev => {
         const arr = Array.from(prev);
         arr.splice(destination.index, 0, updatedGuest);
         return arr;
       });
+
+      // API Call mapping
+      let newStatus: "pending" | "in_progress" | "completed" | null = null;
+      if (destination.droppableId === 'waiting') newStatus = "pending";
+      else if (destination.droppableId === 'inChair') newStatus = "in_progress";
+      else if (destination.droppableId === 'completed') newStatus = "completed";
+
+      if (newStatus) {
+        BookingService.updateBookingStatus(String(guestId), newStatus).catch(() => {
+          toast.error("Failed to update status in DB");
+        });
+      }
 
       if (destination.droppableId === 'inChair' && source.droppableId === 'waiting') {
         toast.success(`${updatedGuest.name} moved to chair`);

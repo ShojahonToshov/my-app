@@ -4,11 +4,11 @@ import { z } from "zod";
 export const BusinessSchema = z.object({
   id: z.string(),
   name: z.string(),
-  description: z.string().optional(),
-  address: z.string().optional(),
-  phone: z.string().optional(),
-  email: z.string().optional(),
-  avatarUrl: z.string().optional(),
+  description: z.string().nullish(),
+  address: z.string().nullish(),
+  phone: z.string().nullish(),
+  email: z.string().nullish(),
+  avatarUrl: z.string().nullish(),
 }).passthrough();
 export type Business = z.infer<typeof BusinessSchema>;
 
@@ -18,22 +18,22 @@ export const ServiceSchema = z.object({
   name: z.string(),
   durationMinutes: z.number(),
   price: z.number(),
-  description: z.string().optional(),
+  description: z.string().nullish(),
 }).passthrough();
 export type Service = z.infer<typeof ServiceSchema>;
 
 export const BookingSchema = z.object({
   id: z.string(),
-  serviceId: z.string().optional(), // Make some relations optional if mock data is weird
-  customerId: z.string().optional(),
+  serviceId: z.string().nullish(), // Make some relations optional if mock data is weird
+  customerId: z.string().nullish(),
   startTime: z.string(),
-  endTime: z.string().optional(),
-  time: z.string().optional(),
-  date: z.string().optional(),
-  isGuest: z.boolean().optional(),
-  isGuestCheckout: z.boolean().optional(),
-  guestName: z.string().optional(),
-  guestPhone: z.string().optional(),
+  endTime: z.string().nullish(),
+  time: z.string().nullish(),
+  date: z.string().nullish(),
+  isGuest: z.boolean().nullish(),
+  isGuestCheckout: z.boolean().nullish(),
+  guestName: z.string().nullish(),
+  guestPhone: z.string().nullish(),
   status: z.enum(["pending", "confirmed", "cancelled", "completed", "in_progress", "done"]).catch("pending"), // Caught some weird statuses in useLiveTicket
 }).passthrough();
 export type Booking = z.infer<typeof BookingSchema>;
@@ -51,16 +51,16 @@ export const MasterSchema = z.object({
   id: z.string(),
   businessId: z.string(),
   name: z.string(),
-  avatarUrl: z.string().optional(),
-  role: z.string().optional(),
+  avatarUrl: z.string().nullish(),
+  role: z.string().nullish(),
 }).passthrough();
 export type Master = z.infer<typeof MasterSchema>;
 
 export const WorkingHoursSchema = z.object({
-  id: z.string().optional(),
-  businessId: z.string().optional(),
-  masterId: z.string().optional(),
-  dayOfWeek: z.number().min(0).max(6).optional(),
+  id: z.string().nullish(),
+  businessId: z.string().nullish(),
+  masterId: z.string().nullish(),
+  dayOfWeek: z.number().min(0).max(6).nullish(),
   startTime: z.string(),
   endTime: z.string(),
   isActive: z.boolean().default(true),
@@ -104,17 +104,17 @@ export interface TicketDTO {
 
 export interface ApiBookingDTO {
   id: string;
-  userId?: string;
-  venueId?: string;
-  venueName?: string;
-  serviceName?: string;
-  servicePrice?: string;
-  masterName?: string;
-  date?: string;
-  time?: string;
-  clientName?: string;
-  clientPhone?: string;
-  status?: string;
+  userId?: string | null;
+  venueId?: string | null;
+  venueName?: string | null;
+  serviceName?: string | null;
+  servicePrice?: string | null;
+  masterName?: string | null;
+  date?: string | null;
+  time?: string | null;
+  clientName?: string | null;
+  clientPhone?: string | null;
+  status?: string | null;
 }
 
 export interface KpiCardProps {

@@ -40,7 +40,8 @@ const GoogleIcon = ({ className }: { className?: string }) => (
 export default function Signup() {
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || 'customer';
-  const { name, setName, login, setLogin, password, setPassword, showPassword, setShowPassword, isSubmitting, handleSubmit, errors } = useSignup(role, "/admin");
+  const { form, showPassword, setShowPassword, isSubmitting, handleSubmit } = useSignup(role, "/search");
+  const { register, formState: { errors } } = form;
 
   const title = role === 'business' ? 'Create your business account' : 'Create your customer account';
   const subtitle = role === 'business' 
@@ -72,9 +73,8 @@ export default function Signup() {
             icon={User}
             placeholder="Jane Doe"
             disabled={isSubmitting}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            error={errors.name}
+            error={errors?.name?.message}
+            {...register("name")}
           />
 
           <Input
@@ -84,9 +84,8 @@ export default function Signup() {
             icon={Mail}
             placeholder="name@example.com"
             disabled={isSubmitting}
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-            error={errors.login}
+            error={errors?.login?.message}
+            {...register("login")}
           />
 
           <Input
@@ -98,9 +97,8 @@ export default function Signup() {
             onActionClick={() => setShowPassword(!showPassword)}
             placeholder="••••••••"
             disabled={isSubmitting}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={errors.password}
+            error={errors?.password?.message}
+            {...register("password")}
           />
 
           <Button

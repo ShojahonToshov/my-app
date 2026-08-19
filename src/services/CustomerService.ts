@@ -1,17 +1,14 @@
-import { createClient } from "@/utils/supabase/client";
 import type { Client } from "@/types";
 
-class CustomerService {
-  private getClient(client?: any) {
-    return client || createClient();
-  }
+export class CustomerService {
+  constructor(private client: any) {}
   
   private get supabase() {
-    return this.getClient();
+    return this.client;
   }
 
-  async getCustomers(client?: any): Promise<Client[]> {
-    const { data, error } = await this.getClient(client)
+  async getCustomers(): Promise<Client[]> {
+    const { data, error } = await this.supabase
       .from('profiles')
       .select('*')
       .eq('role', 'customer');
@@ -40,5 +37,3 @@ class CustomerService {
     return data as unknown as Client;
   }
 }
-
-export default new CustomerService();

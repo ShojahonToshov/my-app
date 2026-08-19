@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";;
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import VenueService from "@/services/VenueService";
-import BookingService from "@/services/BookingService";
+import VenueService from "@/services/client/VenueService";
+import BookingService from "@/services/client/BookingService";
 import { DATES } from "@/constants/booking";
 import useUser from "@/hooks/useUser";
 

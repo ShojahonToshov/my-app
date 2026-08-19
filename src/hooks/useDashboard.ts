@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, FormEvent } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import BookingService from "@/services/BookingService";
+import BookingService from "@/services/client/BookingService";
 import { toast } from "sonner";
 import { queryKeys } from "@/lib/queryKeys";
 import { ApiBookingDTO, TicketDTO } from "@/types";

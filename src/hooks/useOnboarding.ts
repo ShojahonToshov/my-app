@@ -3,7 +3,7 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";;
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import VenueService from "@/services/VenueService";
+import VenueService from "@/services/client/VenueService";
 import { Scissors, Store, HeartPulse, MoreHorizontal } from "lucide-react";
 import useUser from "@/hooks/useUser";
 

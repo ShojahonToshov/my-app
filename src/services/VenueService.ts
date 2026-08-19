@@ -1,11 +1,12 @@
-import { createClient } from "@/utils/supabase/client";
 import { BusinessSchema } from "@/types";
 import { z } from "zod";
 import type { VenueData } from "@/types";
 
-class VenueService {
+export class VenueService {
+  constructor(private client: any) {}
+
   private get supabase() {
-    return createClient();
+    return this.client;
   }
 
   async getVenues() {
@@ -47,5 +48,3 @@ class VenueService {
     return data;
   }
 }
-
-export default new VenueService();

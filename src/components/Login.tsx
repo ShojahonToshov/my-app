@@ -30,7 +30,8 @@ const GoogleIcon = ({ className }: { className?: string }) => (
 );
 
 export default function Login() {
-  const { login, setLogin, password, setPassword, showPassword, setShowPassword, isSubmitting, handleSubmit, errors, rememberMe, setRememberMe } = useLogin("/admin");
+  const { form, showPassword, setShowPassword, isSubmitting, handleSubmit } = useLogin("/search");
+  const { register, formState: { errors } } = form;
 
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-[#ECECEA] font-sans selection:bg-[#8A2532] selection:text-white overflow-x-hidden text-[#121415] p-4 sm:p-6 relative">
@@ -54,9 +55,8 @@ export default function Login() {
             icon={Mail}
             placeholder="name@example.com"
             disabled={isSubmitting}
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-            error={errors?.login}
+            error={errors?.login?.message}
+            {...register("login")}
           />
 
           <Input
@@ -68,9 +68,8 @@ export default function Login() {
             onActionClick={() => setShowPassword(!showPassword)}
             placeholder="••••••••"
             disabled={isSubmitting}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={errors?.password}
+            error={errors?.password?.message}
+            {...register("password")}
           />
 
           <div className="flex items-center justify-between pt-1 pb-2 w-full shrink-0 gap-4">
@@ -78,10 +77,9 @@ export default function Login() {
               <div className="relative flex items-center justify-center w-5 h-5 shrink-0">
                 <input
                   type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
                   disabled={isSubmitting}
                   className="peer appearance-none w-5 h-5 border border-[#DCDCDA] rounded-md checked:bg-[#121415] checked:border-[#121415] transition-colors cursor-pointer shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                  {...register("rememberMe")}
                 />
                 <Check className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity duration-200" />
               </div>

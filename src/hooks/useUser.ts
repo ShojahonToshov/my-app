@@ -1,39 +1,31 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import AuthService, { AppUser } from "@/services/AuthService";
+import AuthService from "@/services/client/AuthService";
+import type { AppUser  } from "@/services/AuthService";
+import useAuthStore from "@/stores/authStore";
 
 export type StoreUser = AppUser & Record<string, any>;
 
 export default function useUser() {
-  const queryClient = useQueryClient();
-  
-  const query = useQuery<StoreUser | null>({
-    queryKey: ['user'],
-    queryFn: async () => {
-      const user = await AuthService.getCurrentUser();
-      return user as StoreUser | null;
-    },
-    staleTime: 60 * 1000,
-  });
+  const user = useAuthStore((state) => state.user);
+  const isLoading = useAuthStore((state) => state.isLoading);
+  const setUser = useAuthStore((state) => state.setUser);
 
   const updateUser = (updatedData: any) => {
-    queryClient.setQueryData(['user'], (oldData: any) => {
-      if (!oldData) return null;
-      return { ...oldData, ...updatedData };
-    });
+    if (!user) return;
+    setUser({ ...user, ...updatedData });
   };
 
   const login = (userData: any) => {
-    queryClient.setQueryData(['user'], userData);
+    setUser(userData);
   };
 
   const logout = () => {
-    queryClient.setQueryData(['user'], null);
+    setUser(null);
   };
 
   return {
-    user: query.data,
-    isLoading: query.isLoading,
-    isAuthenticated: !!query.data,
+    user,
+    isLoading,
+    isAuthenticated: !!user,
     login,
     updateUser,
     logout

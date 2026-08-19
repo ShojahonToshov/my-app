@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import AuthService from "@/services/AuthService";
+import AuthService from "@/services/client/AuthService";
 import { toast } from "sonner";
 import useUser from "@/hooks/useUser";
 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, FormEvent, MouseEvent } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import BookingService from "@/services/BookingService";
+import BookingService from "@/services/client/BookingService";
 import { START_HOUR, PIXELS_PER_MINUTE } from "@/constants/schedule";
 import { queryKeys } from "@/lib/queryKeys";
 import { ApiBookingDTO } from "@/types";

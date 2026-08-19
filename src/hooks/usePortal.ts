@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import useUser from "@/hooks/useUser";
-import AuthService from "@/services/AuthService";
+import AuthService from "@/services/client/AuthService";
 
 export default function usePortal() {
   const router = useRouter();

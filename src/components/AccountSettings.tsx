@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
-import AuthService from "@/services/AuthService";
+import AuthService from "@/services/client/AuthService";
 import useUser from "@/hooks/useUser";
 
 const fadeUp = {

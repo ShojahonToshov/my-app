@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import useUser from "@/hooks/useUser";
-import AuthService from "@/services/AuthService";
+import AuthService from "@/services/client/AuthService";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/Input";

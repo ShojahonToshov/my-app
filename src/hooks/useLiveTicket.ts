@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";;
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import BookingService from "@/services/BookingService";
+import BookingService from "@/services/client/BookingService";
 import { queryKeys } from "@/lib/queryKeys";
 import { Booking } from '@/types';
 import { createClient } from "@/utils/supabase/client";

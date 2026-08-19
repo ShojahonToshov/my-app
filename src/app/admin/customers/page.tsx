@@ -1,6 +1,6 @@
 import Customers from '@/components/admin-pages/Customers';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import CustomerService from '@/services/CustomerService';
+import { CustomerService } from "@/services/CustomerService";
 import { createClient } from '@/utils/supabase/server';
 import { queryKeys } from '@/lib/queryKeys';
 import { INITIAL_CLIENTS } from '@/constants/clients';
@@ -12,7 +12,8 @@ export default async function Page() {
   await queryClient.prefetchQuery({
     queryKey: queryKeys.clients.all,
     queryFn: async () => {
-      const res = await CustomerService.getCustomers(supabase);
+      const customerService = new CustomerService(supabase);
+      const res = await customerService.getCustomers();
       return res && res.length > 0 ? res : INITIAL_CLIENTS;
     }
   });

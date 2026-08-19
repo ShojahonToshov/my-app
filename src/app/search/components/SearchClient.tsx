@@ -21,7 +21,6 @@ import {
   SearchX,
 } from "lucide-react";
 import Link from "next/link";
-import Footer from "@/components/Footer";
 import ElaraLogo from "@/components/ElaraLogo";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -80,7 +79,7 @@ function EmptyState({ query }: { query?: string }) {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export default function Search() {
+export default function SearchClient({ initialVenues }: { initialVenues: any[] }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
@@ -99,7 +98,7 @@ export default function Search() {
     activeCategory, setActiveCategory,
     sortBy, setSortBy,
     sortOpen, setSortOpen,
-  } = useSearch();
+  } = useSearch(initialVenues);
 
   const accountLink = currentUser?.profile?.role === "business" ? "/admin" : "/account";
 
@@ -654,7 +653,7 @@ export default function Search() {
                             </div>
 
                             <Link
-                              href="/booking"
+                              href={`/booking?id=${venue.id}`}
                               className="w-full xl:w-auto shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 rounded-full"
                             >
                               <Button variant="primary" icon={ChevronRight} className="w-full xl:w-auto px-6 py-3 active:scale-95 flex-row-reverse">
@@ -770,7 +769,7 @@ export default function Search() {
         </div>
       </main>
 
-      <Footer />
-    </div>
+          </div>
   );
 }
+

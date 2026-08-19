@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, ChangeEvent, FormEvent } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import CustomerService from "@/services/CustomerService";
+import CustomerService from "@/services/client/CustomerService";
 import { toast } from "sonner";
 import { INITIAL_CLIENTS } from "@/constants/clients";
 import { queryKeys } from "@/lib/queryKeys";
