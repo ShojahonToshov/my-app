@@ -72,7 +72,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
   if (authUser?.id) {
     const { data: rawBookings } = await supabase
       .from("bookings")
-      .select("*, businesses(name), services(name)")
+      .select("*, businesses(name)")
       .eq("client_id", authUser.id)
       .order("date", { ascending: true })
       .order("time", { ascending: true });
@@ -86,7 +86,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
         time: b.time,
         venueName: b.businesses?.name || "Unknown Venue",
         serviceName: b.services?.name || "Unknown Service",
-        masterName: "Any available",
+        staffName: "Any available",
         status: b.status,
       }));
 
@@ -97,7 +97,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
         serviceName: b.services?.name || "Unknown Service",
         venueName: b.businesses?.name || "Unknown Venue",
         venueId: b.business_id,
-        masterName: "Any available",
+        staffName: "Any available",
         isReviewed: b.rating !== null && b.rating > 0,
         rating: b.rating || 0,
       }));
@@ -152,7 +152,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
                   <div className="bg-[#F5F5F4] rounded-2xl p-5 mb-8 border border-[#DCDCDA] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="min-w-0 flex-1">
                       <p className="font-semibold text-[#121415] leading-snug">{booking.serviceName}</p>
-                      <p className="text-sm text-[#4A4E51] font-medium mt-1">Professional: {booking.masterName}</p>
+                      <p className="text-sm text-[#4A4E51] font-medium mt-1">Professional: {booking.staffName}</p>
                     </div>
                     <div className="flex items-center gap-2 bg-[#E8EFE9] px-3 py-1.5 rounded-lg border border-[#4A6B53]/20 w-max shrink-0">
                       <Timer className="w-4 h-4 text-[#4A6B53] shrink-0" />
@@ -186,7 +186,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
                       <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A4E51] bg-[#F5F5F4] px-2.5 py-1 rounded-lg border border-[#DCDCDA]">{booking.date}</span>
                     </div>
                     <h3 className="font-semibold text-[#121415] text-xl tracking-tight leading-snug">{booking.serviceName}</h3>
-                    <p className="text-sm text-[#4A4E51] font-medium mt-1 leading-relaxed">{booking.venueName} • Pro: {booking.masterName}</p>
+                    <p className="text-sm text-[#4A4E51] font-medium mt-1 leading-relaxed">{booking.venueName} • Pro: {booking.staffName}</p>
                   </div>
                   <div className="shrink-0 flex sm:flex-col items-center sm:items-end gap-3 sm:gap-2">
                     {booking.isReviewed ? (

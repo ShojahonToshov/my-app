@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";;
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import VenueService from "@/services/client/VenueService";
-import BookingService from "@/services/client/BookingService";
+import VenueService from "@/services/customer/VenueService";
+import BookingService from "@/services/customer/BookingService";
 import { DATES } from "@/constants/booking";
 import useUser from "@/hooks/useUser";
 
@@ -19,18 +19,18 @@ interface ExtendedBooking extends Omit<Booking, "status"> {
   venueName?: string;
   serviceName?: string;
   servicePrice?: number | string;
-  masterName?: string;
+  staffName?: string;
   date?: string;
   time?: string;
-  clientName?: string;
-  clientPhone?: string;
+  customerName?: string;
+  customerPhone?: string;
   status?: string;
 }
 
 interface ExtendedBusiness extends Business {
   rating?: number;
   services?: Service[];
-  masters?: { id: string; name: string }[];
+  staff?: { id: string; name: string }[];
 }
 
 export default function useBooking() {
@@ -54,8 +54,8 @@ export default function useBooking() {
   const [selectedMaster, setSelectedMaster] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState(DATES[0].id);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [clientName, setClientName] = useState(currentUser?.name || "");
-  const [clientPhone, setClientPhone] = useState<string>(() => {
+  const [customerName, setClientName] = useState(currentUser?.name || "");
+  const [customerPhone, setClientPhone] = useState<string>(() => {
     if (currentUser?.login && /^\+?\d+$/.test(String(currentUser.login))) {
       return String(currentUser.login);
     }
@@ -120,29 +120,35 @@ export default function useBooking() {
   };
 
   const handleBooking = () => {
-    if (!selectedService || !selectedMaster || !selectedDate || !selectedTime || !clientName || !clientPhone || !policyAccepted) return;
+    if (!selectedService || !selectedMaster || !selectedDate || !selectedTime || !customerName || !customerPhone || !policyAccepted) return;
     
     const serviceObj = (venueData as ExtendedBusiness)?.services 
       ? (venueData as ExtendedBusiness).services?.find((s) => String(s.id) === String(selectedService))
       : null;
-    const masterObj = (venueData as ExtendedBusiness)?.masters 
-      ? (venueData as ExtendedBusiness).masters?.find((m) => String(m.id) === String(selectedMaster))
+    const masterObj = (venueData as ExtendedBusiness)?.staff 
+      ? (venueData as ExtendedBusiness).staff?.find((m) => String(m.id) === String(selectedMaster))
       : null;
     const newId = Date.now().toString();
 
     const newBooking = {
+      client_id: currentUser?.id || null,
+      business_id: String((venueData as ExtendedBusiness)?.id || venueId),
+      service_id: serviceObj?.id || null,
+      guest_name: customerName,
+      guest_phone: String(customerPhone),
+      is_guest: !currentUser?.id,
       id: newId,
       userId: currentUser?.id || "guest",
       venueId: String((venueData as ExtendedBusiness)?.id || venueId),
       venueName: (venueData as ExtendedBusiness)?.name,
       serviceName: serviceObj?.name || "Service",
       servicePrice: serviceObj?.price || "0 UZS",
-      masterName: masterObj?.name || "Any available specialist",
+      staffName: masterObj?.name || "Any available specialist",
       date: selectedDate,
       time: selectedTime,
       startTime: selectedTime,
-      clientName: clientName,
-      clientPhone: String(clientPhone),
+      customerName: customerName,
+      customerPhone: String(customerPhone),
       status: "upcoming"
     } as ExtendedBooking;
 
@@ -153,7 +159,7 @@ export default function useBooking() {
   if (selectedService) progressPercent += 20;
   if (selectedMaster) progressPercent += 20;
   if (selectedDate && selectedTime) progressPercent += 20;
-  if (clientName.length > 2 && clientPhone.length >= 7) progressPercent += 20;
+  if (customerName.length > 2 && customerPhone.length >= 7) progressPercent += 20;
   if (policyAccepted) progressPercent += 20;
   const isFormValid = progressPercent === 100;
 
@@ -176,8 +182,8 @@ export default function useBooking() {
     selectedMaster, setSelectedMaster,
     selectedDate, setSelectedDate,
     selectedTime, setSelectedTime,
-    clientName, setClientName,
-    clientPhone, setClientPhone,
+    customerName, setClientName,
+    customerPhone, setClientPhone,
     policyAccepted, setPolicyAccepted,
     userKarma,
     averageRating,

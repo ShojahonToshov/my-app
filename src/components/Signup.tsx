@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/Input";
 import { PhoneInput } from "@/components/ui/PhoneInput";
 import { Card } from "@/components/ui/Card";
 import OtpInput from "./OtpInput";
-import AuthService from "@/services/client/AuthService";
+import AuthService from "@/services/customer/AuthService";
 import useUser from "@/hooks/useUser";
 import { toast } from "sonner";
 import { createClient } from "@/utils/supabase/client";
@@ -97,7 +97,7 @@ export default function Signup() {
           await supabase.auth.refreshSession();
           
           setTimeout(() => {
-            window.location.href = role === "business" ? "/admin" : "/search";
+            window.location.href = role === "business" ? "/dashboard" : "/search";
           }, 500);
         }
       } catch (loginErr: any) {
@@ -203,7 +203,7 @@ export default function Signup() {
               <p className="text-center text-sm text-[#4A4E51] font-medium mt-4 w-full">
                 <span className="mr-1">Already have an account?</span>
                 <Link
-                  href="/login"
+                  href={`/login${searchParams.get("redirect") ? `?redirect=${encodeURIComponent(searchParams.get("redirect") as string)}` : ""}`}
                   className="text-[#121415] font-semibold hover:underline transition-colors"
                 >
                   Log in

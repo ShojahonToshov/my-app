@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
-import AuthService from "@/services/client/AuthService";
+import AuthService from "@/services/customer/AuthService";
 import useAuthStore from "@/stores/authStore";
 
 export function Providers({ children }: { children: React.ReactNode }) {

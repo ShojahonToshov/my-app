@@ -2,10 +2,10 @@ import { Booking, BookingSchema } from "@/types";
 import { z } from "zod";
 
 export class BookingService {
-  constructor(private client: any) {}
+  constructor(private customer: any) {}
 
   private get supabase() {
-    return this.client;
+    return this.customer;
   }
 
   async getBookings() {
@@ -29,15 +29,11 @@ export class BookingService {
   async createBooking(bookingData: Partial<Booking>) {
     const { data, error } = await this.supabase
       .from('bookings')
-      .insert([bookingData])
-      .select()
-      .maybeSingle();
+      .insert([bookingData]);
 
     if (error) {
-      if (error.code === 'PGRST116' && !bookingData.client_id) {
-        return null;
-      }
-      throw error;
+      console.error("Supabase insert error:", error);
+      throw new Error(error.message || "Failed to create booking in database");
     }
     return data;
   }

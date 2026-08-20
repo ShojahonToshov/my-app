@@ -91,7 +91,7 @@ export default function Landing() {
   useEffect(() => setMounted(true), []);
 
   const { isAuthenticated, user } = useUser();
-  const accountLink = user?.profile?.role === "business" ? "/admin" : "/account";
+  const accountLink = user?.profile?.role === "business" ? "/dashboard" : "/account";
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
@@ -417,7 +417,7 @@ export default function Landing() {
                   Verified reviews
                 </h3>
                 <p className="text-[#4A4E51] font-medium leading-relaxed">
-                  Read authentic feedback from real clients. We only allow
+                  Read authentic feedback from real customers. We only allow
                   reviews from completed appointments.
                 </p>
               </div>
@@ -570,17 +570,17 @@ export default function Landing() {
                 {
                   text: "Elara completely changed how I book my appointments. It is so clean, calm, and incredibly intuitive.",
                   author: "Sarah J.",
-                  role: "Verified Client",
+                  role: "Verified Customer",
                 },
                 {
                   text: "The most beautifully designed booking platform I've ever used. Zero friction from search to confirmation.",
                   author: "Michael T.",
-                  role: "Verified Client",
+                  role: "Verified Customer",
                 },
                 {
                   text: "I love being able to see my stylist's exact schedule without texting them back and forth. Pure elegance.",
                   author: "David L.",
-                  role: "Verified Client",
+                  role: "Verified Customer",
                 },
               ].map((t, i) => (
                 <div
@@ -622,7 +622,7 @@ export default function Landing() {
               {[
                 {
                   q: "Is Elara free to use?",
-                  a: "Yes, booking through Elara is completely free for clients. You only pay for the services you book directly at the venue.",
+                  a: "Yes, booking through Elara is completely free for customers. You only pay for the services you book directly at the venue.",
                 },
                 {
                   q: "Can I cancel or reschedule my appointment?",
@@ -630,7 +630,7 @@ export default function Landing() {
                 },
                 {
                   q: "Are the reviews authentic?",
-                  a: "We only allow reviews from clients who have actually completed an appointment at the venue.",
+                  a: "We only allow reviews from customers who have actually completed an appointment at the venue.",
                 },
                 {
                   q: "How do I list my business on Elara?",

@@ -3,7 +3,7 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";;
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import VenueService from "@/services/client/VenueService";
+import VenueService from "@/services/customer/VenueService";
 import { Scissors, Store, HeartPulse, MoreHorizontal } from "lucide-react";
 import useUser from "@/hooks/useUser";
 
@@ -29,7 +29,7 @@ export default function useOnboarding() {
   const [servicePrice, setServicePrice] = useState("");
   const [serviceDuration, setServiceDuration] = useState("45");
 
-  const [masterName, setMasterName] = useState("");
+  const [staffName, setStaffName] = useState("");
 
   const handleNext = (e: FormEvent) => {
     e.preventDefault();
@@ -51,7 +51,7 @@ export default function useOnboarding() {
       toast.success("Workspace created!", {
         description: "Your business profile is ready to receive appointments.",
       });
-      router.push("/admin");
+      router.push("/dashboard");
     },
     onError: (error) => {
       console.error(error);
@@ -61,7 +61,7 @@ export default function useOnboarding() {
 
   const handleFinish = (e: FormEvent) => {
     e.preventDefault();
-    if (!masterName.trim()) return toast.error("Please provide master name");
+    if (!staffName.trim()) return toast.error("Please provide staff name");
 
     const newVenue = {
       id: Date.now().toString(),
@@ -84,11 +84,11 @@ export default function useOnboarding() {
         duration: `${serviceDuration} min`,
         isActive: true
       }],
-      masters: [{
+      staff: [{
         id: "mst_1",
-        name: masterName,
-        role: "Master",
-        initials: masterName.substring(0, 2).toUpperCase(),
+        name: staffName,
+        role: "Staff",
+        initials: staffName.substring(0, 2).toUpperCase(),
         isActive: true
       }]
     };
@@ -104,7 +104,7 @@ export default function useOnboarding() {
     serviceName, setServiceName,
     servicePrice, setServicePrice,
     serviceDuration, setServiceDuration,
-    masterName, setMasterName,
+    staffName, setStaffName,
     handleNext, handleFinish
   };
 }

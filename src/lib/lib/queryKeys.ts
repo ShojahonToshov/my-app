@@ -9,9 +9,9 @@ export const queryKeys = {
     byVenue: (venueId: string) => ['bookings', { venueId }],
     byUser: (userId: string) => ['bookings', { userId }],
   },
-  clients: {
-    all: ['clients'],
-    detail: (id: string) => ['clients', id],
+  customers: {
+    all: ['customers'],
+    detail: (id: string) => ['customers', id],
   },
   users: {
     all: ['users'],

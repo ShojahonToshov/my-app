@@ -1,32 +1,32 @@
-import type { Client } from "@/types";
+import type { Customer } from "@/types";
 
 export class CustomerService {
-  constructor(private client: any) {}
+  constructor(private customer: any) {}
   
   private get supabase() {
-    return this.client;
+    return this.customer;
   }
 
-  async getCustomers(): Promise<Client[]> {
+  async getCustomers(): Promise<Customer[]> {
     const { data, error } = await this.supabase
       .from('profiles')
       .select('*')
       .eq('role', 'customer');
     if (error) throw error;
-    return data as unknown as Client[];
+    return data as unknown as Customer[];
   }
 
-  async createCustomer(customerData: Partial<Client>): Promise<Client> {
+  async createClient(customerData: Partial<Customer>): Promise<Customer> {
     const { data, error } = await this.supabase
       .from('profiles')
       .insert([{ ...customerData, role: 'customer' }])
       .select()
       .single();
     if (error) throw error;
-    return data as unknown as Client;
+    return data as unknown as Customer;
   }
 
-  async deleteCustomer(id: string): Promise<Client> {
+  async deleteCustomer(id: string): Promise<Customer> {
     const { data, error } = await this.supabase
       .from('profiles')
       .delete()
@@ -34,6 +34,6 @@ export class CustomerService {
       .select()
       .single();
     if (error) throw error;
-    return data as unknown as Client;
+    return data as unknown as Customer;
   }
 }

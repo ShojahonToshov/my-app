@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/Input";
 import { PhoneInput } from "@/components/ui/PhoneInput";
 import { Card } from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
-import AuthService from "@/services/client/AuthService";
+import AuthService from "@/services/customer/AuthService";
 import useUser from "@/hooks/useUser";
 
 const fadeUp = {

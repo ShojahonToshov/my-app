@@ -100,7 +100,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
     sortOpen, setSortOpen,
   } = useSearch(initialVenues);
 
-  const accountLink = currentUser?.profile?.role === "business" ? "/admin" : "/account";
+  const accountLink = currentUser?.profile?.role === "business" ? "/dashboard" : "/account";
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileView, setMobileView]         = useState<"list" | "map">("list");

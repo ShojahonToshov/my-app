@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import bookingService from "@/services/client/BookingService";
+import bookingService from "@/services/customer/BookingService";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -131,7 +131,7 @@ export default function LiveTicket() {
   const [bookingData, setBookingData] = useState<{
     venueName: string;
     serviceName: string;
-    masterName: string;
+    staffName: string;
     date: string;
     time: string;
   } | null>(null);
@@ -149,7 +149,7 @@ export default function LiveTicket() {
           setBookingData({
             venueName: (data as any).businesses?.name || "Unknown Venue",
             serviceName: (data as any).services?.name || "Unknown Service",
-            masterName: "Any available",
+            staffName: "Any available",
             date: data.date || "",
             time: data.time || "",
           });
@@ -282,10 +282,10 @@ export default function LiveTicket() {
                 </span>
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-full bg-white border border-[#DCDCDA] flex items-center justify-center text-[10px] font-bold text-[#121415] shrink-0">
-                    {bookingData.masterName.substring(0, 2).toUpperCase()}
+                    {bookingData.staffName.substring(0, 2).toUpperCase()}
                   </div>
                   <span className="text-sm font-semibold text-[#121415] truncate">
-                    {bookingData.masterName}
+                    {bookingData.staffName}
                   </span>
                 </div>
               </div>

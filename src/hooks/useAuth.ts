@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import AuthService from "@/services/client/AuthService";
+import AuthService from "@/services/customer/AuthService";
 import useUser from "@/hooks/useUser";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
@@ -19,6 +19,7 @@ export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function useLogin(defaultRedirectPath = "/account") {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const { login: loginStore } = useUser();
 
@@ -45,10 +46,11 @@ export function useLogin(defaultRedirectPath = "/account") {
       await supabase.auth.refreshSession();
       
       const role = user.profile?.role;
-      if (role === "admin" || role === "master" || role === "business") {
-        router.push("/admin");
+      if (role === "admin" || role === "staff" || role === "business") {
+        router.push("/dashboard");
       } else {
-        router.push(defaultRedirectPath);
+        const redirectParam = searchParams.get("redirect");
+        router.push(redirectParam || defaultRedirectPath);
       }
     },
     onError: () => {
@@ -79,6 +81,7 @@ export type SignupFormValues = z.infer<typeof signupSchema>;
 
 export function useSignup(defaultRole = "user", defaultRedirectPath = "/account") {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const { login: loginStore } = useUser();
 
@@ -110,10 +113,11 @@ export function useSignup(defaultRole = "user", defaultRedirectPath = "/account"
       await supabase.auth.refreshSession();
       
       const role = user.profile?.role;
-      if (role === "admin" || role === "master" || role === "business") {
-        router.push("/admin");
+      if (role === "admin" || role === "staff" || role === "business") {
+        router.push("/dashboard");
       } else {
-        router.push(defaultRedirectPath);
+        const redirectParam = searchParams.get("redirect");
+        router.push(redirectParam || defaultRedirectPath);
       }
     },
     onError: (error: Error) => {

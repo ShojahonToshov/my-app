@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";;
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import BookingService from "@/services/client/BookingService";
+import BookingService from "@/services/customer/BookingService";
 import { queryKeys } from "@/lib/queryKeys";
 import { Booking } from '@/types';
 import { createClient } from "@/utils/supabase/client";
@@ -108,7 +108,7 @@ export default function useLiveTicket() {
   const isReady = (bookingData as ExtendedBooking)?.status === "in_progress";
   const isCompleted = (bookingData as ExtendedBooking)?.status === "completed";
   
-  const simulatedDelayMins = ((bookingData as ExtendedBooking)?.status as string) === "upcoming" && id && parseInt(id) % 2 === 0 ? 15 : 0;
+  const simulatedDelayMins = (((bookingData as ExtendedBooking)?.status as string) === "upcoming" || ((bookingData as ExtendedBooking)?.status as string) === "pending") && id && parseInt(id.replace(/-/g, ''), 16) % 2 === 0 ? 15 : 0;
   const isDelayed = simulatedDelayMins > 0;
   
   const expectedTime = calculateETA((bookingData as ExtendedBooking)?.time as string | undefined, simulatedDelayMins);
@@ -121,7 +121,7 @@ export default function useLiveTicket() {
        if (stepName === "waiting") return "done";
        if (stepName === "in_chair") return "active";
     }
-    if ((status as string) === "upcoming") {
+    if ((status as string) === "upcoming" || (status as string) === "pending") {
        if (stepName === "booked") return "done";
        if (stepName === "waiting") return "active";
        if (stepName === "in_chair") return "wait";

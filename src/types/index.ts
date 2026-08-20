@@ -26,7 +26,7 @@ export const BookingSchema = z.object({
   id: z.string(),
   serviceId: z.string().nullish(), // Make some relations optional if mock data is weird
   customerId: z.string().nullish(),
-  startTime: z.string(),
+  startTime: z.string().nullish(),
   endTime: z.string().nullish(),
   time: z.string().nullish(),
   date: z.string().nullish(),
@@ -47,19 +47,19 @@ export const LiveTicketSchema = z.object({
 }).passthrough();
 export type LiveTicket = z.infer<typeof LiveTicketSchema>;
 
-export const MasterSchema = z.object({
+export const StaffSchema = z.object({
   id: z.string(),
   businessId: z.string(),
   name: z.string(),
   avatarUrl: z.string().nullish(),
   role: z.string().nullish(),
 }).passthrough();
-export type Master = z.infer<typeof MasterSchema>;
+export type Staff = z.infer<typeof StaffSchema>;
 
 export const WorkingHoursSchema = z.object({
   id: z.string().nullish(),
   businessId: z.string().nullish(),
-  masterId: z.string().nullish(),
+  staffId: z.string().nullish(),
   dayOfWeek: z.number().min(0).max(6).nullish(),
   startTime: z.string(),
   endTime: z.string(),
@@ -67,7 +67,7 @@ export const WorkingHoursSchema = z.object({
 }).passthrough();
 export type WorkingHours = z.infer<typeof WorkingHoursSchema>;
 
-export interface Client {
+export interface Customer {
   id: string;
   name: string;
   phone: string;
@@ -79,7 +79,7 @@ export interface Client {
   tag?: string;
 }
 
-export interface ClientData {
+export interface CustomerData {
   id: string;
   name: string;
   phone: string;
@@ -98,7 +98,7 @@ export interface TicketDTO {
   service: string;
   name: string;
   status: "waiting" | "in_progress" | "completed" | "upcoming";
-  master: string;
+  staff: string;
   isDelayed?: boolean;
 }
 
@@ -109,11 +109,11 @@ export interface ApiBookingDTO {
   venueName?: string | null;
   serviceName?: string | null;
   servicePrice?: string | null;
-  masterName?: string | null;
+  staffName?: string | null;
   date?: string | null;
   time?: string | null;
-  clientName?: string | null;
-  clientPhone?: string | null;
+  customerName?: string | null;
+  customerPhone?: string | null;
   status?: string | null;
 }
 
@@ -178,7 +178,7 @@ export interface UpdateProfileData {
   [key: string]: unknown;
 }
 
-export interface CustomerData {
+export interface CustomerProfileData {
   name?: string;
   phone?: string;
   [key: string]: unknown;

@@ -2,7 +2,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, User, Briefcase, ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
 export interface SignupRoleModalProps {
@@ -12,11 +12,14 @@ export interface SignupRoleModalProps {
 
 export default function SignupRoleModal({ isOpen, onClose }: SignupRoleModalProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   useLockBodyScroll(isOpen);
 
   const handleSelect = (role: string) => {
     onClose();
-    router.push(`/signup?role=${role}`);
+    const redirectParam = searchParams.get("redirect");
+    const redirectQuery = redirectParam ? `&redirect=${encodeURIComponent(redirectParam)}` : "";
+    router.push(`/signup?role=${role}${redirectQuery}`);
   };
 
   return (

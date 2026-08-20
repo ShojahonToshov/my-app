@@ -49,7 +49,7 @@ export default async function middleware(request: NextRequest) {
 
   const guestOnlyRoutes = ['/', '/login', '/signup'];
   const customerOnlyRoutes = ['/account', '/booking', '/settings'];
-  const businessOnlyRoutes = ['/admin', '/onboarding'];
+  const businessOnlyRoutes = ['/dashboard', '/onboarding'];
   const customerOrGuestRoutes = ['/search', '/ticket'];
 
   if (!mergedUser) {
@@ -78,7 +78,7 @@ export default async function middleware(request: NextRequest) {
     onboardingStep = onboardingStep || 0;
     const isUnonboardedBusiness = userRole === 'business' && onboardingStep < 3;
 
-    let homeRoute = userRole === 'business' ? '/admin' : '/search';
+    let homeRoute = userRole === 'business' ? '/dashboard' : '/search';
     if (isUnonboardedBusiness) {
       homeRoute = '/onboarding';
     }

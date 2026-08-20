@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import VenueService from "@/services/client/VenueService";
+import VenueService from "@/services/customer/VenueService";
 import { queryKeys } from "@/lib/queryKeys";
 
 export default function useSettings() {
@@ -47,7 +47,7 @@ export default function useSettings() {
           address: venue.address || '',
         });
         setServices((venue.services as Record<string, unknown>[] | undefined)?.map((s: Record<string, unknown>) => ({...s, isActive: s.isActive !== false})) || []);
-        setTeam((venue.masters as Record<string, unknown>[] | undefined)?.map((m: Record<string, unknown>) => ({...m, isActive: m.isActive !== false})) || []);
+        setTeam((venue.staff as Record<string, unknown>[] | undefined)?.map((m: Record<string, unknown>) => ({...m, isActive: m.isActive !== false})) || []);
       }
       return data;
     },
@@ -102,7 +102,7 @@ export default function useSettings() {
     setIsSavingPolicies(true);
     await new Promise(r => setTimeout(r, 600)); 
     localStorage.setItem("venuePolicies", JSON.stringify(policies));
-    toast.success("Booking policies updated", { description: "Updated policies are now active for all clients." });
+    toast.success("Booking policies updated", { description: "Updated policies are now active for all customers." });
     setIsSavingPolicies(false);
   };
 
@@ -146,16 +146,16 @@ export default function useSettings() {
   const handleToggleMaster = (id: string) => {
     const updatedTeam = team.map((m: Record<string, unknown>) => m.id === id ? { ...m, isActive: !m.isActive } : m);
     setTeam(updatedTeam);
-    updateVenueMutation.mutate({ masters: updatedTeam }, {
+    updateVenueMutation.mutate({ staff: updatedTeam }, {
       onSuccess: () => toast.success("Staff status updated")
     });
   };
 
   const addMasterMutation = useMutation({
-    mutationFn: (newMaster: Record<string, unknown>) => {
-      const updatedTeam = [...team, newMaster];
+    mutationFn: (newStaff: Record<string, unknown>) => {
+      const updatedTeam = [...team, newStaff];
       setTeam(updatedTeam);
-      return VenueService.updateVenue(venueId as string, { masters: updatedTeam });
+      return VenueService.updateVenue(venueId as string, { staff: updatedTeam });
     }
   });
 
@@ -164,7 +164,7 @@ export default function useSettings() {
     if (!venueId) return;
     const formData = new FormData(e.currentTarget);
     const name = (formData.get("name") as string) || "New Staff Member";
-    const newMaster = {
+    const newStaff = {
       id: Date.now().toString(),
       name: name,
       role: role, 
@@ -172,7 +172,7 @@ export default function useSettings() {
       isActive: true
     };
     
-    addMasterMutation.mutate(newMaster, {
+    addMasterMutation.mutate(newStaff, {
       onSuccess: () => {
         toast.success("Team member added");
         if (callback) callback();
@@ -187,10 +187,10 @@ export default function useSettings() {
         const updatedServices = services.filter((s: Record<string, unknown>) => s.id !== item.id);
         setServices(updatedServices);
         return VenueService.updateVenue(venueId as string, { services: updatedServices });
-      } else if (item.type === "master") {
+      } else if (item.type === "staff") {
         const updatedTeam = team.filter((m: Record<string, unknown>) => m.id !== item.id);
         setTeam(updatedTeam);
-        return VenueService.updateVenue(venueId as string, { masters: updatedTeam });
+        return VenueService.updateVenue(venueId as string, { staff: updatedTeam });
       }
     }
   });

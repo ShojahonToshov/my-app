@@ -3,10 +3,10 @@ import { z } from "zod";
 import type { VenueData } from "@/types";
 
 export class VenueService {
-  constructor(private client: any) {}
+  constructor(private customer: any) {}
 
   private get supabase() {
-    return this.client;
+    return this.customer;
   }
 
   async getVenues() {

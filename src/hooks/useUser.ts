@@ -1,4 +1,4 @@
-import AuthService from "@/services/client/AuthService";
+import AuthService from "@/services/customer/AuthService";
 import type { AppUser  } from "@/services/AuthService";
 import useAuthStore from "@/stores/authStore";
 

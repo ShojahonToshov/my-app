@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import useUser from "@/hooks/useUser";
-import AuthService from "@/services/client/AuthService";
+import AuthService from "@/services/customer/AuthService";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/Input";
@@ -162,7 +162,7 @@ export default function OnboardingWizard() {
       if (final) {
         await supabase.auth.refreshSession();
         toast.success("Setup complete! Welcome to your dashboard.");
-        router.push("/admin");
+        router.push("/dashboard");
       } else {
         setStep(nextStepIndex);
       }
@@ -192,7 +192,7 @@ export default function OnboardingWizard() {
     },
     {
       title: "Location & Contact",
-      subtitle: "Where can clients find you?",
+      subtitle: "Where can customers find you?",
       content: (
         <div className="space-y-4 w-full">
           <Input

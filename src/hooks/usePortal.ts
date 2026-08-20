@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import useUser from "@/hooks/useUser";
-import AuthService from "@/services/client/AuthService";
+import AuthService from "@/services/customer/AuthService";
 
 export default function usePortal() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function usePortal() {
   const handleCopyLink = () => {
     navigator.clipboard.writeText("https://superqueue.com/b/chop-chop");
     toast.success("Public booking link copied", {
-      description: "Send it to your clients for online booking.",
+      description: "Send it to your customers for online booking.",
     });
   };
 

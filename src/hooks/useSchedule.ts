@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, FormEvent, MouseEvent } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import BookingService from "@/services/client/BookingService";
+import BookingService from "@/services/customer/BookingService";
 import { START_HOUR, PIXELS_PER_MINUTE } from "@/constants/schedule";
 import { queryKeys } from "@/lib/queryKeys";
 import { ApiBookingDTO } from "@/types";
@@ -21,7 +21,7 @@ export default function useSchedule() {
   const [prefilledMaster, setPrefilledMaster] = useState(DYNAMIC_MASTERS[0].id);
   const [currentMinutes, setCurrentMinutes] = useState(12 * 60 + 15);
 
-  const masters = DYNAMIC_MASTERS;
+  const staff = DYNAMIC_MASTERS;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -38,8 +38,8 @@ export default function useSchedule() {
       if (data && data.length > 0) {
         return data.map((item: ApiBookingDTO, index: number) => ({
           id: item.id,
-          masterId: masters[index % masters.length].id,
-          client: item.clientName || "Guest",
+          staffId: staff[index % staff.length].id,
+          customer: item.customerName || "Guest",
           service: item.serviceName || "Service",
           startTime: item.time || "10:00",
           duration: 45, 
@@ -66,19 +66,24 @@ export default function useSchedule() {
   const handleAddBooking = useCallback((e: FormEvent<HTMLFormElement>, callback?: () => void) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const selectedMasterObj = masters.find((m: { id: string; name: string }) => m.id === prefilledMaster);
+    const selectedMasterObj = staff.find((m: { id: string; name: string }) => m.id === prefilledMaster);
     
-    const newBooking: ApiBookingDTO = {
+    const newBooking: any = {
+      client_id: null,
+      business_id: typeof window !== 'undefined' ? localStorage.getItem('elara_business_id') || '' : '',
+      service_id: null,
+      guest_name: (formData.get("customerName") as string) || "New Customer",
+      is_guest: true,
       id: Date.now().toString(),
       userId: "admin-manual",
       venueId: "1",
       venueName: "SuperQueue Business",
       serviceName: "Men's Haircut",
       servicePrice: "80,000 UZS",
-      masterName: selectedMasterObj?.name || "Master",
+      staffName: selectedMasterObj?.name || "Staff",
       date: selectedDate,
       time: (formData.get("time") as string) || "12:00",
-      clientName: (formData.get("clientName") as string) || "New Client",
+      customerName: (formData.get("customerName") as string) || "New Customer",
       status: "upcoming"
     };
     
@@ -87,7 +92,7 @@ export default function useSchedule() {
         if (callback) callback();
       }
     });
-  }, [masters, prefilledMaster, selectedDate, addBookingMutation]);
+  }, [staff, prefilledMaster, selectedDate, addBookingMutation]);
 
   const deleteBookingMutation = useMutation({
     mutationFn: (id: string) => BookingService.deleteBooking(id),
@@ -109,7 +114,7 @@ export default function useSchedule() {
     });
   }, [deleteBookingMutation]);
 
-  const handleGridClick = useCallback((e: MouseEvent<HTMLDivElement>, masterId: string, openModalCallback?: () => void) => {
+  const handleGridClick = useCallback((e: MouseEvent<HTMLDivElement>, staffId: string, openModalCallback?: () => void) => {
     if ((e.target as HTMLElement).closest('.appointment-card')) return;
     
     const rect = e.currentTarget.getBoundingClientRect();
@@ -122,7 +127,7 @@ export default function useSchedule() {
     const m = (roundedMins % 60).toString().padStart(2, '0');
     
     setPrefilledTime(`${h}:${m}`);
-    setPrefilledMaster(masterId);
+    setPrefilledMaster(staffId);
     if (openModalCallback) openModalCallback();
   }, []);
 
@@ -135,7 +140,7 @@ export default function useSchedule() {
   return {
     selectedDate, setSelectedDate,
     isSubmitting, isLoading, isError, handleRefetch: refetch,
-    bookings, masters,
+    bookings, staff,
     prefilledTime, setPrefilledTime,
     prefilledMaster, setPrefilledMaster,
     dailyBookings, showTimeLine, currentTimeTop,

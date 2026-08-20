@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";;
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import BookingService from "@/services/client/BookingService";
-import VenueService from "@/services/client/VenueService";
+import BookingService from "@/services/customer/BookingService";
+import VenueService from "@/services/customer/VenueService";
 import { toast } from "sonner";
 import useUser from "@/hooks/useUser";
 
@@ -33,7 +33,7 @@ export default function useAccount() {
     queryFn: async () => {
       const dataBookings = await BookingService.getBookings();
       if (!currentUser) return [];
-      const userBookings = (dataBookings as Booking[]).filter((b) => String(b.userId) === String(currentUser.id));
+      const userBookings = (dataBookings as Booking[]).filter((b) => String((b as any).client_id) === String(currentUser.id) || String(b.customerId) === String(currentUser.id));
       return userBookings.sort((a, b) => Number(b.id) - Number(a.id));
     },
     enabled: !!currentUser?.id,
@@ -115,8 +115,8 @@ export default function useAccount() {
     });
   };
 
-  const upcomingBookings = (bookings as Booking[]).filter((b) => (b.status as string) === "upcoming" || b.status === "in_progress");
-  const historyList = (bookings as Booking[]).filter((b) => b.status === "completed");
+  const upcomingBookings = (bookings as Booking[]).filter((b) => (b.status as string) === "upcoming" || b.status === "in_progress" || b.status === "pending");
+  const historyList = (bookings as Booking[]).filter((b) => b.status === "completed" || b.status === "cancelled" || b.status === "done");
 
   const isLoading = isBookingsLoading || isFavoritesLoading;
   const isError = isBookingsError || isFavoritesError;

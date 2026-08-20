@@ -14,10 +14,10 @@ export type AppUser = User & {
 };
 
 export class AuthService {
-  constructor(private client: any) {}
+  constructor(private customer: any) {}
 
   private get supabase() {
-    return this.client;
+    return this.customer;
   }
 
   // Helper to fetch user profile from Supabase database

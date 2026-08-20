@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";;
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import AuthService from "@/services/client/AuthService";
+import AuthService from "@/services/customer/AuthService";
 import { toast } from "sonner";
 import useUser from "@/hooks/useUser";
 
