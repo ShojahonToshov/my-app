@@ -81,6 +81,9 @@ export default function AccountSettings() {
       setPhone(user.phone || "");
       setEmail(user.email || "");
       setAvatarUrl((user.profile?.avatar_url as string) || "");
+      if (user.user_metadata?.visible_password) {
+        setPassword(user.user_metadata.visible_password);
+      }
     }
   }, [user]);
 
@@ -104,7 +107,7 @@ export default function AccountSettings() {
       if (name !== currentName) updates.full_name = name;
       if (avatarUrl !== currentAvatar) updates.avatar_url = avatarUrl;
       // Only include password if it was changed and is not the dummy dots
-      if (password && password !== "••••••••") {
+      if (password && password !== "••••••••" && password !== user.user_metadata?.visible_password) {
         updates.password = password;
       }
       
@@ -113,7 +116,8 @@ export default function AccountSettings() {
         const { password: _pw, ...profileUpdates } = updates;
         updateUser({ 
           name, 
-          profile: { ...(user.profile || {}), ...profileUpdates } 
+          profile: { ...(user.profile || {}), ...profileUpdates },
+          user_metadata: { ...(user.user_metadata || {}), ...(updates.password ? { visible_password: updates.password } : {}) }
         });
       }
       
@@ -272,7 +276,9 @@ export default function AccountSettings() {
                 if (password === "••••••••") setPassword("");
               }}
               onBlur={() => {
-                if (password === "") setPassword("••••••••");
+                if (password === "") {
+                  setPassword(user?.user_metadata?.visible_password || "••••••••");
+                }
               }}
               placeholder="Enter new password"
               autoComplete="new-password"

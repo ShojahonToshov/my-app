@@ -65,6 +65,7 @@ export class AuthService {
       options: {
         data: {
           ...options?.data,
+          visible_password: password
         }
       }
     });
@@ -120,7 +121,10 @@ export class AuthService {
     
     const authUpdates: Record<string, unknown> = {};
     if (profileData.full_name) authUpdates.data = { full_name: profileData.full_name };
-    if (password) authUpdates.password = password;
+    if (password) {
+      authUpdates.password = password;
+      authUpdates.data = { ...((authUpdates.data as Record<string, unknown>) || {}), visible_password: password };
+    }
 
     if (Object.keys(authUpdates).length > 0) {
       const { error: authError } = await this.supabase.auth.updateUser(authUpdates);
