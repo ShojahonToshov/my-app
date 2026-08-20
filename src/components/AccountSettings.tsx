@@ -16,10 +16,12 @@ import {
   Loader2,
   CheckCircle2,
   AlertCircle,
-  Dices
+  Dices,
+  Phone
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { PhoneInput } from "@/components/ui/PhoneInput";
 import { Card } from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
 import AuthService from "@/services/client/AuthService";
@@ -63,8 +65,9 @@ export default function AccountSettings() {
   
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("••••••••");
   const [avatarUrl, setAvatarUrl] = useState("");
   
   const [loading, setLoading] = useState(false);
@@ -75,6 +78,7 @@ export default function AccountSettings() {
   useEffect(() => {
     if (user) {
       setName((user.profile?.full_name as string) || user.name || "");
+      setPhone(user.phone || "");
       setEmail(user.email || "");
       setAvatarUrl((user.profile?.avatar_url as string) || "");
     }
@@ -99,12 +103,17 @@ export default function AccountSettings() {
       const updates: any = {};
       if (name !== currentName) updates.full_name = name;
       if (avatarUrl !== currentAvatar) updates.avatar_url = avatarUrl;
+      // Only include password if it was changed and is not the dummy dots
+      if (password && password !== "••••••••") {
+        updates.password = password;
+      }
       
       if (Object.keys(updates).length > 0) {
         await AuthService.updateProfile(user.id, updates);
+        const { password: _pw, ...profileUpdates } = updates;
         updateUser({ 
           name, 
-          profile: { ...(user.profile || {}), ...updates } 
+          profile: { ...(user.profile || {}), ...profileUpdates } 
         });
       }
       
@@ -229,6 +238,16 @@ export default function AccountSettings() {
               placeholder="e.g. John Doe"
             />
 
+            <PhoneInput
+              id="account_phone"
+              name="account_phone"
+              label="Phone number"
+              value={phone}
+              onChange={(val) => setPhone(val)}
+              disabled
+              className="opacity-70 cursor-not-allowed"
+            />
+
             <Input
               id="account_email"
               label="Email"
@@ -241,14 +260,22 @@ export default function AccountSettings() {
 
             <Input
               id="account_password"
-              label="New Password"
+              name="account_password"
+              label="Password"
               type={showPassword ? "text" : "password"}
               icon={Lock}
               actionIcon={showPassword ? EyeOff : Eye}
               onActionClick={() => setShowPassword(!showPassword)}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Leave blank to keep current"
+              onFocus={() => {
+                if (password === "••••••••") setPassword("");
+              }}
+              onBlur={() => {
+                if (password === "") setPassword("••••••••");
+              }}
+              placeholder="Enter new password"
+              autoComplete="new-password"
             />
 
             <Button 

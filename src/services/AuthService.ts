@@ -38,11 +38,9 @@ export class AuthService {
   async login(identifier: string, password: string) {
     const isPhone = identifier.startsWith('+') || /^\d+$/.test(identifier.replace(/\D/g, ''));
     
-    // Поскольку Phone Auth отключен в Supabase, мы используем привязанный скрытый email для логина
-    const loginIdentifier = isPhone ? `phone${identifier.replace(/\D/g, '')}@elara-app.com` : identifier;
-    
+    // Now that Phone Auth is enabled, we can authenticate directly with the phone number
     const { data, error } = await this.supabase.auth.signInWithPassword({ 
-      email: loginIdentifier, 
+      ...(isPhone ? { phone: identifier } : { email: identifier }), 
       password 
     });
     
@@ -106,18 +104,27 @@ export class AuthService {
 
   // Profile update
   async updateProfile(userId: string, userData: UpdateProfileData): Promise<Record<string, unknown>> {
-    const { data, error } = await this.supabase
-      .from('profiles')
-      .upsert({ id: userId, ...userData })
-      .select()
-      .single();
+    const { password, ...profileData } = userData;
+    let data = {};
 
-    if (error) throw error;
+    if (Object.keys(profileData).length > 0) {
+      const { data: dbData, error } = await this.supabase
+        .from('profiles')
+        .upsert({ id: userId, ...profileData })
+        .select()
+        .single();
+
+      if (error) throw error;
+      data = dbData;
+    }
     
-    if (userData.full_name) {
-      await this.supabase.auth.updateUser({
-        data: { full_name: userData.full_name }
-      });
+    const authUpdates: Record<string, unknown> = {};
+    if (profileData.full_name) authUpdates.data = { full_name: profileData.full_name };
+    if (password) authUpdates.password = password;
+
+    if (Object.keys(authUpdates).length > 0) {
+      const { error: authError } = await this.supabase.auth.updateUser(authUpdates);
+      if (authError) throw authError;
     }
 
     return data;

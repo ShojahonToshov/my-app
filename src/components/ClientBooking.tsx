@@ -298,14 +298,14 @@ export default function ClientBooking() {
   const isStep3Unlocked = isStep2Unlocked && selectedMaster !== null;
   const isStep4Unlocked = isStep3Unlocked && selectedTime !== null;
   const isStep5Unlocked =
-    isStep4Unlocked && clientName.trim() !== "" && clientPhone.trim() !== "";
+    isStep4Unlocked && (user ? true : clientName.trim() !== "" && clientPhone.trim() !== "");
 
   const getProgress = () => {
     if (isStep5Unlocked) return 100;
-    if (isStep4Unlocked) return 80;
-    if (isStep3Unlocked) return 60;
-    if (isStep2Unlocked) return 40;
-    return 20;
+    if (isStep4Unlocked) return user ? 100 : 80;
+    if (isStep3Unlocked) return user ? 75 : 60;
+    if (isStep2Unlocked) return user ? 50 : 40;
+    return user ? 25 : 20;
   };
 
   const scrollToElement = (id: string) => {
@@ -328,7 +328,7 @@ export default function ClientBooking() {
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-    scrollToElement("step-4");
+    scrollToElement(user ? "step-5" : "step-4");
   };
 
   const handleConfirm = async () => {
@@ -347,8 +347,8 @@ export default function ClientBooking() {
         service_id: selectedService || undefined,
         date: selectedDate,
         time: selectedTime || undefined,
-        guest_name: clientName,
-        guest_phone: clientPhone,
+        guest_name: user?.name ? String(user.name) : clientName,
+        guest_phone: user?.phone ? String(user.phone) : clientPhone,
         is_guest: !user,
         status: "pending" as const
       };
@@ -634,36 +634,38 @@ export default function ClientBooking() {
                 </div>
 
                 {/* Step 4: User Data */}
-                <div
-                  id="step-4"
-                  className={`scroll-mt-32 pt-2 relative transition-all duration-500 ${isStep4Unlocked ? "opacity-100" : "opacity-40 pointer-events-none grayscale-[30%]"}`}
-                >
-                  <h2 className="text-xl font-semibold text-[#121415] mb-5 tracking-tight flex items-center gap-3">
-                    <span className="relative z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white text-[#121415] text-xs font-bold border border-[#DCDCDA] shrink-0">
-                      4
-                    </span>
-                    Your details
-                  </h2>
+                {!user && (
+                  <div
+                    id="step-4"
+                    className={`scroll-mt-32 pt-2 relative transition-all duration-500 ${isStep4Unlocked ? "opacity-100" : "opacity-40 pointer-events-none grayscale-[30%]"}`}
+                  >
+                    <h2 className="text-xl font-semibold text-[#121415] mb-5 tracking-tight flex items-center gap-3">
+                      <span className="relative z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white text-[#121415] text-xs font-bold border border-[#DCDCDA] shrink-0">
+                        4
+                      </span>
+                      Your details
+                    </h2>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Input
-                      id="client_name"
-                      label="Full Name"
-                      type="text"
-                      icon={User}
-                      value={clientName}
-                      onChange={(e) => setClientName(e.target.value)}
-                    />
-                    <Input
-                      id="client_phone"
-                      label="Phone number"
-                      type="tel"
-                      icon={Phone}
-                      value={clientPhone}
-                      onChange={(e) => setClientPhone(e.target.value)}
-                    />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <Input
+                        id="client_name"
+                        label="Full Name"
+                        type="text"
+                        icon={User}
+                        value={clientName}
+                        onChange={(e) => setClientName(e.target.value)}
+                      />
+                      <Input
+                        id="client_phone"
+                        label="Phone number"
+                        type="tel"
+                        icon={Phone}
+                        value={clientPhone}
+                        onChange={(e) => setClientPhone(e.target.value)}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Step 5: Confirmation */}
                 <div
@@ -672,7 +674,7 @@ export default function ClientBooking() {
                 >
                   <h2 className="text-xl font-semibold text-[#121415] mb-5 mt-6 tracking-tight flex items-center gap-3">
                     <span className="relative z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white text-[#121415] text-xs font-bold border border-[#DCDCDA] shrink-0">
-                      5
+                      {user ? 4 : 5}
                     </span>
                     Confirmation
                   </h2>

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getOtpCache } from '@/utils/otpCache';
+import { getOtpCache, saveOtpCache } from '@/utils/otpCache';
+import crypto from 'crypto';
 
 export async function POST(request: Request) {
   try {
@@ -10,28 +11,36 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // TODO: Здесь в идеале нужно сделать запрос к Supabase (через Admin API)
-    // чтобы проверить, не занят ли уже этот номер телефона.
-    // Пример: const { data } = await supabaseAdmin.auth.admin.listUsers();
-    // (Упрощено для текущей реализации Mock SMS)
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return NextResponse.json({ 
+        error: 'ОШИБКА: SUPABASE_SERVICE_ROLE_KEY не найден в .env.local!' 
+      }, { status: 500 });
+    }
 
     // Генерируем 6-значный код
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     
-    // Сохраняем в кэш на 5 минут
-    const cacheMap = getOtpCache();
-    cacheMap[phone] = {
-      code,
+    // Hash the code
+    const otpHash = crypto.createHash('sha256').update(code).digest('hex');
+    
+    // Expiration: 5 minutes from now
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+
+    const cache = getOtpCache();
+    cache[phone] = {
+      otpHash,
       data: { firstName, lastName, phone, password, role },
-      expiresAt: Date.now() + 5 * 60 * 1000,
+      expiresAt,
       attempts: 0
     };
+    saveOtpCache(cache);
 
-    // MOCK SMS PROVIDER - Вывод в консоль сервера!
+    // DEMO AUTH - Вывод в консоль сервера!
     console.log('\n=============================================');
-    console.log(`[MOCK SMS PROVIDER]`);
-    console.log(`Recipient: ${phone}`);
-    console.log(`Code: ${code}`);
+    console.log(`[DEMO AUTH]`);
+    console.log(`Phone: ${phone}`);
+    console.log(`OTP: ${code}`);
+    console.log(`Expires: 5 minutes`);
     console.log('=============================================\n');
 
     return NextResponse.json({ 

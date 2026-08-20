@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import useUser from "@/hooks/useUser";
@@ -8,7 +8,60 @@ import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { MapPin, Phone, Store, Briefcase } from "lucide-react";
+import { MapPin, Store, Briefcase, ChevronDown, CheckCircle2 } from "lucide-react";
+
+function OnboardingSelect({ value, options, onChange, placeholder }: { value: string, options: string[], onChange: (v: string) => void, placeholder: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) setIsOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative w-full group" ref={dropdownRef}>
+      <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194] group-focus-within:text-[#121415] z-10 transition-colors pointer-events-none" />
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-full flex items-center justify-between pl-12 pr-4 py-4 rounded-2xl outline-none transition-all duration-300 text-sm font-medium border text-[#121415] appearance-none ${
+          isOpen ? "bg-white ring-4 ring-[#121415]/5 border-[#121415]" : "bg-[#F5F5F4] border-[#DCDCDA] hover:border-[#121415]"
+        }`}
+      >
+        <span className="truncate">{value || placeholder}</span>
+        <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isOpen ? "text-[#121415] rotate-180" : "text-[#8B9194]"}`} />
+      </button>
+
+      {isOpen && (
+        <div className="absolute z-50 w-full mt-2 bg-white border border-[#DCDCDA] rounded-2xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
+          {options.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                onChange(opt);
+                setIsOpen(false);
+              }}
+              className={`w-full text-left px-4 py-3 text-sm transition-colors flex items-center justify-between group hover:bg-[#F5F5F4] ${
+                value === opt ? "bg-[#F5F5F4]" : ""
+              }`}
+            >
+              <span className={value === opt ? "font-medium text-[#121415]" : "font-medium text-[#4A4E51] group-hover:text-[#121415]"}>
+                {opt}
+              </span>
+              {value === opt && <CheckCircle2 className="w-5 h-5 text-[#121415] shrink-0" />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function OnboardingWizard() {
   const router = useRouter();
@@ -23,7 +76,6 @@ export default function OnboardingWizard() {
   const [businessName, setBusinessName] = useState("");
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
   
   // We need businessId if created on Step 1
   const [businessId, setBusinessId] = useState("");
@@ -151,14 +203,6 @@ export default function OnboardingWizard() {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
-          <Input
-            id="phone"
-            label="Phone Number (Optional)"
-            icon={Phone}
-            placeholder="+1 234 567 890"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
         </div>
       )
     },
@@ -167,23 +211,12 @@ export default function OnboardingWizard() {
       subtitle: "What is your main service area?",
       content: (
         <div className="space-y-4 w-full">
-          <div className="relative group w-full">
-            <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194] group-focus-within:text-[#121415] z-10 transition-colors" />
-            <select
-              id="category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="peer w-full pl-12 pr-4 py-4 rounded-2xl outline-none transition-all duration-300 text-sm font-medium border bg-[#F5F5F4] focus:bg-white focus:ring-4 focus:border-[#121415] focus:ring-[#121415]/5 text-[#121415] border-[#DCDCDA] appearance-none"
-            >
-              <option value="" disabled>Select a category</option>
-              <option value="Barbershop">Barbershop</option>
-              <option value="Beauty Salon">Beauty Salon</option>
-              <option value="Manicure">Manicure</option>
-            </select>
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
-              ▼
-            </div>
-          </div>
+          <OnboardingSelect
+            value={category}
+            onChange={(val) => setCategory(val)}
+            placeholder="Select a category"
+            options={["Barbershop", "Beauty Salon", "Manicure"]}
+          />
           <p className="text-xs text-[#4A4E51] mt-2">
              You can add more details later in the dashboard.
           </p>

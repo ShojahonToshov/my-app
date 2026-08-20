@@ -1,0 +1,14 @@
+{
+  "+998 56565675675765": {
+    "otpHash": "a2915d06d7245d5720f1b13f4771c52b3b2e4f15248c12eb533f6a671ec90e9e",
+    "data": {
+      "firstName": "Adminstrator",
+      "lastName": "Jon",
+      "phone": "+998 56565675675765",
+      "password": "00000000",
+      "role": "business"
+    },
+    "expiresAt": "2026-08-20T02:38:59.261Z",
+    "attempts": 0
+  }
+}
