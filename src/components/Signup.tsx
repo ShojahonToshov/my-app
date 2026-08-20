@@ -9,6 +9,10 @@ import { Input } from "@/components/ui/Input";
 import { PhoneInput } from "@/components/ui/PhoneInput";
 import { Card } from "@/components/ui/Card";
 import OtpInput from "./OtpInput";
+import AuthService from "@/services/client/AuthService";
+import useUser from "@/hooks/useUser";
+import { toast } from "sonner";
+import { createClient } from "@/utils/supabase/client";
 
 type StepType = "form" | "otp";
 
@@ -19,6 +23,7 @@ export default function Signup() {
   const [step, setStep] = useState<StepType>("form");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { login: loginStore } = useUser();
   
   const [formData, setFormData] = useState({
     firstName: "",
@@ -29,14 +34,11 @@ export default function Signup() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
-    // Если это поле телефона, разрешаем только плюс, цифры, пробелы и скобки
     if (name === "phone") {
       const sanitized = value.replace(/[^\d\s+()-]/g, "");
       setFormData({ ...formData, [name]: sanitized });
       return;
     }
-    
     setFormData({ ...formData, [name]: value });
   };
 
@@ -45,16 +47,23 @@ export default function Signup() {
     setIsSubmitting(true);
     
     try {
-      console.log(`[Dev API] POST /api/auth/register-request`, { ...formData, role });
+      const res = await fetch('/api/auth/register-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, role })
+      });
       
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const data = await res.json();
       
-      console.log(`[SMS DEV] Code 583214 sent to ${formData.phone}`);
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to request verification');
+      }
       
+      toast.success("Verification code sent!");
       setStep("otp");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("Registration error");
+      toast.error(error.message || "Registration error");
     } finally {
       setIsSubmitting(false);
     }
@@ -63,18 +72,40 @@ export default function Signup() {
   const handleVerifyOtp = async (code: string) => {
     setIsSubmitting(true);
     try {
-      console.log(`[Dev API] POST /api/auth/verify-phone`, { phone: formData.phone, code });
+      const res = await fetch('/api/auth/verify-phone', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: formData.phone, code })
+      });
       
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const data = await res.json();
       
-      if (code === "583214") {
-        alert("Registration successful! (Redirecting...)");
-        // window.location.href = role === "business" ? "/admin" : "/search";
-      } else {
-        alert("Invalid code. Enter 583214 for testing.");
+      if (!res.ok) {
+        throw new Error(data.error || 'Invalid verification code');
       }
-    } catch (error) {
+
+      // API verify-phone теперь сам создает пользователя в Supabase через Admin API
+      try {
+
+        const loginRes = await AuthService.login(formData.phone, formData.password);
+        
+        if (loginRes.user) {
+          toast.success("Registration successful!");
+          loginStore(loginRes.user);
+          
+          const supabase = createClient();
+          await supabase.auth.refreshSession();
+          
+          setTimeout(() => {
+            window.location.href = role === "business" ? "/admin" : "/search";
+          }, 500);
+        }
+      } catch (loginErr: any) {
+        throw new Error(loginErr.message || "Failed to login after registration");
+      }
+    } catch (error: any) {
       console.error(error);
+      toast.error(error.message || "Error during verification");
     } finally {
       setIsSubmitting(false);
     }

@@ -35,10 +35,15 @@ export class AuthService {
     return data;
   }
 
-  async login(email: string, password: string) {
-    const { data, error } = await this.supabase.auth.signInWithPassword({
-      email,
-      password,
+  async login(identifier: string, password: string) {
+    const isPhone = identifier.startsWith('+') || /^\d+$/.test(identifier.replace(/\D/g, ''));
+    
+    // Поскольку Phone Auth отключен в Supabase, мы используем привязанный скрытый email для логина
+    const loginIdentifier = isPhone ? `phone${identifier.replace(/\D/g, '')}@elara-app.com` : identifier;
+    
+    const { data, error } = await this.supabase.auth.signInWithPassword({ 
+      email: loginIdentifier, 
+      password 
     });
     
     if (error) throw error;
@@ -53,9 +58,11 @@ export class AuthService {
     return { ...data, user: data.user as AppUser | null };
   }
 
-  async signup(email: string, password: string, options?: { data?: Record<string, unknown> }) {
+  async signup(identifier: string, password: string, options?: { data?: Record<string, unknown> }) {
+    const isPhone = identifier.startsWith('+') || /^\d+$/.test(identifier.replace(/\D/g, ''));
+    
     const { data, error } = await this.supabase.auth.signUp({
-      email,
+      ...(isPhone ? { phone: identifier } : { email: identifier }),
       password,
       options: {
         data: {
