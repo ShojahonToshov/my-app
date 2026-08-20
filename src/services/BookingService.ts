@@ -19,11 +19,25 @@ export class BookingService {
   async getBookingById(id: string) {
     const { data, error } = await this.supabase
       .from('bookings')
-      .select('*, businesses(name), services(name)')
+      .select('*, businesses(name)')
       .eq('id', id)
       .single();
     if (error) throw error;
-    return BookingSchema.parse(data);
+
+    let serviceName = null;
+    if (data.service_id) {
+      const { data: serviceData } = await this.supabase
+        .from('services')
+        .select('name')
+        .eq('id', data.service_id)
+        .single();
+      if (serviceData) {
+        serviceName = serviceData.name;
+      }
+    }
+
+    const resultData = { ...data, services: serviceName ? { name: serviceName } : null };
+    return BookingSchema.parse(resultData);
   }
 
   async createBooking(bookingData: Partial<Booking>) {

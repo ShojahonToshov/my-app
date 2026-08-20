@@ -21,13 +21,31 @@ import {
   Filter,
   ChevronDown,
 } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
 
 export default function Dashboard() {
   const queryClient = useQueryClient();
   const [isMounted, setIsMounted] = useState(false);
+  const [businessId, setBusinessId] = useState<string | null>(null);
+  
+  const [teamData, setTeamData] = useState<any[]>([]);
+  const [servicesData, setServicesData] = useState<any[]>([]);
   
   useEffect(() => {
     setIsMounted(true);
+    async function loadBusinessId() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data: business } = await supabase.from('businesses').select('id, team_data').eq('owner_id', user.id).single();
+      if (business) {
+        setBusinessId(business.id);
+        if (business.team_data && Array.isArray(business.team_data)) {
+          setTeamData(business.team_data);
+        }
+      }
+    }
+    loadBusinessId();
   }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,8 +65,6 @@ interface Guest {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [isPaused, setIsPaused] = useState(false);
-  
-  const mastersList = ["Ali Ahmedov", "Sanjar B.", "Timur G."];
 
   const [waitingGuests, setWaitingGuests] = useState<Guest[]>([]);
   const [inChairGuests, setInChairGuests] = useState<Guest[]>([]);
@@ -79,8 +95,9 @@ interface Guest {
     
     const venueBookings = bookings.filter((b: any) => {
       // Filter by current user ID acting as the business owner
-      if (currentUser?.id && b.businesses?.owner_id) {
-        return b.businesses.owner_id === currentUser.id;
+      const ownerId = Array.isArray(b.businesses) ? b.businesses[0]?.owner_id : b.businesses?.owner_id;
+      if (currentUser?.id && ownerId) {
+        return ownerId === currentUser.id;
       }
       return false;
     });
@@ -94,10 +111,10 @@ interface Guest {
       const guest: Guest = {
         id: b.id,
         name: b.guest_name || b.customerName || "Guest",
-        service: b.service_id || b.serviceName || "Service",
+        service: b.service_name || b.serviceName || b.service_id || "Service",
         time: b.time || b.startTime || "12:00",
         oldTime: existing?.oldTime || null,
-        staff: b.staffName || "Ali Ahmedov",
+        staff: b.staff_name || (b.staff_name || b.staffName) || "Ali Ahmedov",
         delay: existing?.delay || null
       };
       
@@ -109,27 +126,93 @@ interface Guest {
     setWaitingGuests(waiting);
     setInChairGuests(inChair);
     setCompletedGuests(completed);
-  }, [bookings]);
+  }, [bookings, currentUser?.id]);
 
-  const handleAddGuest = () => {
+  // Calculate dynamic KPIs
+  const venueBookings = bookings?.filter((b: any) => {
+    const ownerId = Array.isArray(b.businesses) ? b.businesses[0]?.owner_id : b.businesses?.owner_id;
+    if (currentUser?.id && ownerId) {
+      return ownerId === currentUser.id;
+    }
+    return false;
+  }) || [];
+
+  const totalBookings = venueBookings.length;
+  const inSalonNow = inChairGuests.length;
+  
+  // Calculate top service
+  const serviceCounts: Record<string, number> = {};
+  venueBookings.forEach((b: any) => {
+    const s = b.service_name || b.serviceName || b.service_id;
+    if (s) {
+      serviceCounts[s] = (serviceCounts[s] || 0) + 1;
+    }
+  });
+  let topService = "N/A";
+  let maxCount = 0;
+  for (const [s, count] of Object.entries(serviceCounts)) {
+    if (count > maxCount) {
+      maxCount = count;
+      topService = s;
+    }
+  }
+
+  // Calculate total delay (mock logic for now if delay is null)
+  const totalDelay = venueBookings.reduce((acc: number, b: any) => {
+    const existing = allGuestsRef.current.get(b.id);
+    const delayMatch = existing?.delay?.match(/(\d+)/);
+    if (delayMatch) {
+      return acc + parseInt(delayMatch[1], 10);
+    }
+    return acc;
+  }, 0);
+
+  // Calculate dynamic masters list
+  const mastersSet = new Set<string>();
+  venueBookings.forEach((b: any) => {
+    if ((b.staff_name || b.staffName)) mastersSet.add((b.staff_name || b.staffName));
+  });
+  teamData.forEach((t: any) => {
+    if (t.name && t.isActive !== false) mastersSet.add(t.name);
+  });
+  const mastersList = Array.from(mastersSet);
+  if (mastersList.length === 0) {
+    mastersList.push("Any Professional");
+  }
+
+  const handleAddGuest = async () => {
     if (!customerName.trim()) return;
     
-    const newGuest = {
-      id: Date.now().toString(),
-      name: customerName,
-      service: service,
+    if (!businessId) {
+      toast.error("Business not found. Cannot add guest.");
+      return;
+    }
+
+    const bData = {
+      guest_name: customerName,
+      serviceName: service,
+      staffName: staffName,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      oldTime: null,
-      staff: staffName,
-      delay: null
+      date: new Date().toISOString().split('T')[0],
+      status: 'pending',
+      is_guest: true,
+      business_id: businessId
     };
     
-    setWaitingGuests([...waitingGuests, newGuest]);
+    try {
+      await BookingService.createBooking(bData as any);
+      toast.success(`${customerName} added to the queue`);
+      queryClient.invalidateQueries({ queryKey: ['adminBookings'] });
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to add guest to queue");
+      return;
+    }
+    
     setIsModalOpen(false);
     setClientName("");
     setStaffName("Ali Ahmedov");
     setService("Haircut");
-    toast.success(`${newGuest.name} added to the queue`);
   };
 
   const addMinutesToTime = (timeStr: string, minsToAdd: number) => {
@@ -315,7 +398,7 @@ interface Guest {
         {/* HEADER */}
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Dashboard</h1>
+            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Queue (Live)</h1>
             <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Real-time customer flow & queue management</p>
           </div>
 
@@ -357,35 +440,31 @@ interface Guest {
                 <TrendingUp className="w-4 h-4" /> 
                 <span className="text-xs font-medium uppercase tracking-wider">Total Bookings</span>
               </div>
-              <div className="text-3xl font-semibold text-[#121415]">12</div>
+              <div className="text-3xl font-semibold text-[#121415]">{totalBookings}</div>
             </div>
             
             <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between">
               <div className="flex items-center gap-2 text-[#4A4E51] mb-2">
-                <Users className="w-4 h-4" /> 
+                <Users className="w-4 h-4" />
                 <span className="text-xs font-medium uppercase tracking-wider">In Salon Now</span>
               </div>
-              <div className="text-3xl font-semibold text-[#121415]">4</div>
+              <div className="text-3xl font-semibold text-[#121415]">{inSalonNow}</div>
             </div>
-            
-            <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between">
-              <div className="flex items-center gap-2 text-[#4A4E51] mb-2">
-                <Scissors className="w-4 h-4" /> 
+  
+            <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between min-w-0">
+              <div className="flex items-center gap-2 text-[#4A4E51] mb-2 shrink-0">
+                <Scissors className="w-4 h-4" />
                 <span className="text-xs font-medium uppercase tracking-wider">Top Service</span>
               </div>
-              <div className="text-lg font-medium text-[#121415] truncate leading-tight mt-1">
-                Haircut + Beard
-              </div>
+              <div className="text-xl font-semibold text-[#121415] truncate" title={topService}>{topService}</div>
             </div>
-            
-            <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between transition-colors">
-              <div className="flex items-center gap-2 mb-2 text-[#8A2532]">
-                <AlertTriangle className="w-4 h-4" /> 
+  
+            <div className="bg-[#FFF4F4] p-5 rounded-2xl border border-[#FDE8E8] shadow-sm flex flex-col justify-between">
+              <div className="flex items-center gap-2 text-[#8A2532] mb-2">
+                <AlertTriangle className="w-4 h-4" />
                 <span className="text-xs font-medium uppercase tracking-wider">Total Delay</span>
               </div>
-              <div className="text-3xl font-semibold text-[#8A2532]">
-                15 min
-              </div>
+              <div className="text-3xl font-semibold text-[#8A2532]">{totalDelay} min</div>
             </div>
           </div>
 
@@ -665,23 +744,20 @@ interface Guest {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-[#121415] mb-2">Service</label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button 
-                      type="button" 
-                      onClick={() => setService('Haircut')}
-                      className={`flex flex-col items-start p-4 border rounded-xl relative text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${service === 'Haircut' ? 'border-[#121415] bg-[#121415] text-white' : 'border-[#DCDCDA] bg-[#F5F5F4] hover:border-[#121415] text-[#4A4E51]'}`}
-                    >
-                      <Scissors className={`w-5 h-5 mb-2 ${service === 'Haircut' ? 'text-white' : 'text-[#8B9194]'}`} />
-                      <span className="font-medium text-sm">Haircut</span>
-                    </button>
-                    <button 
-                      type="button" 
-                      onClick={() => setService('Combo')}
-                      className={`flex flex-col items-start p-4 border rounded-xl relative text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${service === 'Combo' ? 'border-[#121415] bg-[#121415] text-white' : 'border-[#DCDCDA] bg-[#F5F5F4] hover:border-[#121415] text-[#4A4E51]'}`}
-                    >
-                      <Scissors className={`w-5 h-5 mb-2 ${service === 'Combo' ? 'text-white' : 'text-[#8B9194]'}`} />
-                      <span className="font-medium text-sm">Combo</span>
-                    </button>
+                                    <div className="grid grid-cols-2 gap-3">
+                    {servicesData.length > 0 ? servicesData.map(s => (
+                      <button 
+                        key={s.id}
+                        type="button" 
+                        onClick={() => setService(s.id)}
+                        className={`flex flex-col items-start p-4 border rounded-xl relative text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${service === s.id ? 'border-[#121415] bg-[#121415] text-white' : 'border-[#DCDCDA] bg-[#F5F5F4] hover:border-[#121415] text-[#4A4E51]'}`}
+                      >
+                        <Scissors className={`w-5 h-5 mb-2 ${service === s.id ? 'text-white' : 'text-[#8B9194]'}`} />
+                        <span className="font-medium text-sm">{s.name}</span>
+                      </button>
+                    )) : (
+                      <span className="text-sm text-[#8B9194]">No services added to business</span>
+                    )}
                   </div>
                 </div>
               </div>

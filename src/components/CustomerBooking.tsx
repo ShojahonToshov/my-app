@@ -140,17 +140,22 @@ export default function CustomerBooking() {
   const [venueData, setVenueData] = useState(defaultVenueData);
 
   useEffect(() => {
-    if (venueId) {
-      async function fetchActualData() {
-        try {
-          const supabase = createClient();
-          const { data: business } = await supabase.from('businesses').select('*').eq('id', venueId).single();
+    async function fetchActualData() {
+      try {
+        const supabase = createClient();
+        let targetVenueId = venueId;
+        if (!targetVenueId) {
+          const { data: businesses } = await supabase.from('businesses').select('*').limit(1);
+          if (businesses && businesses.length > 0) targetVenueId = businesses[0].id;
+          else return;
+        }
+        const { data: business } = await supabase.from('businesses').select('*').eq('id', targetVenueId).single();
           if (business) {
             let actualServices = null;
             let actualMasters = null;
             let actualSchedule = null;
 
-            const { data: dbServices } = await supabase.from('services').select('*').eq('business_id', venueId);
+            const { data: dbServices } = await supabase.from('services').select('*').eq('business_id', targetVenueId);
             if (dbServices) {
               actualServices = dbServices.map((s: any) => ({
                 id: s.id,
@@ -184,6 +189,7 @@ export default function CustomerBooking() {
                 
               return {
                 ...prev,
+                id: targetVenueId,
                 name: business.name || prev.name,
                 address: business.address || prev.address,
                 imageUrl: business.image_url || prev.imageUrl,
@@ -211,7 +217,6 @@ export default function CustomerBooking() {
         }
       }
       fetchActualData();
-    }
   }, [venueId]);
 
   const dates = useMemo(() => {
@@ -343,9 +348,10 @@ export default function CustomerBooking() {
       const supabase = createClient();
       const { data: { user: currentUser } } = await supabase.auth.getUser();
 
+            
       const bookingData = {
-        client_id: currentUser?.id || null, // Use null instead of undefined so it's not omitted by JSON.stringify
-        business_id: venueId || "11111111-1111-1111-1111-111111111111", // Fallback to seed UUID if venueId missing
+        client_id: currentUser?.id || null,
+        business_id: (venueData as any).id || venueId || "11111111-1111-1111-1111-111111111111",
         service_id: selectedService || undefined,
         date: selectedDate,
         time: selectedTime || undefined,

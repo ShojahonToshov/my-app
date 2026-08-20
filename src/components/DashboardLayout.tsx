@@ -81,12 +81,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [showNotifications, showMobileNotifications]);
+
   const { user: authUser } = useUser();
-  const displayName: string = "Владелец";
+  const displayName: string = (authUser?.profile?.full_name as string) || (authUser?.user_metadata?.full_name as string) || "Owner";
   const userEmail: string = (authUser?.email as string) ?? "";
   const avatarUrl: string = (authUser?.profile?.avatar_url as string) ?? "";
   const roleLabel = "Owner";
-
 
   return (
     <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white overflow-hidden">

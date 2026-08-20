@@ -134,10 +134,12 @@ export default function LiveTicket() {
     staffName: string;
     date: string;
     time: string;
+    status: string;
   } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let interval: NodeJS.Timeout;
     async function fetchBooking() {
       if (!id) {
         setLoading(false);
@@ -149,9 +151,10 @@ export default function LiveTicket() {
           setBookingData({
             venueName: (data as any).businesses?.name || "Unknown Venue",
             serviceName: (data as any).services?.name || "Unknown Service",
-            staffName: "Any available",
-            date: data.date || "",
-            time: data.time || "",
+            staffName: (data as any).staffName || "Any available",
+            date: (data as any).date || "",
+            time: (data as any).time || "",
+            status: (data as any).status || "pending",
           });
         }
       } catch (error) {
@@ -161,6 +164,8 @@ export default function LiveTicket() {
       }
     }
     fetchBooking();
+    interval = setInterval(fetchBooking, 3000); // Polling
+    return () => clearInterval(interval);
   }, [id]);
 
   useLockBodyScroll(isCancelModalOpen);
@@ -245,31 +250,33 @@ export default function LiveTicket() {
 
             {/* Stepper */}
             <div className="grid grid-cols-3 mb-10 px-2 shrink-0 w-full relative z-0">
-
+              {/* Booked / Pending */}
               <div className="relative flex flex-col items-center gap-2">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#121415] shadow-sm shrink-0">
-                  <CheckCircle className="w-4 h-4 text-white" />
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shadow-sm shrink-0 ${bookingData.status === 'pending' || bookingData.status === 'upcoming' || bookingData.status === 'confirmed' ? 'border-2 bg-white border-[#8A2532] shadow-[0_0_12px_rgba(138,37,50,0.15)] animate-pulse' : 'bg-[#121415]'}`}>
+                  {bookingData.status === 'pending' || bookingData.status === 'upcoming' || bookingData.status === 'confirmed' ? <MoreHorizontal className="w-4 h-4 text-[#8A2532]" /> : <CheckCircle className="w-4 h-4 text-white" />}
                 </div>
-                <span className="text-[9px] font-bold text-[#121415] uppercase tracking-widest truncate">
-                  Booked
+                <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${bookingData.status === 'pending' || bookingData.status === 'upcoming' || bookingData.status === 'confirmed' ? 'text-[#8A2532]' : 'text-[#121415]'}`}>
+                  {bookingData.status === 'pending' || bookingData.status === 'upcoming' || bookingData.status === 'confirmed' ? 'Waiting' : 'Booked'}
                 </span>
               </div>
 
+              {/* In Chair / In Progress */}
               <div className="relative flex flex-col items-center gap-2">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center border-2 bg-white border-[#8A2532] shadow-[0_0_12px_rgba(138,37,50,0.15)] animate-pulse shrink-0">
-                  <MoreHorizontal className="w-4 h-4 text-[#8A2532]" />
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 ${bookingData.status === 'in_progress' ? 'bg-white border-[#8A2532] shadow-[0_0_12px_rgba(138,37,50,0.15)] animate-pulse' : bookingData.status === 'completed' || bookingData.status === 'done' ? 'bg-[#121415] border-[#121415]' : 'bg-[#F5F5F4] border-[#DCDCDA]'}`}>
+                  {bookingData.status === 'in_progress' ? <Scissors className="w-4 h-4 text-[#8A2532]" /> : bookingData.status === 'completed' || bookingData.status === 'done' ? <CheckCircle className="w-4 h-4 text-white" /> : <Scissors className="w-4 h-4 text-[#DCDCDA]" />}
                 </div>
-                <span className="text-[9px] font-bold uppercase tracking-widest text-[#8A2532] truncate">
-                  Waiting
-                </span>
-              </div>
-
-              <div className="relative flex flex-col items-center gap-2">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center border-2 bg-[#F5F5F4] border-[#DCDCDA] shrink-0">
-                  <Scissors className="w-4 h-4 text-[#DCDCDA]" />
-                </div>
-                <span className="text-[9px] font-bold uppercase tracking-widest text-[#787D80] truncate">
+                <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${bookingData.status === 'in_progress' ? 'text-[#8A2532]' : bookingData.status === 'completed' || bookingData.status === 'done' ? 'text-[#121415]' : 'text-[#787D80]'}`}>
                   In chair
+                </span>
+              </div>
+
+              {/* Completed */}
+              <div className="relative flex flex-col items-center gap-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 ${bookingData.status === 'completed' || bookingData.status === 'done' ? 'bg-white border-[#8A2532] shadow-[0_0_12px_rgba(138,37,50,0.15)] animate-pulse' : bookingData.status === 'completed' || bookingData.status === 'done' ? 'bg-[#121415]' : 'bg-[#F5F5F4] border-[#DCDCDA]'}`}>
+                  {bookingData.status === 'completed' || bookingData.status === 'done' ? <CheckCircle2 className="w-4 h-4 text-[#8A2532]" /> : <CheckCircle2 className="w-4 h-4 text-[#DCDCDA]" />}
+                </div>
+                <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${bookingData.status === 'completed' || bookingData.status === 'done' ? 'text-[#8A2532]' : 'text-[#787D80]'}`}>
+                  Completed
                 </span>
               </div>
             </div>

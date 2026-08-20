@@ -1,8 +1,10 @@
 import Landing from '@/components/Landing';
+import { Suspense } from 'react';
 
 export default function Page() {
   return (
-          <Landing />
-
+    <Suspense fallback={<div>Loading...</div>}>
+      <Landing />
+    </Suspense>
   );
 }
