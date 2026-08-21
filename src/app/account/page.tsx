@@ -74,6 +74,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
       .from("bookings")
       .select("*, businesses(name)")
       .eq("client_id", authUser.id)
+      .eq("is_guest", false)
       .order("date", { ascending: true })
       .order("time", { ascending: true });
 

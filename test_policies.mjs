@@ -1,1 +1,0 @@
-import { createClient } from '@supabase/supabase-js'; const supabase = createClient('https://hhlbquuxnesiuwknscyq.supabase.co', process.env.SUPABASE_SERVICE_ROLE_KEY); const run = async () => { const { data, error } = await supabase.from('pg_policies').select('*').eq('tablename', 'bookings'); console.log(JSON.stringify(data, null, 2)); process.exit(0); }; run();

@@ -43,6 +43,10 @@ export default function Dashboard() {
         if (business.team_data && Array.isArray(business.team_data)) {
           setTeamData(business.team_data);
         }
+        const { data: services } = await supabase.from('services').select('*').eq('business_id', business.id);
+        if (services) {
+          setServicesData(services);
+        }
       }
     }
     loadBusinessId();
@@ -93,7 +97,9 @@ interface Guest {
   useEffect(() => {
     if (!bookings) return;
     
+    const today = new Date().toISOString().split('T')[0];
     const venueBookings = bookings.filter((b: any) => {
+      if (b.date && b.date !== today) return false;
       // Filter by current user ID acting as the business owner
       const ownerId = Array.isArray(b.businesses) ? b.businesses[0]?.owner_id : b.businesses?.owner_id;
       if (currentUser?.id && ownerId) {
@@ -107,6 +113,7 @@ interface Guest {
     const completed: Guest[] = [];
 
     venueBookings.forEach((b: any) => {
+      if (b.status === "cancelled") return;
       const existing = allGuestsRef.current.get(b.id);
       
     let guestNameRaw = b.guest_name || b.customerName || "Guest";
@@ -117,7 +124,7 @@ interface Guest {
       actualStaffId = parts[1];
     }
     
-    let actualStaffName = "Ali Ahmedov";
+    let actualStaffName = "Any available";
     if (actualStaffId) {
       const staff = teamData.find((t: any) => String(t.id) === String(actualStaffId));
       if (staff) actualStaffName = staff.name;

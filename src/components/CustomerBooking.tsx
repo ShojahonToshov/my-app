@@ -151,9 +151,8 @@ export default function CustomerBooking() {
             if (myBusiness) targetVenueId = myBusiness.id;
           }
           if (!targetVenueId) {
-            const { data: businesses } = await supabase.from('businesses').select('*').limit(1);
-            if (businesses && businesses.length > 0) targetVenueId = businesses[0].id;
-            else return;
+            router.push('/search');
+            return;
           }
         }
         const { data: business } = await supabase.from('businesses').select('*').eq('id', targetVenueId).single();
