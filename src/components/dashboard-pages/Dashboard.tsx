@@ -108,15 +108,40 @@ interface Guest {
 
     venueBookings.forEach((b: any) => {
       const existing = allGuestsRef.current.get(b.id);
-      const guest: Guest = {
-        id: b.id,
-        name: b.guest_name || b.customerName || "Guest",
-        service: b.service_name || b.serviceName || b.service_id || "Service",
-        time: b.time || b.startTime || "12:00",
-        oldTime: existing?.oldTime || null,
-        staff: b.staff_name || (b.staff_name || b.staffName) || "Ali Ahmedov",
-        delay: existing?.delay || null
-      };
+      
+    let guestNameRaw = b.guest_name || b.customerName || "Guest";
+    let actualStaffId = "";
+    if (typeof guestNameRaw === 'string' && guestNameRaw.includes("|||")) {
+      const parts = guestNameRaw.split("|||");
+      guestNameRaw = parts[0];
+      actualStaffId = parts[1];
+    }
+    
+    let actualStaffName = "Ali Ahmedov";
+    if (actualStaffId) {
+      const staff = teamData.find((t: any) => String(t.id) === String(actualStaffId));
+      if (staff) actualStaffName = staff.name;
+    } else if (b.staff_name || b.staffName) {
+      actualStaffName = b.staff_name || b.staffName;
+    }
+
+    let actualServiceName = "Service";
+    if (b.service_id) {
+       const srv = servicesData.find((s: any) => String(s.id) === String(b.service_id));
+       if (srv) actualServiceName = srv.name;
+    } else if (b.service_name || b.serviceName) {
+       actualServiceName = b.service_name || b.serviceName;
+    }
+
+    const guest: Guest = {
+      id: b.id,
+      name: guestNameRaw,
+      service: actualServiceName,
+      time: b.time || b.startTime || "12:00",
+      oldTime: existing?.oldTime || null,
+      staff: actualStaffName,
+      delay: existing?.delay || null
+    };
       
       if (b.status === "in_progress") inChair.push(guest);
       else if (b.status === "completed" || b.status === "done") completed.push(guest);
@@ -169,9 +194,17 @@ interface Guest {
 
   // Calculate dynamic masters list
   const mastersSet = new Set<string>();
+  
   venueBookings.forEach((b: any) => {
-    if ((b.staff_name || b.staffName)) mastersSet.add((b.staff_name || b.staffName));
+    let sName = b.staff_name || b.staffName;
+    if (b.guest_name && typeof b.guest_name === 'string' && b.guest_name.includes("|||")) {
+       const staffId = b.guest_name.split("|||")[1];
+       const staff = teamData.find((t: any) => String(t.id) === String(staffId));
+       if (staff) sName = staff.name;
+    }
+    if (sName) mastersSet.add(sName);
   });
+
   teamData.forEach((t: any) => {
     if (t.name && t.isActive !== false) mastersSet.add(t.name);
   });
@@ -188,15 +221,20 @@ interface Guest {
       return;
     }
 
+    
+    let foundStaffId = "";
+    const foundStaff = teamData.find((t: any) => t.name === staffName);
+    if (foundStaff) foundStaffId = foundStaff.id;
+
     const bData = {
-      guest_name: customerName,
-      serviceName: service,
-      staffName: staffName,
+      guest_name: customerName + "|||" + foundStaffId,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       date: new Date().toISOString().split('T')[0],
       status: 'pending',
       is_guest: true,
-      business_id: businessId
+      service_id: service,
+      business_id: businessId,
+      client_id: currentUser?.id
     };
     
     try {
