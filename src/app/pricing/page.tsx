@@ -12,9 +12,7 @@ export default function PricingPage() {
       {/* Navigation */}
       <nav className="fixed top-0 inset-x-0 bg-white/80 backdrop-blur-xl z-50 border-b border-[#DCDCDA]">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/">
-            <ElaraLogo />
-          </Link>
+          <ElaraLogo />
           <div className="flex items-center gap-6">
             <Link href="/pricing" className="text-sm font-medium text-[#121415] hover:text-[#8A2532] transition-colors">
               Pricing

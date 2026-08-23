@@ -299,7 +299,7 @@ export default function AccountSettings() {
             <button 
               onClick={handleLogout}
               type="button"
-              className="flex-1 h-12 px-6 bg-white border border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4] rounded-full font-medium text-sm transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+              className="flex-1 h-12 px-6 bg-white border border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4] rounded-full font-medium text-sm transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
             >
               <LogOut className="w-4 h-4 text-[#4A4E51] shrink-0" />
               <span>Log out</span>

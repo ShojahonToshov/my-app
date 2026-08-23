@@ -251,7 +251,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                     className="relative w-11 h-11 shrink-0 flex items-center justify-end group outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full"
                     aria-label={`Go to account — ${name}`}
                   >
-                    <div className="relative flex items-center justify-end w-full h-full transition-transform duration-300 group-hover:-translate-y-0.5">
+                    <div className="relative flex items-center justify-end w-full h-full transition-transform duration-300 group-">
                       
                       {/* Drawer (slides out from underneath to the left) */}
                       <div className="absolute right-4 h-9 bg-white border border-[#DCDCDA] rounded-l-full flex items-center max-w-0 opacity-0 overflow-hidden group-hover:max-w-[200px] group-hover:opacity-100 transition-all duration-500 ease-in-out z-0 shadow-sm pointer-events-none">
@@ -279,7 +279,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               <>
                 <Link
                   href="/login"
-                  className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center"
+                  className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
                 >
                   Log in
                 </Link>
@@ -406,7 +406,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               {/* Saved button */}
               <button
                 onClick={toggleSavedFilter}
-                className={`shrink-0 px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 ${
+                className={`shrink-0 px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2 ${
                   isSavedOnly
                     ? "bg-[#121415] border-[#121415] text-white"
                     : "bg-white border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4]"
@@ -428,7 +428,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                 <button
                   key={filter}
                   onClick={() => setActiveCategory(filter)}
-                  className={`shrink-0 px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center ${
+                  className={`shrink-0 px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center ${
                     activeCategory === filter
                       ? "bg-[#121415] border-[#121415] text-white"
                       : "bg-white border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4]"
@@ -448,7 +448,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               {/* Open Now button */}
               <button
                 onClick={toggleOpenNow}
-                className={`shrink-0 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 ${
+                className={`shrink-0 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2 ${
                   isOpenNowOnly
                     ? "bg-[#121415] border-[#121415] text-white"
                     : "bg-white border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4]"
@@ -462,7 +462,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               <div className="relative" ref={sortRef}>
                 <button
                   onClick={() => setSortOpen(!sortOpen)}
-                  className="shrink-0 px-4 sm:px-5 py-2.5 bg-white hover:bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA] rounded-full text-sm font-medium transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2"
+                  className="shrink-0 px-4 sm:px-5 py-2.5 bg-white hover:bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA] rounded-full text-sm font-medium transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2"
                 >
                   <SlidersHorizontal className="w-4 h-4 text-[#8A2532]" />
                   <span className="hidden sm:inline">
@@ -672,7 +672,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
             {/* Load More */}
             {filtered.length > 0 && (
               <div className="mb-16 flex justify-center">
-                <button className="px-8 py-3.5 bg-white border border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4] rounded-full text-sm font-medium transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center">
+                <button className="px-8 py-3.5 bg-white border border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4] rounded-full text-sm font-medium transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center">
                   Load more venues
                 </button>
               </div>
@@ -698,7 +698,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                     key={i}
                     onPointerDown={(e) => e.stopPropagation()}
                     onClick={(e) => { e.stopPropagation(); action(); }}
-                    className="w-10 h-10 bg-white/90 backdrop-blur-md rounded-xl border border-[#DCDCDA] flex items-center justify-center text-[#121415] hover:text-[#8A2532] hover:bg-[#F5F5F4] transition-colors duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                    className="w-10 h-10 bg-white/90 backdrop-blur-md rounded-xl border border-[#DCDCDA] flex items-center justify-center text-[#121415] hover:text-[#8A2532] hover:bg-[#F5F5F4] transition-colors duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
                   >
                     <Icon className="w-5 h-5" />
                   </button>
@@ -751,7 +751,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                   <button
                     key={i}
                     onPointerDown={(e) => e.stopPropagation()}
-                    className="absolute flex flex-col items-center cursor-pointer transition-transform duration-300 ease-out z-10 hover:z-20 hover:scale-110 hover:-translate-y-1 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 rounded-full"
+                    className="absolute flex flex-col items-center cursor-pointer transition-transform duration-300 ease-out z-10 hover:z-20 hover:scale-110 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 rounded-full"
                     style={{ top, left, transform: "translate(-50%, -100%)" }}
                   >
                     <div className={`px-4 py-2.5 rounded-full font-semibold text-sm flex items-center gap-1.5 shadow-md ${active ? "bg-[#121415] text-white" : "bg-white text-[#121415] border border-[#DCDCDA] shadow-sm"}`}>

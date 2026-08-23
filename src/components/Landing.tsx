@@ -156,7 +156,7 @@ export default function Landing() {
               {mounted && isAuthenticated ? (
                 <Link
                   href={accountLink}
-                  className="px-5 py-2.5 text-sm font-medium text-white bg-[#121415] hover:bg-[#1E2123] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center"
+                  className="px-5 py-2.5 text-sm font-medium text-white bg-[#121415] hover:bg-[#1E2123] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
                 >
                   My Account
                 </Link>
@@ -164,7 +164,7 @@ export default function Landing() {
                 <>
                   <Link
                     href="/login"
-                    className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center"
+                    className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
                   >
                     Log in
                   </Link>
@@ -172,7 +172,7 @@ export default function Landing() {
                     onClick={() => setSignupModalOpen(true)}
                     variant="secondary" 
                     size="sm" 
-                    className="px-5 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                    className="px-5 shadow-sm hover:shadow-md"
                   >
                     Sign up
                   </Button>
@@ -298,7 +298,7 @@ export default function Landing() {
                 onClick={(e) => scrollToSection(e, "features")}
                 className="w-full sm:w-auto outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full"
               >
-                <button className="w-full sm:w-auto px-8 py-3.5 bg-white border border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4] rounded-full text-base font-medium transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center">
+                <button className="w-full sm:w-auto px-8 py-3.5 bg-white border border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4] rounded-full text-base font-medium transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center">
                   Explore features
                 </button>
               </Link>
@@ -347,7 +347,7 @@ export default function Landing() {
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="flex-1 w-full flex justify-center lg:justify-end"
             >
-              <div className="bg-white rounded-[2.5rem] w-full max-w-[360px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-[#DCDCDA] flex flex-col overflow-hidden relative group hover:-translate-y-2 transition-transform duration-500">
+              <div className="bg-white rounded-[2.5rem] w-full max-w-[360px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-[#DCDCDA] flex flex-col overflow-hidden relative group transition-transform duration-500">
                 {/* Header Map Area */}
                 <div className="h-32 bg-[#E5E9EA] relative overflow-hidden flex items-center justify-center border-b border-[#DCDCDA]">
                    <div className="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
@@ -480,7 +480,7 @@ export default function Landing() {
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="flex-1 w-full"
             >
-              <div className="bg-white rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-[#DCDCDA] p-3 md:p-4 overflow-hidden group hover:-translate-y-2 transition-transform duration-500">
+              <div className="bg-white rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-[#DCDCDA] p-3 md:p-4 overflow-hidden group transition-transform duration-500">
                 <div className="bg-[#F5F5F4] rounded-[1.5rem] w-full h-[480px] border border-[#DCDCDA]/60 flex flex-col overflow-hidden relative">
                   
                   {/* Header */}
@@ -722,7 +722,7 @@ export default function Landing() {
                   instantly.
                 </p>
 
-                <div className="absolute right-[-10%] bottom-[-20%] w-3/4 h-64 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl shadow-lg p-6 group-hover:-translate-y-2 transition-transform duration-500 hidden md:block">
+                <div className="absolute right-[-10%] bottom-[-20%] w-3/4 h-64 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl shadow-lg p-6 group- transition-transform duration-500 hidden md:block">
                   <div className="h-4 w-1/3 bg-[#DCDCDA] rounded-full mb-6" />
                   <div className="space-y-4">
                     {[1, 2, 3].map((i) => (

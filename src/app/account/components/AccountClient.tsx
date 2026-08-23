@@ -62,7 +62,7 @@ export function KarmaTooltip({ karma }: { karma: number }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="relative inline-block">
-      <button type="button" onClick={() => setIsOpen(!isOpen)} onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)} className="group bg-[#F5F5F4] px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-[#DCDCDA] shadow-sm shrink-0 h-8 cursor-pointer hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+      <button type="button" onClick={() => setIsOpen(!isOpen)} onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)} className="group bg-[#F5F5F4] px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-[#DCDCDA] shadow-sm shrink-0 h-8 cursor-pointer hover:bg-white hover:shadow-md transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
         <Star className="w-3.5 h-3.5 fill-[#8A2532] text-[#8A2532] shrink-0 group-hover:rotate-[72deg] group-hover:scale-110 transition-transform duration-500" />
         <span className="text-xs uppercase tracking-widest font-bold text-[#121415] whitespace-nowrap">Karma: {karma}%</span>
       </button>
@@ -105,7 +105,7 @@ export function AccountTabs({ upcomingCount }: { upcomingCount: number }) {
           <button
             key={tab.id}
             onClick={() => handleTabChange(tab.id)}
-            className={`shrink-0 h-11 px-5 rounded-full text-sm font-medium transition-all duration-300 border active:scale-95 flex items-center gap-2 whitespace-nowrap min-w-[100px] justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 ${
+            className={`shrink-0 h-11 px-5 rounded-full text-sm font-medium transition-all duration-300 border active:scale-95 flex items-center gap-2 whitespace-nowrap min-w-[100px] justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 shadow-sm hover:shadow-md ${
               activeTab === tab.id ? "bg-[#121415] text-white border-[#121415]" : "bg-white text-[#121415] border-[#DCDCDA] hover:bg-[#F5F5F4]"
             }`}
           >
@@ -132,11 +132,11 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
   return (
     <>
       <div className="flex gap-4 sm:w-1/2">
-        <button onClick={() => setRescheduleModalOpen(true)} className="flex-1 h-12 px-4 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm hover:bg-[#F5F5F4] rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+        <button onClick={() => setRescheduleModalOpen(true)} className="flex-1 h-12 px-4 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm hover:bg-[#F5F5F4] rounded-full transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
           <RefreshCw className="w-4 h-4 text-[#4A4E51] shrink-0" />
           <span>Reschedule</span>
         </button>
-        <button onClick={() => setCancelModalOpen(true)} className="w-12 h-12 shrink-0 bg-white border border-[#DCDCDA] text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5 hover:border-[#DC2626]/30 rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]">
+        <button onClick={() => setCancelModalOpen(true)} className="w-12 h-12 shrink-0 bg-white border border-[#DCDCDA] text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5 hover:border-[#DC2626]/30 rounded-full transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]">
           <X className="w-5 h-5 shrink-0" />
         </button>
       </div>
@@ -155,7 +155,7 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
                 <span className="text-xs text-[#4A4E51] uppercase tracking-widest font-bold block">Available: Tomorrow, 14:00, 16:30</span>
               </button>
               <div className="flex flex-col sm:flex-row gap-3 w-full">
-                <button onClick={() => setRescheduleModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Cancel</span></button>
+                <button onClick={() => setRescheduleModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Cancel</span></button>
                 <button onClick={() => setRescheduleModalOpen(false)} className="flex-1 h-12 px-6 bg-[#121415] text-white rounded-full font-medium text-sm hover:bg-[#1E2123] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Confirm</span></button>
               </div>
             </motion.div>
@@ -173,7 +173,7 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
               <h2 className="text-2xl font-semibold text-[#121415] mb-3 tracking-tight break-words">Cancel Booking</h2>
               <p className="text-sm text-[#4A4E51] font-medium mb-8 leading-relaxed break-words">Are you sure you want to cancel? This may affect your Karma score.</p>
               <div className="flex flex-col sm:flex-row gap-3 w-full">
-                <button onClick={() => setCancelModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Keep it</span></button>
+                <button onClick={() => setCancelModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Keep it</span></button>
                 <button disabled={isCancelling} onClick={async () => { setIsCancelling(true); const supabase = createClient(); const { error } = await supabase.from('bookings').update({ status: 'cancelled' }).eq('id', bookingId); if (error) { toast.error('Failed to cancel booking'); } else { toast.success('Booking cancelled'); setCancelModalOpen(false); router.refresh(); } setIsCancelling(false); }} className="flex-1 h-12 px-6 bg-[#DC2626] text-white rounded-full font-medium text-sm hover:bg-[#B91C1C] shadow-[0_8px_20px_rgba(220,38,38,0.2)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50"> {isCancelling ? <Loader2 className="w-5 h-5 animate-spin shrink-0" /> : <span className="truncate block">Cancel Booking</span>} </button>
               </div>
             </motion.div>
@@ -215,7 +215,7 @@ export function ReviewAction({ venueName, bookingId }: { venueName: string, book
               </div>
               <textarea value={reviewText} onChange={(e) => setReviewText(e.target.value)} placeholder="What did you love? (optional)" className="w-full h-32 max-h-64 p-4 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl text-sm font-medium outline-none focus:bg-white focus:border-[#121415] focus:ring-4 focus:ring-[#121415]/5 resize-y mb-8 transition-all duration-300 text-[#121415] placeholder:text-[#4A4E51]" />
               <div className="flex flex-col sm:flex-row gap-3 w-full">
-                <button disabled={isReviewSubmitting} onClick={() => setReviewModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Cancel</span></button>
+                <button disabled={isReviewSubmitting} onClick={() => setReviewModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Cancel</span></button>
                 <button disabled={isReviewSubmitting} onClick={async () => { if (rating === 0) { toast.error('Please select a rating'); return; } setIsReviewSubmitting(true); const supabase = createClient(); const { error } = await supabase.from('bookings').update({ rating, reviewText }).eq('id', bookingId); if (error) { toast.error('Failed to submit review'); } else { toast.success('Review submitted successfully'); setReviewModalOpen(false); router.refresh(); } setIsReviewSubmitting(false); }} className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-full font-medium text-sm hover:bg-[#731E29] shadow-[0_8px_20px_rgba(138,37,50,0.2)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50">
                   {isReviewSubmitting ? <Loader2 className="w-5 h-5 animate-spin shrink-0" /> : <span className="truncate block">Submit Review</span>}
                 </button>

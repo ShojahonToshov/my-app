@@ -779,7 +779,7 @@ export default function CustomerBooking() {
                   type="button"
                   onClick={handleConfirm}
                   disabled={!isStep5Unlocked || isSubmitting}
-                  className="w-full py-4 rounded-full font-medium text-sm transition-all flex items-center justify-center gap-2 bg-[#8A2532] hover:bg-[#731E29] text-white shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:shadow-[0_12px_24px_rgba(138,37,50,0.3)] hover:-translate-y-0.5 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full py-4 rounded-full font-medium text-sm transition-all flex items-center justify-center gap-2 bg-[#8A2532] hover:bg-[#731E29] text-white shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:shadow-[0_12px_24px_rgba(138,37,50,0.3)] active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? "Confirming..." : "Confirm Booking"}
                 </button>
@@ -952,7 +952,7 @@ export default function CustomerBooking() {
                   </p>
                   <button 
                     onClick={() => toast.info("Customer reviews will be available soon.")}
-                    className="mt-4 px-6 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                    className="mt-4 px-6 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md"
                   >
                     Read all reviews
                   </button>

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { toast } from "sonner";
 import { createClient } from "@/utils/supabase/client";
 import {
@@ -178,7 +179,29 @@ export default function DashboardSettings() {
             
             <div className="bg-white rounded-3xl shadow-sm border border-[#DCDCDA] flex flex-col animate-in fade-in duration-300">
               
-              {/* 1. Business Security Info */}
+              {/* 1. Subscription & Plan */}
+              <div className="p-6 sm:p-8 border-b border-[#DCDCDA] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">Current Plan</h3>
+                  <p className="text-sm text-[#4A4E51] font-medium">Manage your subscription and upgrade options.</p>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                  <div className="flex items-center gap-3 p-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl">
+                    <div className="w-10 h-10 bg-[#E5E9EA] border border-[#DCDCDA] rounded-lg flex items-center justify-center text-[#121415] shrink-0 shadow-sm">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <div className="flex flex-col pr-4">
+                      <span className="text-sm font-semibold text-[#121415] tracking-tight">Free Plan</span>
+                      <span className="text-[10px] text-[#8A2532] font-bold mt-0.5 uppercase">Basic Features</span>
+                    </div>
+                  </div>
+                  <Link href="/pricing" className="px-5 py-2.5 bg-[#8A2532] text-white font-semibold text-sm rounded-xl hover:bg-[#6b1c26] transition-colors shadow-sm active:scale-95 shrink-0 inline-flex items-center justify-center">
+                    Upgrade Plan
+                  </Link>
+                </div>
+              </div>
+
+              {/* 2. Business Security Info */}
               <div className="p-6 sm:p-8 border-b border-[#DCDCDA]">
                 <div className="mb-6">
                   <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Business Security Info</h2>

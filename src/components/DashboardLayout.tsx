@@ -163,6 +163,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Settings className="w-5 h-5 shrink-0" />
             <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Settings</span>
           </Link>
+          <Link
+            href="/dashboard/proverka"
+            title="Proverka"
+            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/proverka') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
+          >
+            <CheckCircle2 className="w-5 h-5 shrink-0" />
+            <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Proverka</span>
+          </Link>
         </nav>
 
         {/* BOTTOM USER & NOTIFICATIONS SECTION */}
@@ -373,6 +381,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </Link>
             <Link href="/dashboard/settings" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/settings') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
               <Settings className="w-5 h-5" /> Settings
+            </Link>
+            <Link href="/dashboard/proverka" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/proverka') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
+              <CheckCircle2 className="w-5 h-5" /> Proverka
             </Link>
           </nav>
           <div className="p-4 border-t border-[#DCDCDA] flex flex-col gap-2">

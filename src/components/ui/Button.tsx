@@ -26,13 +26,13 @@ export function Button({
 
   const variants = {
     primary:
-      "bg-brand hover:bg-brand-hover text-white border border-transparent shadow-[0_8px_20px] shadow-brand/20 hover:shadow-[0_12px_24px] hover:shadow-brand/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm",
+      "bg-brand hover:bg-brand-hover text-white border border-transparent shadow-[0_8px_20px] shadow-brand/20 hover:shadow-[0_12px_24px] hover:shadow-brand/30 active:translate-y-0 active:shadow-sm",
     secondary:
-      "bg-slate-dark hover:bg-slate-dark-hover text-white border border-transparent shadow-[0_8px_20px] shadow-black/8 hover:shadow-[0_12px_24px] hover:shadow-black/15 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm",
+      "bg-slate-dark hover:bg-slate-dark-hover text-white border border-transparent shadow-[0_8px_20px] shadow-black/8 hover:shadow-[0_12px_24px] hover:shadow-black/15 active:translate-y-0 active:shadow-sm",
     danger:
-      "bg-bg-light border border-border text-danger hover:bg-danger hover:text-white hover:border-transparent hover:shadow-[0_12px_24px] hover:shadow-danger/20 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm",
+      "bg-bg-light border border-border text-danger hover:bg-danger hover:text-white hover:border-transparent hover:shadow-[0_12px_24px] hover:shadow-danger/20 active:translate-y-0 active:shadow-sm",
     outline:
-      "bg-white hover:bg-bg-light text-slate-dark border border-border hover:border-slate-dark shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm",
+      "bg-white hover:bg-bg-light text-slate-dark border border-border hover:border-slate-dark shadow-sm hover:shadow-md active:translate-y-0 active:shadow-sm",
     ghost:
       "bg-transparent text-slate-text hover:text-slate-dark hover:bg-bg-light shadow-none hover:shadow-none",
   };

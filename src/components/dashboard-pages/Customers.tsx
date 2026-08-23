@@ -156,7 +156,7 @@ export default function Customers() {
             <button type="button" className="hidden sm:flex p-2.5 bg-white border border-[#DCDCDA] text-[#4A4E51] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 shadow-sm">
               <Download className="w-5 h-5" />
             </button>
-            <button type="button" onClick={() => setModal(true)} className="bg-[#121415] text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
+            <button type="button" onClick={() => setModal(true)} className="bg-[#121415] text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
               <Plus className="w-4 h-4" /> <span className="hidden sm:inline">Add Customer</span>
             </button>
           </div>
