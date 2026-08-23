@@ -114,7 +114,9 @@ export default function Footer() {
           </Link>
         </div>
       </div>
-      <SignupRoleModal isOpen={signupModalOpen} onClose={() => setSignupModalOpen(false)} />
+      <React.Suspense fallback={null}>
+        <SignupRoleModal isOpen={signupModalOpen} onClose={() => setSignupModalOpen(false)} />
+      </React.Suspense>
     </footer>
   );
 }
