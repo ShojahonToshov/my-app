@@ -147,7 +147,7 @@ export default function CustomerBooking() {
         if (!targetVenueId) {
           const { data: { user } } = await supabase.auth.getUser();
           if (user) {
-            const { data: myBusiness } = await supabase.from('businesses').select('*').eq('owner_id', user.id).single();
+            const { data: myBusiness } = await supabase.from('businesses').select('*').eq('owner_id', user.id).maybeSingle();
             if (myBusiness) targetVenueId = myBusiness.id;
           }
           if (!targetVenueId) {
@@ -155,7 +155,7 @@ export default function CustomerBooking() {
             return;
           }
         }
-        const { data: business } = await supabase.from('businesses').select('*').eq('id', targetVenueId).single();
+        const { data: business } = await supabase.from('businesses').select('*').eq('id', targetVenueId).maybeSingle();
           if (business) {
             let actualServices = null;
             let actualMasters = null;
@@ -355,15 +355,25 @@ export default function CustomerBooking() {
       const { data: { user: currentUser } } = await supabase.auth.getUser();
 
             
+      const chosenStaff = venueData.staff?.find((s: any) => s.id === selectedMaster);
+      const chosenService = venueData.services?.find((s: any) => s.id === selectedService);
+      const finalGuestName = currentUser 
+        ? (currentUser.user_metadata?.full_name || currentUser.email || customerName || "Customer") 
+        : (customerName || "Guest");
+            
       const bookingData = {
         client_id: currentUser?.id || null,
         business_id: (venueData as any).id || venueId || "11111111-1111-1111-1111-111111111111",
         service_id: selectedService || undefined,
+        service_name: chosenService?.name || "Service",
+        staff_id: selectedMaster || null,
+        staff_name: chosenStaff?.name || "Any available",
         date: selectedDate,
         time: selectedTime || undefined,
-        guest_name: (currentUser ? (currentUser.user_metadata?.full_name || currentUser.email || customerName || "") : customerName) + "|||" + (selectedMaster || ""),
+        guest_name: finalGuestName,
         guest_phone: currentUser ? (currentUser.phone || customerPhone || "") : customerPhone,
         is_guest: !currentUser,
+        delay_minutes: 0,
         status: "pending" as const
       };
 

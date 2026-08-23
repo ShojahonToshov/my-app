@@ -72,7 +72,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
   if (authUser?.id) {
     const { data: rawBookings } = await supabase
       .from("bookings")
-      .select("*, businesses(name)")
+      .select("*, businesses(name, team_data)")
       .eq("client_id", authUser.id)
       .eq("is_guest", false)
       .order("date", { ascending: true })
@@ -81,27 +81,38 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
     if (rawBookings) {
       const isUpcoming = (status: string) => !["completed", "cancelled", "done"].includes(status);
 
-      upcomingBookings = rawBookings.filter((b) => isUpcoming(b.status)).map((b) => ({
-        id: b.id,
-        date: b.date,
-        time: b.time,
-        venueName: b.businesses?.name || "Unknown Venue",
-        serviceName: b.services?.name || "Unknown Service",
-        staffName: "Any available",
-        status: b.status,
-      }));
+      const mapBooking = (b: any) => {
+        let staffName = b.staff_name || b.staffName || null;
+        let guestNameRaw = b.guest_name || b.customerName || "Guest";
+        let actualStaffId = b.staff_id || "";
+        
+        if (typeof guestNameRaw === 'string' && guestNameRaw.includes("|||")) {
+          const parts = guestNameRaw.split("|||");
+          guestNameRaw = parts[0];
+          if (!actualStaffId) actualStaffId = parts[1];
+        }
+        
+        if (!staffName && actualStaffId && b.businesses?.team_data) {
+          const staff = b.businesses.team_data.find((t: any) => String(t.id) === String(actualStaffId));
+          if (staff) staffName = staff.name;
+        }
 
-      historyList = rawBookings.filter((b) => !isUpcoming(b.status)).map((b) => ({
-        id: b.id,
-        date: b.date,
-        time: b.time,
-        serviceName: b.services?.name || "Unknown Service",
-        venueName: b.businesses?.name || "Unknown Venue",
-        venueId: b.business_id,
-        staffName: "Any available",
-        isReviewed: b.rating !== null && b.rating > 0,
-        rating: b.rating || 0,
-      }));
+        return {
+          id: b.id,
+          date: b.date,
+          time: b.time,
+          venueName: b.businesses?.name || "Unknown Venue",
+          serviceName: b.service_name || b.service_id || "Unknown Service",
+          staffName: staffName || "Any available",
+          status: b.status,
+          venueId: b.business_id,
+          isReviewed: b.rating !== null && b.rating > 0,
+          rating: b.rating || 0,
+        };
+      };
+
+      upcomingBookings = rawBookings.filter((b) => isUpcoming(b.status)).map(mapBooking);
+      historyList = rawBookings.filter((b) => !isUpcoming(b.status)).map(mapBooking);
     }
   }
 

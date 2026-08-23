@@ -148,12 +148,28 @@ export default function LiveTicket() {
       try {
         const data = await bookingService.getBookingById(id);
         if (data) {
+          const delayMinutes = (data as any).delay_minutes || (data as any).delayMinutes || 0;
+          let formattedTime = (data as any).time || "";
+          if (delayMinutes > 0 && formattedTime) {
+            const parts = formattedTime.split(':');
+            if (parts.length === 2) {
+              const h = parseInt(parts[0], 10);
+              const m = parseInt(parts[1], 10);
+              if (!isNaN(h) && !isNaN(m)) {
+                const total = h * 60 + m + delayMinutes;
+                const newH = Math.floor(total / 60) % 24;
+                const newM = total % 60;
+                formattedTime = `${newH.toString().padStart(2, '0')}:${newM.toString().padStart(2, '0')}`;
+              }
+            }
+          }
+
           setBookingData({
             venueName: (data as any).businesses?.name || "Unknown Venue",
-            serviceName: (data as any).services?.name || "Unknown Service",
-            staffName: (data as any).staffName || "Any available",
+            serviceName: (data as any).service_name || (data as any).services?.name || "Unknown Service",
+            staffName: (data as any).staff_name || (data as any).staffName || "Any available",
             date: (data as any).date || "",
-            time: (data as any).time || "",
+            time: formattedTime,
             status: (data as any).status || "pending",
           });
         }

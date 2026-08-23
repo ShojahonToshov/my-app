@@ -1,20 +1,21 @@
 export const queryKeys = {
   venues: {
-    all: ['venues'],
-    detail: (id: string) => ['venues', id],
+    all: ['venues'] as const,
+    detail: (id: string) => ['venues', id] as const,
   },
   bookings: {
-    all: ['bookings'],
-    detail: (id: string) => ['bookings', id],
-    byVenue: (venueId: string) => ['bookings', { venueId }],
-    byUser: (userId: string) => ['bookings', { userId }],
+    all: ['bookings'] as const,
+    detail: (id: string) => ['bookings', id] as const,
+    byVenue: (venueId: string) => ['bookings', { venueId }] as const,
+    byUser: (userId: string) => ['bookings', { userId }] as const,
+    admin: (businessId: string | null | undefined) => ['adminBookings', businessId] as const,
   },
   customers: {
-    all: ['customers'],
-    detail: (id: string) => ['customers', id],
+    all: ['customers'] as const,
+    detail: (id: string) => ['customers', id] as const,
   },
   users: {
-    all: ['users'],
-    detail: (id: string) => ['users', id],
+    all: ['users'] as const,
+    detail: (id: string) => ['users', id] as const,
   }
 };

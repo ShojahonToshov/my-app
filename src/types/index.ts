@@ -14,27 +14,47 @@ export type Business = z.infer<typeof BusinessSchema>;
 
 export const ServiceSchema = z.object({
   id: z.string(),
-  businessId: z.string(),
+  businessId: z.string().nullish(),
   name: z.string(),
-  durationMinutes: z.number(),
-  price: z.number(),
+  durationMinutes: z.number().nullish(),
+  price: z.union([z.number(), z.string()]).nullish(),
   description: z.string().nullish(),
 }).passthrough();
 export type Service = z.infer<typeof ServiceSchema>;
 
 export const BookingSchema = z.object({
   id: z.string(),
-  serviceId: z.string().nullish(), // Make some relations optional if mock data is weird
+  businessId: z.string().nullish(),
+  business_id: z.string().nullish(),
+  serviceId: z.string().nullish(),
+  service_id: z.string().nullish(),
+  serviceName: z.string().nullish(),
+  service_name: z.string().nullish(),
   customerId: z.string().nullish(),
+  clientId: z.string().nullish(),
+  client_id: z.string().nullish(),
+  staffId: z.string().nullish(),
+  staff_id: z.string().nullish(),
+  staffName: z.string().nullish(),
+  staff_name: z.string().nullish(),
   startTime: z.string().nullish(),
   endTime: z.string().nullish(),
   time: z.string().nullish(),
   date: z.string().nullish(),
+  delayMinutes: z.number().nullish(),
+  delay_minutes: z.number().nullish(),
+  queueOrder: z.number().nullish(),
+  queue_order: z.number().nullish(),
   isGuest: z.boolean().nullish(),
+  is_guest: z.boolean().nullish(),
   isGuestCheckout: z.boolean().nullish(),
   guestName: z.string().nullish(),
+  guest_name: z.string().nullish(),
   guestPhone: z.string().nullish(),
-  status: z.enum(["pending", "confirmed", "cancelled", "completed", "in_progress", "done"]).catch("pending"), // Caught some weird statuses in useLiveTicket
+  guest_phone: z.string().nullish(),
+  rating: z.number().nullish(),
+  reviewText: z.string().nullish(),
+  status: z.enum(["pending", "confirmed", "cancelled", "completed", "in_progress", "done", "waiting", "upcoming"]).catch("pending"),
 }).passthrough();
 export type Booking = z.infer<typeof BookingSchema>;
 
@@ -49,10 +69,12 @@ export type LiveTicket = z.infer<typeof LiveTicketSchema>;
 
 export const StaffSchema = z.object({
   id: z.string(),
-  businessId: z.string(),
+  businessId: z.string().nullish(),
   name: z.string(),
   avatarUrl: z.string().nullish(),
   role: z.string().nullish(),
+  initials: z.string().nullish(),
+  isActive: z.boolean().nullish(),
 }).passthrough();
 export type Staff = z.infer<typeof StaffSchema>;
 
@@ -68,19 +90,19 @@ export const WorkingHoursSchema = z.object({
 export type WorkingHours = z.infer<typeof WorkingHoursSchema>;
 
 export interface Customer {
-  id: string;
+  id: string | number;
   name: string;
   phone: string;
   visits: number;
   lastVisit: string;
-  totalSpent: string;
+  totalSpent?: string;
   status: "active" | "inactive" | "new" | "regular";
   color?: string;
   tag?: string;
 }
 
 export interface CustomerData {
-  id: string;
+  id: string | number;
   name: string;
   phone: string;
   status: string;

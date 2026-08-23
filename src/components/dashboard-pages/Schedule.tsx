@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import {
   format,
@@ -19,16 +19,13 @@ import {
 } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
   Plus,
-  User,
   Trash2,
-  Loader2,
   X,
-  Users,
-  ChevronDown
+  ChevronDown,
+  Clock
 } from "lucide-react";
 
 // --- Built-in ConfirmModal component ---
@@ -64,6 +61,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm,
     </div>
   );
 };
+
 function CalendarPopover({ selectedDate, onSelect }: { selectedDate: Date, onSelect: (date: Date) => void }) {
   const [currentMonth, setCurrentMonth] = useState(startOfMonth(selectedDate));
   
@@ -139,38 +137,118 @@ function CalendarPopover({ selectedDate, onSelect }: { selectedDate: Date, onSel
     </div>
   );
 }
-// -----------------------------------------------------------------
 
-const TIME_OPTIONS = Array.from({ length: 36 }).map((_, i) => {
-  const t = (i + 12) * 30; 
-  return `${Math.floor(t / 60).toString().padStart(2, '0')}:${(t % 60).toString().padStart(2, '0')}`;
-});
+// Periods defined exactly as 1, 2, 3, 4 based on the school timetable photo.
+const PERIODS = [1, 2, 3, 4];
 
 type Appointment = {
   id: string;
   customerName: string;
-  time: string;
+  period: number;
+  date: string; // YYYY-MM-DD
+  timeRange: string;
   service: string;
-  staffId: string;
-  status: "Waiting" | "In Chair";
+  masterName: string;
+  status: "Waiting" | "In Chair" | "Completed";
 };
 
 export default function Schedule() {
   const [currentDate, setCurrentDate] = useState<Date>(startOfToday());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-  const [selectedTime, setSelectedTime] = useState("12:00");
-  const [selectedMaster, setSelectedMaster] = useState("1");
-  const [isTimeDropdownOpen, setIsTimeDropdownOpen] = useState(false);
-  const [isMasterDropdownOpen, setIsMasterDropdownOpen] = useState(false);
+  
+  const [selectedPeriod, setSelectedPeriod] = useState<number>(1);
+  const [selectedDateStr, setSelectedDateStr] = useState(format(startOfToday(), "yyyy-MM-dd"));
+  
+  const [isPeriodDropdownOpen, setIsPeriodDropdownOpen] = useState(false);
+  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
+  
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [appointmentToDelete, setAppointmentToDelete] = useState<string | null>(null);
   const [newCustomerName, setNewClientName] = useState("");
+  
+  // Hardcoded initial data tailored for the timetable layout
   const [appointments, setAppointments] = useState<Appointment[]>([
-    { id: "1", customerName: "Guest", time: "10:00", service: "Men's Haircut", staffId: "1", status: "Waiting" },
-    { id: "2", customerName: "Alexey", time: "11:30", service: "Haircut + Beard", staffId: "2", status: "In Chair" },
-    { id: "3", customerName: "New Customer", time: "14:00", service: "Service", staffId: "4", status: "Waiting" },
+    { 
+      id: "1", 
+      customerName: "Guest", 
+      period: 1, 
+      date: format(startOfToday(), "yyyy-MM-dd"), 
+      timeRange: "08:30 - 09:15",
+      service: "Men's Haircut", 
+      masterName: "Ali Ahmedov", 
+      status: "Waiting" 
+    },
+    { 
+      id: "2", 
+      customerName: "Alexey", 
+      period: 2, 
+      date: format(startOfToday(), "yyyy-MM-dd"), 
+      timeRange: "09:20 - 10:05",
+      service: "Haircut + Beard", 
+      masterName: "Sanjar B.", 
+      status: "In Chair" 
+    },
+    { 
+      id: "3", 
+      customerName: "New Customer", 
+      period: 3, 
+      date: format(addDays(startOfToday(), 1), "yyyy-MM-dd"), 
+      timeRange: "10:10 - 10:55",
+      service: "Service", 
+      masterName: "Denis K.", 
+      status: "Waiting" 
+    },
   ]);
+
+  const calendarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) {
+        setIsCalendarOpen(false);
+      }
+    };
+    if (isCalendarOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isCalendarOpen]);
+
+  const handlePrevWeek = () => setCurrentDate(prev => subDays(prev, 7));
+  const handleNextWeek = () => setCurrentDate(prev => addDays(prev, 7));
+
+  // Compute the 7-day columns for the timetable grid
+  const next7Days = useMemo(() => {
+    return Array.from({ length: 7 }).map((_, i) => {
+      const d = addDays(currentDate, i);
+      return {
+        id: format(d, "yyyy-MM-dd"),
+        day: format(d, "EEE"),
+        dateNum: format(d, "dd"),
+        month: format(d, "MMM")
+      };
+    });
+  }, [currentDate]);
+
+  const DATE_OPTIONS = useMemo(() => {
+    return next7Days.map(d => ({
+        id: d.id,
+        label: `${d.dateNum} ${d.month} (${d.day})`
+    }));
+  }, [next7Days]);
+
+  const getTimeRangeForPeriod = (p: number) => {
+    switch (p) {
+      case 1: return "08:30 - 09:15";
+      case 2: return "09:20 - 10:05";
+      case 3: return "10:10 - 10:55";
+      case 4: return "11:20 - 12:05";
+      default: return "12:00 - 13:00";
+    }
+  };
 
   const handleAddAppointment = (e: React.FormEvent) => {
     e.preventDefault();
@@ -179,9 +257,11 @@ export default function Schedule() {
     const newAppt: Appointment = {
       id: Date.now().toString(),
       customerName: newCustomerName,
-      time: selectedTime,
+      period: selectedPeriod,
+      date: selectedDateStr,
+      timeRange: getTimeRangeForPeriod(selectedPeriod),
       service: "Service", 
-      staffId: selectedMaster,
+      masterName: "Specialist", // minimal logic, hardcoded fallback
       status: "Waiting"
     };
 
@@ -205,52 +285,23 @@ export default function Schedule() {
     }
     setDeleteModalOpen(false);
   };
-  const calendarRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) {
-        setIsCalendarOpen(false);
-      }
-    };
-    if (isCalendarOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isCalendarOpen]);
-
-  const handlePrevDay = () => setCurrentDate(prev => subDays(prev, 1));
-  const handleNextDay = () => setCurrentDate(prev => addDays(prev, 1));
-
-  const currentTimeTop = 270; // 12:15 in pixels from 10:00 (135 mins * 2px)
-  const showTimeLine = true;
-
-  const staff = [
-    { id: "1", name: "Ali Ahmedov", initials: "AA" },
-    { id: "2", name: "Sanjar B.", initials: "SB" },
-    { id: "3", name: "Marat V.", initials: "MV" },
-    { id: "4", name: "Denis K.", initials: "DK" },
-    { id: "5", name: "Timur G.", initials: "TG" },
-  ];
 
   return (
-    <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white">
-      <div className="flex-1 flex flex-col overflow-hidden relative">
+    <div className="flex min-h-full bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white">
+      <div className="flex-1 flex flex-col relative">
         
         {/* HEADER */}
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Schedule</h1>
-            <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Manage appointments and specialists</p>
+            <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Manage appointments up to a week in advance</p>
           </div>
 
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1 bg-[#F5F5F4] p-1.5 rounded-xl border border-[#DCDCDA] relative" ref={calendarRef}>
               <button 
                 type="button" 
-                onClick={handlePrevDay}
+                onClick={handlePrevWeek}
                 className="p-1.5 hover:bg-white rounded-lg transition-colors text-[#4A4E51] hover:text-[#121415] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -260,11 +311,11 @@ export default function Schedule() {
                 onClick={() => setIsCalendarOpen(!isCalendarOpen)}
                 className="px-4 py-1.5 font-medium text-sm text-[#121415] bg-white rounded-lg shadow-sm border border-[#DCDCDA] hover:bg-gray-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
               >
-                {format(currentDate, "dd.MM")} 
+                {format(currentDate, "dd.MM")} - {format(addDays(currentDate, 6), "dd.MM")}
               </button>
               <button 
                 type="button" 
-                onClick={handleNextDay}
+                onClick={handleNextWeek}
                 className="p-1.5 hover:bg-white rounded-lg transition-colors text-[#4A4E51] hover:text-[#121415] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -296,89 +347,100 @@ export default function Schedule() {
           </div>
         </header>
 
-        <main className="flex-1 p-6 md:p-10 overflow-hidden flex flex-col pt-6">
-          <div className="flex-1 bg-white rounded-[2rem] shadow-sm border border-[#DCDCDA] flex flex-col overflow-hidden">
-            
-            {/* Scrollable grid container */}
-            <div className="flex-1 overflow-auto flex flex-col relative scrollbar-hide">
-              
-              {/* MASTER HEADERS (Sticky Top) */}
-              <div className="flex border-b border-[#DCDCDA] bg-white/90 backdrop-blur-md shrink-0 sticky top-0 z-40 min-w-max">
-                <div className="w-16 md:w-20 border-r border-[#DCDCDA] shrink-0 bg-white sticky left-0 z-50"></div>
-                {staff.map((staff) => (
-                  <div key={staff.id} className="min-w-[240px] flex-1 py-4 flex flex-col items-center justify-center border-r border-[#DCDCDA]">
-                    <div className="w-9 h-9 rounded-full bg-[#121415] text-white flex items-center justify-center text-xs font-medium mb-1.5">
-                      {staff.initials}
-                    </div>
-                    <span className="font-semibold text-[#121415] text-sm">{staff.name}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* TIMELINE GRID */}
-              <div className="flex-1 flex relative min-w-max pb-10">
-                
-                {/* Current time red marker */}
-                {showTimeLine && (
-                  <div className="absolute left-16 md:left-20 right-0 z-20 pointer-events-none" style={{ top: `${currentTimeTop}px` }}>
-                    <div className="relative border-t-2 border-[#8A2532] shadow-[0_2px_4px_rgba(138,37,50,0.3)]">
-                      <div className="absolute -left-1.5 -top-1.5 w-3 h-3 bg-[#8A2532] rounded-full"></div>
-                    </div>
-                  </div>
-                )}
-
-                {/* TIME AXIS (Sticky Left) */}
-                <div className="w-16 md:w-20 bg-white/90 border-r border-[#DCDCDA] shrink-0 text-center select-none pt-2 z-30 sticky left-0 backdrop-blur-md shadow-[2px_0_5px_-2px_rgba(0,0,0,0.02)]">
-                  {[...Array(11)].map((_, i) => (
-                    <div key={i} className="h-[120px] flex justify-center text-xs font-medium text-[#8B9194]">
-                      {10 + i}:00
-                    </div>
-                  ))}
-                </div>
-
-                {/* Background grid lines */}
-                <div className="absolute inset-0 left-16 md:left-20 pointer-events-none flex flex-col z-0">
-                  {[...Array(11)].map((_, i) => (
-                    <div key={i} className="h-[120px] border-b border-[#F5F5F4] w-full"></div>
-                  ))}
-                </div>
-
-                {/* MASTER COLUMNS WITH APPOINTMENT CARDS */}
-                
-                {staff.map((staff) => {
-                  const masterAppointments = appointments.filter(a => a.staffId === staff.id);
-                  return (
-                    <div key={staff.id} className="min-w-[240px] flex-1 border-r border-[#DCDCDA] relative group cursor-pointer hover:bg-[#F5F5F4]/50 transition-colors z-10">
-                      {masterAppointments.map((appt) => {
-                        const [hours, minutes] = appt.time.split(':').map(Number);
-                        const topPx = ((hours - 10) * 60 + minutes) * 2;
-                        const isWaiting = appt.status === "Waiting";
+        {/* TIMETABLE CONTENT */}
+        <main className="flex-1 p-6 md:p-10 flex flex-col pt-6">
+          <div className="flex-1 bg-white rounded-[2rem] shadow-sm border border-[#DCDCDA] flex flex-col">
+            <div className="w-full overflow-x-auto flex flex-col relative scrollbar-hide">
+              <table className="w-full text-left border-collapse min-w-[1100px]">
+                <thead>
+                  <tr>
+                    {/* Empty top-left cell */}
+                    <th className="p-4 border-b border-r border-[#DCDCDA] bg-[#F5F5F4] w-12 text-center text-[#4A4E51] font-semibold text-sm sticky top-0 z-30 shadow-[0_1px_0_#DCDCDA]">
+                      #
+                    </th>
+                    {/* Day Columns */}
+                    {next7Days.map(date => (
+                      <th key={date.id} className="p-3 border-b border-r last:border-r-0 border-[#DCDCDA] bg-[#F5F5F4] text-center min-w-[150px] sticky top-0 z-20 shadow-[0_1px_0_#DCDCDA]">
+                        <div className="flex items-baseline justify-center gap-1.5">
+                          <div className="text-sm font-medium text-[#121415] capitalize">{date.day}</div>
+                          <div className="text-xs font-semibold text-[#8B9194]">{date.dateNum} {date.month}</div>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {PERIODS.map(period => (
+                    <tr key={period} className="border-b border-[#DCDCDA] last:border-0 hover:bg-[#F5F5F4]/30 transition-colors group">
+                      {/* Row Label (Period) */}
+                      <td className="p-4 border-r border-[#DCDCDA] bg-[#F5F5F4] text-center font-bold text-[#121415] text-base w-12 sticky left-0 z-10 shadow-[1px_0_0_#DCDCDA]">
+                        {period}
+                      </td>
+                      {/* Cells for each Day */}
+                      {next7Days.map(date => {
+                        const apptsInSlot = appointments.filter(a => a.date === date.id && a.period === period);
                         
                         return (
-                          <div key={appt.id} className={`appointment-card absolute bg-white border rounded-2xl p-3 shadow-sm hover:shadow-md transition-all duration-200 z-20 overflow-hidden flex flex-col group/card ${isWaiting ? 'border-[#DCDCDA] hover:border-[#4A4E51]' : 'border-[#4a6b53]/30 hover:border-[#4a6b53]'}`} 
-                               style={{ top: `${topPx}px`, height: "88px", left: "calc(0% + 6px)", width: "calc(100% - 12px)" }}>
-                            <div className={`absolute top-0 left-0 w-1 h-full rounded-l-2xl ${isWaiting ? (staff.id === '4' ? 'bg-[#121415]' : 'bg-[#8A2532]') : 'bg-[#4a6b53]'}`}></div>
-                            <div className="flex justify-between items-start mb-1 pl-2">
-                              <span className="font-semibold text-[#121415] text-sm truncate pr-4">{appt.customerName}</span>
-                              <span className="text-[10px] font-medium bg-[#F5F5F4] px-1.5 py-0.5 rounded-md text-[#4A4E51] border border-[#DCDCDA]">{appt.time}</span>
-                            </div>
-                            <p className="text-xs text-[#4A4E51] truncate pl-2 mt-0.5">{appt.service}</p>
-                            <div className="mt-auto flex items-center justify-between pl-2">
-                               <span className={`text-[10px] font-medium px-2 py-0.5 rounded-md border ${isWaiting ? 'bg-[#F5F5F4] text-[#4A4E51] border-[#DCDCDA]' : 'bg-[#e8efe9] text-[#4a6b53] border-[#4a6b53]/30'}`}>
-                                 {appt.status}
-                               </span>
-                               <button type="button" onClick={(e) => handleDeleteAppointment(appt.id, e)} className="text-[#8B9194] hover:text-[#dc2626] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] rounded">
-                                 <Trash2 className="w-3.5 h-3.5" />
-                               </button>
-                            </div>
-                          </div>
+                          <td key={date.id} className="p-2 border-r last:border-r-0 border-[#DCDCDA] align-top min-h-[140px] w-[150px] relative group/cell">
+                            {apptsInSlot.length > 0 ? (
+                              apptsInSlot.map(appt => {
+                                const isWaiting = appt.status === "Waiting";
+                                return (
+                                  <div key={appt.id} className="w-full h-full bg-white border border-[#DCDCDA] rounded-xl p-3 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group/card flex flex-col justify-between min-h-[120px]">
+                                    
+                                    {/* Subject / Service */}
+                                    <div className="flex justify-between items-start mb-2">
+                                      <span className="font-semibold text-[#8A2532] text-[13px] leading-tight pr-4">{appt.service}</span>
+                                      <button type="button" onClick={(e) => handleDeleteAppointment(appt.id, e)} className="text-[#8B9194] hover:text-[#dc2626] transition-colors focus-visible:outline-none rounded shrink-0 opacity-0 group-hover/card:opacity-100 absolute top-2 right-2 bg-white/80 p-0.5">
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                    </div>
+                                    
+                                    {/* Teacher / Master */}
+                                    <div className="text-xs font-medium text-[#121415] truncate mb-1">
+                                      {appt.masterName}
+                                    </div>
+
+                                    {/* Time Range */}
+                                    <div className="text-xs font-medium text-[#4A4E51] flex items-center gap-1.5 mb-2">
+                                      <Clock className="w-3 h-3 shrink-0" />
+                                      {appt.timeRange}
+                                    </div>
+                                    
+                                    {/* Room / Client & Status */}
+                                    <div className="mt-auto pt-2 border-t border-[#F5F5F4] flex items-center justify-between">
+                                      <span className="text-xs font-medium text-[#121415] truncate pr-2">
+                                        {appt.customerName}
+                                      </span>
+                                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border shrink-0 ${isWaiting ? 'bg-[#F5F5F4] text-[#4A4E51] border-[#DCDCDA]' : 'bg-[#e8efe9] text-[#4a6b53] border-[#4a6b53]/30'}`}>
+                                        {appt.status}
+                                      </span>
+                                    </div>
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              // Empty state for booking
+                              <div className="w-full h-full min-h-[120px] opacity-0 group-hover/cell:opacity-100 flex items-center justify-center transition-opacity bg-white/50 border border-dashed border-[#DCDCDA] rounded-xl hover:border-[#8A2532] hover:bg-[#8A2532]/5 cursor-pointer"
+                                onClick={() => {
+                                  setSelectedDateStr(date.id);
+                                  setSelectedPeriod(period);
+                                  setIsBookingModalOpen(true);
+                                }}
+                              >
+                                <span className="text-xs font-semibold text-[#8A2532] flex flex-col items-center gap-1.5">
+                                  <Plus className="w-4 h-4" />
+                                  Book Slot
+                                </span>
+                              </div>
+                            )}
+                          </td>
                         );
                       })}
-                    </div>
-                  );
-                })}
-
-              </div>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </main>
@@ -392,89 +454,91 @@ export default function Schedule() {
               <X className="w-4 h-4" />
             </button>
             <div className="p-8 pb-4 shrink-0">
-              <h2 className="text-2xl font-semibold text-[#121415] tracking-tight">Quick Booking</h2>
+              <h2 className="text-2xl font-semibold text-[#121415] tracking-tight">Add Timetable Entry</h2>
+            </div>
+            <form className="px-8 pb-8 space-y-5" onSubmit={handleAddAppointment}>
+              <div>
+                <label className="block text-sm font-medium text-[#121415] mb-2">Client / Status Note</label>
+                <input autoFocus required name="customerName" type="text" value={newCustomerName} onChange={e => setNewClientName(e.target.value)} placeholder="e.g. John Doe" className="w-full px-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                   <label className="block text-sm font-medium text-[#121415] mb-2">Date</label>
+                   <div className="relative">
+                     <button
+                       type="button"
+                       onClick={() => { setIsDateDropdownOpen(!isDateDropdownOpen); setIsPeriodDropdownOpen(false); }}
+                       className={`w-full flex items-center justify-between pl-4 pr-4 py-3 border rounded-xl text-left font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]/10 ${isDateDropdownOpen ? 'bg-white border-[#121415] ring-2 ring-[#121415]/10' : 'bg-[#F5F5F4] border-[#DCDCDA] text-[#121415]'}`}
+                     >
+                       <span className="truncate">{DATE_OPTIONS.find(d => d.id === selectedDateStr)?.label || selectedDateStr}</span>
+                       <ChevronDown className={`w-5 h-5 text-[#8B9194] transition-transform duration-200 shrink-0 ${isDateDropdownOpen ? 'rotate-180' : ''}`} />
+                     </button>
+                     
+                     {isDateDropdownOpen && (
+                       <>
+                         <div className="fixed inset-0 z-40" onClick={() => setIsDateDropdownOpen(false)}></div>
+                         <div className="absolute z-50 w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg py-1 max-h-56 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
+                           {DATE_OPTIONS.map((dateOpt) => (
+                             <button
+                               key={dateOpt.id}
+                               type="button"
+                               onClick={() => {
+                                 setSelectedDateStr(dateOpt.id);
+                                 setIsDateDropdownOpen(false);
+                               }}
+                               className={`w-full text-left px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#F5F5F4] ${selectedDateStr === dateOpt.id ? 'text-[#121415] bg-[#F5F5F4]/50' : 'text-[#4A4E51]'}`}
+                             >
+                               {dateOpt.label}
+                             </button>
+                           ))}
+                         </div>
+                       </>
+                     )}
+                   </div>
+                </div>
+
+                <div>
+                   <label className="block text-sm font-medium text-[#121415] mb-2">Period</label>
+                   <div className="relative">
+                     <button
+                       type="button"
+                       onClick={() => { setIsPeriodDropdownOpen(!isPeriodDropdownOpen); setIsDateDropdownOpen(false); }}
+                       className={`w-full flex items-center justify-between pl-4 pr-4 py-3 border rounded-xl text-left font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]/10 ${isPeriodDropdownOpen ? 'bg-white border-[#121415] ring-2 ring-[#121415]/10' : 'bg-[#F5F5F4] border-[#DCDCDA] text-[#121415]'}`}
+                     >
+                       <span>{selectedPeriod}</span>
+                       <ChevronDown className={`w-5 h-5 text-[#8B9194] transition-transform duration-200 shrink-0 ${isPeriodDropdownOpen ? 'rotate-180' : ''}`} />
+                     </button>
+                     
+                     {isPeriodDropdownOpen && (
+                       <>
+                         <div className="fixed inset-0 z-40" onClick={() => setIsPeriodDropdownOpen(false)}></div>
+                         <div className="absolute z-50 w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg py-1 max-h-56 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
+                           {PERIODS.map((period) => (
+                             <button
+                               key={period}
+                               type="button"
+                               onClick={() => {
+                                 setSelectedPeriod(period);
+                                 setIsPeriodDropdownOpen(false);
+                               }}
+                               className={`w-full text-left px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#F5F5F4] ${selectedPeriod === period ? 'text-[#121415] bg-[#F5F5F4]/50' : 'text-[#4A4E51]'}`}
+                             >
+                               Period {period}
+                             </button>
+                           ))}
+                         </div>
+                       </>
+                     )}
+                   </div>
+                </div>
+              </div>
+              <button type="submit" className="w-full mt-6 py-3 bg-[#121415] text-white rounded-xl font-medium text-sm hover:opacity-90 transition-all flex justify-center items-center shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                Save Entry
+              </button>
+            </form>
           </div>
-          <form className="px-8 pb-8 space-y-6" onSubmit={handleAddAppointment}>
-            <div>
-              <label className="block text-sm font-medium text-[#121415] mb-2">Customer</label>
-              <input autoFocus required name="customerName" type="text" value={newCustomerName} onChange={e => setNewClientName(e.target.value)} placeholder="Customer name" className="w-full px-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                 <label className="block text-sm font-medium text-[#121415] mb-2">Time</label>
-                 <div className="relative">
-                   <button
-                     type="button"
-                     onClick={() => { setIsTimeDropdownOpen(!isTimeDropdownOpen); setIsMasterDropdownOpen(false); }}
-                     className={`w-full flex items-center justify-between pl-4 pr-4 py-3 border rounded-xl text-left font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]/10 ${isTimeDropdownOpen ? 'bg-white border-[#121415] ring-2 ring-[#121415]/10' : 'bg-[#F5F5F4] border-[#DCDCDA] text-[#121415]'}`}
-                   >
-                     <span>{selectedTime}</span>
-                     <ChevronDown className={`w-5 h-5 text-[#8B9194] transition-transform duration-200 ${isTimeDropdownOpen ? 'rotate-180' : ''}`} />
-                   </button>
-                   
-                   {isTimeDropdownOpen && (
-                     <>
-                       <div className="fixed inset-0 z-40" onClick={() => setIsTimeDropdownOpen(false)}></div>
-                       <div className="absolute z-50 w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg py-1 max-h-56 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
-                         {TIME_OPTIONS.map((time) => (
-                           <button
-                             key={time}
-                             type="button"
-                             onClick={() => {
-                               setSelectedTime(time);
-                               setIsTimeDropdownOpen(false);
-                             }}
-                             className={`w-full text-left px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#F5F5F4] ${selectedTime === time ? 'text-[#121415] bg-[#F5F5F4]/50' : 'text-[#4A4E51]'}`}
-                           >
-                             {time}
-                           </button>
-                         ))}
-                       </div>
-                     </>
-                   )}
-                 </div>
-              </div>
-              <div>
-                 <label className="block text-sm font-medium text-[#121415] mb-2">Staff</label>
-                 <div className="relative">
-                   <button
-                     type="button"
-                     onClick={() => { setIsMasterDropdownOpen(!isMasterDropdownOpen); setIsTimeDropdownOpen(false); }}
-                     className={`w-full flex items-center justify-between pl-4 pr-4 py-3 border rounded-xl text-left font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]/10 ${isMasterDropdownOpen ? 'bg-white border-[#121415] ring-2 ring-[#121415]/10' : 'bg-[#F5F5F4] border-[#DCDCDA] text-[#121415]'}`}
-                   >
-                     <span className="truncate">{staff.find(m => m.id === selectedMaster)?.name || 'Select'}</span>
-                     <ChevronDown className={`w-5 h-5 text-[#8B9194] transition-transform duration-200 ${isMasterDropdownOpen ? 'rotate-180' : ''}`} />
-                   </button>
-                   
-                   {isMasterDropdownOpen && (
-                     <>
-                       <div className="fixed inset-0 z-40" onClick={() => setIsMasterDropdownOpen(false)}></div>
-                       <div className="absolute z-50 w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg py-1 max-h-56 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
-                         {staff.map((staff) => (
-                           <button
-                             key={staff.id}
-                             type="button"
-                             onClick={() => {
-                               setSelectedMaster(staff.id);
-                               setIsMasterDropdownOpen(false);
-                             }}
-                             className={`w-full text-left px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#F5F5F4] ${selectedMaster === staff.id ? 'text-[#121415] bg-[#F5F5F4]/50' : 'text-[#4A4E51]'}`}
-                           >
-                             {staff.name}
-                           </button>
-                         ))}
-                       </div>
-                     </>
-                   )}
-                 </div>
-              </div>
-            </div>
-            <button type="submit" className="w-full mt-6 py-3 bg-[#121415] text-white rounded-xl font-medium text-sm hover:opacity-90 transition-all flex justify-center items-center shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-              Save
-            </button>
-          </form>
         </div>
-      </div>
       )}
 
       {/* CONFIRM DELETE MODAL */}
@@ -482,10 +546,10 @@ export default function Schedule() {
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={confirmDelete}
-        title="Cancel Appointment"
-        description="Are you sure you want to cancel this appointment? This action cannot be undone."
-        confirmText="Cancel Appointment"
-        cancelText="Keep it"
+        title="Remove Entry"
+        description="Are you sure you want to remove this timetable entry? This action cannot be undone."
+        confirmText="Remove"
+        cancelText="Cancel"
         isDestructive={true}
       />
     </div>

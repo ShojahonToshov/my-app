@@ -1,9 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import BookingService from "@/services/customer/BookingService";
-import useAuthStore from "@/stores/authStore";
+import { queryKeys } from "@/lib/queryKeys";
+import { Booking } from "@/types";
+import { format } from "date-fns";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import {
   Plus,
@@ -23,6 +25,32 @@ import {
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 
+interface Guest {
+  id: string;
+  name: string;
+  service: string;
+  time: string;
+  oldTime?: string | null;
+  staff: string;
+  staffId?: string | null;
+  delay?: string | null;
+  delayMinutes: number;
+  status: string;
+}
+
+const addMinutesToTimeStr = (timeStr: string, minsToAdd: number): string => {
+  if (!timeStr) return timeStr;
+  const parts = timeStr.split(':');
+  if (parts.length !== 2) return timeStr;
+  const hours = parseInt(parts[0], 10);
+  const minutes = parseInt(parts[1], 10);
+  if (isNaN(hours) || isNaN(minutes)) return timeStr;
+  const totalMins = hours * 60 + minutes + minsToAdd;
+  const newH = Math.floor(totalMins / 60) % 24;
+  const newM = totalMins % 60;
+  return `${newH.toString().padStart(2, '0')}:${newM.toString().padStart(2, '0')}`;
+};
+
 export default function Dashboard() {
   const queryClient = useQueryClient();
   const [isMounted, setIsMounted] = useState(false);
@@ -31,38 +59,7 @@ export default function Dashboard() {
   const [teamData, setTeamData] = useState<any[]>([]);
   const [servicesData, setServicesData] = useState<any[]>([]);
   
-  useEffect(() => {
-    setIsMounted(true);
-    async function loadBusinessId() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      const { data: business } = await supabase.from('businesses').select('id, team_data').eq('owner_id', user.id).single();
-      if (business) {
-        setBusinessId(business.id);
-        if (business.team_data && Array.isArray(business.team_data)) {
-          setTeamData(business.team_data);
-        }
-        const { data: services } = await supabase.from('services').select('*').eq('business_id', business.id);
-        if (services) {
-          setServicesData(services);
-        }
-      }
-    }
-    loadBusinessId();
-  }, []);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-interface Guest {
-  id: string | number;
-  name: string;
-  service?: string;
-  time: string;
-  oldTime?: string | null;
-  staff: string;
-  delay?: string | null;
-}
-
   const [customerName, setClientName] = useState("");
   const [staffName, setStaffName] = useState("Ali Ahmedov");
   const [service, setService] = useState("Haircut");
@@ -70,283 +67,348 @@ interface Guest {
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [isPaused, setIsPaused] = useState(false);
 
-  const [waitingGuests, setWaitingGuests] = useState<Guest[]>([]);
-  const [inChairGuests, setInChairGuests] = useState<Guest[]>([]);
-  const [completedGuests, setCompletedGuests] = useState<Guest[]>([]);
-
-  // Keep a ref of all guests to preserve local state like `delay` and `oldTime` during refetch
-  const allGuestsRef = React.useRef<Map<string | number, Guest>>(new Map());
-
-  // Update ref whenever lists change
   useEffect(() => {
-    const map = new Map<string | number, Guest>();
-    [...waitingGuests, ...inChairGuests, ...completedGuests].forEach(g => {
-      map.set(g.id, g);
-    });
-    allGuestsRef.current = map;
-  }, [waitingGuests, inChairGuests, completedGuests]);
+    setIsMounted(true);
+    async function loadBusinessId() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data: business } = await supabase
+        .from('businesses')
+        .select('id, team_data')
+        .eq('owner_id', user.id)
+        .maybeSingle();
+      if (business) {
+        setBusinessId(business.id);
+        if (business.team_data && Array.isArray(business.team_data)) {
+          setTeamData(business.team_data);
+        }
+        const { data: services } = await supabase
+          .from('services')
+          .select('*')
+          .eq('business_id', business.id);
+        if (services && services.length > 0) {
+          setServicesData(services);
+          setService(services[0].id);
+        }
+      }
+    }
+    loadBusinessId();
+  }, []);
 
-  const { user: currentUser } = useAuthStore();
+  const adminQueryKey = queryKeys.bookings.admin(businessId);
 
+  // TanStack React Query for Live Queue
   const { data: bookings } = useQuery({
-    queryKey: ['adminBookings'],
-    queryFn: () => BookingService.getBookings(),
+    queryKey: adminQueryKey,
+    queryFn: () => BookingService.getBookings(businessId || undefined),
     refetchInterval: 2000,
+    enabled: !!businessId,
   });
 
-  useEffect(() => {
-    if (!bookings) return;
-    
-    const today = new Date().toISOString().split('T')[0];
-    const venueBookings = bookings.filter((b: any) => {
-      if (b.date && b.date !== today) return false;
-      // Filter by current user ID acting as the business owner
-      const ownerId = Array.isArray(b.businesses) ? b.businesses[0]?.owner_id : b.businesses?.owner_id;
-      if (currentUser?.id && ownerId) {
-        return ownerId === currentUser.id;
+  // Mutation: Update status
+  const updateStatusMutation = useMutation({
+    mutationFn: async ({ bookingId, status }: { bookingId: string; status: Booking["status"] }) => {
+      return BookingService.updateBookingStatus(bookingId, status);
+    },
+    onMutate: async ({ bookingId, status }) => {
+      await queryClient.cancelQueries({ queryKey: adminQueryKey });
+      const previousBookings = queryClient.getQueryData<Booking[]>(adminQueryKey);
+      if (previousBookings) {
+        queryClient.setQueryData<Booking[]>(adminQueryKey, old =>
+          (old || []).map(b => (b.id === bookingId ? { ...b, status } : b))
+        );
       }
-      return false;
-    });
+      return { previousBookings };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousBookings) {
+        queryClient.setQueryData(adminQueryKey, context.previousBookings);
+      }
+      toast.error("Failed to update status in DB");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: adminQueryKey });
+    },
+  });
+
+  // Mutation: Add Delay (Persisted in DB)
+  const updateDelayMutation = useMutation({
+    mutationFn: async ({ updates }: { updates: { id: string; delay_minutes: number }[] }) => {
+      return Promise.all(
+        updates.map(u => BookingService.updateBookingDelay(u.id, u.delay_minutes))
+      );
+    },
+    onMutate: async ({ updates }) => {
+      await queryClient.cancelQueries({ queryKey: adminQueryKey });
+      const previousBookings = queryClient.getQueryData<Booking[]>(adminQueryKey);
+      const updateMap = new Map(updates.map(u => [u.id, u.delay_minutes]));
+
+      if (previousBookings) {
+        queryClient.setQueryData<Booking[]>(adminQueryKey, old =>
+          (old || []).map(b => {
+            if (updateMap.has(b.id)) {
+              const d = updateMap.get(b.id)!;
+              return { ...b, delay_minutes: d, delayMinutes: d };
+            }
+            return b;
+          })
+        );
+      }
+      return { previousBookings };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousBookings) {
+        queryClient.setQueryData(adminQueryKey, context.previousBookings);
+      }
+      toast.error("Failed to save delay to database");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: adminQueryKey });
+    },
+  });
+
+  // Mutation: Complete & Call Next
+  const completeAndCallNextMutation = useMutation({
+    mutationFn: async ({ currentId, nextId }: { currentId: string; nextId?: string }) => {
+      return BookingService.completeAndCallNext(currentId, nextId);
+    },
+    onMutate: async ({ currentId, nextId }) => {
+      await queryClient.cancelQueries({ queryKey: adminQueryKey });
+      const previousBookings = queryClient.getQueryData<Booking[]>(adminQueryKey);
+      if (previousBookings) {
+        queryClient.setQueryData<Booking[]>(adminQueryKey, old =>
+          (old || []).map(b => {
+            if (b.id === currentId) return { ...b, status: 'completed' as const };
+            if (nextId && b.id === nextId) {
+              return { ...b, status: 'in_progress' as const, delay_minutes: 0, delayMinutes: 0 };
+            }
+            return b;
+          })
+        );
+      }
+      return { previousBookings };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousBookings) {
+        queryClient.setQueryData(adminQueryKey, context.previousBookings);
+      }
+      toast.error("Failed to complete session");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: adminQueryKey });
+    },
+  });
+
+  // Parse and organize guests from queries data
+  const { waitingGuests, inChairGuests, completedGuests, allVenueBookings } = useMemo(() => {
+    if (!bookings || !businessId) {
+      return { waitingGuests: [], inChairGuests: [], completedGuests: [], allVenueBookings: [] };
+    }
+
+    const venueBookings = bookings.filter((b: any) => b.business_id === businessId && b.status !== "cancelled");
 
     const waiting: Guest[] = [];
     const inChair: Guest[] = [];
     const completed: Guest[] = [];
 
     venueBookings.forEach((b: any) => {
-      if (b.status === "cancelled") return;
-      const existing = allGuestsRef.current.get(b.id);
-      
-    let guestNameRaw = b.guest_name || b.customerName || "Guest";
-    let actualStaffId = "";
-    if (typeof guestNameRaw === 'string' && guestNameRaw.includes("|||")) {
-      const parts = guestNameRaw.split("|||");
-      guestNameRaw = parts[0];
-      actualStaffId = parts[1];
-    }
-    
-    let actualStaffName = "Any available";
-    if (actualStaffId) {
-      const staff = teamData.find((t: any) => String(t.id) === String(actualStaffId));
-      if (staff) actualStaffName = staff.name;
-    } else if (b.staff_name || b.staffName) {
-      actualStaffName = b.staff_name || b.staffName;
-    }
+      let guestNameClean = b.guest_name || b.guestName || b.customerName || "Guest";
+      let actualStaffId = b.staff_id || b.staffId || "";
 
-    let actualServiceName = "Service";
-    if (b.service_id) {
-       const srv = servicesData.find((s: any) => String(s.id) === String(b.service_id));
-       if (srv) actualServiceName = srv.name;
-    } else if (b.service_name || b.serviceName) {
-       actualServiceName = b.service_name || b.serviceName;
-    }
+      // Safe legacy fallback if ||| is in guest_name
+      if (typeof guestNameClean === 'string' && guestNameClean.includes("|||")) {
+        const parts = guestNameClean.split("|||");
+        guestNameClean = parts[0];
+        if (!actualStaffId) actualStaffId = parts[1];
+      }
 
-    const guest: Guest = {
-      id: b.id,
-      name: guestNameRaw,
-      service: actualServiceName,
-      time: b.time || b.startTime || "12:00",
-      oldTime: existing?.oldTime || null,
-      staff: actualStaffName,
-      delay: existing?.delay || null
-    };
-      
-      if (b.status === "in_progress") inChair.push(guest);
-      else if (b.status === "completed" || b.status === "done") completed.push(guest);
-      else waiting.push(guest);
+      let actualStaffName = b.staff_name || b.staffName || "Any available";
+      if (actualStaffName === "Any available" && actualStaffId && teamData.length > 0) {
+        const staffObj = teamData.find((t: any) => String(t.id) === String(actualStaffId));
+        if (staffObj) actualStaffName = staffObj.name;
+      }
+
+      let actualServiceName = b.service_name || b.serviceName || "Service";
+      if (actualServiceName === "Service" && b.service_id && servicesData.length > 0) {
+        const srv = servicesData.find((s: any) => String(s.id) === String(b.service_id));
+        if (srv) actualServiceName = srv.name;
+      }
+
+      const delayMins = Number(b.delay_minutes || b.delayMinutes || 0);
+      const baseTime = b.time || b.startTime || "12:00";
+      const adjustedTime = delayMins > 0 ? addMinutesToTimeStr(baseTime, delayMins) : baseTime;
+
+      const guest: Guest = {
+        id: String(b.id),
+        name: guestNameClean,
+        service: actualServiceName,
+        time: adjustedTime,
+        oldTime: delayMins > 0 ? baseTime : null,
+        staff: actualStaffName,
+        staffId: actualStaffId,
+        delay: delayMins > 0 ? `Delay +${delayMins}m` : null,
+        delayMinutes: delayMins,
+        status: b.status,
+      };
+
+      if (b.status === "in_progress") {
+        inChair.push(guest);
+      } else if (b.status === "completed" || b.status === "done") {
+        completed.push(guest);
+      } else {
+        waiting.push(guest);
+      }
     });
 
-    setWaitingGuests(waiting);
-    setInChairGuests(inChair);
-    setCompletedGuests(completed);
-  }, [bookings, currentUser?.id]);
+    return {
+      waitingGuests: waiting,
+      inChairGuests: inChair,
+      completedGuests: completed,
+      allVenueBookings: venueBookings,
+    };
+  }, [bookings, businessId, teamData, servicesData]);
 
-  // Calculate dynamic KPIs
-  const venueBookings = bookings?.filter((b: any) => {
-    const ownerId = Array.isArray(b.businesses) ? b.businesses[0]?.owner_id : b.businesses?.owner_id;
-    if (currentUser?.id && ownerId) {
-      return ownerId === currentUser.id;
-    }
-    return false;
-  }) || [];
+  // Dynamic masters list for filter
+  const mastersList = useMemo(() => {
+    const set = new Set<string>();
+    allVenueBookings.forEach((b: any) => {
+      let sName = b.staff_name || b.staffName;
+      if (!sName && b.staff_id && teamData.length > 0) {
+        const s = teamData.find((t: any) => String(t.id) === String(b.staff_id));
+        if (s) sName = s.name;
+      }
+      if (sName) set.add(sName);
+    });
 
-  const totalBookings = venueBookings.length;
+    teamData.forEach((t: any) => {
+      if (t.name && t.isActive !== false) set.add(t.name);
+    });
+
+    const list = Array.from(set);
+    return list.length > 0 ? list : ["Any Professional"];
+  }, [allVenueBookings, teamData]);
+
+  // KPI calculations
+  const totalBookings = allVenueBookings.length;
   const inSalonNow = inChairGuests.length;
-  
-  // Calculate top service
-  const serviceCounts: Record<string, number> = {};
-  venueBookings.forEach((b: any) => {
-    const s = b.service_name || b.serviceName || b.service_id;
-    if (s) {
-      serviceCounts[s] = (serviceCounts[s] || 0) + 1;
-    }
-  });
-  let topService = "N/A";
-  let maxCount = 0;
-  for (const [s, count] of Object.entries(serviceCounts)) {
-    if (count > maxCount) {
-      maxCount = count;
-      topService = s;
-    }
-  }
 
-  // Calculate total delay (mock logic for now if delay is null)
-  const totalDelay = venueBookings.reduce((acc: number, b: any) => {
-    const existing = allGuestsRef.current.get(b.id);
-    const delayMatch = existing?.delay?.match(/(\d+)/);
-    if (delayMatch) {
-      return acc + parseInt(delayMatch[1], 10);
+  const topService = useMemo(() => {
+    const serviceCounts: Record<string, number> = {};
+    allVenueBookings.forEach((b: any) => {
+      const s = b.service_name || b.serviceName || b.service_id;
+      if (s) {
+        serviceCounts[s] = (serviceCounts[s] || 0) + 1;
+      }
+    });
+    let top = "N/A";
+    let max = 0;
+    for (const [name, count] of Object.entries(serviceCounts)) {
+      if (count > max) {
+        max = count;
+        top = name;
+      }
     }
-    return acc;
-  }, 0);
+    return top;
+  }, [allVenueBookings]);
 
-  // Calculate dynamic masters list
-  const mastersSet = new Set<string>();
-  
-  venueBookings.forEach((b: any) => {
-    let sName = b.staff_name || b.staffName;
-    if (b.guest_name && typeof b.guest_name === 'string' && b.guest_name.includes("|||")) {
-       const staffId = b.guest_name.split("|||")[1];
-       const staff = teamData.find((t: any) => String(t.id) === String(staffId));
-       if (staff) sName = staff.name;
-    }
-    if (sName) mastersSet.add(sName);
-  });
+  const totalDelay = useMemo(() => {
+    return allVenueBookings.reduce((acc: number, b: any) => {
+      return acc + (Number(b.delay_minutes || b.delayMinutes || 0));
+    }, 0);
+  }, [allVenueBookings]);
 
-  teamData.forEach((t: any) => {
-    if (t.name && t.isActive !== false) mastersSet.add(t.name);
-  });
-  const mastersList = Array.from(mastersSet);
-  if (mastersList.length === 0) {
-    mastersList.push("Any Professional");
-  }
-
+  // Actions
   const handleAddGuest = async () => {
     if (!customerName.trim()) return;
-    
     if (!businessId) {
       toast.error("Business not found. Cannot add guest.");
       return;
     }
 
-    
-    let foundStaffId = "";
     const foundStaff = teamData.find((t: any) => t.name === staffName);
-    if (foundStaff) foundStaffId = foundStaff.id;
+    const chosenService = servicesData.find((s: any) => s.id === service);
 
     const bData = {
-      guest_name: customerName + "|||" + foundStaffId,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      date: new Date().toISOString().split('T')[0],
-      status: 'pending',
-      is_guest: true,
+      guest_name: customerName.trim(),
+      staff_id: foundStaff ? String(foundStaff.id) : null,
+      staff_name: foundStaff ? foundStaff.name : staffName,
       service_id: service,
+      service_name: chosenService ? chosenService.name : "Haircut",
+      time: format(new Date(), "HH:mm"),
+      date: format(new Date(), "yyyy-MM-dd"),
+      status: "pending" as const,
+      is_guest: true,
+      client_id: null,
       business_id: businessId,
-      client_id: currentUser?.id
+      delay_minutes: 0,
+      queue_order: waitingGuests.length,
     };
-    
+
     try {
       await BookingService.createBooking(bData as any);
       toast.success(`${customerName} added to the queue`);
-      queryClient.invalidateQueries({ queryKey: ['adminBookings'] });
+      queryClient.invalidateQueries({ queryKey: adminQueryKey });
     } catch (e) {
       console.error(e);
       toast.error("Failed to add guest to queue");
       return;
     }
-    
+
     setIsModalOpen(false);
     setClientName("");
-    setStaffName("Ali Ahmedov");
-    setService("Haircut");
+    setStaffName(mastersList[0] || "Ali Ahmedov");
+    if (servicesData.length > 0) setService(servicesData[0].id);
   };
 
-  const addMinutesToTime = (timeStr: string, minsToAdd: number) => {
-    if (!timeStr) return timeStr;
-    const parts = timeStr.split(':');
-    if (parts.length !== 2) return timeStr;
-    const hours = parseInt(parts[0], 10);
-    const minutes = parseInt(parts[1], 10);
-    if (isNaN(hours) || isNaN(minutes)) return timeStr;
-    const date = new Date();
-    date.setHours(hours, minutes + minsToAdd, 0, 0);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-  };
-
-  const handleCallIn = async (guestId: string | number) => {
+  const handleCallIn = async (guestId: string) => {
     const guest = waitingGuests.find(g => g.id === guestId);
     if (!guest) return;
-    
-    // Optimistic UI update
-    setWaitingGuests(prev => prev.filter(g => g.id !== guestId));
-    setInChairGuests(prev => [...prev, { ...guest, delay: null }]);
-    
-    try {
-      await BookingService.updateBookingStatus(guestId.toString(), "in_progress");
-      await queryClient.invalidateQueries({ queryKey: ['adminBookings'] });
-      toast.success(`${guest.name} called to chair`);
-    } catch (err) {
-      toast.error("Failed to update status");
-      // Could revert here on failure
-    }
+
+    updateStatusMutation.mutate({ bookingId: guestId, status: "in_progress" });
+    toast.success(`${guest.name} called to chair`);
   };
 
-  const handleComplete = async (guestId: string | number) => {
+  const handleComplete = async (guestId: string) => {
     const guest = inChairGuests.find(g => g.id === guestId);
     if (!guest) return;
+
+    const nextGuest = waitingGuests.find(g => g.staff === guest.staff || (guest.staffId && g.staffId === guest.staffId));
     
-    // Optimistic UI update
-    setInChairGuests(prev => prev.filter(g => g.id !== guestId));
-    setCompletedGuests(prev => [...prev, { ...guest, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) }]);
-    
-    try {
-      await BookingService.updateBookingStatus(guestId.toString(), "completed");
-      toast.success(`Session with ${guest.name} completed`);
-      
-      // Find next waiting guest for this staff and call them in
-      const nextGuest = waitingGuests.find(g => g.staff === guest.staff);
-      if (nextGuest) {
-        setWaitingGuests(prev => prev.filter(g => g.id !== nextGuest.id));
-        setInChairGuests(prev => [...prev, { ...nextGuest, delay: null }]);
-        await BookingService.updateBookingStatus(nextGuest.id.toString(), "in_progress");
-        toast.info(`${nextGuest.name} was automatically called in`);
-      } else {
-        toast.info(`No waiting customers left for ${guest.staff}`);
-      }
-      
-      await queryClient.invalidateQueries({ queryKey: ['adminBookings'] });
-    } catch (err) {
-      toast.error("Failed to complete session");
+    completeAndCallNextMutation.mutate({
+      currentId: guestId,
+      nextId: nextGuest ? nextGuest.id : undefined,
+    });
+
+    toast.success(`Session with ${guest.name} completed`);
+    if (nextGuest) {
+      toast.info(`${nextGuest.name} was automatically called in`);
+    } else {
+      toast.info(`No waiting customers left for ${guest.staff}`);
     }
   };
 
-  const handleAddDelay = (guestId: string | number) => {
+  const handleAddDelay = (guestId: string) => {
     const guestInChair = inChairGuests.find(g => g.id === guestId);
     if (!guestInChair) return;
-    
-    setWaitingGuests(prev => {
-      let updatedCount = 0;
-      const nextList = prev.map(waitingGuest => {
-        if (waitingGuest.staff === guestInChair.staff) {
-          updatedCount++;
-          const currentDelayMatch = waitingGuest.delay ? waitingGuest.delay.match(/\+?(\d+)m/) : null;
-          const currentDelay = currentDelayMatch ? parseInt(currentDelayMatch[1], 10) : 0;
-          return {
-            ...waitingGuest,
-            oldTime: waitingGuest.oldTime || waitingGuest.time,
-            time: addMinutesToTime(waitingGuest.time, 10),
-            delay: `Delay +${currentDelay + 10}m`
-          };
-        }
-        return waitingGuest;
-      });
-      
-      if (updatedCount > 0) {
-        toast.warning(`+10 min delay applied to queue for ${guestInChair.staff}`);
-      } else {
-        toast.info(`No customers waiting for ${guestInChair.staff}`);
-      }
-      return nextList;
-    });
+
+    // Apply +10m to all waiting guests for this staff
+    const staffMatches = waitingGuests.filter(
+      w => w.staff === guestInChair.staff || (guestInChair.staffId && w.staffId === guestInChair.staffId)
+    );
+
+    if (staffMatches.length === 0) {
+      toast.info(`No customers waiting for ${guestInChair.staff}`);
+      return;
+    }
+
+    const updates = staffMatches.map(w => ({
+      id: w.id,
+      delay_minutes: w.delayMinutes + 10,
+    }));
+
+    updateDelayMutation.mutate({ updates });
+    toast.warning(`+10 min delay applied to ${updates.length} customer(s) for ${guestInChair.staff}`);
   };
 
   const onDragEnd = (result: DropResult) => {
@@ -355,76 +417,23 @@ interface Guest {
     if (source.droppableId === destination.droppableId && source.index === destination.index) return;
 
     const allGuests = [...waitingGuests, ...inChairGuests, ...completedGuests];
-    const guestId = draggableId;
-    const guest = allGuests.find(g => String(g.id) === guestId);
+    const guest = allGuests.find(g => g.id === draggableId);
     if (!guest) return;
 
-    // Helper to get setter
-    const getSetter = (id: string) => {
-      if (id === 'waiting') return setWaitingGuests;
-      if (id === 'inChair') return setInChairGuests;
-      return setCompletedGuests;
-    };
+    if (source.droppableId !== destination.droppableId) {
+      let newStatus: Booking["status"] = "pending";
+      if (destination.droppableId === "inChair") newStatus = "in_progress";
+      else if (destination.droppableId === "completed") newStatus = "completed";
+      else newStatus = "pending";
 
-    const sourceSetter = getSetter(source.droppableId);
-    const destSetter = getSetter(destination.droppableId);
+      updateStatusMutation.mutate({ bookingId: guest.id, status: newStatus });
 
-    const updatedGuest = { ...guest };
-    if (destination.droppableId === 'completed' && source.droppableId !== 'completed') {
-      updatedGuest.time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-    }
-    if (destination.droppableId === 'inChair') {
-      updatedGuest.delay = null;
-    }
-
-    if (source.droppableId === destination.droppableId) {
-      // Reorder within same list
-      sourceSetter(prev => {
-        const arr = Array.from(prev);
-        // Find index of actual item in the state array (since visual index might be filtered)
-        const actualSourceIndex = arr.findIndex(g => String(g.id) === guestId);
-        if (actualSourceIndex === -1) return prev;
-        
-        arr.splice(actualSourceIndex, 1);
-        
-        // Find destination index in the unfiltered array
-        // It's safer to just splice it at destination.index. If filtered, it might jump, but it's fine for now.
-        // To be perfect, if selectedFilter !== 'All', we'd need more complex logic. 
-        // For simplicity:
-        arr.splice(destination.index, 0, updatedGuest);
-        return arr;
-      });
-    } else {
-      // Move between lists
-      sourceSetter(prev => prev.filter(g => String(g.id) !== guestId));
-      destSetter(prev => {
-        const arr = Array.from(prev);
-        arr.splice(destination.index, 0, updatedGuest);
-        return arr;
-      });
-
-      // API Call mapping
-      let newStatus: "pending" | "in_progress" | "completed" | null = null;
-      if (destination.droppableId === 'waiting') newStatus = "pending";
-      else if (destination.droppableId === 'inChair') newStatus = "in_progress";
-      else if (destination.droppableId === 'completed') newStatus = "completed";
-
-      if (newStatus) {
-        BookingService.updateBookingStatus(String(guestId), newStatus)
-          .then(() => queryClient.invalidateQueries({ queryKey: ['adminBookings'] }))
-          .catch(() => {
-            toast.error("Failed to update status in DB");
-          });
-      }
-
-      if (destination.droppableId === 'inChair' && source.droppableId === 'waiting') {
-        toast.success(`${updatedGuest.name} moved to chair`);
-      } else if (destination.droppableId === 'completed' && source.droppableId === 'inChair') {
-        toast.success(`Session with ${updatedGuest.name} completed`);
+      if (destination.droppableId === 'inChair') {
+        toast.success(`${guest.name} moved to chair`);
       } else if (destination.droppableId === 'completed') {
-        toast.success(`${updatedGuest.name} moved to completed`);
+        toast.success(`Session with ${guest.name} completed`);
       } else {
-        toast.info(`${updatedGuest.name} status updated`);
+        toast.info(`${guest.name} moved to waiting queue`);
       }
     }
   };
@@ -551,7 +560,7 @@ interface Guest {
                     {...provided.droppableProps}
                   >
                     {filteredWaiting.map((guest, index) => (
-                      <Draggable key={guest.id.toString()} draggableId={guest.id.toString()} index={index}>
+                      <Draggable key={guest.id} draggableId={guest.id} index={index}>
                         {(provided, snapshot) => (
                           <div 
                             ref={provided.innerRef}
@@ -616,7 +625,7 @@ interface Guest {
                     {...provided.droppableProps}
                   >
                     {filteredInChair.map((guest, index) => (
-                      <Draggable key={guest.id.toString()} draggableId={guest.id.toString()} index={index}>
+                      <Draggable key={guest.id} draggableId={guest.id} index={index}>
                         {(provided, snapshot) => (
                           <div 
                             ref={provided.innerRef}
@@ -672,12 +681,12 @@ interface Guest {
               <Droppable droppableId="completed">
                 {(provided) => (
                   <div 
-                    className="space-y-4 pb-4 min-h-[100px]"
+                    className="space-y-4 pb-4 min-h-[100px]" 
                     ref={provided.innerRef} 
                     {...provided.droppableProps}
                   >
                     {filteredCompleted.map((guest, index) => (
-                      <Draggable key={guest.id.toString()} draggableId={guest.id.toString()} index={index}>
+                      <Draggable key={guest.id} draggableId={guest.id} index={index}>
                         {(provided, snapshot) => (
                           <div 
                             ref={provided.innerRef}
@@ -768,7 +777,7 @@ interface Guest {
                     {isDropdownOpen && (
                       <>
                         <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)}></div>
-                        <div className="absolute z-50 w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg py-1 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="absolute z-50 w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg py-1 animate-in fade-in slide-in-from-top-2 duration-200 max-h-48 overflow-y-auto">
                           {mastersList.map((staff) => (
                             <button
                               key={staff}
@@ -789,7 +798,7 @@ interface Guest {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-[#121415] mb-2">Service</label>
-                                    <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-3">
                     {servicesData.length > 0 ? servicesData.map(s => (
                       <button 
                         key={s.id}
@@ -808,9 +817,7 @@ interface Guest {
               </div>
               <div className="flex gap-3 mt-8 pt-6 border-t border-[#DCDCDA] pb-2">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3 bg-white hover:bg-[#F5F5F4] border border-[#DCDCDA] text-[#121415] rounded-xl font-medium text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Cancel</button>
-                <button type="submit" className="flex-1 py-3 bg-[#121415] hover:opacity-90 text-white rounded-xl font-medium text-sm shadow-sm transition-all flex justify-center items-center active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                  Save Appointment
-                </button>
+                <button type="submit" className="flex-1 py-3 bg-[#121415] hover:opacity-90 text-white rounded-xl font-medium text-sm transition-opacity shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Save</button>
               </div>
             </form>
           </div>
