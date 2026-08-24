@@ -245,7 +245,7 @@ export default function Settings() {
       }).eq('id', businessId);
       
       if (error) throw error;
-      toast.success("Profile saved successfully");
+      toast.success("Profile saved");
     } catch (err) {
       console.error(err);
       toast.error("Failed to save profile");
@@ -274,11 +274,11 @@ export default function Settings() {
        const supabase = createClient();
        const { error } = await supabase.from('businesses').update({ team_data: newTeam }).eq('id', businessId);
        if (error) {
-         toast.error("Error saving to DB: " + error.message);
+         toast.error("Failed to save: " + error.message);
        }
     }
     
-    toast.success("Specialist added successfully");
+    toast.success("Specialist added");
     setIsMasterModalOpen(false);
     setSpecialistFormName("");
     setNewMasterRole(ROLE_OPTIONS[0]);
@@ -293,7 +293,7 @@ export default function Settings() {
          const supabase = createClient();
          await supabase.from('services').delete().eq('id', itemToDelete.id);
       }
-      toast.success("Service deleted successfully");
+      toast.success("Service deleted");
     } else if (itemToDelete?.type === 'staff') {
       const newTeam = team.filter(m => m.id !== itemToDelete.id);
       setTeam(newTeam);
@@ -302,7 +302,7 @@ export default function Settings() {
          const supabase = createClient();
          await supabase.from('businesses').update({ team_data: newTeam }).eq('id', businessId);
       }
-      toast.success("Specialist deleted successfully");
+      toast.success("Specialist deleted");
     }
     setDeleteModalOpen(false);
     setItemToDelete(null);
@@ -358,7 +358,7 @@ export default function Settings() {
         duration: serviceFormDuration + " min",
         price: serviceFormPrice + " UZS"
       } : s));
-      toast.success("Service updated successfully");
+      toast.success("Service updated");
     } else {
       const { data, error } = await supabase.from('services').insert({
         business_id: businessId,
@@ -379,7 +379,7 @@ export default function Settings() {
         price: data.price + " UZS",
         isActive: true
       }]);
-      toast.success("Service added successfully");
+      toast.success("Service added");
     }
 
     setIsServiceModalOpen(false);
@@ -393,14 +393,14 @@ export default function Settings() {
     if (!businessId) return;
     const supabase = createClient();
     await supabase.from('businesses').update({ schedule_data: schedule }).eq('id', businessId);
-    toast.success("Working hours saved successfully");
+    toast.success("Working hours saved");
   };
 
   const savePolicies = async () => {
     if (!businessId) return;
     const supabase = createClient();
     await supabase.from('businesses').update({ policies_data: policies }).eq('id', businessId);
-    toast.success("Policies saved successfully");
+    toast.success("Policies saved");
   };
 
   // Toggle handlers
@@ -418,7 +418,7 @@ export default function Settings() {
 
   const handleToggleService = (id: string) => {
     setServices(services.map(s => s.id === id ? { ...s, isActive: !s.isActive } : s));
-    toast.success("Service status updated (Demo)");
+    /* no-op */
   };
 
   const handleToggleMaster = async (id: string) => {
@@ -428,7 +428,7 @@ export default function Settings() {
        const supabase = createClient();
        await supabase.from('businesses').update({ team_data: newTeam }).eq('id', businessId);
     }
-    toast.success("Specialist status updated");
+    /* no-op */
   };
 
   const preventDefaultSubmit = (e: React.FormEvent) => e.preventDefault();

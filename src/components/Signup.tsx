@@ -59,7 +59,7 @@ export default function Signup() {
         throw new Error(data.error || 'Failed to request verification');
       }
       
-      toast.success("Verification code sent!");
+      toast.success("Verification code sent");
       setStep("otp");
     } catch (error: any) {
       console.error(error);
@@ -84,24 +84,19 @@ export default function Signup() {
         throw new Error(data.error || 'Invalid verification code');
       }
 
-      // API verify-phone теперь сам создает пользователя в Supabase через Admin API
-      try {
-
-        const loginRes = await AuthService.login(formData.phone, formData.password);
+      // API verify-phone теперь сам создает пользователя, логинит его и ставит куки!
+      if (data.user) {
+        toast.success("Account created successfully");
+        loginStore(data.user);
         
-        if (loginRes.user) {
-          toast.success("Registration successful!");
-          loginStore(loginRes.user);
-          
-          const supabase = createClient();
-          await supabase.auth.refreshSession();
-          
-          setTimeout(() => {
-            window.location.href = role === "business" ? "/dashboard" : "/search";
-          }, 500);
-        }
-      } catch (loginErr: any) {
-        throw new Error(loginErr.message || "Failed to login after registration");
+        const supabase = createClient();
+        await supabase.auth.refreshSession();
+        
+        setTimeout(() => {
+          window.location.href = role === "business" ? "/dashboard" : "/search";
+        }, 500);
+      } else {
+        throw new Error("No user returned from verification");
       }
     } catch (error: any) {
       console.error(error);
@@ -192,9 +187,10 @@ export default function Signup() {
 
               <Button
                 type="submit"
-                variant="primary"
-                className="w-full mt-2 bg-[#121415] hover:bg-black text-white"
+                variant="secondary"
+                className="w-full mt-2"
                 icon={!isSubmitting ? ArrowRight : undefined}
+                iconPosition="right"
                 isLoading={isSubmitting}
               >
                 Continue

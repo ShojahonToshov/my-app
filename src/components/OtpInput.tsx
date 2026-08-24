@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { Button } from "@/components/ui/Button";
 
 interface OtpInputProps {
   onVerify: (code: string) => void;
@@ -57,13 +58,14 @@ export default function OtpInput({ onVerify, phone }: OtpInputProps) {
           />
         </div>
 
-        <button
+        <Button
           type="submit"
+          variant="secondary"
+          className="w-full mb-4 py-3"
           disabled={code.length !== 6}
-          className="w-full bg-[#121415] hover:bg-black text-white font-medium py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed mb-4"
         >
           Verify
-        </button>
+        </Button>
       </form>
 
       <div className="text-sm text-center">

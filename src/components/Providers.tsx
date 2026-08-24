@@ -32,14 +32,23 @@ export function Providers({ children }: { children: React.ReactNode }) {
       }
 
       // Optimistic update with whatever data we have
-      const tempUser = { ...user } as any;
+      const currentUser = useAuthStore.getState().user;
+      const tempUser = { ...user, profile: currentUser?.profile } as any;
       useAuthStore.getState().setUser(tempUser);
 
-      // Fetch the full profile to ensure .profile exists
-      const fullUser = await AuthService.getCurrentUser();
-      if (fullUser) {
-        useAuthStore.getState().setUser(fullUser as any);
+      // Fetch the full profile to ensure .profile exists if not already present
+      if (!tempUser.profile) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .single();
+          
+        if (profile) {
+          useAuthStore.getState().setUser({ ...tempUser, profile });
+        }
       }
+      
       useAuthStore.getState().setLoading(false);
     });
 

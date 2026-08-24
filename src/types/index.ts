@@ -9,6 +9,8 @@ export const BusinessSchema = z.object({
   phone: z.string().nullish(),
   email: z.string().nullish(),
   avatarUrl: z.string().nullish(),
+  work_hours: z.string().nullish(),
+  punctuality: z.number().nullish(),
 }).passthrough();
 export type Business = z.infer<typeof BusinessSchema>;
 

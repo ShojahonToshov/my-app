@@ -19,6 +19,7 @@ export interface VenueData {
   distance: string;
   /** Work hours e.g. "09:00-21:00" */
   time: string;
+  punctuality: number;
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -57,41 +58,90 @@ export default function useSearch(initialVenues: VenueData[] = []) {
 
   // Load saved on mount / user change
   useEffect(() => {
-    const raw = localStorage.getItem(SAVED_KEY(userId));
-    setSavedIds(new Set(raw ? (JSON.parse(raw) as string[]) : []));
-  }, [userId]);
+    const loadSaved = async () => {
+      const raw = localStorage.getItem(SAVED_KEY(userId));
+      const localSaved = raw ? (JSON.parse(raw) as string[]) : [];
+
+      if (isAuthenticated && userId !== "guest") {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("saved_venues")
+          .eq("id", userId)
+          .single();
+
+        if (!error && data) {
+          const dbSaved = Array.isArray(data.saved_venues) ? data.saved_venues : [];
+          // Avoid spreads in dependencies or effect bodies where React Compiler might trip
+          const merged = new Set(dbSaved);
+          localSaved.forEach(id => merged.add(id));
+          
+          setSavedIds(merged);
+          
+          const mergedArray = Array.from(merged);
+          localStorage.setItem(SAVED_KEY(userId), JSON.stringify(mergedArray));
+          
+          if (localSaved.length > 0 && localSaved.some(id => !dbSaved.includes(id))) {
+            await supabase
+              .from("profiles")
+              .update({ saved_venues: mergedArray })
+              .eq("id", userId);
+          }
+        } else {
+          setSavedIds(new Set(localSaved));
+        }
+      } else {
+        setSavedIds(new Set(localSaved));
+      }
+    };
+    loadSaved();
+  }, [userId, isAuthenticated]); // Primitives only
 
   const persistSaved = useCallback(
     (next: Set<string>) => {
-      localStorage.setItem(SAVED_KEY(userId), JSON.stringify([...next]));
+      const nextArray = Array.from(next);
+      localStorage.setItem(SAVED_KEY(userId), JSON.stringify(nextArray));
       setSavedIds(next);
     },
     [userId]
   );
 
   const toggleSaved = useCallback(
-    (venueId: string) => {
-      // Read current state directly — do NOT call toast inside setState updater,
-      // because React 18 Strict Mode calls updaters twice (to detect side effects),
-      // which would fire the toast notification twice.
-      const isSaved = savedIds.has(venueId);
-      const next = new Set(savedIds);
-      if (isSaved) {
-        next.delete(venueId);
-      } else {
-        next.add(venueId);
-      }
-      localStorage.setItem(SAVED_KEY(userId), JSON.stringify([...next]));
-      setSavedIds(next);
+    async (venueId: string) => {
+      let isSaved = false;
+      let nextArray: string[] = [];
 
-      // Toast is called here — outside setState — so it fires exactly once.
+      setSavedIds((prev) => {
+        const next = new Set(prev);
+        isSaved = next.has(venueId);
+        
+        if (isSaved) {
+          next.delete(venueId);
+        } else {
+          next.add(venueId);
+        }
+        
+        nextArray = Array.from(next);
+        localStorage.setItem(SAVED_KEY(userId), JSON.stringify(nextArray));
+        return next;
+      });
+
+      // Toast fires outside setState
       if (isSaved) {
         toast.info("Removed from saved");
       } else {
         toast.success("Saved!");
       }
+
+      if (isAuthenticated && userId !== "guest") {
+        const supabase = createClient();
+        await supabase
+          .from("profiles")
+          .update({ saved_venues: nextArray })
+          .eq("id", userId);
+      }
     },
-    [savedIds, userId]
+    [userId, isAuthenticated] // Primitives only, removed savedIds and currentUser
   );
 
   // ── Filters (all local state — fast, no URL needed for now) ────────────────
@@ -113,16 +163,22 @@ export default function useSearch(initialVenues: VenueData[] = []) {
 
   // ── Derived list ──────────────────────────────────────────────────────────
   const filtered = useMemo(() => {
-    let list = [...venues];
+    const list = venues.slice();
 
     // 1. Saved filter
     if (isSavedOnly) {
-      list = list.filter((v) => savedIds.has(v.id));
+      return list.filter((v) => savedIds.has(v.id)); // early return if no other filters for performance? No, let's keep it chained
+    }
+    
+    let result = list;
+
+    if (isSavedOnly) {
+      result = result.filter((v) => savedIds.has(v.id));
     }
 
     // 2. Category filter
     if (activeCategory !== "All") {
-      list = list.filter((v) =>
+      result = result.filter((v) =>
         v.category.toLowerCase().includes(activeCategory.toLowerCase()) ||
         v.tags.some((t) => t.toLowerCase().includes(activeCategory.toLowerCase()))
       );
@@ -131,7 +187,7 @@ export default function useSearch(initialVenues: VenueData[] = []) {
     // 3. Search query
     const q = searchQuery.trim().toLowerCase();
     if (q) {
-      list = list.filter(
+      result = result.filter(
         (v) =>
           v.name.toLowerCase().includes(q) ||
           v.category.toLowerCase().includes(q) ||
@@ -141,31 +197,47 @@ export default function useSearch(initialVenues: VenueData[] = []) {
 
     // 4. Open Now filter
     if (isOpenNowOnly) {
-      list = list.filter((v) => isOpenNow(v.time));
+      result = result.filter((v) => isOpenNow(v.time));
     }
 
     // 5. Sort
-    const sorted = [...list];
-    if (sortBy === "rating") sorted.sort((a, b) => b.rating - a.rating);
-    if (sortBy === "reviews") sorted.sort((a, b) => b.reviews - a.reviews);
+    if (sortBy === "rating") result.sort((a, b) => b.rating - a.rating);
+    if (sortBy === "reviews") result.sort((a, b) => b.reviews - a.reviews);
     if (sortBy === "distance")
-      sorted.sort(
+      result.sort(
         (a, b) => parseFloat(a.distance) - parseFloat(b.distance)
       );
     if (sortBy === "punctual") {
-      // Stub: use id-based mock score until real data exists
-      const score = (id: string) =>
-        id === "1" ? 98 : id === "2" ? 94 : 88;
-      sorted.sort((a, b) => score(b.id) - score(a.id));
+      result.sort((a, b) => b.punctuality - a.punctuality);
     }
 
-    return sorted;
+    return result;
   }, [venues, isSavedOnly, savedIds, activeCategory, searchQuery, isOpenNowOnly, sortBy]);
+
+  const [visibleCount, setVisibleCount] = useState(10);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [searchQuery, activeCategory, isSavedOnly, isOpenNowOnly, sortBy]);
+
+  const loadMore = useCallback(() => {
+    setVisibleCount((prev) => prev + 10);
+  }, []);
+
+  const paginatedVenues = useMemo(() => {
+    return filtered.slice(0, visibleCount);
+  }, [filtered, visibleCount]);
+
+  const hasMore = visibleCount < filtered.length;
 
   return {
     // data
     venues,
-    filtered,
+    filtered: paginatedVenues,
+    totalCount: filtered.length,
+    hasMore,
+    loadMore,
     isVenuesLoading,
     // auth
     currentUser,
@@ -188,6 +260,7 @@ export default function useSearch(initialVenues: VenueData[] = []) {
     sortOpen, setSortOpen,
   };
 }
+
 
 
 

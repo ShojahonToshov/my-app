@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getOtpCache, saveOtpCache } from '@/utils/otpCache';
+import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
 export async function POST(request: Request) {
@@ -17,6 +17,11 @@ export async function POST(request: Request) {
       }, { status: 500 });
     }
 
+    const supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+
     // Генерируем 6-значный код
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     
@@ -26,14 +31,20 @@ export async function POST(request: Request) {
     // Expiration: 5 minutes from now
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
 
-    const cache = getOtpCache();
-    cache[phone] = {
-      otpHash,
-      data: { firstName, lastName, phone, password, role },
-      expiresAt,
-      attempts: 0
-    };
-    saveOtpCache(cache);
+    const { error: upsertError } = await supabaseAdmin
+      .from('otp_requests')
+      .upsert({
+        phone,
+        otp_hash: otpHash,
+        data: { firstName, lastName, phone, password, role },
+        expires_at: expiresAt,
+        attempts: 0
+      }, { onConflict: 'phone' });
+
+    if (upsertError) {
+      console.error('Error saving OTP request:', upsertError);
+      return NextResponse.json({ error: 'Failed to save verification request' }, { status: 500 });
+    }
 
     // DEMO AUTH - Вывод в консоль сервера!
     console.log('\n=============================================');
@@ -48,8 +59,8 @@ export async function POST(request: Request) {
       message: 'Verification code generated' 
     });
     
-  } catch (error: any) {
-    console.error('Error in register-request:', error);
+  } catch (error: unknown) {
+    console.error('Error in register-request:', error instanceof Error ? error.message : String(error));
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

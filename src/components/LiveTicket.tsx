@@ -17,6 +17,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
+import { Button } from "@/components/ui/Button";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -100,22 +101,22 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               {description}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 w-full">
-              <button
+              <Button
                 onClick={onClose}
-                className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                variant="outline"
+                shape="pill"
+                className="flex-1 h-12"
               >
-                <span className="truncate block">{cancelText}</span>
-              </button>
-              <button
+                {cancelText}
+              </Button>
+              <Button
                 onClick={onConfirm}
-                className={`flex-1 h-12 px-6 rounded-full font-medium text-sm text-white transition-all shadow-[0_8px_20px_rgba(0,0,0,0.08)] active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
-                  isDestructive
-                    ? "bg-[#DC2626] hover:bg-[#B91C1C] shadow-[0_8px_20px_rgba(220,38,38,0.2)] focus-visible:ring-[#DC2626]"
-                    : "bg-[#121415] hover:bg-[#1E2123] focus-visible:ring-[#121415]"
-                }`}
+                variant={isDestructive ? "danger" : "secondary"}
+                shape="pill"
+                className="flex-1 h-12"
               >
-                <span className="truncate block">{confirmText}</span>
-              </button>
+                {confirmText}
+              </Button>
             </div>
           </motion.div>
         </motion.div>
@@ -329,22 +330,22 @@ export default function LiveTicket() {
             {/* Layout Actions */}
             <div className="flex flex-col gap-3 shrink-0">
               <div className="grid grid-cols-2 gap-3">
-                <button className="flex items-center justify-center gap-2 h-12 bg-white border border-[#DCDCDA] rounded-full font-medium text-sm text-[#121415] hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 min-w-0 px-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                  <Navigation className="w-4 h-4 text-[#121415] shrink-0" />
-                  <span className="truncate">Directions</span>
-                </button>
-                <button className="flex items-center justify-center gap-2 h-12 bg-white border border-[#DCDCDA] rounded-full font-medium text-sm text-[#121415] hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 min-w-0 px-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                  <PhoneCall className="w-4 h-4 text-[#121415] shrink-0" />
-                  <span className="truncate">Contact</span>
-                </button>
+                <Button variant="outline" shape="pill" icon={Navigation} className="h-12 w-full text-sm">
+                  Directions
+                </Button>
+                <Button variant="outline" shape="pill" icon={PhoneCall} className="h-12 w-full text-sm">
+                  Contact
+                </Button>
               </div>
 
-              <button
+              <Button
                 onClick={() => setIsCancelModalOpen(true)}
-                className="flex items-center justify-center w-full h-12 rounded-full text-xs font-bold uppercase tracking-widest text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5 transition-colors active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]"
+                variant="ghost"
+                shape="pill"
+                className="h-12 w-full text-xs font-bold uppercase tracking-widest text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5"
               >
                 Cancel booking
-              </button>
+              </Button>
             </div>
           </div>
         </div>

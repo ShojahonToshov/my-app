@@ -23,7 +23,7 @@ export function NotificationsDropdown() {
   ]);
   return (
     <div className="relative hidden sm:block shrink-0">
-      <button aria-label="Notifications" onClick={() => notifications.length > 0 ? setShowNotifications(!showNotifications) : toast("У вас нет новых уведомлений")} className="relative p-2.5 text-[#4A4E51] hover:text-[#121415] rounded-full hover:bg-white border border-transparent hover:border-[#DCDCDA] transition-all active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+      <button aria-label="Notifications" onClick={() => notifications.length > 0 ? setShowNotifications(!showNotifications) : toast.info("No new notifications")} className="relative p-2.5 text-[#4A4E51] hover:text-[#121415] rounded-full hover:bg-white border border-transparent hover:border-[#DCDCDA] transition-all active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
         <Bell className="w-5 h-5" />
         {notifications.length > 0 && <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#ECECEA]"></span>}
       </button>
@@ -32,7 +32,7 @@ export function NotificationsDropdown() {
           <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} transition={{ duration: 0.2 }} className="absolute top-full right-0 mt-2 w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden z-50 origin-top-right">
             <div className="flex items-center justify-between p-5 border-b border-[#DCDCDA] bg-white">
               <span className="font-medium text-[#121415] text-base tracking-tight">Notifications</span>
-              <button type="button" onClick={() => { setNotifications([]); setShowNotifications(false); toast.success("Все уведомления прочитаны"); }} className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded">Mark all read</button>
+              <button type="button" onClick={() => { setNotifications([]); setShowNotifications(false); toast.success("Notifications cleared"); }} className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded">Mark all read</button>
             </div>
             <div className="max-h-[340px] overflow-y-auto">
               {notifications.map((notif) => (
@@ -216,7 +216,7 @@ export function ReviewAction({ venueName, bookingId }: { venueName: string, book
               <textarea value={reviewText} onChange={(e) => setReviewText(e.target.value)} placeholder="What did you love? (optional)" className="w-full h-32 max-h-64 p-4 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl text-sm font-medium outline-none focus:bg-white focus:border-[#121415] focus:ring-4 focus:ring-[#121415]/5 resize-y mb-8 transition-all duration-300 text-[#121415] placeholder:text-[#4A4E51]" />
               <div className="flex flex-col sm:flex-row gap-3 w-full">
                 <button disabled={isReviewSubmitting} onClick={() => setReviewModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Cancel</span></button>
-                <button disabled={isReviewSubmitting} onClick={async () => { if (rating === 0) { toast.error('Please select a rating'); return; } setIsReviewSubmitting(true); const supabase = createClient(); const { error } = await supabase.from('bookings').update({ rating, reviewText }).eq('id', bookingId); if (error) { toast.error('Failed to submit review'); } else { toast.success('Review submitted successfully'); setReviewModalOpen(false); router.refresh(); } setIsReviewSubmitting(false); }} className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-full font-medium text-sm hover:bg-[#731E29] shadow-[0_8px_20px_rgba(138,37,50,0.2)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50">
+                <button disabled={isReviewSubmitting} onClick={async () => { if (rating === 0) { toast.error('Please select a rating'); return; } setIsReviewSubmitting(true); const supabase = createClient(); const { error } = await supabase.from('bookings').update({ rating, reviewText }).eq('id', bookingId); if (error) { toast.error('Failed to submit review'); } else { toast.success('Review submitted'); setReviewModalOpen(false); router.refresh(); } setIsReviewSubmitting(false); }} className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-full font-medium text-sm hover:bg-[#731E29] shadow-[0_8px_20px_rgba(138,37,50,0.2)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50">
                   {isReviewSubmitting ? <Loader2 className="w-5 h-5 animate-spin shrink-0" /> : <span className="truncate block">Submit Review</span>}
                 </button>
               </div>
@@ -242,9 +242,32 @@ export function FavoritesList({ initialVenues, currentUserId }: { initialVenues:
   const [savedIds, setSavedIds] = React.useState<Set<string>>(new Set());
   
   React.useEffect(() => {
-    const SAVED_KEY = `elara_saved_${currentUserId}`;
-    const raw = localStorage.getItem(SAVED_KEY);
-    setSavedIds(new Set(raw ? (JSON.parse(raw) as string[]) : []));
+    const loadSaved = async () => {
+      const SAVED_KEY = `elara_saved_${currentUserId}`;
+      const raw = localStorage.getItem(SAVED_KEY);
+      const localSaved = raw ? (JSON.parse(raw) as string[]) : [];
+
+      if (currentUserId && currentUserId !== "guest") {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("saved_venues")
+          .eq("id", currentUserId)
+          .single();
+
+        if (!error && data) {
+          const dbSaved = Array.isArray(data.saved_venues) ? data.saved_venues : [];
+          const merged = new Set([...dbSaved, ...localSaved]);
+          setSavedIds(merged);
+          localStorage.setItem(SAVED_KEY, JSON.stringify(Array.from(merged)));
+        } else {
+          setSavedIds(new Set(localSaved));
+        }
+      } else {
+        setSavedIds(new Set(localSaved));
+      }
+    };
+    loadSaved();
   }, [currentUserId]);
 
   const favoriteVenues = initialVenues.filter(v => savedIds.has(v.id));

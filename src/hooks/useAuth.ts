@@ -11,10 +11,23 @@ import * as z from "zod";
 import { createClient } from "@/utils/supabase/client";
 
 const loginSchema = z.object({
-  login: z.string().min(1, "Please enter your email or phone number."),
+  loginType: z.enum(["phone", "email", "name"]).optional(),
+  login: z.string().min(1, "Please enter your email, phone or username."),
   password: z.string().min(1, "Please enter your password."),
   rememberMe: z.boolean().optional(),
+}).superRefine((data, ctx) => {
+  if (data.loginType === "email") {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (data.login && !emailRegex.test(data.login)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Please enter a valid email address.",
+        path: ["login"],
+      });
+    }
+  }
 });
+
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function useLogin(defaultRedirectPath = "/account") {
@@ -26,6 +39,7 @@ export function useLogin(defaultRedirectPath = "/account") {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
+      loginType: "phone",
       login: "",
       password: "",
       rememberMe: false,
@@ -39,11 +53,8 @@ export function useLogin(defaultRedirectPath = "/account") {
       return data.user;
     },
     onSuccess: async (user) => {
-      toast.success("Successfully signed in");
+      toast.success("Signed in successfully");
       loginStore(user);
-      
-      const supabase = createClient();
-      await supabase.auth.refreshSession();
       
       const role = user.profile?.role;
       if (role === "admin" || role === "staff" || role === "business") {
@@ -54,8 +65,8 @@ export function useLogin(defaultRedirectPath = "/account") {
       }
     },
     onError: () => {
-      form.setError("root", { type: "manual", message: "Invalid credentials or account not found." });
-      toast.error("Sign in failed.");
+      form.setError("login", { type: "manual", message: "Invalid login or password." });
+      form.setError("password", { type: "manual", message: "Invalid login or password." });
     }
   });
 
@@ -106,11 +117,8 @@ export function useSignup(defaultRole = "user", defaultRedirectPath = "/account"
       return data.user;
     },
     onSuccess: async (user) => {
-      toast.success("Registration successful!");
+      toast.success("Account created successfully");
       loginStore(user);
-      
-      const supabase = createClient();
-      await supabase.auth.refreshSession();
       
       const role = user.profile?.role;
       if (role === "admin" || role === "staff" || role === "business") {
@@ -122,7 +130,7 @@ export function useSignup(defaultRole = "user", defaultRedirectPath = "/account"
     },
     onError: (error: Error) => {
       form.setError("root", { type: "manual", message: "An error occurred during registration." });
-      toast.error(error?.message || "Error occurred during registration.");
+      toast.error(error?.message || "Failed to create account");
     }
   });
 

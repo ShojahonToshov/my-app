@@ -22,8 +22,10 @@ import {
   TimerReset,
   Filter,
   ChevronDown,
+  Loader2,
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 interface Guest {
   id: string;
@@ -60,6 +62,7 @@ export default function Dashboard() {
   const [servicesData, setServicesData] = useState<any[]>([]);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddingGuest, setIsAddingGuest] = useState(false);
   const [customerName, setClientName] = useState("");
   const [staffName, setStaffName] = useState("Ali Ahmedov");
   const [service, setService] = useState("Haircut");
@@ -99,7 +102,7 @@ export default function Dashboard() {
   const adminQueryKey = queryKeys.bookings.admin(businessId);
 
   // TanStack React Query for Live Queue
-  const { data: bookings } = useQuery({
+  const { data: bookings, isLoading: isBookingsLoading } = useQuery({
     queryKey: adminQueryKey,
     queryFn: () => BookingService.getBookings(businessId || undefined),
     refetchInterval: 2000,
@@ -296,7 +299,13 @@ export default function Dashboard() {
   const topService = useMemo(() => {
     const serviceCounts: Record<string, number> = {};
     allVenueBookings.forEach((b: any) => {
-      const s = b.service_name || b.serviceName || b.service_id;
+      let s = b.service_name || b.serviceName;
+      if ((!s || s === "Service") && b.service_id && servicesData.length > 0) {
+        const srv = servicesData.find((sd: any) => String(sd.id) === String(b.service_id));
+        if (srv) s = srv.name;
+      }
+      s = s || b.service_id;
+
       if (s) {
         serviceCounts[s] = (serviceCounts[s] || 0) + 1;
       }
@@ -310,7 +319,7 @@ export default function Dashboard() {
       }
     }
     return top;
-  }, [allVenueBookings]);
+  }, [allVenueBookings, servicesData]);
 
   const totalDelay = useMemo(() => {
     return allVenueBookings.reduce((acc: number, b: any) => {
@@ -325,6 +334,8 @@ export default function Dashboard() {
       toast.error("Business not found. Cannot add guest.");
       return;
     }
+
+    setIsAddingGuest(true);
 
     const foundStaff = teamData.find((t: any) => t.name === staffName);
     const chosenService = servicesData.find((s: any) => s.id === service);
@@ -349,12 +360,17 @@ export default function Dashboard() {
       await BookingService.createBooking(bData as any);
       toast.success(`${customerName} added to the queue`);
       queryClient.invalidateQueries({ queryKey: adminQueryKey });
+      
+      // Delay slightly so the spinner is visible to the user, providing feedback
+      await new Promise(resolve => setTimeout(resolve, 500));
     } catch (e) {
       console.error(e);
       toast.error("Failed to add guest to queue");
+      setIsAddingGuest(false);
       return;
     }
 
+    setIsAddingGuest(false);
     setIsModalOpen(false);
     setClientName("");
     setStaffName(mastersList[0] || "Ali Ahmedov");
@@ -380,11 +396,11 @@ export default function Dashboard() {
       nextId: nextGuest ? nextGuest.id : undefined,
     });
 
-    toast.success(`Session with ${guest.name} completed`);
+    toast.success(`${guest.name}\`s session completed`);
     if (nextGuest) {
-      toast.info(`${nextGuest.name} was automatically called in`);
+      toast.info(`${nextGuest.name} was auto-called in`);
     } else {
-      toast.info(`No waiting customers left for ${guest.staff}`);
+      /* no-op */
     }
   };
 
@@ -408,7 +424,7 @@ export default function Dashboard() {
     }));
 
     updateDelayMutation.mutate({ updates });
-    toast.warning(`+10 min delay applied to ${updates.length} customer(s) for ${guestInChair.staff}`);
+    toast.info(`+10 min delay applied to ${updates.length} customer(s)`);
   };
 
   const onDragEnd = (result: DropResult) => {
@@ -461,7 +477,7 @@ export default function Dashboard() {
               type="button"
               onClick={() => {
                 setIsPaused(!isPaused);
-                toast.success(isPaused ? "Bookings resumed" : "Bookings paused");
+                toast.success(isPaused ? "Queue is now open" : "Queue paused temporarily");
               }}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-95 text-white ${
                 isPaused 
@@ -559,7 +575,19 @@ export default function Dashboard() {
                     ref={provided.innerRef} 
                     {...provided.droppableProps}
                   >
-                    {filteredWaiting.map((guest, index) => (
+                    {isBookingsLoading ? (
+                      Array.from({ length: 3 }).map((_, i) => (
+                        <div key={i} className="bg-white border border-[#DCDCDA] rounded-xl p-3 flex flex-col justify-between min-h-[120px] mx-1 mb-2">
+                          <Skeleton className="w-24 h-4 mb-2" />
+                          <Skeleton className="w-16 h-3 mb-2" />
+                          <Skeleton className="w-20 h-3 mb-2" />
+                          <div className="mt-auto flex justify-between items-end">
+                            <Skeleton className="w-24 h-3" />
+                            <Skeleton className="w-16 h-6" />
+                          </div>
+                        </div>
+                      ))
+                    ) : filteredWaiting.map((guest, index) => (
                       <Draggable key={guest.id} draggableId={guest.id} index={index}>
                         {(provided, snapshot) => (
                           <div 
@@ -595,7 +623,7 @@ export default function Dashboard() {
                         )}
                       </Draggable>
                     ))}
-                    {filteredWaiting.length === 0 && (
+                    {!isBookingsLoading && filteredWaiting.length === 0 && (
                       <div className="flex flex-col items-center justify-center h-32 text-center border-2 border-dashed border-[#DCDCDA] rounded-2xl mx-1 bg-[#F5F5F4]/50">
                         <span className="text-sm font-medium text-[#8B9194]">No guests waiting</span>
                         <span className="text-[10px] text-[#8B9194]/70 mt-1 uppercase tracking-wider">Queue is clear</span>
@@ -817,7 +845,14 @@ export default function Dashboard() {
               </div>
               <div className="flex gap-3 mt-8 pt-6 border-t border-[#DCDCDA] pb-2">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3 bg-white hover:bg-[#F5F5F4] border border-[#DCDCDA] text-[#121415] rounded-xl font-medium text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Cancel</button>
-                <button type="submit" className="flex-1 py-3 bg-[#121415] hover:opacity-90 text-white rounded-xl font-medium text-sm transition-opacity shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Save</button>
+                <button 
+                  type="submit" 
+                  disabled={isAddingGuest}
+                  className="flex-1 py-3 bg-[#121415] hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed text-white rounded-xl font-medium text-sm transition-opacity shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] flex items-center justify-center gap-2"
+                >
+                  {isAddingGuest && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Save
+                </button>
               </div>
             </form>
           </div>

@@ -58,6 +58,8 @@ export default async function middleware(request: NextRequest) {
       businessOnlyRoutes.some(route => pathname.startsWith(route))
     ) {
       redirectUrl = new URL('/login', request.url);
+      const targetPath = request.nextUrl.pathname + request.nextUrl.search;
+      redirectUrl.searchParams.set('redirect', targetPath);
     }
   } else {
     let rawRole = mergedUser.app_metadata?.role as string;
@@ -84,7 +86,9 @@ export default async function middleware(request: NextRequest) {
     }
 
     if (guestOnlyRoutes.includes(pathname)) {
-      redirectUrl = new URL(homeRoute, request.url);
+      const redirectParam = request.nextUrl.searchParams.get('redirect');
+      const target = (redirectParam && redirectParam.startsWith('/')) ? redirectParam : homeRoute;
+      redirectUrl = new URL(target, request.url);
     } else if (isUnonboardedBusiness && !pathname.startsWith('/onboarding')) {
       redirectUrl = new URL('/onboarding', request.url);
     } else if (userRole === 'customer' && businessOnlyRoutes.some(route => pathname.startsWith(route))) {

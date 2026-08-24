@@ -100,7 +100,7 @@ export default function DashboardSettings() {
     }
     
     setActiveModal(null);
-    toast.success("Card updated successfully");
+    toast.success("Card updated");
   };
 
   const handleSaveSecurity = async (e: React.FormEvent) => {
@@ -121,7 +121,7 @@ export default function DashboardSettings() {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Security info updated successfully");
+      toast.success("Security info updated");
     }
   };
 
@@ -134,7 +134,7 @@ export default function DashboardSettings() {
     setIs2FAEnabled(true);
     setActiveModal(null);
     setCode2FA("");
-    toast.success("Two-factor authentication enabled successfully (Demo)");
+    toast.success("2FA enabled (Demo)");
   };
 
   const handleLogout = async () => {
@@ -149,7 +149,7 @@ export default function DashboardSettings() {
       toast.error("Please type DELETE to confirm");
       return;
     }
-    toast.success("Account deletion requested (Demo)");
+    toast.success("Account deletion requested");
     setActiveModal(null);
     setDeleteConfirmText("");
   };
@@ -262,7 +262,7 @@ export default function DashboardSettings() {
                     <button
                       type="submit"
                       disabled={isSaving}
-                      className="w-full sm:w-auto px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 disabled:opacity-70 disabled:pointer-events-none"
+                      className="w-full sm:w-auto px-8 py-3 bg-[#121415] text-white hover:bg-[#2A2E30] rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 disabled:!bg-[#E5E9EA] disabled:!text-[#8B9194] disabled:!shadow-none disabled:pointer-events-none"
                     >
                       {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                       {isSaving ? "Saving..." : "Save Security Info"}
@@ -360,7 +360,7 @@ export default function DashboardSettings() {
       {activeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={() => setActiveModal(null)}>
           <div className="bg-white w-full max-w-md rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]" onClick={e => e.stopPropagation()}>
-            <button type="button" onClick={() => setActiveModal(null)} className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-[#F5F5F4] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] transition-colors z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+            <button type="button" onClick={() => setActiveModal(null)} className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-xl bg-[#F5F5F4] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] transition-colors z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
               <X className="w-4 h-4" />
             </button>
 
@@ -420,7 +420,7 @@ export default function DashboardSettings() {
                   <div className="flex items-center justify-center gap-1.5 mt-5 mb-6 text-xs font-medium text-[#4a6b53]">
                     <ShieldCheck className="w-3.5 h-3.5" /> Protected by 256-bit SSL encryption
                   </div>
-                  <button type="submit" className="w-full py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                  <button type="submit" className="w-full py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:bg-[#2A2E30] transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
                     Link Payment Card
                   </button>
                 </form>
@@ -452,7 +452,7 @@ export default function DashboardSettings() {
                       />
                     </div>
                   </div>
-                  <button type="submit" className="w-full mt-6 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                  <button type="submit" className="w-full mt-6 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:bg-[#2A2E30] transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
                     Enable Authentication
                   </button>
                 </form>
@@ -472,7 +472,7 @@ export default function DashboardSettings() {
                   <button type="button" onClick={() => setActiveModal(null)} className="flex-1 py-3.5 bg-white border border-[#DCDCDA] text-[#121415] rounded-xl font-medium text-sm shadow-sm hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
                     Cancel
                   </button>
-                  <button type="button" onClick={handleLogout} className="flex-1 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                  <button type="button" onClick={handleLogout} className="flex-1 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:bg-[#2A2E30] transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
                     Log Out
                   </button>
                 </div>
@@ -505,7 +505,7 @@ export default function DashboardSettings() {
                   <button 
                     type="submit" 
                     disabled={deleteConfirmText !== "DELETE"}
-                    className="w-full mt-6 py-3.5 bg-[#dc2626] text-white rounded-xl font-medium text-sm shadow-sm hover:bg-[#b91c1c] transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] disabled:opacity-50 disabled:pointer-events-none"
+                    className="w-full mt-6 py-3.5 bg-[#dc2626] text-white rounded-xl font-medium text-sm shadow-sm hover:bg-[#b91c1c] transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] disabled:!bg-[#E5E9EA] disabled:!text-[#8B9194] disabled:!shadow-none disabled:pointer-events-none"
                   >
                     Permanently Delete
                   </button>

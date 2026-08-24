@@ -85,6 +85,9 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
 
   const {
     filtered,
+    totalCount,
+    hasMore,
+    loadMore,
     isVenuesLoading,
     currentUser,
     savedIds,
@@ -229,7 +232,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               </AnimatePresence>
             </div>
 
-            <Button variant="primary" size="sm" className="px-6 py-2.5 shrink-0 active:scale-95">
+            <Button variant="primary" size="sm" shape="pill" className="px-6 py-2.5 shrink-0">
               Search
             </Button>
           </div>
@@ -284,7 +287,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                   Log in
                 </Link>
                 <Link href="/signup" className="outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full flex items-center justify-center">
-                  <Button variant="secondary" size="sm" className="px-6 py-2.5 rounded-full active:scale-95">
+                  <Button variant="secondary" size="sm" shape="pill" className="px-6 py-2.5 shrink-0">
                     Sign up
                   </Button>
                 </Link>
@@ -404,13 +407,11 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
             <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar flex-1 pr-4 py-3 -my-3">
 
               {/* Saved button */}
-              <button
+              <Button
                 onClick={toggleSavedFilter}
-                className={`shrink-0 px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2 ${
-                  isSavedOnly
-                    ? "bg-[#121415] border-[#121415] text-white"
-                    : "bg-white border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4]"
-                }`}
+                variant={isSavedOnly ? "secondary" : "outline"}
+                shape="pill"
+                className="px-4 sm:px-5"
               >
                 <Heart className={`w-4 h-4 transition-all ${isSavedOnly ? "fill-white" : ""}`} />
                 <span>Saved</span>
@@ -419,50 +420,48 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                     {savedIds.size}
                   </span>
                 )}
-              </button>
+              </Button>
 
               <div className="w-px h-6 bg-[#DCDCDA] shrink-0 mx-1" />
 
               {/* Category filters */}
               {CATEGORIES.map((filter) => (
-                <button
+                <Button
                   key={filter}
                   onClick={() => setActiveCategory(filter)}
-                  className={`shrink-0 px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center ${
-                    activeCategory === filter
-                      ? "bg-[#121415] border-[#121415] text-white"
-                      : "bg-white border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4]"
-                  }`}
+                  variant={activeCategory === filter ? "secondary" : "outline"}
+                  shape="pill"
+                  className="px-4 sm:px-5"
                 >
                   {filter}
-                </button>
+                </Button>
               ))}
             </div>
 
             {/* Right: count + Open Now + Sort */}
             <div className="flex items-center gap-2 sm:gap-3 shrink-0 border-l border-[#DCDCDA] pl-3 sm:pl-4">
               <span className="text-[#121415] font-semibold text-sm tracking-tight px-1 hidden md:block">
-                {filtered.length} {filtered.length === 1 ? "venue" : "venues"}
+                {totalCount} {totalCount === 1 ? "venue" : "venues"}
               </span>
 
               {/* Open Now button */}
-              <button
+              <Button
                 onClick={toggleOpenNow}
-                className={`shrink-0 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2 ${
-                  isOpenNowOnly
-                    ? "bg-[#121415] border-[#121415] text-white"
-                    : "bg-white border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4]"
-                }`}
+                variant={isOpenNowOnly ? "secondary" : "outline"}
+                shape="pill"
+                className="px-4"
               >
                 <Clock className="w-4 h-4" />
                 <span className="hidden sm:inline">Open Now</span>
-              </button>
+              </Button>
 
               {/* Sort dropdown */}
               <div className="relative" ref={sortRef}>
-                <button
+                <Button
                   onClick={() => setSortOpen(!sortOpen)}
-                  className="shrink-0 px-4 sm:px-5 py-2.5 bg-white hover:bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA] rounded-full text-sm font-medium transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2"
+                  variant="outline"
+                  shape="pill"
+                  className="px-4 sm:px-5"
                 >
                   <SlidersHorizontal className="w-4 h-4 text-[#8A2532]" />
                   <span className="hidden sm:inline">
@@ -470,7 +469,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                   </span>
                   <span className="sm:hidden">Sort</span>
                   <ChevronDown className={`w-4 h-4 text-[#4A4E51] transition-transform duration-300 ${sortOpen ? "rotate-180" : ""}`} />
-                </button>
+                </Button>
 
                 <AnimatePresence>
                   {sortOpen && (
@@ -508,15 +507,15 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
           {/* Mobile Map Toggle */}
           <div className="lg:hidden flex items-center bg-white border border-[#DCDCDA] rounded-full p-1 shadow-sm mb-2 w-max mx-auto shrink-0 z-20">
             {(["list", "map"] as const).map((v) => (
-              <button
+              <Button
                 key={v}
                 onClick={() => setMobileView(v)}
-                className={`px-6 py-2 rounded-full text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-[#121415] transition-colors active:scale-95 capitalize ${
-                  mobileView === v ? "bg-[#121415] text-white shadow-sm" : "text-[#4A4E51] hover:text-[#121415]"
-                }`}
+                variant={mobileView === v ? "secondary" : "ghost"}
+                shape="pill"
+                className="px-6 py-2 capitalize border-transparent"
               >
                 {v}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -545,7 +544,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               </div>
             )}
 
-            {filtered.length === 0 ? (
+            {totalCount === 0 ? (
               <div className="mt-2 lg:mt-0 pb-10">
                 <EmptyState query={searchQuery.trim()} />
               </div>
@@ -621,14 +620,22 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                                 </div>
                               </div>
 
-                              <div className="flex flex-col items-end shrink-0 bg-[#F5F5F4] px-3 py-2 rounded-xl border border-[#DCDCDA]">
-                                <div className="flex items-center gap-1.5">
-                                  <Star className="w-4 h-4 fill-[#8A2532] text-[#8A2532] shrink-0" />
-                                  <span className="font-semibold text-[#121415] text-sm">{venue.rating}</span>
-                                </div>
-                                <span className="text-[#4A4E51] text-[10px] uppercase font-bold mt-1">
-                                  {venue.reviews} rev.
-                                </span>
+                              <div className={`flex flex-col justify-center shrink-0 bg-[#F5F5F4] px-3 py-2 rounded-xl border border-[#DCDCDA] min-w-[64px] min-h-[52px] ${venue.reviews > 0 ? "items-end" : "items-center"}`}>
+                                {venue.reviews > 0 ? (
+                                  <>
+                                    <div className="flex items-center gap-1.5">
+                                      <Star className="w-4 h-4 fill-[#8A2532] text-[#8A2532] shrink-0" />
+                                      <span className="font-semibold text-[#121415] text-sm">{venue.rating}</span>
+                                    </div>
+                                    <span className="text-[#4A4E51] text-[10px] uppercase font-bold mt-1">
+                                      {venue.reviews} rev.
+                                    </span>
+                                  </>
+                                ) : (
+                                  <span className="font-semibold text-[#4A4E51] text-xs uppercase tracking-wide">
+                                    New
+                                  </span>
+                                )}
                               </div>
                             </div>
 
@@ -656,7 +663,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                               href={`/booking?id=${venue.id}`}
                               className="w-full xl:w-auto shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 rounded-full"
                             >
-                              <Button variant="primary" icon={ChevronRight} className="w-full xl:w-auto px-6 py-3 active:scale-95 flex-row-reverse">
+                              <Button variant="primary" icon={ChevronRight} iconPosition="right" shape="pill" className="w-full xl:w-auto px-6 py-3">
                                 Book now
                               </Button>
                             </Link>
@@ -670,11 +677,11 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
             )}
 
             {/* Load More */}
-            {filtered.length > 0 && (
+            {hasMore && (
               <div className="mb-16 flex justify-center">
-                <button className="px-8 py-3.5 bg-white border border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4] rounded-full text-sm font-medium transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center">
+                <Button variant="outline" shape="pill" className="px-8 py-3.5" onClick={loadMore}>
                   Load more venues
-                </button>
+                </Button>
               </div>
             )}
           </div>

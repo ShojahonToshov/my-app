@@ -24,6 +24,7 @@ import {
   Map,
 } from "lucide-react";
 import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
 
 const Instagram: React.FC<{ className?: string }> = ({ className }) => (
   <svg
@@ -385,7 +386,7 @@ export default function CustomerBooking() {
         console.error("Supabase insert error:", insertError);
         throw new Error(insertError.message || "Failed to create booking in database");
       }
-      toast.success("Booking confirmed successfully!");
+      toast.success("Booking confirmed");
       
       // Reset or navigate
       router.refresh();
@@ -682,13 +683,13 @@ export default function CustomerBooking() {
                       <p className="text-sm font-medium text-[#4A4E51] mb-5 text-center">
                         You need to have an account to confirm your booking.
                       </p>
-                      <button
-                        type="button"
+                      <Button
                         onClick={() => router.push(`/login?redirect=/booking?id=${venueId}`)}
-                        className="px-6 py-3 bg-[#121415] hover:bg-black text-white text-sm font-medium rounded-xl transition-all active:scale-95 shadow-sm"
+                        variant="secondary"
+                        className="px-6 py-3"
                       >
                         Log in or Register
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 )}
@@ -775,14 +776,16 @@ export default function CustomerBooking() {
               <div
                 className={`hidden md:block mt-10 transition-all duration-500 ${isStep5Unlocked ? "opacity-100" : "opacity-40 pointer-events-none"}`}
               >
-                <button
-                  type="button"
+                <Button
                   onClick={handleConfirm}
                   disabled={!isStep5Unlocked || isSubmitting}
-                  className="w-full py-4 rounded-full font-medium text-sm transition-all flex items-center justify-center gap-2 bg-[#8A2532] hover:bg-[#731E29] text-white shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:shadow-[0_12px_24px_rgba(138,37,50,0.3)] active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  isLoading={isSubmitting}
+                  variant="primary"
+                  shape="pill"
+                  className="w-full py-4 text-sm"
                 >
                   {isSubmitting ? "Confirming..." : "Confirm Booking"}
-                </button>
+                </Button>
               </div>
             </motion.div>
           )}
@@ -950,12 +953,14 @@ export default function CustomerBooking() {
                     Only customers who have successfully completed their visit can
                     leave a review.
                   </p>
-                  <button 
+                  <Button 
                     onClick={() => toast.info("Customer reviews will be available soon.")}
-                    className="mt-4 px-6 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md"
+                    variant="outline"
+                    shape="pill"
+                    className="mt-4"
                   >
                     Read all reviews
-                  </button>
+                  </Button>
                 </div>
               </section>
 
@@ -967,29 +972,28 @@ export default function CustomerBooking() {
       {/* Sticky Mobile CTA */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-xl border-t border-[#DCDCDA] z-50">
         {activeTab === "booking" ? (
-          <button
-            type="button"
+          <Button
             onClick={handleConfirm}
             disabled={!isStep5Unlocked || isSubmitting}
-            className={`w-full py-3.5 rounded-full font-medium text-sm flex items-center justify-center gap-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
-              isStep5Unlocked && !isSubmitting
-                ? "bg-[#8A2532] hover:bg-[#731E29] text-white shadow-[0_8px_20px_rgba(138,37,50,0.2)] active:scale-95 focus-visible:ring-[#8A2532]"
-                : "bg-[#DCDCDA] text-[#787D80] cursor-not-allowed"
-            }`}
+            isLoading={isSubmitting}
+            variant="primary"
+            shape="pill"
+            className="w-full py-3.5"
           >
             <span className="truncate">{isSubmitting ? "Confirming..." : "Confirm Booking"}</span>
-          </button>
+          </Button>
         ) : (
-          <button
-            type="button"
+          <Button
             onClick={() => {
               setActiveTab("booking");
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className="w-full py-3.5 bg-[#121415] hover:bg-[#1E2123] text-white rounded-full font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] flex items-center justify-center gap-2 active:scale-95 transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2"
+            variant="secondary"
+            shape="pill"
+            className="w-full py-3.5 shadow-[0_8px_20px_rgba(0,0,0,0.08)]"
           >
             <span className="truncate">Go to booking</span>
-          </button>
+          </Button>
         )}
       </div>
     </div>

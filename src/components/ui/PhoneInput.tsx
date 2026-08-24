@@ -73,15 +73,63 @@ export function PhoneInput({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let rawValue = e.target.value;
-    let sanitized = rawValue.replace(/[^\d\s+()-]/g, "");
+    let sanitized = rawValue.replace(/[^\d+]/g, "");
     
-    if (sanitized === "" || sanitized === "+") {
-      sanitized = selectedCountry.code + " ";
-    } else if (!sanitized.startsWith("+")) {
-      sanitized = selectedCountry.code + " " + sanitized;
+    if (sanitized === "") {
+      onChange("");
+      return;
     }
 
-    onChange(sanitized);
+    const hasPlus = rawValue.includes('+');
+    sanitized = sanitized.replace(/\+/g, "");
+    
+    if (hasPlus || sanitized.length > 0) {
+      sanitized = '+' + sanitized;
+    }
+
+    if (sanitized === "+") {
+      onChange(selectedCountry.code + " ");
+      return;
+    }
+
+    const digitsOnly = sanitized.replace(/\D/g, "");
+    const match = COUNTRIES.find(c => digitsOnly.startsWith(c.code.replace(/\D/g, "")));
+    const currentCountryCode = match ? match.code : null;
+
+    if (!currentCountryCode || !sanitized.startsWith(currentCountryCode)) {
+      onChange(sanitized);
+      return;
+    }
+
+    let localDigits = sanitized.slice(currentCountryCode.length);
+    
+    // Formatting patterns based on country
+    let pattern = null;
+    switch (currentCountryCode) {
+      case "+998": case "+992": pattern = [2, 3, 2, 2]; break;
+      case "+7": case "+90": pattern = [3, 3, 2, 2]; break;
+      case "+996": pattern = [3, 3, 3]; break;
+      case "+1": case "+44": pattern = [3, 3, 4]; break;
+      case "+971": pattern = [2, 3, 4]; break;
+    }
+
+    if (pattern && localDigits.length > 0) {
+      let formattedLocal = "";
+      let currentIndex = 0;
+      for (let i = 0; i < pattern.length; i++) {
+        const chunkLength = pattern[i];
+        if (currentIndex >= localDigits.length) break;
+        const chunk = localDigits.slice(currentIndex, currentIndex + chunkLength);
+        formattedLocal += (formattedLocal ? " " : "") + chunk;
+        currentIndex += chunkLength;
+      }
+      if (currentIndex < localDigits.length) {
+        formattedLocal += " " + localDigits.slice(currentIndex);
+      }
+      onChange(currentCountryCode + " " + formattedLocal);
+    } else {
+      onChange(currentCountryCode + (localDigits.length > 0 ? " " + localDigits : " "));
+    }
   };
 
   const displayValue = value === "" ? `${selectedCountry.code} ` : value;

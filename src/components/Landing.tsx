@@ -284,12 +284,12 @@ export default function Landing() {
               >
                 <Button
                   variant="primary"
-                  className="w-full !px-8 !py-3.5 !text-base active:scale-95"
+                  shape="pill"
+                  icon={ArrowRight}
+                  iconPosition="right"
+                  className="w-full sm:w-auto px-8 py-3.5 text-base"
                 >
-                  <div className="flex items-center justify-center gap-2">
-                    Start your journey
-                    <ArrowRight className="w-4 h-4 shrink-0" />
-                  </div>
+                  Start your journey
                 </Button>
               </Link>
 
@@ -298,9 +298,13 @@ export default function Landing() {
                 onClick={(e) => scrollToSection(e, "features")}
                 className="w-full sm:w-auto outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full"
               >
-                <button className="w-full sm:w-auto px-8 py-3.5 bg-white border border-[#DCDCDA] text-[#121415] hover:bg-[#F5F5F4] rounded-full text-base font-medium transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center">
+                <Button
+                  variant="outline"
+                  shape="pill"
+                  className="w-full sm:w-auto px-8 py-3.5 text-base"
+                >
                   Explore features
-                </button>
+                </Button>
               </Link>
             </motion.div>
           </motion.div>
@@ -430,9 +434,9 @@ export default function Landing() {
                   </div>
 
                   <div className="space-y-3 mt-auto">
-                     <button className="w-full py-3 bg-white border border-[#DCDCDA] rounded-xl text-sm font-semibold text-[#121415] shadow-sm hover:bg-[#F5F5F4] transition-colors">
+                     <Button variant="outline" className="w-full">
                        Reschedule
-                     </button>
+                     </Button>
                   </div>
                 </div>
               </div>
@@ -688,9 +692,9 @@ export default function Landing() {
                        <ShieldCheck className="w-4 h-4 text-[#8A2532]" />
                        <span className="text-xs text-[#4A4E51] font-medium leading-tight">Your Karma score requires a non-refundable deposit to secure this booking.</span>
                      </div>
-                     <button className="w-full py-2.5 bg-[#121415] text-white rounded-lg text-xs font-bold hover:bg-[#2C3135] transition-colors">
+                     <Button variant="secondary" shape="square" className="w-full text-xs">
                        Pay Deposit & Book
-                     </button>
+                     </Button>
                   </div>
                 </div>
               </motion.div>

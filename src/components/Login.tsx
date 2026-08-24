@@ -21,6 +21,7 @@ export default function Login() {
 
   const handleTypeChange = (type: LoginType) => {
     setLoginType(type);
+    setValue("loginType", type);
     setValue("login", ""); // Clear input when switching
   };
 
@@ -149,8 +150,8 @@ export default function Login() {
 
             <Button
               type="submit"
-              variant="primary"
-              className="w-full bg-[#121415] hover:bg-black text-white"
+              variant="secondary"
+              className="w-full"
               isLoading={isSubmitting}
             >
               Log in

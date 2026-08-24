@@ -27,6 +27,8 @@ import {
   ChevronDown,
   Clock
 } from "lucide-react";
+import customerBookingService from "@/services/customer/BookingService";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 // --- Built-in ConfirmModal component ---
 interface ConfirmModalProps {
@@ -152,6 +154,24 @@ type Appointment = {
   status: "Waiting" | "In Chair" | "Completed";
 };
 
+const getTimeForPeriod = (p: number) => {
+  switch (p) {
+    case 1: return "08:30";
+    case 2: return "09:20";
+    case 3: return "10:10";
+    case 4: return "11:20";
+    default: return "12:00";
+  }
+};
+
+const getPeriodForTime = (time: string | null | undefined) => {
+  if (time?.startsWith("08:30")) return 1;
+  if (time?.startsWith("09:20")) return 2;
+  if (time?.startsWith("10:10")) return 3;
+  if (time?.startsWith("11:20")) return 4;
+  return 1; // default fallback
+};
+
 export default function Schedule() {
   const [currentDate, setCurrentDate] = useState<Date>(startOfToday());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -167,41 +187,38 @@ export default function Schedule() {
   const [appointmentToDelete, setAppointmentToDelete] = useState<string | null>(null);
   const [newCustomerName, setNewClientName] = useState("");
   
-  // Hardcoded initial data tailored for the timetable layout
-  const [appointments, setAppointments] = useState<Appointment[]>([
-    { 
-      id: "1", 
-      customerName: "Guest", 
-      period: 1, 
-      date: format(startOfToday(), "yyyy-MM-dd"), 
-      timeRange: "08:30 - 09:15",
-      service: "Men's Haircut", 
-      masterName: "Ali Ahmedov", 
-      status: "Waiting" 
-    },
-    { 
-      id: "2", 
-      customerName: "Alexey", 
-      period: 2, 
-      date: format(startOfToday(), "yyyy-MM-dd"), 
-      timeRange: "09:20 - 10:05",
-      service: "Haircut + Beard", 
-      masterName: "Sanjar B.", 
-      status: "In Chair" 
-    },
-    { 
-      id: "3", 
-      customerName: "New Customer", 
-      period: 3, 
-      date: format(addDays(startOfToday(), 1), "yyyy-MM-dd"), 
-      timeRange: "10:10 - 10:55",
-      service: "Service", 
-      masterName: "Denis K.", 
-      status: "Waiting" 
-    },
-  ]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const calendarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchBookings = async () => {
+      try {
+        setIsLoading(true);
+        const data = await customerBookingService.getBookings();
+        if (isMounted) {
+          const mappedAppointments = data.map((b) => ({
+            id: b.id,
+            customerName: b.guest_name || b.guestName || "Guest",
+            period: getPeriodForTime(b.time),
+            date: b.date || format(startOfToday(), "yyyy-MM-dd"),
+            timeRange: getTimeRangeForPeriod(getPeriodForTime(b.time)),
+            service: b.service_name || b.serviceName || "Service",
+            masterName: b.staff_name || b.staffName || "Specialist",
+            status: b.status === "in_progress" ? "In Chair" : b.status === "completed" ? "Completed" : "Waiting"
+          })) as Appointment[];
+          setAppointments(mappedAppointments);
+        }
+      } catch (error) {
+        console.error("Failed to fetch bookings", error);
+        toast.error("Failed to load schedule");
+      }
+    };
+    fetchBookings();
+    return () => { isMounted = false; };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -250,25 +267,41 @@ export default function Schedule() {
     }
   };
 
-  const handleAddAppointment = (e: React.FormEvent) => {
+  const handleAddAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCustomerName.trim()) return;
 
-    const newAppt: Appointment = {
-      id: Date.now().toString(),
-      customerName: newCustomerName,
-      period: selectedPeriod,
-      date: selectedDateStr,
-      timeRange: getTimeRangeForPeriod(selectedPeriod),
-      service: "Service", 
-      masterName: "Specialist", // minimal logic, hardcoded fallback
-      status: "Waiting"
-    };
+    try {
+      const newApptData = {
+        date: selectedDateStr,
+        time: getTimeForPeriod(selectedPeriod),
+        guest_name: newCustomerName,
+        service_name: "Service",
+        staff_name: "Specialist",
+        status: "waiting" as const
+      };
+      
+      const created = await customerBookingService.createBooking(newApptData);
+      
+      const newAppt: Appointment = {
+        id: created.id,
+        customerName: created.guest_name || newCustomerName,
+        period: selectedPeriod,
+        date: created.date || selectedDateStr,
+        timeRange: getTimeRangeForPeriod(selectedPeriod),
+        service: created.service_name || "Service", 
+        masterName: created.staff_name || "Specialist",
+        status: "Waiting"
+      };
 
-    setAppointments(prev => [...prev, newAppt]);
-    setIsBookingModalOpen(false);
-    setNewClientName("");
-    toast.success(`${newCustomerName} added to the schedule`);
+      setAppointments(prev => [...prev, newAppt]);
+      setIsBookingModalOpen(false);
+      setNewClientName("");
+      toast.success(`${newCustomerName} added to schedule`);
+    } catch (error) {
+      console.error("Failed to add appointment", error);
+      toast.error("Failed to create appointment");
+    }
   };
 
   const handleDeleteAppointment = (id: string, e: React.MouseEvent) => {
@@ -277,11 +310,17 @@ export default function Schedule() {
     setDeleteModalOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (appointmentToDelete) {
-      setAppointments(prev => prev.filter(a => a.id !== appointmentToDelete));
-      setAppointmentToDelete(null);
-      toast.success("Appointment canceled successfully");
+      try {
+        await customerBookingService.deleteBooking(appointmentToDelete);
+        setAppointments(prev => prev.filter(a => a.id !== appointmentToDelete));
+        setAppointmentToDelete(null);
+        toast.success("Appointment canceled");
+      } catch (error) {
+        console.error("Failed to delete appointment", error);
+        toast.error("Failed to cancel appointment");
+      }
     }
     setDeleteModalOpen(false);
   };
@@ -382,7 +421,17 @@ export default function Schedule() {
                         
                         return (
                           <td key={date.id} className="p-2 border-r last:border-r-0 border-[#DCDCDA] align-top min-h-[140px] w-[150px] relative group/cell">
-                            {apptsInSlot.length > 0 ? (
+                            {isLoading ? (
+                              <div className="w-full h-full min-h-[120px] bg-white border border-[#DCDCDA] rounded-xl p-3 flex flex-col justify-between">
+                                <Skeleton className="w-20 h-4 mb-2" />
+                                <Skeleton className="w-24 h-3 mb-1" />
+                                <Skeleton className="w-16 h-3 mb-2" />
+                                <div className="mt-auto pt-2 border-t border-[#F5F5F4] flex justify-between">
+                                  <Skeleton className="w-16 h-3" />
+                                  <Skeleton className="w-12 h-4" />
+                                </div>
+                              </div>
+                            ) : apptsInSlot.length > 0 ? (
                               apptsInSlot.map(appt => {
                                 const isWaiting = appt.status === "Waiting";
                                 return (
