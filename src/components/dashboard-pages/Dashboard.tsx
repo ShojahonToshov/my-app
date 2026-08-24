@@ -68,7 +68,7 @@ export default function Dashboard() {
   const [service, setService] = useState("Haircut");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All");
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
 
   useEffect(() => {
     setIsMounted(true);
@@ -78,11 +78,16 @@ export default function Dashboard() {
       if (!user) return;
       const { data: business } = await supabase
         .from('businesses')
-        .select('id, team_data')
+        .select('id, team_data, policies_data')
         .eq('owner_id', user.id)
         .maybeSingle();
       if (business) {
         setBusinessId(business.id);
+        
+        if (business.policies_data && typeof business.policies_data === 'object' && 'is_paused' in business.policies_data) {
+          setIsPaused(business.policies_data.is_paused as boolean);
+        }
+
         if (business.team_data && Array.isArray(business.team_data)) {
           setTeamData(business.team_data);
         }
@@ -209,7 +214,12 @@ export default function Dashboard() {
       return { waitingGuests: [], inChairGuests: [], completedGuests: [], allVenueBookings: [] };
     }
 
-    const venueBookings = bookings.filter((b: any) => b.business_id === businessId && b.status !== "cancelled");
+    const todayStr = format(new Date(), "yyyy-MM-dd");
+    const venueBookings = bookings.filter((b: any) => {
+      const isCorrectBusinessAndStatus = b.business_id === businessId && b.status !== "cancelled";
+      const isTodayOrNoDate = !b.date || String(b.date).startsWith(todayStr);
+      return isCorrectBusinessAndStatus && isTodayOrNoDate;
+    });
 
     const waiting: Guest[] = [];
     const inChair: Guest[] = [];
@@ -475,9 +485,18 @@ export default function Dashboard() {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={() => {
-                setIsPaused(!isPaused);
-                toast.success(isPaused ? "Queue is now open" : "Queue paused temporarily");
+              onClick={async () => {
+                const newState = !isPaused;
+                setIsPaused(newState);
+                
+                if (businessId) {
+                  const supabase = createClient();
+                  const { data: b } = await supabase.from('businesses').select('policies_data').eq('id', businessId).single();
+                  const currentPolicies = b?.policies_data && typeof b.policies_data === 'object' ? b.policies_data : {};
+                  await supabase.from('businesses').update({ policies_data: { ...currentPolicies, is_paused: newState } }).eq('id', businessId);
+                }
+                
+                toast.success(newState ? "Queue paused temporarily" : "Queue is now open");
               }}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-95 text-white ${
                 isPaused 

@@ -1,6 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { createClient } from "@/utils/supabase/client";
+import { CustomerService } from "@/services/CustomerService";
+import { queryKeys } from "@/lib/queryKeys";
+import { INITIAL_CUSTOMERS } from "@/constants/customers";
+import type { Customer, CustomerData } from "@/types";
 import {
   Search,
   Download,
@@ -61,13 +67,6 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }: Confir
 };
 // -------------------------------------------------------------
 
-// Static mock data
-const INITIAL_CUSTOMERS = [
-  { id: 1, name: "Azamat Umarov", initials: "AU", avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]", phone: "+998 90 123 45 67", status: "regular", statusColor: "bg-[#8A2532]/10 text-[#8A2532] border-[#8A2532]/20", visits: 24, ltv: "2,450,000 UZS", lastVisit: "Yesterday, 18:20" },
-  { id: 2, name: "Dilshod K.", initials: "DK", avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]", phone: "+998 93 987 65 43", status: "new", statusColor: "bg-[#e8efe9] text-[#4a6b53] border-[#4a6b53]/30", visits: 1, ltv: "80,000 UZS", lastVisit: "04 July, 12:00" },
-  { id: 3, name: "Malika Kh.", initials: "MK", avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]", phone: "+998 99 444 55 66", status: "regular", statusColor: "bg-[#8A2532]/10 text-[#8A2532] border-[#8A2532]/20", visits: 12, ltv: "1,120,000 UZS", lastVisit: "28 June, 15:45" },
-];
-
 const TABS = [
   { id: "all", label: "All" },
   { id: "regular", label: "Regulars" },
@@ -75,16 +74,82 @@ const TABS = [
 ];
 
 export default function Customers() {
-  const [customers, setCustomers] = useState(INITIAL_CUSTOMERS);
+  const queryClient = useQueryClient();
+  const supabase = createClient();
+  const customerService = new CustomerService(supabase);
+
+  const { data: customersData = INITIAL_CUSTOMERS, isLoading } = useQuery({
+    queryKey: queryKeys.customers.all,
+    queryFn: async () => {
+      const res = await customerService.getCustomers();
+      return res && res.length > 0 ? res : INITIAL_CUSTOMERS;
+    }
+  });
+
+  const formattedCustomers = (customersData as CustomerData[]).map((c) => {
+    if (typeof c.id === "number") return c;
+    const words = (c.name || "Unknown").trim().split(/\s+/);
+    const initials = words.length >= 2 
+      ? (words[0][0] + words[1][0]).toUpperCase() 
+      : words[0].substring(0, 2).toUpperCase();
+
+    return {
+      id: c.id,
+      name: c.name || "Unknown",
+      initials,
+      avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]",
+      phone: c.phone || "No phone",
+      status: c.status || "new",
+      statusColor: c.status === "regular" ? "bg-[#8A2532]/10 text-[#8A2532] border-[#8A2532]/20" : "bg-[#e8efe9] text-[#4a6b53] border-[#4a6b53]/30",
+      visits: c.visits || 0,
+      ltv: c.ltv || "0 UZS",
+      lastVisit: c.lastVisit || "Never"
+    } as CustomerData;
+  });
+
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [selectedIds, setSelectedIds] = useState<(string | number)[]>([]);
   const [modal, setModal] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [customerToDelete, setCustomerToDelete] = useState<number | null>(null);
+  const [customerToDelete, setCustomerToDelete] = useState<string | number | null>(null);
 
   const [newCustomerName, setNewClientName] = useState("");
   const [newCustomerPhone, setNewClientPhone] = useState("");
+
+  const createCustomerMutation = useMutation({
+    mutationFn: async (newCustomer: Partial<Customer>) => {
+      return await customerService.createClient(newCustomer);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.customers.all });
+      toast.success("Customer added successfully");
+      setModal(false);
+      setNewClientName("");
+      setNewClientPhone("");
+    },
+    onError: (error) => {
+      toast.error("Failed to add customer");
+      console.error(error);
+    }
+  });
+
+  const deleteCustomerMutation = useMutation({
+    mutationFn: async (id: string | number) => {
+      return await customerService.deleteCustomer(id.toString());
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.customers.all });
+      toast.success("Customer deleted successfully");
+      setDeleteModalOpen(false);
+      setCustomerToDelete(null);
+      setSelectedIds(prev => prev.filter(selectedId => selectedId !== customerToDelete));
+    },
+    onError: (error) => {
+      toast.error("Failed to delete customer");
+      console.error(error);
+    }
+  });
 
   const handleAddCustomer = (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,32 +158,14 @@ export default function Customers() {
       return;
     }
 
-    const words = newCustomerName.trim().split(/\s+/);
-    const initials = words.length >= 2 
-      ? (words[0][0] + words[1][0]).toUpperCase() 
-      : words[0].substring(0, 2).toUpperCase();
-
-    const newCustomer = {
-      id: Date.now(),
+    createCustomerMutation.mutate({
       name: newCustomerName,
-      initials,
-      avatarColor: "bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA]",
       phone: newCustomerPhone,
-      status: "new",
-      statusColor: "bg-[#e8efe9] text-[#4a6b53] border-[#4a6b53]/30",
-      visits: 0,
-      ltv: "0 UZS",
-      lastVisit: "Never"
-    };
-
-    setCustomers(prev => [newCustomer, ...prev]);
-    setModal(false);
-    setNewClientName("");
-    setNewClientPhone("");
-    toast.success("Customer added successfully");
+      status: "new"
+    });
   };
 
-  const filteredCustomers = customers.filter((customer) => {
+  const filteredCustomers = formattedCustomers.filter((customer: CustomerData) => {
     const matchesTab = activeTab === "all" || customer.status === activeTab;
     const q = searchQuery.trim().toLowerCase();
     const matchesSearch = q === "" || 
@@ -127,18 +174,18 @@ export default function Customers() {
     return matchesTab && matchesSearch;
   });
 
-  const allFilteredSelected = filteredCustomers.length > 0 && filteredCustomers.every(c => selectedIds.includes(c.id));
-  const someSelected = filteredCustomers.some(c => selectedIds.includes(c.id)) && !allFilteredSelected;
+  const allFilteredSelected = filteredCustomers.length > 0 && filteredCustomers.every((c: CustomerData) => selectedIds.includes(c.id));
+  const someSelected = filteredCustomers.some((c: CustomerData) => selectedIds.includes(c.id)) && !allFilteredSelected;
 
   const toggleSelectAll = () => {
     if (allFilteredSelected) {
-      setSelectedIds(prev => prev.filter(id => !filteredCustomers.find(c => c.id === id)));
+      setSelectedIds(prev => prev.filter(id => !filteredCustomers.find((c: CustomerData) => c.id === id)));
     } else {
-      setSelectedIds(prev => [...new Set([...prev, ...filteredCustomers.map(c => c.id)])]);
+      setSelectedIds(prev => [...new Set([...prev, ...filteredCustomers.map((c: CustomerData) => c.id)])]);
     }
   };
 
-  const toggleSelect = (id: number) => {
+  const toggleSelect = (id: string | number) => {
     setSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   };
 
@@ -226,7 +273,13 @@ export default function Customers() {
                 </thead>
 
                 <tbody className="divide-y divide-[#F5F5F4] text-sm">
-                  {filteredCustomers.length === 0 ? (
+                  {isLoading ? (
+                    <tr>
+                      <td colSpan={6} className="py-8 text-center text-[#4A4E51]">
+                        Loading customers...
+                      </td>
+                    </tr>
+                  ) : filteredCustomers.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="py-8">
                         <EmptyState 
@@ -236,7 +289,7 @@ export default function Customers() {
                       </td>
                     </tr>
                   ) : (
-                    filteredCustomers.map((customer) => (
+                    filteredCustomers.map((customer: any) => (
                     <tr key={customer.id} className={`transition-colors group ${selectedIds.includes(customer.id) ? "bg-[#F5F5F4]" : "hover:bg-[#F5F5F4]/50"}`}>
                       <td className="py-3 pl-6 pr-2">
                         <input 
@@ -293,7 +346,11 @@ export default function Customers() {
 
               {/* MOBILE VIEW */}
               <div className="lg:hidden flex flex-col divide-y divide-[#F5F5F4]">
-                {filteredCustomers.length === 0 ? (
+                {isLoading ? (
+                  <div className="p-8 text-center text-[#4A4E51]">
+                    Loading customers...
+                  </div>
+                ) : filteredCustomers.length === 0 ? (
                   <div className="p-8">
                     <EmptyState 
                       title={searchQuery ? "No results found" : "No customers found"} 
@@ -301,7 +358,7 @@ export default function Customers() {
                     />
                   </div>
                 ) : (
-                  filteredCustomers.map((customer) => (
+                  filteredCustomers.map((customer: any) => (
                     <div key={customer.id} className="p-5 bg-white hover:bg-[#F5F5F4] transition-colors">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
@@ -349,8 +406,8 @@ export default function Customers() {
 
       {/* ADD CLIENT MODAL */}
       {modal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm">
-          <div className="bg-white w-full max-w-md rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={() => setModal(false)}>
+          <div className="bg-white w-full max-w-md rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <button type="button" onClick={() => setModal(false)} className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-[#F5F5F4] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] transition-colors z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
               <X className="w-4 h-4" />
             </button>
@@ -379,8 +436,8 @@ export default function Customers() {
                   className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
                 />
               </div>
-              <button type="submit" className="w-full mt-4 py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex justify-center items-center active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                Add to Directory
+              <button disabled={createCustomerMutation.isPending} type="submit" className="w-full mt-4 py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex justify-center items-center active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] disabled:opacity-70">
+                {createCustomerMutation.isPending ? "Adding..." : "Add to Directory"}
               </button>
             </form>
           </div>
@@ -396,12 +453,8 @@ export default function Customers() {
         }} 
         onConfirm={() => {
           if (customerToDelete !== null) {
-            setCustomers(prev => prev.filter(c => c.id !== customerToDelete));
-            setSelectedIds(prev => prev.filter(id => id !== customerToDelete));
-            toast.success("Customer deleted successfully");
+            deleteCustomerMutation.mutate(customerToDelete);
           }
-          setDeleteModalOpen(false);
-          setCustomerToDelete(null);
         }} 
         title="Delete Customer?" 
         description="Are you sure you want to remove this customer from the directory?" 

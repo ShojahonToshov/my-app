@@ -3,6 +3,9 @@ import { createClient } from "@/utils/supabase/server";
 import SearchClient from "./components/SearchClient";
 import Footer from "@/components/Footer";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function SearchPage() {
   const supabase = await createClient();
   const venueService = new VenueService(supabase);
@@ -21,6 +24,7 @@ export default async function SearchPage() {
     price: b.price ?? "$50",
     time: b.work_hours ?? "09:00-21:00",
     punctuality: b.punctuality ?? 100,
+    is_paused: b.policies_data?.is_paused ?? true,
     tags: b.tags ?? [b.category ?? "General"],
     badges: b.badges ?? [],
   }));

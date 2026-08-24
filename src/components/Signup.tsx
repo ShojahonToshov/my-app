@@ -23,6 +23,7 @@ export default function Signup() {
   const [step, setStep] = useState<StepType>("form");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [autoFillCode, setAutoFillCode] = useState<string>("");
   const { login: loginStore } = useUser();
   
   const [formData, setFormData] = useState({
@@ -61,6 +62,17 @@ export default function Signup() {
       
       toast.success("Verification code sent");
       setStep("otp");
+
+      if (data.code) {
+        setTimeout(() => {
+          toast("\uD83D\uDCF2 New Message", {
+            description: `Your Elara verification code is ${data.code}`,
+            position: "top-center",
+            duration: 6000,
+          });
+          setAutoFillCode(data.code);
+        }, 1000);
+      }
     } catch (error: any) {
       console.error(error);
       toast.error(error.message || "Registration error");
@@ -208,7 +220,7 @@ export default function Signup() {
             </form>
           </>
         ) : (
-          <OtpInput phone={formData.phone} onVerify={handleVerifyOtp} />
+          <OtpInput phone={formData.phone} onVerify={handleVerifyOtp} autoFillCode={autoFillCode} />
         )}
       </Card>
     </div>

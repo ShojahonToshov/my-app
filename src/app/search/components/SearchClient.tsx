@@ -19,6 +19,10 @@ import {
   X,
   ChevronRight,
   SearchX,
+  Lock,
+  Unlock,
+  AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
 import Link from "next/link";
 import ElaraLogo from "@/components/ElaraLogo";
@@ -26,7 +30,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
-import useSearch from "@/hooks/useSearch";
+import useSearch, { isOpenNow } from "@/hooks/useSearch";
 import Avatar from "@/components/ui/Avatar";
 
 
@@ -81,6 +85,7 @@ function EmptyState({ query }: { query?: string }) {
 
 export default function SearchClient({ initialVenues }: { initialVenues: any[] }) {
   const [mounted, setMounted] = useState(false);
+  const [interceptedVenue, setInterceptedVenue] = useState<any | null>(null);
   useEffect(() => setMounted(true), []);
 
   const {
@@ -579,6 +584,35 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                               <Badge variant="dark" icon={Timer}>
                                 {venue.badges.find((b) => b.includes("time")) ?? "Verified"}
                               </Badge>
+                              {venue.is_paused || (mounted ? !isOpenNow(venue.time) : false) ? (
+                                <div className="relative group inline-block">
+                                  <Badge variant="dark" icon={Lock} className="!bg-[#8A2532] !text-white backdrop-blur-md border-none cursor-pointer hover:!bg-[#8A2532]/90">
+                                    Closed
+                                  </Badge>
+                                  <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-[#DCDCDA] z-[60] text-left opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none">
+                                    <p className="text-xs font-semibold text-[#121415] mb-1 flex items-center gap-1.5">
+                                      <AlertCircle className="w-3.5 h-3.5 text-[#8A2532]" /> Temporarily Closed
+                                    </p>
+                                    <p className="text-[11px] text-[#4A4E51] leading-relaxed">
+                                      This venue is currently closed and not accepting instant walk-ins. You can still make an advance booking, but immediate service is not guaranteed.
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="relative group inline-block">
+                                  <Badge variant="dark" icon={Unlock} className="!bg-[#4a6b53] !text-white backdrop-blur-md border-none cursor-pointer hover:!bg-[#4a6b53]/90">
+                                    Open
+                                  </Badge>
+                                  <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-[#DCDCDA] z-[60] text-left opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none">
+                                    <p className="text-xs font-semibold text-[#121415] mb-1 flex items-center gap-1.5">
+                                      <CheckCircle2 className="w-3.5 h-3.5 text-[#4a6b53]" /> Currently Open
+                                    </p>
+                                    <p className="text-[11px] text-[#4A4E51] leading-relaxed">
+                                      This venue is open and currently accepting instant walk-ins and bookings.
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
                             </div>
 
                             {/* ── Save button ── */}
@@ -659,14 +693,27 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                               <span className="text-sm font-semibold text-[#121415]">{venue.time}</span>
                             </div>
 
-                            <Link
-                              href={`/booking?id=${venue.id}`}
-                              className="w-full xl:w-auto shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 rounded-full"
-                            >
-                              <Button variant="primary" icon={ChevronRight} iconPosition="right" shape="pill" className="w-full xl:w-auto px-6 py-3">
+                            {venue.is_paused || (mounted ? !isOpenNow(venue.time) : false) ? (
+                              <Button 
+                                variant="primary" 
+                                icon={ChevronRight} 
+                                iconPosition="right" 
+                                shape="pill" 
+                                className="w-full xl:w-auto px-6 py-3"
+                                onClick={() => setInterceptedVenue(venue)}
+                              >
                                 Book now
                               </Button>
-                            </Link>
+                            ) : (
+                              <Link
+                                href={`/booking?id=${venue.id}`}
+                                className="w-full xl:w-auto shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 rounded-full"
+                              >
+                                <Button variant="primary" icon={ChevronRight} iconPosition="right" shape="pill" className="w-full xl:w-auto px-6 py-3">
+                                  Book now
+                                </Button>
+                              </Link>
+                            )}
                           </div>
                         </div>
                       </Card>
@@ -774,6 +821,60 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
 
         </div>
         </div>
+      {/* Intercept Booking Modal */}
+      <AnimatePresence>
+        {interceptedVenue && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-[#121415]/40 backdrop-blur-sm"
+              onClick={() => setInterceptedVenue(null)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="relative w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-[#DCDCDA] overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 w-full h-1 bg-[#8A2532]" />
+              <button
+                onClick={() => setInterceptedVenue(null)}
+                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-[#F5F5F4] text-[#4A4E51] hover:text-[#121415] hover:bg-[#E5E9EA] transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="w-12 h-12 rounded-2xl bg-[#8A2532]/10 flex items-center justify-center mb-5">
+                <AlertCircle className="w-6 h-6 text-[#8A2532]" />
+              </div>
+
+              <h2 className="text-xl font-bold text-[#121415] mb-2 tracking-tight">
+                Venue is Currently Closed
+              </h2>
+              <p className="text-sm font-medium text-[#4A4E51] leading-relaxed mb-6">
+                <strong className="text-[#121415]">{interceptedVenue.name}</strong> is not accepting instant walk-ins right now. You can still make an advance booking for a future date, but immediate service is not guaranteed.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setInterceptedVenue(null)}
+                >
+                  Cancel
+                </Button>
+                <Link href={`/booking?id=${interceptedVenue.id}`} className="flex-1">
+                  <Button variant="primary" className="w-full" onClick={() => setInterceptedVenue(null)}>
+                    Proceed to Book
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
       </main>
 
           </div>

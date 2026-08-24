@@ -105,12 +105,18 @@ export function PhoneInput({
     
     // Formatting patterns based on country
     let pattern = null;
+    let maxDigits = 0;
     switch (currentCountryCode) {
       case "+998": case "+992": pattern = [2, 3, 2, 2]; break;
       case "+7": case "+90": pattern = [3, 3, 2, 2]; break;
       case "+996": pattern = [3, 3, 3]; break;
       case "+1": case "+44": pattern = [3, 3, 4]; break;
       case "+971": pattern = [2, 3, 4]; break;
+    }
+
+    if (pattern) {
+      maxDigits = pattern.reduce((acc, val) => acc + val, 0);
+      localDigits = localDigits.slice(0, maxDigits);
     }
 
     if (pattern && localDigits.length > 0) {
@@ -122,9 +128,6 @@ export function PhoneInput({
         const chunk = localDigits.slice(currentIndex, currentIndex + chunkLength);
         formattedLocal += (formattedLocal ? " " : "") + chunk;
         currentIndex += chunkLength;
-      }
-      if (currentIndex < localDigits.length) {
-        formattedLocal += " " + localDigits.slice(currentIndex);
       }
       onChange(currentCountryCode + " " + formattedLocal);
     } else {

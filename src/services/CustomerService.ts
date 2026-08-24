@@ -1,7 +1,8 @@
 import type { Customer } from "@/types";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export class CustomerService {
-  constructor(private customer: any) {}
+  constructor(private customer: SupabaseClient) {}
   
   private get supabase() {
     return this.customer;

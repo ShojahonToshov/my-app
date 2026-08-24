@@ -124,6 +124,9 @@ export function AccountTabs({ upcomingCount }: { upcomingCount: number }) {
 
 export function BookingActions({ bookingId }: { bookingId: string }) {
   const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
+  const [newDate, setNewDate] = useState("");
+  const [newTime, setNewTime] = useState("");
+  const [isRescheduling, setIsRescheduling] = useState(false);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const router = useRouter();
@@ -149,14 +152,46 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
                 <CalendarDays className="w-6 h-6" />
               </div>
               <h2 className="text-2xl font-semibold text-[#121415] mb-2 tracking-tight">Reschedule booking</h2>
-              <p className="text-sm text-[#4A4E51] font-medium mb-8 leading-relaxed">Plans changed? Pick a new time for your visit to maintain your reliability rating.</p>
-              <button className="w-full bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl p-5 mb-8 text-center cursor-pointer hover:bg-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] group">
-                <span className="font-semibold text-[#121415] block mb-1.5 group-hover:text-[#8A2532] transition-colors">Select new time</span>
-                <span className="text-xs text-[#4A4E51] uppercase tracking-widest font-bold block">Available: Tomorrow, 14:00, 16:30</span>
-              </button>
+              <p className="text-sm text-[#4A4E51] font-medium mb-8 leading-relaxed">Plans changed? Pick a new date and time for your visit.</p>
+              
+              <div className="flex gap-4 mb-8">
+                <div className="flex-1">
+                  <label className="block text-xs font-semibold text-[#4A4E51] uppercase tracking-wider mb-2">New Date</label>
+                  <input
+                    type="date"
+                    value={newDate}
+                    onChange={(e) => setNewDate(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="w-full h-12 px-4 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-sm font-medium outline-none focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all duration-300 text-[#121415]"
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-xs font-semibold text-[#4A4E51] uppercase tracking-wider mb-2">New Time</label>
+                  <input
+                    type="time"
+                    value={newTime}
+                    onChange={(e) => setNewTime(e.target.value)}
+                    className="w-full h-12 px-4 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-sm font-medium outline-none focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all duration-300 text-[#121415]"
+                  />
+                </div>
+              </div>
+
               <div className="flex flex-col sm:flex-row gap-3 w-full">
                 <button onClick={() => setRescheduleModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Cancel</span></button>
-                <button onClick={() => setRescheduleModalOpen(false)} className="flex-1 h-12 px-6 bg-[#121415] text-white rounded-full font-medium text-sm hover:bg-[#1E2123] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Confirm</span></button>
+                <button 
+                  disabled={isRescheduling || !newDate || !newTime} 
+                  onClick={async () => { 
+                    setIsRescheduling(true); 
+                    const supabase = createClient(); 
+                    const { error } = await supabase.from('bookings').update({ date: newDate, time: newTime }).eq('id', bookingId); 
+                    if (error) { toast.error('Failed to reschedule booking'); } 
+                    else { toast.success('Booking rescheduled'); setRescheduleModalOpen(false); router.refresh(); } 
+                    setIsRescheduling(false); 
+                  }} 
+                  className="flex-1 h-12 px-6 bg-[#121415] text-white rounded-full font-medium text-sm hover:bg-[#1E2123] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50"
+                >
+                  {isRescheduling ? <Loader2 className="w-5 h-5 animate-spin shrink-0" /> : <span className="truncate block">Confirm</span>}
+                </button>
               </div>
             </motion.div>
           </motion.div>

@@ -156,14 +156,15 @@ const TIME_OPTIONS = Array.from({ length: 36 }).map((_, i) => {
 
 const ROLE_OPTIONS = ["Barber", "Senior Barber", "Top Specialist"];
 const STANDARD_SERVICES = ["Men's Haircut", "Haircut + Beard", "Beard Trim", "Kids Haircut", "Buzz Cut", "Hair Coloring", "Head Shave", "Face Massage", "Styling"];
-const CANCEL_WINDOWS = ["2 hours before", "12 hours before", "24 hours before", "Allow anytime"];
+const CANCEL_WINDOWS = ["2 hours before", "12 hours before (Recommended)", "24 hours before", "Allow anytime"];
+const KARMA_THRESHOLDS = ["90%", "80% (Recommended)", "70%", "60%"];
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
 
   // Real state data for tab views
   const [venueProfile, setVenueProfile] = useState({ name: '', phone: '', address: '', description: '', instagram: '' });
-  const [policies, setPolicies] = useState({ cancelWindow: "12 hours before", requireCardForLowKarma: true, autoBlacklist: false });
+  const [policies, setPolicies] = useState({ cancelWindow: "12 hours before (Recommended)", requireCardForLowKarma: true, karmaThreshold: "80% (Recommended)", autoBlacklist: false });
   const [services, setServices] = useState<any[]>([]);
   const [team, setTeam] = useState<any[]>([]);
   const [schedule, setSchedule] = useState<any[]>([]);
@@ -186,7 +187,13 @@ export default function Settings() {
           description: business.description || '',
           instagram: business.instagram || ''
         });
-        if (business.policies_data && Object.keys(business.policies_data).length > 0) setPolicies(business.policies_data);
+        if (business.policies_data && Object.keys(business.policies_data).length > 0) {
+          const pd = business.policies_data;
+          if (!pd.cancelWindow || pd.cancelWindow === "12 hours before") pd.cancelWindow = "12 hours before (Recommended)";
+          if (!pd.karmaThreshold) pd.karmaThreshold = "80% (Recommended)";
+          else if (pd.karmaThreshold === "80%") pd.karmaThreshold = "80% (Recommended)";
+          setPolicies({ ...pd, cancelWindow: pd.cancelWindow, karmaThreshold: pd.karmaThreshold });
+        }
         if (business.team_data && business.team_data.length > 0) setTeam(business.team_data);
         
         if (business.schedule_data && business.schedule_data.length > 0) {
@@ -498,20 +505,13 @@ export default function Settings() {
                         <input required type="text" value={venueProfile.name} onChange={(e) => setVenueProfile({...venueProfile, name: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
                       </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-[#121415] mb-2">Customer Phone</label>
-                      <div className="relative">
-                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                        <input required type="text" value={venueProfile.phone} onChange={(e) => setVenueProfile({...venueProfile, phone: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
-                      </div>
-                    </div>
-                  </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-[#121415] mb-2">Instagram Username</label>
-                    <div className="relative">
-                      <Instagram className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                      <input type="text" value={venueProfile.instagram} onChange={(e) => setVenueProfile({...venueProfile, instagram: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" placeholder="@your.instagram" />
+                    <div>
+                      <label className="block text-sm font-medium text-[#121415] mb-2">Instagram Username</label>
+                      <div className="relative">
+                        <Instagram className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
+                        <input type="text" value={venueProfile.instagram} onChange={(e) => setVenueProfile({...venueProfile, instagram: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" placeholder="@your.instagram" />
+                      </div>
                     </div>
                   </div>
 
@@ -690,31 +690,44 @@ export default function Settings() {
                     <label className="block text-sm font-semibold text-[#121415] mb-1">Free Cancellation Window</label>
                     <p className="text-xs text-[#4A4E51] font-medium mb-4">If a customer cancels past this window, their reliability karma rating will decrease.</p>
                     <CustomSelect 
-                      value={policies.cancelWindow} 
+                      value={policies.cancelWindow || "12 hours before (Recommended)"} 
                       options={CANCEL_WINDOWS} 
                       onChange={(val) => setPolicies({...policies, cancelWindow: val})} 
                       className="w-full sm:w-64"
                     />
                   </div>
 
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border border-[#DCDCDA] bg-[#F5F5F4]/50 gap-4">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-semibold text-[#121415] text-sm">Smart Karma Protection</span>
-                        <span className="px-2 py-0.5 rounded-md bg-[#4a6b53]/10 text-[#4a6b53] text-xs font-semibold">Recommended</span>
+                  <div className="p-5 rounded-2xl border border-[#DCDCDA] bg-[#F5F5F4]/50">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-semibold text-[#121415] text-sm">Smart Karma Protection</span>
+                          <span className="px-2 py-0.5 rounded-md bg-[#4a6b53]/10 text-[#4a6b53] text-xs font-semibold">Recommended</span>
+                        </div>
+                        <p className="text-xs text-[#4A4E51] font-medium max-w-lg leading-relaxed">
+                          Require card hold (deposit) only for first-time customers or those with karma score below {policies.karmaThreshold?.replace(' (Recommended)', '') || '80%'}. Loyal customers book in 1-click.
+                        </p>
                       </div>
-                      <p className="text-xs text-[#4A4E51] font-medium max-w-lg leading-relaxed">
-                        Require card hold (deposit) only for first-time customers or those with karma score below 80%. Loyal customers book in 1-click.
-                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setPolicies({...policies, requireCardForLowKarma: !policies.requireCardForLowKarma})} 
+                        aria-label="Toggle Smart Karma Protection"
+                        className={`relative w-11 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 shrink-0 ${policies.requireCardForLowKarma ? "bg-[#8A2532]" : "bg-[#DCDCDA]"}`}
+                      >
+                        <span className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 shadow-sm ${policies.requireCardForLowKarma ? "translate-x-5" : "translate-x-0"}`}></span>
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setPolicies({...policies, requireCardForLowKarma: !policies.requireCardForLowKarma})} 
-                      aria-label="Toggle Smart Karma Protection"
-                      className={`relative w-11 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 shrink-0 ${policies.requireCardForLowKarma ? "bg-[#8A2532]" : "bg-[#DCDCDA]"}`}
-                    >
-                      <span className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 shadow-sm ${policies.requireCardForLowKarma ? "translate-x-5" : "translate-x-0"}`}></span>
-                    </button>
+                    {policies.requireCardForLowKarma && (
+                      <div className="pt-4 mt-4 border-t border-[#DCDCDA]">
+                        <label className="block text-sm font-semibold text-[#121415] mb-2">Karma Threshold</label>
+                        <CustomSelect 
+                          value={policies.karmaThreshold || "80% (Recommended)"} 
+                          options={KARMA_THRESHOLDS} 
+                          onChange={(val) => setPolicies({...policies, karmaThreshold: val})} 
+                          className="w-full sm:w-64"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -732,8 +745,8 @@ export default function Settings() {
 
       {/* MODAL: NEW SERVICE */}
       {isServiceModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true">
-          <div className="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsServiceModalOpen(false)}>
+          <div className="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <button type="button" aria-label="Close" onClick={() => setIsServiceModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">
               <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{editingServiceId ? "Edit Service" : "New Service"}</h2>
@@ -774,8 +787,8 @@ export default function Settings() {
 
       {/* MODAL: NEW SPECIALIST */}
       {isMasterModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true">
-          <div className="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsMasterModalOpen(false)}>
+          <div className="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <button type="button" aria-label="Close" onClick={() => setIsMasterModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">
               <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Specialist</h2>

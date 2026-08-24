@@ -88,7 +88,7 @@ export class BookingService {
   async getBookingById(id: string): Promise<Booking> {
     const { data, error } = await this.supabase
       .from('bookings')
-      .select('*, businesses(name, team_data)')
+      .select('*, businesses(name, team_data, category)')
       .eq('id', id)
       .single();
     if (error) throw error;

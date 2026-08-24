@@ -5,12 +5,19 @@ import { Button } from "@/components/ui/Button";
 interface OtpInputProps {
   onVerify: (code: string) => void;
   phone: string;
+  autoFillCode?: string;
 }
 
-export default function OtpInput({ onVerify, phone }: OtpInputProps) {
+export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProps) {
   const [code, setCode] = useState<string>('');
   const [timeLeft, setTimeLeft] = useState<number>(30);
   const [canResend, setCanResend] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (autoFillCode) {
+      setCode(autoFillCode);
+    }
+  }, [autoFillCode]);
 
   useEffect(() => {
     if (timeLeft > 0) {

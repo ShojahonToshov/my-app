@@ -56,7 +56,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ 
       success: true, 
-      message: 'Verification code generated' 
+      message: 'Verification code generated',
+      code
     });
     
   } catch (error: unknown) {

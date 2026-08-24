@@ -20,12 +20,13 @@ export interface VenueData {
   /** Work hours e.g. "09:00-21:00" */
   time: string;
   punctuality: number;
+  is_paused?: boolean;
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 /** Parse "HH:MM-HH:MM" and check against current time */
-function isOpenNow(timeRange: string): boolean {
+export function isOpenNow(timeRange: string): boolean {
   try {
     const [start, end] = timeRange.split("-").map((t) => {
       const [h, m] = t.trim().split(":").map(Number);
@@ -197,7 +198,7 @@ export default function useSearch(initialVenues: VenueData[] = []) {
 
     // 4. Open Now filter
     if (isOpenNowOnly) {
-      result = result.filter((v) => isOpenNow(v.time));
+      result = result.filter((v) => !v.is_paused && isOpenNow(v.time));
     }
 
     // 5. Sort

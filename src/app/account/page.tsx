@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import {
-  Settings, ArrowRight, Star, Heart, Calendar, MapPin, Timer, History, RefreshCw
+  Settings, ArrowRight, Star, Heart, Calendar, MapPin, Timer, History, RefreshCw, Plus
 } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import { createClient } from "@/utils/supabase/server";
@@ -62,12 +62,12 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
     "Guest";
   const userEmail = (authUser?.email as string) ?? "";
   const avatarUrl = (authUser?.profile?.avatar_url as string) ?? "";
-  const clientKarma = 95;
 
   const activeTab = searchParams.tab || DEFAULT_TAB;
 
   let upcomingBookings: any[] = [];
   let historyList: any[] = [];
+  let clientKarma = 100;
 
   if (authUser?.id) {
     const { data: rawBookings } = await supabase
@@ -113,9 +113,11 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
 
       upcomingBookings = rawBookings.filter((b) => isUpcoming(b.status)).map(mapBooking);
       historyList = rawBookings.filter((b) => !isUpcoming(b.status)).map(mapBooking);
+      
+      const { calculateKarmaFromHistory } = await import("@/utils/karma");
+      clientKarma = calculateKarmaFromHistory(rawBookings || []);
     }
   }
-
 
   return (
     <div className="min-h-screen bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white flex flex-col">
@@ -129,6 +131,11 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
             </div>
           </div>
           <div className="flex items-center gap-3 shrink-0">
+            <Link href="/search" className="hidden sm:flex h-9 px-4 bg-[#121415] text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#1E2123] transition-all items-center justify-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+              <Plus className="w-4 h-4 shrink-0" />
+              <span>Book</span>
+            </Link>
+            <div className="w-px h-6 bg-[#DCDCDA] hidden sm:block mx-1 shrink-0" />
             <KarmaTooltip karma={clientKarma} />
             <div className="w-px h-6 bg-[#DCDCDA] hidden sm:block mx-1 shrink-0" />
             <NotificationsDropdown />
@@ -226,6 +233,15 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
           )}
         </div>
       </main>
+
+      {/* Mobile Floating Action Button for New Booking */}
+      <Link
+        href="/search"
+        className="sm:hidden fixed bottom-6 right-6 w-14 h-14 bg-[#121415] text-white rounded-full flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.25)] z-50 hover:scale-105 active:scale-95 transition-transform outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2"
+        aria-label="New Booking"
+      >
+        <Plus className="w-6 h-6" />
+      </Link>
     </div>
   );
 }

@@ -86,10 +86,19 @@ const defaultVenueData = {
   rating: 5.0,
   reviewsCount: 0,
   imageUrl: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074&auto=format&fit=crop",
-  scheduleData: null as any,
+  scheduleData: [
+    { day: "Monday", isActive: true, start: "10:00", end: "20:00" },
+    { day: "Tuesday", isActive: true, start: "10:00", end: "20:00" },
+    { day: "Wednesday", isActive: true, start: "10:00", end: "20:00" },
+    { day: "Thursday", isActive: true, start: "10:00", end: "20:00" },
+    { day: "Friday", isActive: true, start: "10:00", end: "20:00" },
+    { day: "Saturday", isActive: true, start: "10:00", end: "18:00" },
+    { day: "Sunday", isActive: false, start: "10:00", end: "18:00" },
+  ],
   policies: {
-    cancelWindow: "12 hours before",
+    cancelWindow: "12 hours before (Recommended)",
     requireCardForLowKarma: true,
+    karmaThreshold: "80% (Recommended)",
   },
   services: [
     {
@@ -185,8 +194,18 @@ export default function CustomerBooking() {
               ];
             }
             
-            if (business.schedule_data) {
+            if (business.schedule_data && business.schedule_data.length > 0) {
               actualSchedule = business.schedule_data;
+            } else {
+              actualSchedule = [
+                { day: "Monday", isActive: true, start: "10:00", end: "20:00" },
+                { day: "Tuesday", isActive: true, start: "10:00", end: "20:00" },
+                { day: "Wednesday", isActive: true, start: "10:00", end: "20:00" },
+                { day: "Thursday", isActive: true, start: "10:00", end: "20:00" },
+                { day: "Friday", isActive: true, start: "10:00", end: "20:00" },
+                { day: "Saturday", isActive: true, start: "10:00", end: "18:00" },
+                { day: "Sunday", isActive: false, start: "10:00", end: "18:00" },
+              ];
             }
 
             setVenueData((prev: any) => {
@@ -205,7 +224,10 @@ export default function CustomerBooking() {
                 services: actualServices || prev.services,
                 staff: actualMasters || prev.staff,
                 scheduleData: actualSchedule,
-                policies: business.policies_data && Object.keys(business.policies_data).length > 0 ? business.policies_data : prev.policies,
+                policies: {
+                  ...prev.policies,
+                  ...(business.policies_data || {})
+                },
                 about: {
                   ...prev.about,
                   description: business.description || prev.about.description,
@@ -268,6 +290,7 @@ export default function CustomerBooking() {
   }, [venueData.scheduleData, selectedDate, dates]);
 
   const availableTimes = useMemo(() => {
+    let slots: string[] = [];
     if (venueData.scheduleData) {
       const scheduleData = venueData.scheduleData;
       const [year, month, day] = selectedDate.split('-').map(Number);
@@ -275,27 +298,49 @@ export default function CustomerBooking() {
       const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
       
       const daySchedule = scheduleData.find((d: any) => d.day === dayName);
-      if (!daySchedule || !daySchedule.isActive) return [];
-      
-      const slots = [];
-      let [startH, startM] = daySchedule.start.split(':').map(Number);
-      const [endH, endM] = daySchedule.end.split(':').map(Number);
-      
-      while (startH < endH || (startH === endH && startM < endM)) {
-        const timeString = `${startH.toString().padStart(2, '0')}:${startM.toString().padStart(2, '0')}`;
-        slots.push(timeString);
-        startM += 30;
-        if (startM >= 60) {
-          startH += 1;
-          startM -= 60;
+      if (daySchedule && daySchedule.isActive) {
+        let [startH, startM] = daySchedule.start.split(':').map(Number);
+        const [endH, endM] = daySchedule.end.split(':').map(Number);
+        
+        while (startH < endH || (startH === endH && startM < endM)) {
+          const timeString = `${startH.toString().padStart(2, '0')}:${startM.toString().padStart(2, '0')}`;
+          slots.push(timeString);
+          startM += 30;
+          if (startM >= 60) {
+            startH += 1;
+            startM -= 60;
+          }
         }
       }
-      return slots;
+    } else {
+      slots = ["10:00", "10:30", "11:00", "11:30", "14:00", "14:30", "15:00", "16:00", "16:30", "17:00"];
     }
     
-    const times = ["10:00", "10:30", "11:00", "11:30", "14:00", "14:30", "15:00", "16:00", "16:30", "17:00"];
-    return times;
+    const now = new Date();
+    const todayId = format(now, "yyyy-MM-dd");
+    const currentH = now.getHours();
+    const currentM = now.getMinutes();
+
+    return slots.map(timeStr => {
+      let disabled = false;
+      if (selectedDate === todayId) {
+        const [h, m] = timeStr.split(':').map(Number);
+        if (h < currentH || (h === currentH && m <= currentM)) {
+          disabled = true;
+        }
+      }
+      return { time: timeStr, disabled };
+    });
   }, [selectedDate, selectedMaster, venueData.scheduleData]);
+
+  useEffect(() => {
+    if (selectedTime) {
+      const slot = availableTimes.find(t => t.time === selectedTime);
+      if (!slot || slot.disabled) {
+        setSelectedTime(null);
+      }
+    }
+  }, [availableTimes, selectedTime]);
 
   const [customerName, setClientName] = useState<string>(user?.name ? String(user.name) : "");
   const [customerPhone, setClientPhone] = useState<string>(user?.phone ? String(user.phone) : "");
@@ -304,7 +349,23 @@ export default function CustomerBooking() {
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  const userKarma = 95;
+  const [userKarma, setUserKarma] = useState(100);
+
+  useEffect(() => {
+    async function fetchKarma() {
+      if (user?.id) {
+        try {
+          const supabase = createClient();
+          const { calculateUserKarma } = await import("@/utils/karma");
+          const karma = await calculateUserKarma(supabase, user.id);
+          setUserKarma(karma);
+        } catch (error) {
+          console.error("Failed to fetch karma", error);
+        }
+      }
+    }
+    fetchKarma();
+  }, [user]);
 
   const isStep2Unlocked = selectedService !== null;
   const isStep3Unlocked = isStep2Unlocked && selectedMaster !== null;
@@ -649,18 +710,21 @@ export default function CustomerBooking() {
                   </div>
 
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mt-4">
-                    {availableTimes.map((time) => (
+                    {availableTimes.map((slot) => (
                       <button
-                        key={time}
+                        key={slot.time}
                         type="button"
-                        onClick={() => handleTimeSelect(time)}
+                        disabled={slot.disabled}
+                        onClick={() => !slot.disabled && handleTimeSelect(slot.time)}
                         className={`py-3.5 px-2 rounded-xl font-medium text-sm transition-all active:scale-95 border truncate w-full text-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${
-                          selectedTime === time
-                            ? "border-[#121415] bg-[#121415] text-white"
-                            : "border-[#DCDCDA] bg-white text-[#121415] hover:bg-[#F5F5F4]"
+                          slot.disabled
+                            ? "opacity-40 cursor-not-allowed pointer-events-none bg-[#F5F5F4] border-[#DCDCDA]"
+                            : selectedTime === slot.time
+                              ? "border-[#121415] bg-[#121415] text-white"
+                              : "border-[#DCDCDA] bg-white text-[#121415] hover:bg-[#F5F5F4]"
                         }`}
                       >
-                        {time}
+                        {slot.time}
                       </button>
                     ))}
                   </div>
@@ -717,7 +781,7 @@ export default function CustomerBooking() {
                       <ShieldCheck className="w-6 h-6 text-[#121415] shrink-0" />
                       <div>
                         <p className="font-semibold text-[#121415] text-base mb-1">
-                          Free cancellation up to {venueData.policies.cancelWindow.replace(' before', '')}
+                          Free cancellation up to {(venueData.policies?.cancelWindow || "12 hours before").replace(' before', '')}
                         </p>
                         <p className="text-sm font-medium text-[#4A4E51] leading-relaxed">
                           {venueData.policies.requireCardForLowKarma
