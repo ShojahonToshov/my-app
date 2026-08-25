@@ -65,7 +65,7 @@ const SORT_OPTIONS = [
 
 function EmptyState({ query }: { query?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center text-center py-20 px-6 bg-white border border-[#DCDCDA] rounded-[2rem]">
+    <div className="flex flex-col items-center justify-center text-center py-20 px-6 bg-white border border-[#DCDCDA] rounded-2xl">
       <div className="w-14 h-14 rounded-2xl bg-[#8A2532]/10 text-[#8A2532] flex items-center justify-center mb-6">
         <SearchX className="w-7 h-7" />
       </div>
@@ -237,7 +237,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               </AnimatePresence>
             </div>
 
-            <Button variant="primary" size="sm" shape="pill" className="px-6 py-2.5 shrink-0">
+            <Button variant="primary" size="sm" shape="rounded" className="px-6 py-2.5 shrink-0">
               Search
             </Button>
           </div>
@@ -287,12 +287,12 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               <>
                 <Link
                   href="/login"
-                  className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
+                  className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-xl transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
                 >
                   Log in
                 </Link>
                 <Link href="/signup" className="outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full flex items-center justify-center">
-                  <Button variant="secondary" size="sm" shape="pill" className="px-6 py-2.5 shrink-0">
+                  <Button variant="secondary" size="sm" shape="rounded" className="px-6 py-2.5 shrink-0">
                     Sign up
                   </Button>
                 </Link>
@@ -415,7 +415,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               <Button
                 onClick={toggleSavedFilter}
                 variant={isSavedOnly ? "secondary" : "outline"}
-                shape="pill"
+                shape="rounded"
                 className="px-4 sm:px-5"
               >
                 <Heart className={`w-4 h-4 transition-all ${isSavedOnly ? "fill-white" : ""}`} />
@@ -435,7 +435,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                   key={filter}
                   onClick={() => setActiveCategory(filter)}
                   variant={activeCategory === filter ? "secondary" : "outline"}
-                  shape="pill"
+                  shape="rounded"
                   className="px-4 sm:px-5"
                 >
                   {filter}
@@ -453,7 +453,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               <Button
                 onClick={toggleOpenNow}
                 variant={isOpenNowOnly ? "secondary" : "outline"}
-                shape="pill"
+                shape="rounded"
                 className="px-4"
               >
                 <Clock className="w-4 h-4" />
@@ -465,7 +465,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                 <Button
                   onClick={() => setSortOpen(!sortOpen)}
                   variant="outline"
-                  shape="pill"
+                  shape="rounded"
                   className="px-4 sm:px-5"
                 >
                   <SlidersHorizontal className="w-4 h-4 text-[#8A2532]" />
@@ -516,7 +516,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                 key={v}
                 onClick={() => setMobileView(v)}
                 variant={mobileView === v ? "secondary" : "ghost"}
-                shape="pill"
+                shape="rounded"
                 className="px-6 py-2 capitalize border-transparent"
               >
                 {v}
@@ -698,7 +698,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                                 variant="primary" 
                                 icon={ChevronRight} 
                                 iconPosition="right" 
-                                shape="pill" 
+                                shape="rounded" 
                                 className="w-full xl:w-auto px-6 py-3"
                                 onClick={() => setInterceptedVenue(venue)}
                               >
@@ -709,7 +709,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                                 href={`/booking?id=${venue.id}`}
                                 className="w-full xl:w-auto shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 rounded-full"
                               >
-                                <Button variant="primary" icon={ChevronRight} iconPosition="right" shape="pill" className="w-full xl:w-auto px-6 py-3">
+                                <Button variant="primary" icon={ChevronRight} iconPosition="right" shape="rounded" className="w-full xl:w-auto px-6 py-3">
                                   Book now
                                 </Button>
                               </Link>
@@ -726,7 +726,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
             {/* Load More */}
             {hasMore && (
               <div className="mb-16 flex justify-center">
-                <Button variant="outline" shape="pill" className="px-8 py-3.5" onClick={loadMore}>
+                <Button variant="outline" shape="rounded" className="px-8 py-3.5" onClick={loadMore}>
                   Load more venues
                 </Button>
               </div>
@@ -736,7 +736,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
           {/* Right: Interactive Virtual Map */}
           <div className={`${mobileView === "map" ? "block" : "hidden"} lg:block w-full lg:w-[45%] xl:w-[40%] relative mt-2 lg:mt-0`}>
             <div
-              className="lg:sticky lg:top-[160px] h-[500px] lg:h-[calc(100vh-180px)] min-h-[500px] w-full bg-[#F5F5F4] rounded-[2rem] border border-[#DCDCDA] shadow-inner overflow-hidden relative cursor-grab active:cursor-grabbing touch-none"
+              className="lg:sticky lg:top-[160px] h-[500px] lg:h-[calc(100vh-180px)] min-h-[500px] w-full bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA] shadow-inner overflow-hidden relative cursor-grab active:cursor-grabbing touch-none"
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}

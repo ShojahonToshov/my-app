@@ -50,7 +50,7 @@ export default function PricingPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white rounded-[2rem] p-8 md:p-12 border border-[#DCDCDA] shadow-sm flex flex-col relative overflow-hidden group hover:shadow-md transition-shadow"
+            className="bg-white rounded-2xl p-8 md:p-12 border border-[#DCDCDA] shadow-sm flex flex-col relative overflow-hidden group hover:shadow-md transition-shadow"
           >
             <div className="mb-10">
               <h3 className="text-2xl font-bold text-[#121415] mb-2">Core</h3>
@@ -89,7 +89,7 @@ export default function PricingPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="bg-[#121415] rounded-[2rem] p-8 md:p-12 border border-[#121415] shadow-xl flex flex-col relative overflow-hidden group"
+            className="bg-[#121415] rounded-2xl p-8 md:p-12 border border-[#121415] shadow-xl flex flex-col relative overflow-hidden group"
           >
             {/* Subtle background glow */}
             <div className="absolute -top-32 -right-32 w-80 h-80 bg-[#8A2532] rounded-full blur-[120px] opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none" />

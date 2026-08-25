@@ -31,7 +31,7 @@ export function Button({
   const shapes = {
     rounded: "rounded-xl",
     pill: "rounded-full",
-    square: "rounded-md",
+    square: "rounded-lg",
   };
 
   const variants = {

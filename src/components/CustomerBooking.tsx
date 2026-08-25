@@ -481,7 +481,7 @@ export default function CustomerBooking() {
         {/* Hero Banner */}
         <motion.div
           variants={fadeUp}
-          className="w-full h-[200px] md:h-[240px] rounded-[2rem] overflow-hidden relative shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)]"
+          className="w-full h-[200px] md:h-[240px] rounded-2xl overflow-hidden relative shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)]"
         >
           <img
             src={venueData.imageUrl}
@@ -547,7 +547,7 @@ export default function CustomerBooking() {
               initial="hidden"
               animate="show"
               exit="exit"
-              className="bg-white p-6 md:p-10 rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] mb-8"
+              className="bg-white p-6 md:p-10 rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] mb-8"
             >
               {/* Dynamic Progress Bar */}
               <div className="w-full bg-[#F5F5F4] h-1.5 rounded-full mb-10 overflow-hidden border border-[#DCDCDA]">
@@ -845,7 +845,7 @@ export default function CustomerBooking() {
                   disabled={!isStep5Unlocked || isSubmitting}
                   isLoading={isSubmitting}
                   variant="primary"
-                  shape="pill"
+                  shape="rounded"
                   className="w-full py-4 text-sm"
                 >
                   {isSubmitting ? "Confirming..." : "Confirm Booking"}
@@ -862,7 +862,7 @@ export default function CustomerBooking() {
               initial="hidden"
               animate="show"
               exit="exit"
-              className="bg-white p-6 md:p-10 rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] mb-8 space-y-10"
+              className="bg-white p-6 md:p-10 rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] mb-8 space-y-10"
             >
               <section>
                 <h2 className="text-xl font-semibold text-[#121415] mb-4 tracking-tight">
@@ -1020,7 +1020,7 @@ export default function CustomerBooking() {
                   <Button 
                     onClick={() => toast.info("Customer reviews will be available soon.")}
                     variant="outline"
-                    shape="pill"
+                    shape="rounded"
                     className="mt-4"
                   >
                     Read all reviews
@@ -1041,7 +1041,7 @@ export default function CustomerBooking() {
             disabled={!isStep5Unlocked || isSubmitting}
             isLoading={isSubmitting}
             variant="primary"
-            shape="pill"
+            shape="rounded"
             className="w-full py-3.5"
           >
             <span className="truncate">{isSubmitting ? "Confirming..." : "Confirm Booking"}</span>
@@ -1053,7 +1053,7 @@ export default function CustomerBooking() {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
             variant="secondary"
-            shape="pill"
+            shape="rounded"
             className="w-full py-3.5 shadow-[0_8px_20px_rgba(0,0,0,0.08)]"
           >
             <span className="truncate">Go to booking</span>

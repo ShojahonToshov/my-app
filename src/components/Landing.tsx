@@ -156,7 +156,7 @@ export default function Landing() {
               {mounted && isAuthenticated ? (
                 <Link
                   href={accountLink}
-                  className="px-5 py-2.5 text-sm font-medium text-white bg-[#121415] hover:bg-[#1E2123] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
+                  className="px-5 py-2.5 text-sm font-medium text-white bg-[#121415] hover:bg-[#1E2123] rounded-xl transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
                 >
                   My Account
                 </Link>
@@ -164,7 +164,7 @@ export default function Landing() {
                 <>
                   <Link
                     href="/login"
-                    className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
+                    className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-xl transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
                   >
                     Log in
                   </Link>
@@ -284,7 +284,7 @@ export default function Landing() {
               >
                 <Button
                   variant="primary"
-                  shape="pill"
+                  shape="rounded"
                   icon={ArrowRight}
                   iconPosition="right"
                   className="w-full sm:w-auto px-8 py-3.5 text-base"
@@ -300,7 +300,7 @@ export default function Landing() {
               >
                 <Button
                   variant="outline"
-                  shape="pill"
+                  shape="rounded"
                   className="w-full sm:w-auto px-8 py-3.5 text-base"
                 >
                   Explore features
@@ -715,7 +715,7 @@ export default function Landing() {
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="col-span-1 md:col-span-2 bg-white rounded-[2rem] p-8 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] relative overflow-hidden group">
+              <div className="col-span-1 md:col-span-2 bg-white rounded-2xl p-8 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] relative overflow-hidden group">
                 <Calendar className="w-8 h-8 text-[#8A2532] mb-6" />
                 <h3 className="text-2xl font-semibold text-[#121415] mb-3 tracking-tight">
                   Real-time availability
@@ -739,7 +739,7 @@ export default function Landing() {
                 </div>
               </div>
 
-              <div className="col-span-1 bg-white rounded-[2rem] p-8 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] group">
+              <div className="col-span-1 bg-white rounded-2xl p-8 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] group">
                 <Star className="w-8 h-8 text-[#8A2532] mb-6" />
                 <h3 className="text-2xl font-semibold text-[#121415] mb-3 tracking-tight">
                   Verified reviews
@@ -751,7 +751,7 @@ export default function Landing() {
               </div>
 
 
-              <div className="col-span-1 md:col-span-3 bg-[#121415] rounded-[2rem] p-8 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] relative overflow-hidden group">
+              <div className="col-span-1 md:col-span-3 bg-[#121415] rounded-2xl p-8 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] relative overflow-hidden group">
                 <h3 className="text-2xl font-semibold text-white mb-3 tracking-tight">
                   Effortless rescheduling
                 </h3>
@@ -760,10 +760,10 @@ export default function Landing() {
                   directly from your dashboard—without the awkward phone calls.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4">
-                  <div className="px-6 py-3 rounded-full bg-white/10 text-white text-sm font-medium backdrop-blur-md select-none">
+                  <div className="px-6 py-3 rounded-xl bg-white/10 text-white text-sm font-medium backdrop-blur-md select-none">
                     Modify time
                   </div>
-                  <div className="px-6 py-3 rounded-full bg-white/5 text-white/50 text-sm font-medium select-none">
+                  <div className="px-6 py-3 rounded-xl bg-white/5 text-white/50 text-sm font-medium select-none">
                     Cancel
                   </div>
                 </div>
@@ -832,7 +832,7 @@ export default function Landing() {
                 </div>
               </div>
 
-              <div className="bg-[#F5F5F4] rounded-[2rem] border border-[#DCDCDA] aspect-square p-8 md:p-12 flex flex-col justify-center relative overflow-hidden">
+              <div className="bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA] aspect-square p-8 md:p-12 flex flex-col justify-center relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-8">
                   <ElaraLogo dark={false} disableLink={true} />
                 </div>
@@ -902,7 +902,7 @@ export default function Landing() {
               ].map((t, i) => (
                 <div
                   key={i}
-                  className="p-8 rounded-[2rem] bg-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]"
+                  className="p-8 rounded-2xl bg-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]"
                 >
                   <div className="flex gap-1 mb-6">
                     {[1, 2, 3, 4, 5].map((star) => (

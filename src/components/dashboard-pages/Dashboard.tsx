@@ -513,7 +513,7 @@ export default function Dashboard() {
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="bg-[#121415] text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
+              className="bg-[#121415] text-white px-5 py-2.5 rounded-xl text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
             >
               <Plus className="w-4 h-4" /> Add Guest
             </button>
@@ -578,7 +578,7 @@ export default function Dashboard() {
           <div className="flex-1 flex gap-6 px-6 md:px-10 pb-10 overflow-x-auto items-start touch-pan-x">
             
             {/* COLUMN 1: WAITING */}
-            <div className="flex-1 min-w-[300px] flex flex-col rounded-[2rem] border p-4 shadow-sm transition-colors duration-200 bg-[#F5F5F4]/80 border-[#DCDCDA]">
+            <div className="flex-1 min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#F5F5F4]/80 border-[#DCDCDA]">
               <div className="flex justify-between items-center mb-5 px-2">
                 <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-lg tracking-tight">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#8A2532]"></span>
@@ -655,7 +655,7 @@ export default function Dashboard() {
             </div>
 
             {/* COLUMN 2: IN CHAIR */}
-            <div className="flex-1 min-w-[300px] flex flex-col rounded-[2rem] border p-4 shadow-sm transition-colors duration-200 bg-[#e8efe9]/50 border-[#4a6b53]/20">
+            <div className="flex-1 min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#e8efe9]/50 border-[#4a6b53]/20">
               <div className="flex justify-between items-center mb-5 px-2">
                 <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-lg tracking-tight">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#4a6b53] animate-pulse"></span>
@@ -718,7 +718,7 @@ export default function Dashboard() {
             </div>
 
             {/* COLUMN 3: COMPLETED */}
-            <div className="flex-1 min-w-[300px] flex flex-col rounded-[2rem] border p-4 shadow-sm transition-colors duration-200 bg-[#ECECEA]/30 border-[#DCDCDA]/50 opacity-70 hover:opacity-100">
+            <div className="flex-1 min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#ECECEA]/30 border-[#DCDCDA]/50 opacity-70 hover:opacity-100">
               <div className="flex justify-between items-center mb-5 px-2">
                 <h2 className="font-medium text-[#8B9194] flex items-center gap-2 text-sm uppercase tracking-widest">
                   Completed
@@ -779,7 +779,7 @@ export default function Dashboard() {
           onClick={() => setIsModalOpen(false)}
         >
           <div 
-            className="bg-white w-full max-w-md rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]"
+            className="bg-white w-full max-w-md rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
             <button 

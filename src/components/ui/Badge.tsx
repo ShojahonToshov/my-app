@@ -17,7 +17,7 @@ export function Badge({ children, variant = "neutral", className = "", icon: Ico
   };
 
   return (
-    <div className={`px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm w-max max-w-full ${variants[variant]} ${className}`}>
+    <div className={`px-2.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm w-max max-w-full ${variants[variant]} ${className}`}>
       {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
       <span className="text-xs font-bold uppercase truncate">
         {children}

@@ -46,7 +46,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }: Confir
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={onClose}>
-      <div className="bg-white w-[400px] max-w-full rounded-[2rem] p-8 shadow-2xl flex flex-col text-center animate-in fade-in zoom-in-95 duration-200" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+      <div className="bg-white w-[400px] max-w-full rounded-2xl p-8 shadow-2xl flex flex-col text-center animate-in fade-in zoom-in-95 duration-200" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
         <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-[#dc2626]/10 text-[#dc2626]">
           <X className="w-6 h-6" />
         </div>
@@ -199,7 +199,7 @@ export default function Customers() {
             <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Guest history & loyalty analytics</p>
           </div>
           <div className="flex items-center gap-3">
-            <button type="button" onClick={() => setModal(true)} className="bg-[#121415] text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
+            <button type="button" onClick={() => setModal(true)} className="bg-[#121415] text-white px-5 py-2.5 rounded-xl text-sm font-medium shadow-sm hover:shadow-md transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
               <Plus className="w-4 h-4" /> <span className="hidden sm:inline">Add Customer</span>
             </button>
           </div>
@@ -244,7 +244,7 @@ export default function Customers() {
             </div>
           </div>
 
-          <div className="flex-1 bg-white rounded-[2rem] shadow-sm border border-[#DCDCDA] overflow-hidden flex flex-col">
+          <div className="flex-1 bg-white rounded-2xl shadow-sm border border-[#DCDCDA] overflow-hidden flex flex-col">
             <div className="flex-1 overflow-y-auto relative scrollbar-hide">
               
               {/* DESKTOP TABLE */}
@@ -403,7 +403,7 @@ export default function Customers() {
       {/* ADD CLIENT MODAL */}
       {modal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={() => setModal(false)}>
-          <div className="bg-white w-full max-w-md rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <button type="button" onClick={() => setModal(false)} className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-[#F5F5F4] text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] transition-colors z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
               <X className="w-4 h-4" />
             </button>

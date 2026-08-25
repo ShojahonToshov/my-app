@@ -135,7 +135,7 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
   return (
     <>
       <div className="flex gap-4 sm:w-1/2">
-        <button onClick={() => setRescheduleModalOpen(true)} className="flex-1 h-12 px-4 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm hover:bg-[#F5F5F4] rounded-full transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+        <button onClick={() => setRescheduleModalOpen(true)} className="flex-1 h-12 px-4 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm hover:bg-[#F5F5F4] rounded-xl transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
           <RefreshCw className="w-4 h-4 text-[#4A4E51] shrink-0" />
           <span>Reschedule</span>
         </button>
@@ -147,7 +147,7 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
       <AnimatePresence>
         {rescheduleModalOpen && (
           <motion.div variants={modalBackdrop} initial="hidden" animate="show" exit="exit" className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-md" onClick={() => setRescheduleModalOpen(false)}>
-            <motion.div variants={modalContent} className="bg-white w-[480px] max-w-full rounded-[2rem] p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col relative outline-none" onClick={(e) => e.stopPropagation()}>
+            <motion.div variants={modalContent} className="bg-white w-[480px] max-w-full rounded-2xl p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col relative outline-none" onClick={(e) => e.stopPropagation()}>
               <div className="w-14 h-14 rounded-full bg-[#F5F5F4] text-[#121415] flex items-center justify-center mb-6 border border-[#DCDCDA] shrink-0">
                 <CalendarDays className="w-6 h-6" />
               </div>
@@ -177,7 +177,7 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 w-full">
-                <button onClick={() => setRescheduleModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Cancel</span></button>
+                <button onClick={() => setRescheduleModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Cancel</span></button>
                 <button 
                   disabled={isRescheduling || !newDate || !newTime} 
                   onClick={async () => { 
@@ -188,7 +188,7 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
                     else { toast.success('Booking rescheduled'); setRescheduleModalOpen(false); router.refresh(); } 
                     setIsRescheduling(false); 
                   }} 
-                  className="flex-1 h-12 px-6 bg-[#121415] text-white rounded-full font-medium text-sm hover:bg-[#1E2123] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50"
+                  className="flex-1 h-12 px-6 bg-[#121415] text-white rounded-xl font-medium text-sm hover:bg-[#1E2123] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50"
                 >
                   {isRescheduling ? <Loader2 className="w-5 h-5 animate-spin shrink-0" /> : <span className="truncate block">Confirm</span>}
                 </button>
@@ -201,15 +201,15 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
       <AnimatePresence>
         {cancelModalOpen && (
           <motion.div variants={modalBackdrop} initial="hidden" animate="show" exit="exit" className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-md" onClick={() => setCancelModalOpen(false)}>
-            <motion.div variants={modalContent} className="bg-white w-[420px] max-w-full rounded-[2rem] p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col text-center outline-none" onClick={(e) => e.stopPropagation()}>
+            <motion.div variants={modalContent} className="bg-white w-[420px] max-w-full rounded-2xl p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col text-center outline-none" onClick={(e) => e.stopPropagation()}>
               <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6 shrink-0 bg-[#DC2626]/10 text-[#DC2626]">
                 <X className="w-6 h-6" />
               </div>
               <h2 className="text-2xl font-semibold text-[#121415] mb-3 tracking-tight break-words">Cancel Booking</h2>
               <p className="text-sm text-[#4A4E51] font-medium mb-8 leading-relaxed break-words">Are you sure you want to cancel? This may affect your Karma score.</p>
               <div className="flex flex-col sm:flex-row gap-3 w-full">
-                <button onClick={() => setCancelModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Keep it</span></button>
-                <button disabled={isCancelling} onClick={async () => { setIsCancelling(true); const supabase = createClient(); const { error } = await supabase.from('bookings').update({ status: 'cancelled' }).eq('id', bookingId); if (error) { toast.error('Failed to cancel booking'); } else { toast.success('Booking cancelled'); setCancelModalOpen(false); router.refresh(); } setIsCancelling(false); }} className="flex-1 h-12 px-6 bg-[#DC2626] text-white rounded-full font-medium text-sm hover:bg-[#B91C1C] shadow-[0_8px_20px_rgba(220,38,38,0.2)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50"> {isCancelling ? <Loader2 className="w-5 h-5 animate-spin shrink-0" /> : <span className="truncate block">Cancel Booking</span>} </button>
+                <button onClick={() => setCancelModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Keep it</span></button>
+                <button disabled={isCancelling} onClick={async () => { setIsCancelling(true); const supabase = createClient(); const { error } = await supabase.from('bookings').update({ status: 'cancelled' }).eq('id', bookingId); if (error) { toast.error('Failed to cancel booking'); } else { toast.success('Booking cancelled'); setCancelModalOpen(false); router.refresh(); } setIsCancelling(false); }} className="flex-1 h-12 px-6 bg-[#DC2626] text-white rounded-xl font-medium text-sm hover:bg-[#B91C1C] shadow-[0_8px_20px_rgba(220,38,38,0.2)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50"> {isCancelling ? <Loader2 className="w-5 h-5 animate-spin shrink-0" /> : <span className="truncate block">Cancel Booking</span>} </button>
               </div>
             </motion.div>
           </motion.div>
@@ -238,7 +238,7 @@ export function ReviewAction({ venueName, bookingId }: { venueName: string, book
       <AnimatePresence>
         {reviewModalOpen && (
           <motion.div variants={modalBackdrop} initial="hidden" animate="show" exit="exit" className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-md" onClick={() => setReviewModalOpen(false)}>
-            <motion.div variants={modalContent} className="bg-white w-[480px] max-w-full rounded-[2rem] p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col relative outline-none" onClick={(e) => e.stopPropagation()}>
+            <motion.div variants={modalContent} className="bg-white w-[480px] max-w-full rounded-2xl p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col relative outline-none" onClick={(e) => e.stopPropagation()}>
               <h2 className="text-2xl font-semibold text-[#121415] mb-2 tracking-tight">Rate your visit</h2>
               <p className="text-sm text-[#4A4E51] font-medium mb-8">Venue: <strong className="text-[#121415]">{venueName}</strong></p>
               <div className="flex gap-2 justify-center mb-8 shrink-0">
@@ -250,8 +250,8 @@ export function ReviewAction({ venueName, bookingId }: { venueName: string, book
               </div>
               <textarea value={reviewText} onChange={(e) => setReviewText(e.target.value)} placeholder="What did you love? (optional)" className="w-full h-32 max-h-64 p-4 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl text-sm font-medium outline-none focus:bg-white focus:border-[#121415] focus:ring-4 focus:ring-[#121415]/5 resize-y mb-8 transition-all duration-300 text-[#121415] placeholder:text-[#4A4E51]" />
               <div className="flex flex-col sm:flex-row gap-3 w-full">
-                <button disabled={isReviewSubmitting} onClick={() => setReviewModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-full font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Cancel</span></button>
-                <button disabled={isReviewSubmitting} onClick={async () => { if (rating === 0) { toast.error('Please select a rating'); return; } setIsReviewSubmitting(true); const supabase = createClient(); const { error } = await supabase.from('bookings').update({ rating, reviewText }).eq('id', bookingId); if (error) { toast.error('Failed to submit review'); } else { toast.success('Review submitted'); setReviewModalOpen(false); router.refresh(); } setIsReviewSubmitting(false); }} className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-full font-medium text-sm hover:bg-[#731E29] shadow-[0_8px_20px_rgba(138,37,50,0.2)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50">
+                <button disabled={isReviewSubmitting} onClick={() => setReviewModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">Cancel</span></button>
+                <button disabled={isReviewSubmitting} onClick={async () => { if (rating === 0) { toast.error('Please select a rating'); return; } setIsReviewSubmitting(true); const supabase = createClient(); const { error } = await supabase.from('bookings').update({ rating, reviewText }).eq('id', bookingId); if (error) { toast.error('Failed to submit review'); } else { toast.success('Review submitted'); setReviewModalOpen(false); router.refresh(); } setIsReviewSubmitting(false); }} className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-xl font-medium text-sm hover:bg-[#731E29] shadow-[0_8px_20px_rgba(138,37,50,0.2)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50">
                   {isReviewSubmitting ? <Loader2 className="w-5 h-5 animate-spin shrink-0" /> : <span className="truncate block">Submit Review</span>}
                 </button>
               </div>
@@ -311,7 +311,7 @@ export function FavoritesList({ initialVenues, currentUserId }: { initialVenues:
     <AnimatedList className="space-y-4">
       {favoriteVenues.length > 0 ? favoriteVenues.map((venue) => (
         <AnimatedListItem key={venue.id}>
-          <Link href={`/booking?id=${venue.id}`} className="w-full text-left bg-white rounded-[2rem] p-5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center gap-5 active:scale-[0.98] group block outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+          <Link href={`/booking?id=${venue.id}`} className="w-full text-left bg-white rounded-2xl p-5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center gap-5 active:scale-[0.98] group block outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
             <div className="w-20 h-20 rounded-2xl overflow-hidden shrink-0">
               <img src={venue.imageUrl || venue.image} alt={venue.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             </div>
@@ -334,7 +334,7 @@ export function FavoritesList({ initialVenues, currentUserId }: { initialVenues:
           </Link>
         </AnimatedListItem>
       )) : (
-        <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-white rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)]">
+        <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-white rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)]">
           <div className="w-16 h-16 bg-[#F5F5F4] rounded-2xl flex items-center justify-center mb-6 border border-[#DCDCDA] shrink-0">
             <Heart className="w-8 h-8 text-[#4A4E51]" />
           </div>
@@ -343,7 +343,7 @@ export function FavoritesList({ initialVenues, currentUserId }: { initialVenues:
             When you interact with venues or book services, they will appear right here.
           </p>
           <div className="mt-2 w-full flex justify-center">
-            <Link href="/search" className="h-12 px-8 bg-[#121415] text-white rounded-full font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Explore directory</Link>
+            <Link href="/search" className="h-12 px-8 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Explore directory</Link>
           </div>
         </div>
       )}

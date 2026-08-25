@@ -26,7 +26,7 @@ interface EmptyStateProps {
   action?: React.ReactNode;
 }
 const EmptyState: React.FC<EmptyStateProps> = ({ icon: Icon, title, action }) => (
-  <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-white rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)]">
+  <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-white rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)]">
     {Icon && (
       <div className="w-16 h-16 bg-[#F5F5F4] rounded-2xl flex items-center justify-center mb-6 border border-[#DCDCDA] shrink-0">
         <Icon className="w-8 h-8 text-[#4A4E51]" />
@@ -131,7 +131,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
             </div>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            <Link href="/search" className="hidden sm:flex h-9 px-4 bg-[#121415] text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#1E2123] transition-all items-center justify-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+            <Link href="/search" className="hidden sm:flex h-9 px-4 bg-[#121415] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-[#1E2123] transition-all items-center justify-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
               <Plus className="w-4 h-4 shrink-0" />
               <span>Book</span>
             </Link>
@@ -153,7 +153,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
           {activeTab === "upcoming" && (
             <AnimatedList className="space-y-6">
               {upcomingBookings.length > 0 ? upcomingBookings.map((booking) => (
-                <AnimatedListItem key={booking.id} className="bg-white rounded-[2rem] p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] relative overflow-hidden flex flex-col w-full group transition-all">
+                <AnimatedListItem key={booking.id} className="bg-white rounded-2xl p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] relative overflow-hidden flex flex-col w-full group transition-all">
                   <div className="absolute top-0 left-0 w-1.5 h-full bg-[#8A2532]" />
                   <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 gap-4 min-w-0">
                     <div className="min-w-0 flex-1 pr-4">
@@ -179,7 +179,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <Link href={`/ticket?id=${booking.id}`} className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-full font-medium text-sm shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:bg-[#731E29] transition-all flex items-center justify-center gap-2 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2">
+                    <Link href={`/ticket?id=${booking.id}`} className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-xl font-medium text-sm shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:bg-[#731E29] transition-all flex items-center justify-center gap-2 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2">
                       <span>LiveTracker</span>
                       <ArrowRight className="w-4 h-4 shrink-0" />
                     </Link>
@@ -187,7 +187,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
                   </div>
                 </AnimatedListItem>
               )) : (
-                <EmptyState icon={Calendar} title="No active bookings" action={<Link href="/search" className="h-12 px-8 bg-[#121415] text-white rounded-full font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Find a venue</Link>} />
+                <EmptyState icon={Calendar} title="No active bookings" action={<Link href="/search" className="h-12 px-8 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Find a venue</Link>} />
               )}
             </AnimatedList>
           )}
@@ -199,7 +199,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
           {activeTab === "history" && (
             <AnimatedList className="space-y-4">
               {historyList.length > 0 ? historyList.map((booking) => (
-                <AnimatedListItem key={String(booking.id)} className="bg-white rounded-[2rem] p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.08)] transition-all">
+                <AnimatedListItem key={String(booking.id)} className="bg-white rounded-2xl p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.08)] transition-all">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A4E51] bg-[#F5F5F4] px-2.5 py-1 rounded-lg border border-[#DCDCDA]">{booking.date}</span>
@@ -227,7 +227,7 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
                   </div>
                 </AnimatedListItem>
               )) : (
-                <EmptyState icon={History} title="No history yet" action={<Link href="/search" className="h-12 px-8 bg-[#121415] text-white rounded-full font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Find a venue</Link>} />
+                <EmptyState icon={History} title="No history yet" action={<Link href="/search" className="h-12 px-8 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Find a venue</Link>} />
               )}
             </AnimatedList>
           )}

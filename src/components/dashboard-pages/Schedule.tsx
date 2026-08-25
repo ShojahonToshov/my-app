@@ -51,7 +51,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm,
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={onClose}>
-      <div className="bg-white w-[400px] max-w-full rounded-[2rem] p-8 shadow-2xl flex flex-col text-center animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+      <div className="bg-white w-[400px] max-w-full rounded-2xl p-8 shadow-2xl flex flex-col text-center animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
         <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 ${isDestructive ? 'bg-[#dc2626]/10 text-[#dc2626]' : 'bg-[#F5F5F4] text-[#4A4E51]'}`}>
           <X className="w-6 h-6" />
         </div>
@@ -549,7 +549,7 @@ export default function Schedule() {
                 setIsDateEditable(true);
                 setIsBookingModalOpen(true);
               }} 
-              className="bg-[#121415] text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
+              className="bg-[#121415] text-white px-5 py-2.5 rounded-xl text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
             >
               <Plus className="w-4 h-4" /> <span className="hidden sm:inline">New Booking</span>
             </button>
@@ -558,7 +558,7 @@ export default function Schedule() {
 
         {/* TIMETABLE CONTENT */}
         <main className="flex-1 p-6 md:p-10 flex flex-col overflow-hidden">
-          <div className="flex-1 bg-white rounded-[2rem] shadow-sm border border-[#DCDCDA] flex flex-col overflow-hidden">
+          <div className="flex-1 bg-white rounded-2xl shadow-sm border border-[#DCDCDA] flex flex-col overflow-hidden">
             <div className="w-full h-full overflow-auto flex flex-col relative">
               <table className="w-full text-left border-collapse min-w-[1000px]">
                 <thead>
@@ -678,7 +678,7 @@ export default function Schedule() {
       {/* QUICK BOOKING MODAL */}
       {isBookingModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsBookingModalOpen(false)}>
-          <div className="bg-white w-full max-w-md rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={(e) => e.stopPropagation()}>
             <button type="button" aria-label="Close" onClick={() => setIsBookingModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             
             <div className="p-6 border-b border-[#DCDCDA]">

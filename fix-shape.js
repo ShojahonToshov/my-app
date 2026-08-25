@@ -10,13 +10,8 @@ function walkDir(dir,cb){
 let count=0;
 walkDir('c:/Users/user/Desktop/Elara/my-app/src',p=>{
   const c=fs.readFileSync(p,'utf8');
-  const n=c.replace(/className=([\'\"][^\'\"]*?px-\d+[^\'\"]*?rounded-full[^\'\"]*?[\'\"])/g,(m,cl)=>{
-    if(cl.includes('px-2')||cl.includes('px-3'))return m;
-    return m.replace('rounded-full','rounded-xl');
-  }).replace(/className=([\'\"][^\'\"]*?rounded-full[^\'\"]*?px-\d+[^\'\"]*?[\'\"])/g,(m,cl)=>{
-    if(cl.includes('px-2')||cl.includes('px-3'))return m;
-    return m.replace('rounded-full','rounded-xl');
-  });
+  // replace shape="pill" with shape="rounded"
+  const n=c.replace(/shape="pill"/g, 'shape="rounded"');
   if(c!==n){
     fs.writeFileSync(p,n);
     count++;

@@ -82,7 +82,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         >
           <motion.div
             variants={modalContent}
-            className="bg-white w-[420px] max-w-full rounded-[2rem] p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col text-center outline-none"
+            className="bg-white w-[420px] max-w-full rounded-2xl p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col text-center outline-none"
             onClick={(e) => e.stopPropagation()}
           >
             <div
@@ -104,7 +104,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               <Button
                 onClick={onClose}
                 variant="outline"
-                shape="pill"
+                shape="rounded"
                 className="flex-1 h-12"
               >
                 {cancelText}
@@ -112,7 +112,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               <Button
                 onClick={onConfirm}
                 variant={isDestructive ? "danger" : "secondary"}
-                shape="pill"
+                shape="rounded"
                 className="flex-1 h-12"
               >
                 {confirmText}
@@ -257,7 +257,7 @@ export default function LiveTicket() {
               <h2 className="text-6xl sm:text-7xl font-semibold mb-6 tracking-tighter text-white truncate w-full">
                 {bookingData.time}
               </h2>
-              <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-white/10 rounded-full border border-white/5 backdrop-blur-md max-w-full">
+              <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-white/10 rounded-xl border border-white/5 backdrop-blur-md max-w-full">
                 <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-white truncate">
                   {(() => {
@@ -410,10 +410,10 @@ export default function LiveTicket() {
             {/* Layout Actions */}
             <div className="flex flex-col gap-3 shrink-0">
               <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" shape="pill" icon={Navigation} className="h-12 w-full text-sm">
+                <Button variant="outline" shape="rounded" icon={Navigation} className="h-12 w-full text-sm">
                   Directions
                 </Button>
-                <Button variant="outline" shape="pill" icon={PhoneCall} className="h-12 w-full text-sm">
+                <Button variant="outline" shape="rounded" icon={PhoneCall} className="h-12 w-full text-sm">
                   Contact
                 </Button>
               </div>
@@ -421,7 +421,7 @@ export default function LiveTicket() {
               <Button
                 onClick={() => setIsCancelModalOpen(true)}
                 variant="ghost"
-                shape="pill"
+                shape="rounded"
                 className="h-12 w-full text-xs font-bold uppercase tracking-widest text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5"
               >
                 Cancel booking

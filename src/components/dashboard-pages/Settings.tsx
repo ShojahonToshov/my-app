@@ -52,7 +52,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm,
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={onClose}>
-      <div className="bg-white w-[400px] max-w-full rounded-[2rem] p-8 shadow-2xl flex flex-col text-center" onClick={e => e.stopPropagation()}>
+      <div className="bg-white w-[400px] max-w-full rounded-2xl p-8 shadow-2xl flex flex-col text-center" onClick={e => e.stopPropagation()}>
         <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-[#dc2626]/10 text-[#dc2626]">
           <X className="w-6 h-6" />
         </div>
@@ -747,7 +747,7 @@ export default function Settings() {
       {/* MODAL: NEW SERVICE */}
       {isServiceModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsServiceModalOpen(false)}>
-          <div className="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <button type="button" aria-label="Close" onClick={() => setIsServiceModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">
               <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{editingServiceId ? "Edit Service" : "New Service"}</h2>
@@ -789,7 +789,7 @@ export default function Settings() {
       {/* MODAL: NEW SPECIALIST */}
       {isMasterModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsMasterModalOpen(false)}>
-          <div className="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <button type="button" aria-label="Close" onClick={() => setIsMasterModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">
               <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Specialist</h2>
