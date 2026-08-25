@@ -137,6 +137,7 @@ export default function Dashboard() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: adminQueryKey });
+      queryClient.invalidateQueries({ queryKey: queryKeys.customers.all });
     },
   });
 
@@ -205,6 +206,7 @@ export default function Dashboard() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: adminQueryKey });
+      queryClient.invalidateQueries({ queryKey: queryKeys.customers.all });
     },
   });
 
@@ -811,7 +813,7 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-[#121415] mb-2">Staff</label>
-                  <div className="relative">
+                  <div className={`relative ${isDropdownOpen ? 'z-50' : ''}`}>
                     <button
                       type="button"
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}

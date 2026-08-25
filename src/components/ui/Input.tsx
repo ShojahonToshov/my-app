@@ -24,7 +24,7 @@ export function Input({
 }: InputProps) {
   return (
     <div className={`w-full flex flex-col gap-1.5 shrink-0 ${className}`}>
-      <div className="relative group w-full">
+      <div className="relative group w-full z-0">
         {Icon && (
           <Icon
             className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 z-10 ${

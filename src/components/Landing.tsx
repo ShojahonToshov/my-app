@@ -156,7 +156,7 @@ export default function Landing() {
               {mounted && isAuthenticated ? (
                 <Link
                   href={accountLink}
-                  className="px-5 py-2.5 text-sm font-medium text-white bg-[#121415] hover:bg-[#1E2123] rounded-xl transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
+                  className="px-5 py-2.5 text-sm font-medium text-white bg-[#121415] hover:bg-[#1E2123] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
                 >
                   My Account
                 </Link>
@@ -164,7 +164,7 @@ export default function Landing() {
                 <>
                   <Link
                     href="/login"
-                    className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-xl transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
+                    className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
                   >
                     Log in
                   </Link>
@@ -172,6 +172,7 @@ export default function Landing() {
                     onClick={() => setSignupModalOpen(true)}
                     variant="secondary" 
                     size="sm" 
+                    shape="pill" 
                     className="px-5 shadow-sm hover:shadow-md"
                   >
                     Sign up
@@ -182,7 +183,7 @@ export default function Landing() {
 
 
           <button
-            className="md:hidden p-2 text-[#121415] outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-lg active:scale-95 transition-transform"
+            className="md:hidden p-2 text-[#121415] outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full active:scale-95 transition-transform"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? (
@@ -284,7 +285,7 @@ export default function Landing() {
               >
                 <Button
                   variant="primary"
-                  shape="rounded"
+                  shape="pill"
                   icon={ArrowRight}
                   iconPosition="right"
                   className="w-full sm:w-auto px-8 py-3.5 text-base"
@@ -300,7 +301,7 @@ export default function Landing() {
               >
                 <Button
                   variant="outline"
-                  shape="rounded"
+                  shape="pill"
                   className="w-full sm:w-auto px-8 py-3.5 text-base"
                 >
                   Explore features
@@ -434,7 +435,7 @@ export default function Landing() {
                   </div>
 
                   <div className="space-y-3 mt-auto">
-                     <Button variant="outline" className="w-full">
+                     <Button variant="outline" shape="pill" className="w-full">
                        Reschedule
                      </Button>
                   </div>
@@ -692,7 +693,7 @@ export default function Landing() {
                        <ShieldCheck className="w-4 h-4 text-[#8A2532]" />
                        <span className="text-xs text-[#4A4E51] font-medium leading-tight">Your Karma score requires a non-refundable deposit to secure this booking.</span>
                      </div>
-                     <Button variant="secondary" shape="square" className="w-full text-xs">
+                     <Button variant="secondary" shape="pill" className="w-full text-xs">
                        Pay Deposit & Book
                      </Button>
                   </div>
@@ -760,10 +761,10 @@ export default function Landing() {
                   directly from your dashboard—without the awkward phone calls.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4">
-                  <div className="px-6 py-3 rounded-xl bg-white/10 text-white text-sm font-medium backdrop-blur-md select-none">
+                  <div className="px-6 py-3 rounded-full bg-white/10 text-white text-sm font-medium backdrop-blur-md select-none">
                     Modify time
                   </div>
-                  <div className="px-6 py-3 rounded-xl bg-white/5 text-white/50 text-sm font-medium select-none">
+                  <div className="px-6 py-3 rounded-full bg-white/5 text-white/50 text-sm font-medium select-none">
                     Cancel
                   </div>
                 </div>

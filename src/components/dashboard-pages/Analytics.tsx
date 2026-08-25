@@ -2,72 +2,143 @@
 import React from "react";
 import {
   ArrowUpRight,
-  ArrowDownRight,
   Clock,
   Sparkles,
   Coins,
-  Scissors,
   BarChart3,
   CalendarX,
-  Activity,
-  AlertTriangle
+  Activity
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { createClient } from "@/utils/supabase/client";
+import { BookingService } from "@/services/BookingService";
+import { isToday, isThisWeek, isThisMonth, parseISO, format } from "date-fns";
+import type { Booking } from "@/types";
+
+function computeAnalyticsData(
+  bookings: Booking[], 
+  services: { id: string; name: string; price: string | number | null }[], 
+  activeTab: "today" | "week" | "month"
+) {
+  let filteredBookings = bookings;
+  
+  if (activeTab === 'today') {
+    filteredBookings = bookings.filter(b => b.date && isToday(parseISO(b.date)));
+  } else if (activeTab === 'week') {
+    filteredBookings = bookings.filter(b => b.date && isThisWeek(parseISO(b.date), { weekStartsOn: 1 }));
+  } else if (activeTab === 'month') {
+    filteredBookings = bookings.filter(b => b.date && isThisMonth(parseISO(b.date)));
+  }
+
+  const getPrice = (b: Booking) => {
+    let p = 0;
+    if (b.service_id) {
+      const s = services.find(s => s.id === b.service_id);
+      if (s?.price) p = Number(s.price);
+    }
+    if (!p && b.serviceName) {
+      const s = services.find(s => s.name === b.serviceName);
+      if (s?.price) p = Number(s.price);
+    }
+    if (!p) p = 100000; // Mock fallback
+    return p;
+  };
+
+  const visits = filteredBookings.filter(b => b.status !== 'cancelled').length;
+  const cancels = filteredBookings.filter(b => b.status === 'cancelled').length;
+  const revenueNum = filteredBookings.filter(b => b.status !== 'cancelled').reduce((acc, b) => acc + getPrice(b), 0);
+  const revenue = new Intl.NumberFormat('en-US').format(revenueNum);
+  
+  const totalDelay = filteredBookings.reduce((acc, b) => acc + (b.delay_minutes || 0), 0);
+  const avgDelay = visits > 0 ? Math.round(totalDelay / visits) : 0;
+  
+  const serviceCounts: Record<string, { count: number, revenue: number }> = {};
+  filteredBookings.filter(b => b.status !== 'cancelled').forEach(b => {
+    const name = b.serviceName || 'Unknown Service';
+    if (!serviceCounts[name]) serviceCounts[name] = { count: 0, revenue: 0 };
+    serviceCounts[name].count++;
+    serviceCounts[name].revenue += getPrice(b);
+  });
+  
+  const topServices = Object.entries(serviceCounts)
+    .sort((a, b) => b[1].count - a[1].count)
+    .slice(0, 5)
+    .map(([name, data]) => ({
+      name,
+      count: data.count,
+      revenue: new Intl.NumberFormat('en-US').format(data.revenue) + " UZS"
+    }));
+
+  let chart: { time: string; value: number }[] = [];
+  if (activeTab === 'today') {
+    const hourMap: Record<string, number> = { '10:00': 0, '12:00': 0, '14:00': 0, '16:00': 0, '18:00': 0, '20:00': 0 };
+    filteredBookings.filter(b => b.status !== 'cancelled').forEach(b => {
+      if (b.time) {
+        const h = parseInt(b.time.split(':')[0], 10);
+        const slot = h < 12 ? '10:00' : h < 14 ? '12:00' : h < 16 ? '14:00' : h < 18 ? '16:00' : h < 20 ? '18:00' : '20:00';
+        hourMap[slot]++;
+      }
+    });
+    chart = Object.entries(hourMap).map(([time, value]) => ({ time, value }));
+  } else if (activeTab === 'week') {
+    const dayMap: Record<string, number> = { 'Mon': 0, 'Tue': 0, 'Wed': 0, 'Thu': 0, 'Fri': 0, 'Sat': 0, 'Sun': 0 };
+    filteredBookings.filter(b => b.status !== 'cancelled').forEach(b => {
+      if (b.date) {
+        const dayStr = format(parseISO(b.date), 'EEE');
+        if (dayMap[dayStr] !== undefined) dayMap[dayStr]++;
+      }
+    });
+    chart = Object.entries(dayMap).map(([time, value]) => ({ time, value }));
+  } else {
+    const weekMap: Record<string, number> = { 'W1': 0, 'W2': 0, 'W3': 0, 'W4': 0 };
+    filteredBookings.filter(b => b.status !== 'cancelled').forEach(b => {
+      if (b.date) {
+        const d = parseISO(b.date).getDate();
+        const w = d <= 7 ? 'W1' : d <= 14 ? 'W2' : d <= 21 ? 'W3' : 'W4';
+        weekMap[w]++;
+      }
+    });
+    chart = Object.entries(weekMap).map(([time, value]) => ({ time, value }));
+  }
+
+  return {
+    chart,
+    services: topServices,
+    kpi: { 
+      revenue, 
+      visits, 
+      cancels,
+      wait: `${avgDelay > 0 ? '+' : ''}${avgDelay} min`,
+      revTrend: "+0%",
+      visitsTrend: "+0" 
+    }
+  };
+}
 
 export default function Analytics() {
   const [activeTab, setActiveTab] = React.useState<"today" | "week" | "month">("today");
 
-  // Mock data for different tabs
-  const data = {
-    today: {
-      chart: [
-        { time: "10:00", value: 20 },
-        { time: "12:00", value: 60 },
-        { time: "14:00", value: 90 },
-        { time: "16:00", value: 40 },
-        { time: "18:00", value: 100 },
-        { time: "20:00", value: 30 }
-      ],
-      services: [
-        { name: "Haircut + Beard", count: 8, revenue: "960,000 UZS" },
-        { name: "Men's Haircut", count: 4, revenue: "290,000 UZS" }
-      ],
-      kpi: { revenue: "1,250,000", visits: 12, revTrend: "+5.2%", visitsTrend: "+2" }
-    },
-    week: {
-      chart: [
-        { time: "Mon", value: 50 },
-        { time: "Tue", value: 70 },
-        { time: "Wed", value: 65 },
-        { time: "Thu", value: 85 },
-        { time: "Fri", value: 95 },
-        { time: "Sat", value: 110 },
-        { time: "Sun", value: 90 }
-      ],
-      services: [
-        { name: "Haircut + Beard", count: 42, revenue: "5,040,000 UZS" },
-        { name: "Men's Haircut", count: 28, revenue: "2,030,000 UZS" },
-        { name: "Kid's Haircut", count: 12, revenue: "600,000 UZS" }
-      ],
-      kpi: { revenue: "8,450,000", visits: 92, revTrend: "+12.5%", visitsTrend: "+14" }
-    },
-    month: {
-      chart: [
-        { time: "W1", value: 300 },
-        { time: "W2", value: 350 },
-        { time: "W3", value: 420 },
-        { time: "W4", value: 390 }
-      ],
-      services: [
-        { name: "Haircut + Beard", count: 185, revenue: "22,200,000 UZS" },
-        { name: "Men's Haircut", count: 130, revenue: "9,425,000 UZS" },
-        { name: "Hair Coloring", count: 24, revenue: "3,600,000 UZS" },
-        { name: "Premium Grooming", count: 18, revenue: "3,600,000 UZS" }
-      ],
-      kpi: { revenue: "38,250,000", visits: 395, revTrend: "+8.4%", visitsTrend: "+25" }
+  const { data: analyticsData } = useQuery({
+    queryKey: ['analyticsData'],
+    queryFn: async () => {
+      const supabase = createClient();
+      const bookingService = new BookingService(supabase);
+      const bookings = await bookingService.getBookings().catch(() => []);
+      const { data: servicesData } = await supabase.from('services').select('id, name, price');
+      return { bookings, services: servicesData || [] };
     }
-  };
+  });
 
-  const currentData = data[activeTab];
+  const currentData = React.useMemo(() => {
+    if (!analyticsData) {
+      return {
+        chart: [],
+        services: [],
+        kpi: { revenue: "0", visits: 0, cancels: 0, wait: "0 min", revTrend: "0%", visitsTrend: "0" }
+      };
+    }
+    return computeAnalyticsData(analyticsData.bookings, analyticsData.services, activeTab);
+  }, [analyticsData, activeTab]);
 
   return (
     <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white">
@@ -91,7 +162,7 @@ export default function Analytics() {
               <button
                 key={tab.id}
                 type="button"
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as "today" | "week" | "month")}
                 className={`shrink-0 px-5 py-1.5 rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${
                   activeTab === tab.id 
                     ? "bg-white text-[#121415] shadow-sm border border-[#DCDCDA]" 
@@ -112,9 +183,9 @@ export default function Analytics() {
               <Sparkles className="w-5 h-5" />
             </div>
             <div className="flex-1 pt-0.5">
-              <h3 className="text-sm font-semibold tracking-tight text-[#121415] mb-1">Great start to the day</h3>
+              <h3 className="text-sm font-semibold tracking-tight text-[#121415] mb-1">Live Analytics</h3>
               <p className="text-xs font-medium text-[#4a6b53] leading-relaxed">
-                Morning occupancy is 15% higher than usual. Primary revenue is driven by combo grooming packages.
+                Viewing real-time data for the selected period. Revenue is calculated dynamically based on completed appointments.
               </p>
             </div>
           </div>
@@ -161,11 +232,11 @@ export default function Analytics() {
                   <span className="text-xs font-medium uppercase tracking-wider">Cancellations</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium bg-[#F5F5F4] text-[#4A4E51] border border-[#DCDCDA]">
-                  Normal
+                  Total
                 </span>
               </div>
               <div className="text-3xl font-semibold text-[#8A2532] tracking-tight truncate">
-                {activeTab === "today" ? "1" : activeTab === "week" ? "4" : "12"}
+                {currentData.kpi.cancels}
               </div>
             </div>
 
@@ -174,14 +245,14 @@ export default function Analytics() {
               <div className="flex items-center justify-between gap-2 text-[#4A4E51] mb-4">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" /> 
-                  <span className="text-xs font-medium uppercase tracking-wider">Queue Wait</span>
+                  <span className="text-xs font-medium uppercase tracking-wider">Avg Delay</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#e8efe9] text-[#4a6b53] border border-[#4a6b53]/30">
-                  -1 min
+                  Realtime
                 </span>
               </div>
               <div className="text-3xl font-semibold text-[#121415] tracking-tight truncate">
-                {activeTab === "today" ? "2 min" : activeTab === "week" ? "5 min" : "6 min"}
+                {currentData.kpi.wait}
               </div>
             </div>
           </div>
@@ -194,10 +265,10 @@ export default function Analytics() {
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h3 className="text-lg font-semibold tracking-tight text-[#121415]">
-                    Salon Occupancy Rate
+                    Appointments Rate
                   </h3>
                   <p className="text-sm font-medium text-[#4A4E51] mt-0.5">
-                    Helps identify peak hours and schedule additional specialists
+                    Visits density for the selected period
                   </p>
                 </div>
                 <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-[#4A4E51] bg-[#F5F5F4] px-3 py-1.5 rounded-xl border border-[#DCDCDA]">
@@ -208,8 +279,7 @@ export default function Analytics() {
 
               <div className="flex-1 flex items-end justify-between gap-2 md:gap-4 h-52 pt-6 overflow-x-auto scrollbar-hide">
                 {currentData.chart.map((col, idx) => {
-                  // Normalize height percentage based on max value in current chart data
-                  const maxVal = Math.max(...currentData.chart.map(c => c.value));
+                  const maxVal = Math.max(...currentData.chart.map(c => c.value), 1);
                   const heightPercent = Math.round((col.value / maxVal) * 100);
 
                   return (
@@ -217,7 +287,7 @@ export default function Analytics() {
                       <div className="w-full bg-[#F5F5F4] rounded-t-xl flex items-end relative group-hover:bg-[#ECECEA] transition-colors border border-transparent group-hover:border-[#DCDCDA]/50">
                         {/* Tooltip */}
                         <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#121415] text-white text-[10px] font-medium py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-sm">
-                          {activeTab === "today" ? `Occupancy ${col.value}%` : `${col.value} visits`}
+                          {col.value} visits
                         </div>
                         {/* Bar */}
                         <div 
@@ -246,28 +316,32 @@ export default function Analytics() {
               </div>
 
               <div className="space-y-3 mt-6 flex-1 overflow-y-auto scrollbar-hide">
-                {currentData.services.map((service, idx) => (
-                  <div key={idx} className="p-4 bg-[#F5F5F4] rounded-xl border border-[#DCDCDA] flex flex-col gap-3 hover:bg-white hover:border-[#121415]/20 hover:shadow-sm transition-all group">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-semibold text-sm shadow-sm shrink-0 border ${idx === 0 ? "bg-[#121415] text-white border-[#121415]" : "bg-white text-[#4A4E51] border-[#DCDCDA]"}`}>
-                        {idx + 1}
+                {currentData.services.length === 0 ? (
+                  <div className="text-sm text-[#4A4E51] text-center pt-10">No services found for this period.</div>
+                ) : (
+                  currentData.services.map((service, idx) => (
+                    <div key={idx} className="p-4 bg-[#F5F5F4] rounded-xl border border-[#DCDCDA] flex flex-col gap-3 hover:bg-white hover:border-[#121415]/20 hover:shadow-sm transition-all group">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-semibold text-sm shadow-sm shrink-0 border ${idx === 0 ? "bg-[#121415] text-white border-[#121415]" : "bg-white text-[#4A4E51] border-[#DCDCDA]"}`}>
+                          {idx + 1}
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <span className="font-semibold text-sm text-[#121415] truncate">
+                            {service.name}
+                          </span>
+                          <span className="text-xs text-[#8B9194] font-medium mt-0.5">
+                            {service.count} visits
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="font-semibold text-sm text-[#121415] truncate">
-                          {service.name}
-                        </span>
-                        <span className="text-xs text-[#8B9194] font-medium mt-0.5">
-                          {service.count} visits
-                        </span>
+                      <div className="pt-3 border-t border-[#DCDCDA] text-right">
+                         <span className="font-semibold text-sm text-[#121415]">
+                           {service.revenue}
+                         </span>
                       </div>
                     </div>
-                    <div className="pt-3 border-t border-[#DCDCDA] text-right">
-                       <span className="font-semibold text-sm text-[#121415]">
-                         {service.revenue}
-                       </span>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
 

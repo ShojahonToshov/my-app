@@ -23,7 +23,7 @@ function OnboardingSelect({ value, options, onChange, placeholder }: { value: st
   }, []);
 
   return (
-    <div className="relative w-full group" ref={dropdownRef}>
+    <div className={`relative w-full group ${isOpen ? 'z-50' : ''}`} ref={dropdownRef}>
       <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194] group-focus-within:text-[#121415] z-10 transition-colors pointer-events-none" />
       <button
         type="button"

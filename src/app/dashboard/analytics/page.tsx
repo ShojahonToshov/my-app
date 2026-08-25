@@ -2,18 +2,18 @@ import Analytics from '@/components/dashboard-pages/Analytics';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { BookingService } from "@/services/BookingService";
 import { createClient } from '@/utils/supabase/server';
-import { MOCK_DATA } from '@/constants/analytics';
 
 export default async function Page() {
   const queryClient = new QueryClient();
   const supabase = await createClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['analytics', 'Today'],
+    queryKey: ['analyticsData'],
     queryFn: async () => {
       const bookingService = new BookingService(supabase);
-      await bookingService.getBookings().catch(() => {});
-      return MOCK_DATA['Today'];
+      const bookings = await bookingService.getBookings().catch(() => []);
+      const { data: servicesData } = await supabase.from('services').select('id, name, price');
+      return { bookings, services: servicesData || [] };
     }
   });
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
@@ -18,6 +19,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
         },
       })
   );
+
+  useEffect(() => {
+    // Intercept native HTML5 validation tooltips globally
+    const handleInvalid = (e: Event) => {
+      e.preventDefault(); // Stop browser from showing default tooltip
+      toast.error("Please fill out this field.", { id: "html5-validation-error" });
+    };
+
+    document.addEventListener("invalid", handleInvalid, true);
+    
+    return () => {
+      document.removeEventListener("invalid", handleInvalid, true);
+    };
+  }, []);
 
   useEffect(() => {
     const supabase = createClient();

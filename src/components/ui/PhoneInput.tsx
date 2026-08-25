@@ -138,7 +138,7 @@ export function PhoneInput({
   const displayValue = value === "" ? `${selectedCountry.code} ` : value;
 
   return (
-    <div className={`w-full flex flex-col gap-1.5 shrink-0 ${className}`} ref={dropdownRef}>
+    <div className={`w-full flex flex-col gap-1.5 shrink-0 ${className} relative ${isOpen ? "z-[99]" : "z-10"}`} ref={dropdownRef}>
       <div className="relative group w-full flex">
         
         {/* Dropdown Button */}

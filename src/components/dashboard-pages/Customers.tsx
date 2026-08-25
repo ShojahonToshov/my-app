@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/utils/supabase/client";
 import { CustomerService } from "@/services/CustomerService";
 import { queryKeys } from "@/lib/queryKeys";
-import { INITIAL_CUSTOMERS } from "@/constants/customers";
+
 import type { Customer, CustomerData } from "@/types";
 import {
   Search,
@@ -77,11 +77,11 @@ export default function Customers() {
   const supabase = createClient();
   const customerService = new CustomerService(supabase);
 
-  const { data: customersData = INITIAL_CUSTOMERS, isLoading } = useQuery({
+  const { data: customersData = [], isLoading } = useQuery({
     queryKey: queryKeys.customers.all,
     queryFn: async () => {
       const res = await customerService.getCustomers();
-      return res && res.length > 0 ? res : INITIAL_CUSTOMERS;
+      return res || [];
     }
   });
 

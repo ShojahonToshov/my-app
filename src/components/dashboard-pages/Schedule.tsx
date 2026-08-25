@@ -35,6 +35,8 @@ import {
 import customerBookingService from "@/services/customer/BookingService";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { createClient } from "@/utils/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/queryKeys";
 
 // --- ConfirmModal ---
 interface ConfirmModalProps {
@@ -98,7 +100,7 @@ function CustomSelect({ value, options, onChange, className, icon: Icon, disable
   }, []);
 
   return (
-    <div className={`relative ${className}`} ref={dropdownRef}>
+    <div className={`relative ${isOpen ? 'z-50' : ''} ${className}`} ref={dropdownRef}>
       <button
         type="button"
         disabled={disabled}
@@ -185,7 +187,7 @@ function CustomDatePicker({ value, onChange, className, disabled = false }: Cust
   };
 
   return (
-    <div className={`relative ${className}`} ref={dropdownRef}>
+    <div className={`relative ${isOpen ? 'z-50' : ''} ${className}`} ref={dropdownRef}>
       <button
         type="button"
         disabled={disabled}
@@ -272,12 +274,14 @@ const generateTimeSlots = (startHour = 8, endHour = 20, intervalMinutes = 30) =>
 };
 
 export default function Schedule() {
+  const queryClient = useQueryClient();
   const [isMounted, setIsMounted] = useState(false);
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isDateEditable, setIsDateEditable] = useState(true);
   
   // Real business data
+  const [businessId, setBusinessId] = useState<string | null>(null);
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
   const [servicesData, setServicesData] = useState<any[]>([]);
   const [scheduleConfig, setScheduleConfig] = useState<any[]>([]);
@@ -309,9 +313,12 @@ export default function Schedule() {
         
         // Fetch team, services, and schedule from business settings
         const { data: { user } } = await supabase.auth.getUser();
+        let currentBusinessId = null;
         if (user) {
           const { data: business } = await supabase.from('businesses').select('id, team_data, schedule_data').eq('owner_id', user.id).single();
           if (business) {
+            currentBusinessId = business.id;
+            setBusinessId(business.id);
             if (business.team_data && isSubscribed) {
               setTeamMembers(business.team_data);
             }
@@ -326,7 +333,7 @@ export default function Schedule() {
         }
 
         // Fetch bookings
-        const data = await customerBookingService.getBookings();
+        const data = await customerBookingService.getBookings(currentBusinessId || undefined);
         if (isSubscribed) {
           const mappedAppointments = data.map((b) => ({
             id: b.id,
@@ -423,12 +430,13 @@ export default function Schedule() {
 
     try {
       const newApptData = {
+        guest_name: newCustomerName,
         date: selectedDateStr,
         time: selectedTime,
-        guest_name: newCustomerName,
         service_name: newService,
         staff_name: newStaff,
-        status: newStatus
+        status: newStatus,
+        business_id: businessId
       };
       
       const created = await customerBookingService.createBooking(newApptData);
@@ -447,7 +455,12 @@ export default function Schedule() {
       setIsBookingModalOpen(false);
       setNewCustomerName("");
       setNewService("");
-      // keep staff and status for convenience
+      
+      if (businessId) {
+        queryClient.invalidateQueries({ queryKey: queryKeys.bookings.admin(businessId) });
+      }
+      queryClient.invalidateQueries({ queryKey: queryKeys.customers.all });
+      
       toast.success(`${newCustomerName} booked successfully`);
     } catch (error) {
       console.error("Failed to add appointment", error);
@@ -467,6 +480,12 @@ export default function Schedule() {
         await customerBookingService.deleteBooking(appointmentToDelete);
         setAppointments(prev => prev.filter(a => a.id !== appointmentToDelete));
         setAppointmentToDelete(null);
+        
+        if (businessId) {
+          queryClient.invalidateQueries({ queryKey: queryKeys.bookings.admin(businessId) });
+        }
+        queryClient.invalidateQueries({ queryKey: queryKeys.customers.all });
+
         toast.success("Appointment canceled");
       } catch (error) {
         console.error("Failed to delete appointment", error);

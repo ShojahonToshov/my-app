@@ -7,7 +7,6 @@ import {
   Calendar,
   Users,
   BarChart3,
-  CreditCard,
   Settings,
   LogOut,
   Menu,
@@ -23,8 +22,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
 import ElaraLogo from "@/components/ElaraLogo";
 import useUser from "@/hooks/useUser";
-
 import Avatar from "@/components/ui/Avatar";
+import Tooltip from "@/components/ui/Tooltip";
 
 import { usePathname } from "next/navigation";
 
@@ -101,101 +100,100 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           {/* TOGGLE BUTTON */}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className={`flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all duration-300 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shrink-0 ${
-              isCollapsed 
-                ? "absolute inset-0 m-auto w-10 h-10 opacity-0 group-hover:opacity-100 hover:bg-[#DCDCDA]/50 z-10"
-                : "p-2 opacity-100 hover:bg-[#DCDCDA]/50 relative"
-            }`}
-            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            <PanelLeft className="w-5 h-5" />
-          </button>
+          <Tooltip content={isCollapsed ? "Expand sidebar" : "Collapse sidebar"} position="right" className="flex">
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className={`flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all duration-300 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shrink-0 ${
+                isCollapsed 
+                  ? "absolute inset-0 m-auto w-10 h-10 opacity-0 group-hover:opacity-100 hover:bg-[#DCDCDA]/50 z-10"
+                  : "p-2 opacity-100 hover:bg-[#DCDCDA]/50 relative"
+              }`}
+            >
+              <PanelLeft className="w-5 h-5" />
+            </button>
+          </Tooltip>
         </div>
 
         <nav className="flex-1 py-5 px-4 space-y-2 overflow-y-auto scrollbar-hide overflow-x-hidden">
-          <Link
-            href="/dashboard"
-            title="Queue (Live)"
-            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
-          >
-            <LayoutDashboard className="w-5 h-5 shrink-0" />
-            <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Queue (Live)</span>
-          </Link>
-          <Link
-            href="/dashboard/schedule"
-            title="Schedule"
-            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/schedule') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
-          >
-            <Calendar className="w-5 h-5 shrink-0" />
-            <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Schedule</span>
-          </Link>
-          <Link
-            href="/dashboard/customers"
-            title="Customers"
-            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/customers') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
-          >
-            <Users className="w-5 h-5 shrink-0" />
-            <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Customers</span>
-          </Link>
-          <Link
-            href="/dashboard/analytics"
-            title="Analytics"
-            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/analytics') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
-          >
-            <BarChart3 className="w-5 h-5 shrink-0" />
-            <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Analytics</span>
-          </Link>
-          <Link
-            href="/dashboard/billing"
-            title="Billing"
-            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/billing') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
-          >
-            <CreditCard className="w-5 h-5 shrink-0" />
-            <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Billing</span>
-          </Link>
-          <Link
-            href="/dashboard/settings"
-            title="Settings"
-            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/settings') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
-          >
-            <Settings className="w-5 h-5 shrink-0" />
-            <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Settings</span>
-          </Link>
+          <Tooltip content="Queue (Live)"  className="w-full">
+            <Link
+              href="/dashboard"
+              className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
+            >
+              <LayoutDashboard className="w-5 h-5 shrink-0" />
+              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Queue (Live)</span>
+            </Link>
+          </Tooltip>
+          <Tooltip content="Schedule"  className="w-full">
+            <Link
+              href="/dashboard/schedule"
+              className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/schedule') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
+            >
+              <Calendar className="w-5 h-5 shrink-0" />
+              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Schedule</span>
+            </Link>
+          </Tooltip>
+          <Tooltip content="Customers"  className="w-full">
+            <Link
+              href="/dashboard/customers"
+              className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/customers') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
+            >
+              <Users className="w-5 h-5 shrink-0" />
+              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Customers</span>
+            </Link>
+          </Tooltip>
+          <Tooltip content="Analytics"  className="w-full">
+            <Link
+              href="/dashboard/analytics"
+              className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/analytics') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
+            >
+              <BarChart3 className="w-5 h-5 shrink-0" />
+              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Analytics</span>
+            </Link>
+          </Tooltip>
+          <Tooltip content="Settings"  className="w-full">
+            <Link
+              href="/dashboard/settings"
+              className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/settings') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
+            >
+              <Settings className="w-5 h-5 shrink-0" />
+              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Settings</span>
+            </Link>
+          </Tooltip>
         </nav>
 
         {/* BOTTOM USER & NOTIFICATIONS SECTION */}
         <div className="py-4 px-4 border-t border-[#DCDCDA] flex flex-col gap-2 shrink-0 bg-[#F5F5F4] relative whitespace-nowrap">
           
           <div className="relative" ref={notifRef}>
-            <button
-              type="button"
-              title="Notifications"
-              onClick={() => {
-                if (notifications.length > 0) {
-                  setShowNotifications(!showNotifications);
-                } else {
-                  toast("У вас нет новых уведомлений");
-                }
-              }}
-              className={`w-full flex items-center justify-between py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"}`}
-            >
-              <div className="flex items-center font-medium text-sm">
-                <div className="relative shrink-0">
-                  <Bell className="w-5 h-5 shrink-0" />
-                  {notifications.length > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#F5F5F4]"></span>
-                  )}
+            <Tooltip content="Notifications"  className="w-full">
+              <button
+                type="button"
+                onClick={() => {
+                  if (notifications.length > 0) {
+                    setShowNotifications(!showNotifications);
+                  } else {
+                    toast("У вас нет новых уведомлений");
+                  }
+                }}
+                className={`w-full flex items-center justify-between py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"}`}
+              >
+                <div className="flex items-center font-medium text-sm">
+                  <div className="relative shrink-0">
+                    <Bell className="w-5 h-5 shrink-0" />
+                    {notifications.length > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#F5F5F4]"></span>
+                    )}
+                  </div>
+                  <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Notifications</span>
                 </div>
-                <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Notifications</span>
-              </div>
-              {notifications.length > 0 && (
-                <span className={`bg-[#8A2532] text-white text-xs font-medium px-2 py-0.5 rounded-md shrink-0 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>
-                  {notifications.length}
-                </span>
-              )}
-            </button>
+                {notifications.length > 0 && (
+                  <span className={`bg-[#8A2532] text-white text-xs font-medium px-2 py-0.5 rounded-md shrink-0 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>
+                    {notifications.length}
+                  </span>
+                )}
+              </button>
+            </Tooltip>
 
             <AnimatePresence>
               {showNotifications && (
@@ -244,24 +242,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </AnimatePresence>
           </div>
 
-          <Link
-            href="/dashboard/profile"
-            title="Profile"
-            className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent hover:bg-[#ECECEA] text-left group mt-1 overflow-hidden whitespace-nowrap ${isCollapsed ? "px-3" : "px-4"}`}
-          >
-            <Avatar
-              name={displayName}
-              src={avatarUrl || null}
-              size="sm"
-              className="group-hover:scale-105 transition-transform shrink-0"
-            />
-            <div className={`ml-3 flex flex-col flex-1 min-w-0 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>
-              <span className="text-sm font-medium text-[#121415] truncate">{displayName}</span>
-              <span className="text-xs font-medium text-[#4A4E51] truncate mt-0.5">
-                Free
-              </span>
-            </div>
-          </Link>
+          <Tooltip content="Profile"  className="w-full mt-1">
+            <Link
+              href="/dashboard/profile"
+              className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent hover:bg-[#ECECEA] text-left group overflow-hidden whitespace-nowrap ${isCollapsed ? "px-3" : "px-4"}`}
+            >
+              <Avatar
+                name={displayName}
+                src={avatarUrl || null}
+                size="sm"
+                className="group-hover:scale-105 transition-transform shrink-0"
+              />
+              <div className={`ml-3 flex flex-col flex-1 min-w-0 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>
+                <span className="text-sm font-medium text-[#121415] truncate">{displayName}</span>
+                <span className="text-xs font-medium text-[#4A4E51] truncate mt-0.5">
+                  Free
+                </span>
+              </div>
+            </Link>
+          </Tooltip>
         </div>
       </aside>
 
@@ -367,9 +366,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </Link>
             <Link href="/dashboard/analytics" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/analytics') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
               <BarChart3 className="w-5 h-5" /> Analytics
-            </Link>
-            <Link href="/dashboard/billing" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/billing') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
-              <CreditCard className="w-5 h-5" /> Billing
             </Link>
             <Link href="/dashboard/settings" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/settings') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
               <Settings className="w-5 h-5" /> Settings

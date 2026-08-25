@@ -237,7 +237,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               </AnimatePresence>
             </div>
 
-            <Button variant="primary" size="sm" shape="rounded" className="px-6 py-2.5 shrink-0">
+            <Button variant="primary" size="sm" shape="pill" className="px-6 py-2.5 shrink-0">
               Search
             </Button>
           </div>
@@ -287,12 +287,12 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               <>
                 <Link
                   href="/login"
-                  className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-xl transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
+                  className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
                 >
                   Log in
                 </Link>
                 <Link href="/signup" className="outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full flex items-center justify-center">
-                  <Button variant="secondary" size="sm" shape="rounded" className="px-6 py-2.5 shrink-0">
+                  <Button variant="secondary" size="sm" shape="pill" className="px-6 py-2.5 shrink-0">
                     Sign up
                   </Button>
                 </Link>
@@ -302,7 +302,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2 text-[#121415] shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-lg active:scale-95 transition-transform"
+            className="md:hidden p-2 text-[#121415] shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full active:scale-95 transition-transform"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -372,6 +372,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
 
                   <Button
                     variant="primary"
+                    shape="pill"
                     className="w-full mt-1 active:scale-95"
                     onClick={() => {
                       setSearchQuery(mobileSearchQuery);
@@ -415,7 +416,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               <Button
                 onClick={toggleSavedFilter}
                 variant={isSavedOnly ? "secondary" : "outline"}
-                shape="rounded"
+                shape="pill"
                 className="px-4 sm:px-5"
               >
                 <Heart className={`w-4 h-4 transition-all ${isSavedOnly ? "fill-white" : ""}`} />
@@ -435,7 +436,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                   key={filter}
                   onClick={() => setActiveCategory(filter)}
                   variant={activeCategory === filter ? "secondary" : "outline"}
-                  shape="rounded"
+                  shape="pill"
                   className="px-4 sm:px-5"
                 >
                   {filter}
@@ -453,7 +454,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               <Button
                 onClick={toggleOpenNow}
                 variant={isOpenNowOnly ? "secondary" : "outline"}
-                shape="rounded"
+                shape="pill"
                 className="px-4"
               >
                 <Clock className="w-4 h-4" />
@@ -465,7 +466,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                 <Button
                   onClick={() => setSortOpen(!sortOpen)}
                   variant="outline"
-                  shape="rounded"
+                  shape="pill"
                   className="px-4 sm:px-5"
                 >
                   <SlidersHorizontal className="w-4 h-4 text-[#8A2532]" />
@@ -516,7 +517,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                 key={v}
                 onClick={() => setMobileView(v)}
                 variant={mobileView === v ? "secondary" : "ghost"}
-                shape="rounded"
+                shape="pill"
                 className="px-6 py-2 capitalize border-transparent"
               >
                 {v}
@@ -698,7 +699,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                                 variant="primary" 
                                 icon={ChevronRight} 
                                 iconPosition="right" 
-                                shape="rounded" 
+                                shape="pill" 
                                 className="w-full xl:w-auto px-6 py-3"
                                 onClick={() => setInterceptedVenue(venue)}
                               >
@@ -709,7 +710,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                                 href={`/booking?id=${venue.id}`}
                                 className="w-full xl:w-auto shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 rounded-full"
                               >
-                                <Button variant="primary" icon={ChevronRight} iconPosition="right" shape="rounded" className="w-full xl:w-auto px-6 py-3">
+                                <Button variant="primary" icon={ChevronRight} iconPosition="right" shape="pill" className="w-full xl:w-auto px-6 py-3">
                                   Book now
                                 </Button>
                               </Link>
@@ -726,7 +727,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
             {/* Load More */}
             {hasMore && (
               <div className="mb-16 flex justify-center">
-                <Button variant="outline" shape="rounded" className="px-8 py-3.5" onClick={loadMore}>
+                <Button variant="outline" shape="pill" className="px-8 py-3.5" onClick={loadMore}>
                   Load more venues
                 </Button>
               </div>
@@ -752,7 +753,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                     key={i}
                     onPointerDown={(e) => e.stopPropagation()}
                     onClick={(e) => { e.stopPropagation(); action(); }}
-                    className="w-10 h-10 bg-white/90 backdrop-blur-md rounded-xl border border-[#DCDCDA] flex items-center justify-center text-[#121415] hover:text-[#8A2532] hover:bg-[#F5F5F4] transition-colors duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                    className="w-10 h-10 bg-white/90 backdrop-blur-md rounded-full border border-[#DCDCDA] flex items-center justify-center text-[#121415] hover:text-[#8A2532] hover:bg-[#F5F5F4] transition-colors duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
                   >
                     <Icon className="w-5 h-5" />
                   </button>
@@ -860,13 +861,14 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button
                   variant="outline"
+                  shape="pill"
                   className="flex-1"
                   onClick={() => setInterceptedVenue(null)}
                 >
                   Cancel
                 </Button>
                 <Link href={`/booking?id=${interceptedVenue.id}`} className="flex-1">
-                  <Button variant="primary" className="w-full" onClick={() => setInterceptedVenue(null)}>
+                  <Button variant="primary" shape="pill" className="w-full" onClick={() => setInterceptedVenue(null)}>
                     Proceed to Book
                   </Button>
                 </Link>

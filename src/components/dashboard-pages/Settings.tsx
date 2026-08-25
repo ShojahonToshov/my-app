@@ -97,7 +97,7 @@ function CustomSelect({ value, options, onChange, className }: CustomSelectProps
   }, []);
 
   return (
-    <div className={`relative ${className}`} ref={dropdownRef}>
+    <div className={`relative ${isOpen ? 'z-50' : ''} ${className}`} ref={dropdownRef}>
       <button
         type="button"
         aria-haspopup="listbox"
@@ -454,7 +454,7 @@ export default function Settings() {
           </div>
         </header>
 
-        <div className="px-6 md:px-10 pt-4 shrink-0 bg-[#F5F5F4] border-b border-[#DCDCDA]">
+        <div className="px-6 md:px-10 pt-4 shrink-0 bg-white border-b border-[#DCDCDA]">
           <div className="flex gap-6 overflow-x-auto scrollbar-hide">
             {TABS.map((tab) => {
               const Icon = tab.icon;
