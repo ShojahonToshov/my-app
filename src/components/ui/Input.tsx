@@ -41,7 +41,7 @@ export function Input({
           placeholder={label ? " " : placeholder}
           className={`peer w-full ${Icon ? "pl-12" : "pl-4"} ${
             ActionIcon ? "pr-12" : "pr-4"
-          } py-4 rounded-2xl outline-none transition-all duration-300 text-sm font-medium border bg-bg-light focus:bg-white focus:ring-4 [&:-webkit-autofill]:shadow-[inset_0_0_0_9999px_var(--color-bg-light)] focus:[&:-webkit-autofill]:shadow-[inset_0_0_0_9999px_#fff] text-slate-dark placeholder-transparent focus:placeholder-slate-muted/50 ${
+          } py-4 rounded-xl outline-none transition-all duration-300 text-sm font-medium border bg-bg-light focus:bg-white focus:ring-4 [&:-webkit-autofill]:shadow-[inset_0_0_0_9999px_var(--color-bg-light)] focus:[&:-webkit-autofill]:shadow-[inset_0_0_0_9999px_#fff] text-slate-dark placeholder-transparent focus:placeholder-slate-muted/50 ${
             error
               ? "border-brand focus:ring-brand/10 shadow-[0_0_8px] shadow-brand/30"
               : "border-border focus:border-slate-dark focus:ring-slate-dark/5"

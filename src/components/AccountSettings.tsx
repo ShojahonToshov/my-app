@@ -300,7 +300,7 @@ export default function AccountSettings() {
               onClick={handleLogout}
               type="button"
               variant="outline"
-              shape="pill"
+              
               icon={LogOut}
               className="flex-1 h-12"
             >

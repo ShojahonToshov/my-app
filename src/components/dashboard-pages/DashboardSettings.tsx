@@ -161,15 +161,12 @@ export default function DashboardSettings() {
         {/* HEADER */}
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Security & Access</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Security & Access</h1>
+            </div>
             <p className="text-sm text-[#4A4E51] font-medium mt-1 hidden sm:block">
               Business security, recovery, and authentication settings
             </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#4a6b53]/10 border border-[#4a6b53]/20 text-[#4a6b53] text-xs font-semibold shadow-sm">
-              <ShieldCheck className="w-4 h-4" /> Protected
-            </span>
           </div>
         </header>
 

@@ -2,7 +2,6 @@
 import React from "react";
 import {
   CheckCircle2,
-  Download,
   AlertCircle,
   Sliders,
 } from "lucide-react";
@@ -41,12 +40,12 @@ export default function Billing() {
       <div className="flex-1 flex flex-col overflow-hidden relative">
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Subscription & Billing</h1>
-            <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Manage plan, limits, and payment methods</p>
-          </div>
-          <div className="flex items-center gap-2 text-xs font-medium text-[#4a6b53] bg-[#e8efe9] border border-[#4a6b53]/30 px-3 py-1.5 rounded-lg shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-[#4a6b53] animate-pulse"></span>
-            <span>System Active</span>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Subscription & Billing</h1>
+            </div>
+            <p className="text-sm text-[#4A4E51] font-medium mt-1 hidden sm:block">
+              Manage plan, limits, and payment methods
+            </p>
           </div>
         </header>
 
@@ -100,7 +99,6 @@ export default function Billing() {
                       <div className="w-1/4">Date</div>
                       <div className="w-2/4">Description</div>
                       <div className="w-1/4 text-right pr-4">Amount</div>
-                      <div className="w-10"></div>
                     </div>
                     <div className="space-y-1 mt-2">
                       {[
@@ -112,11 +110,6 @@ export default function Billing() {
                           <div className="w-1/4 text-xs font-medium text-[#4A4E51]">{invoice.date}</div>
                           <div className="w-2/4 text-xs font-semibold text-[#121415]">{invoice.desc}</div>
                           <div className="w-1/4 text-right pr-4 text-xs font-semibold text-[#121415]">{invoice.amount}</div>
-                          <div className="w-10 flex justify-end">
-                            <button type="button" className="p-1.5 text-[#4A4E51] bg-white border border-[#DCDCDA] hover:text-[#121415] hover:border-[#121415]/20 rounded-md shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
-                              <Download className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
                         </div>
                       ))}
                     </div>

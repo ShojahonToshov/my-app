@@ -145,7 +145,7 @@ export function PhoneInput({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className={`absolute left-0 top-0 bottom-0 z-20 flex items-center gap-1.5 px-3 rounded-l-2xl border-r border-transparent hover:bg-black/5 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${error ? "text-brand" : "text-slate-text"}`}
+          className={`absolute left-0 top-0 bottom-0 z-20 flex items-center gap-1.5 px-3 rounded-l-xl border-r border-transparent hover:bg-black/5 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${error ? "text-brand" : "text-slate-text"}`}
         >
           <img 
             src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} 
@@ -163,7 +163,7 @@ export function PhoneInput({
           placeholder={label ? " " : placeholder}
           value={displayValue}
           onChange={handleInputChange}
-          className={`peer w-full pl-[4.5rem] pr-4 py-4 rounded-2xl outline-none transition-all duration-300 text-sm font-medium border bg-bg-light focus:bg-white focus:ring-4 [&:-webkit-autofill]:shadow-[inset_0_0_0_9999px_var(--color-bg-light)] focus:[&:-webkit-autofill]:shadow-[inset_0_0_0_9999px_#fff] text-slate-dark placeholder-transparent focus:placeholder-slate-muted/50 ${
+          className={`peer w-full pl-[4.5rem] pr-4 py-4 rounded-xl outline-none transition-all duration-300 text-sm font-medium border bg-bg-light focus:bg-white focus:ring-4 [&:-webkit-autofill]:shadow-[inset_0_0_0_9999px_var(--color-bg-light)] focus:[&:-webkit-autofill]:shadow-[inset_0_0_0_9999px_#fff] text-slate-dark placeholder-transparent focus:placeholder-slate-muted/50 ${
             error
               ? "border-brand focus:ring-brand/10 shadow-[0_0_8px] shadow-brand/30"
               : "border-border focus:border-slate-dark focus:ring-slate-dark/5"

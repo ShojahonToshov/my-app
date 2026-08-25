@@ -117,7 +117,7 @@ function CustomSelect({ value, options, onChange, className, icon: Icon, disable
       </button>
       
       {isOpen && !disabled && (
-        <div role="listbox" className="absolute z-50 w-full min-w-[140px] mt-2 bg-white border border-[#DCDCDA] rounded-2xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
+        <div role="listbox" className="absolute z-50 w-full min-w-[140px] mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
           {options.map((opt) => (
             <button
               key={opt}
@@ -202,7 +202,7 @@ function CustomDatePicker({ value, onChange, className, disabled = false }: Cust
       </button>
 
       {isOpen && !disabled && (
-        <div className="absolute z-50 left-[calc(100%+1rem)] top-0 w-[280px] bg-white border border-[#DCDCDA] rounded-2xl shadow-lg p-4 animate-in fade-in slide-in-from-left-2 zoom-in-95 duration-200 origin-top-left">
+        <div className="absolute z-50 left-[calc(100%+1rem)] top-0 w-[280px] bg-white border border-[#DCDCDA] rounded-xl shadow-lg p-4 animate-in fade-in slide-in-from-left-2 zoom-in-95 duration-200 origin-top-left">
           <div className="flex items-center justify-between mb-4">
             <button type="button" onClick={prevMonth} className="p-1 text-[#4A4E51] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
             <span className="font-semibold text-[#121415] text-sm">{format(currentMonth, "MMMM yyyy")}</span>

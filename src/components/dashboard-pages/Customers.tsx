@@ -9,7 +9,6 @@ import { INITIAL_CUSTOMERS } from "@/constants/customers";
 import type { Customer, CustomerData } from "@/types";
 import {
   Search,
-  Download,
   Plus,
   Phone,
   User,
@@ -200,9 +199,6 @@ export default function Customers() {
             <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Guest history & loyalty analytics</p>
           </div>
           <div className="flex items-center gap-3">
-            <button type="button" className="hidden sm:flex p-2.5 bg-white border border-[#DCDCDA] text-[#4A4E51] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 shadow-sm">
-              <Download className="w-5 h-5" />
-            </button>
             <button type="button" onClick={() => setModal(true)} className="bg-[#121415] text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
               <Plus className="w-4 h-4" /> <span className="hidden sm:inline">Add Customer</span>
             </button>

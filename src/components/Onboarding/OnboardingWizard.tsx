@@ -28,7 +28,7 @@ function OnboardingSelect({ value, options, onChange, placeholder }: { value: st
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between pl-12 pr-4 py-4 rounded-2xl outline-none transition-all duration-300 text-sm font-medium border text-[#121415] appearance-none ${
+        className={`w-full flex items-center justify-between pl-12 pr-4 py-4 rounded-xl outline-none transition-all duration-300 text-sm font-medium border text-[#121415] appearance-none ${
           isOpen ? "bg-white ring-4 ring-[#121415]/5 border-[#121415]" : "bg-[#F5F5F4] border-[#DCDCDA] hover:border-[#121415]"
         }`}
       >
@@ -37,7 +37,7 @@ function OnboardingSelect({ value, options, onChange, placeholder }: { value: st
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 w-full mt-2 bg-white border border-[#DCDCDA] rounded-2xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
+        <div className="absolute z-50 w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
           {options.map((opt) => (
             <button
               key={opt}

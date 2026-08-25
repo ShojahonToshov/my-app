@@ -112,7 +112,7 @@ function CustomSelect({ value, options, onChange, className }: CustomSelectProps
       </button>
       
       {isOpen && (
-        <div role="listbox" className="absolute z-50 w-full min-w-[140px] mt-2 bg-white border border-[#DCDCDA] rounded-2xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
+        <div role="listbox" className="absolute z-50 w-full min-w-[140px] mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
           {options.map((opt) => (
             <button
               key={opt}
@@ -444,12 +444,13 @@ export default function Settings() {
     <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white">
       <div className="flex-1 flex flex-col overflow-hidden relative">
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Settings</h1>
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#4a6b53]/10 border border-[#4a6b53]/20 text-[#4a6b53] text-xs font-semibold" title="Settings are not saved to database in Demo Mode">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Demo Mode</span>
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Settings</h1>
             </div>
+            <p className="text-sm text-[#4A4E51] font-medium mt-1 hidden sm:block">
+              Manage your business profile, operating hours, and staff
+            </p>
           </div>
         </header>
 
