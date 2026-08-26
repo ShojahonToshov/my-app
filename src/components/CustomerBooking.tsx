@@ -111,6 +111,7 @@ type VenueData = {
     cancelWindow: string;
     requireCardForLowKarma: boolean;
     karmaThreshold: string;
+    is_paused?: boolean;
   };
   services: ServiceItem[];
   staff: StaffItem[];
@@ -137,6 +138,7 @@ const defaultVenueData: VenueData = {
     cancelWindow: "12 hours before (Recommended)",
     requireCardForLowKarma: true,
     karmaThreshold: "80% (Recommended)",
+    is_paused: true,
   },
   services: [],
   staff: [],
@@ -600,6 +602,26 @@ export default function CustomerBooking() {
         <AnimatePresence mode="wait">
           {/* Tab 1: Booking Form */}
           {activeTab === "booking" && (
+            venueData.policies?.is_paused ?? true ? (
+              <motion.div
+                key="booking-paused"
+                variants={fadeUp}
+                initial="hidden"
+                animate="show"
+                exit="exit"
+                className="bg-white p-6 md:p-10 rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] mb-8 flex flex-col items-center justify-center text-center py-20"
+              >
+                <div className="w-16 h-16 bg-[#F5F5F4] rounded-full flex items-center justify-center mb-4">
+                  <Clock className="w-8 h-8 text-[#4A4E51]" />
+                </div>
+                <h2 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
+                  Bookings Paused
+                </h2>
+                <p className="text-[#4A4E51] font-medium max-w-md">
+                  This business has temporarily paused new bookings. Please check back later.
+                </p>
+              </motion.div>
+            ) : (
             <motion.div
               key="booking"
               variants={fadeUp}
@@ -923,6 +945,7 @@ export default function CustomerBooking() {
                 </Button>
               </div>
             </motion.div>
+            )
           )}
 
           {/* Tab 2: About Venue */}

@@ -31,7 +31,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
-import useSearch, { isOpenNow } from "@/hooks/useSearch";
+import useSearch from "@/hooks/useSearch";
 import Avatar from "@/components/ui/Avatar";
 import { DynamicMap } from "@/components/map";
 
@@ -560,7 +560,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                               <Badge variant="dark" icon={Timer}>
                                 {venue.badges.find((b) => b.includes("time")) ?? "Verified"}
                               </Badge>
-                              {venue.is_paused || (mounted ? !isOpenNow(venue.time) : false) ? (
+                              {venue.is_paused ? (
                                 <div className="relative group inline-block">
                                   <Badge variant="dark" icon={Lock} className="!bg-[#8A2532] !text-white backdrop-blur-md border-none cursor-pointer hover:!bg-[#8A2532]/90">
                                     Closed
@@ -671,7 +671,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                               <span className="text-sm font-semibold text-[#121415]">{venue.time}</span>
                             </div>
 
-                            {venue.is_paused || (mounted ? !isOpenNow(venue.time) : false) ? (
+                            {venue.is_paused ? (
                               <Button 
                                 variant="primary" 
                                 icon={ChevronRight} 

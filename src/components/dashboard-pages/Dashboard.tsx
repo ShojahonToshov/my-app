@@ -603,7 +603,7 @@ export default function Dashboard() {
             <div className="flex-1 min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#F5F5F4]/80 border-[#DCDCDA]">
               <div className="flex justify-between items-center mb-5 px-2">
                 <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-lg tracking-tight">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#8A2532]"></span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#C89E23]"></span>
                   Waiting
                 </h2>
                 <span className="text-xs font-medium text-[#121415] bg-white border border-[#DCDCDA] shadow-sm px-2.5 py-1 rounded-lg">
@@ -639,7 +639,7 @@ export default function Dashboard() {
                             {...provided.dragHandleProps}
                             className={`bg-white p-4 rounded-2xl border transition-all duration-200 relative group touch-pan-y ${guest.delay ? 'border-[#8A2532]/30' : 'border-[#DCDCDA]'} overflow-hidden ${snapshot.isDragging ? 'shadow-xl scale-[1.02] z-50 ring-2 ring-[#121415]/20' : 'shadow-sm'}`}
                           >
-                            <div className="absolute top-0 left-0 w-1.5 h-full bg-[#8A2532]"></div>
+                            <div className="absolute top-0 left-0 w-1.5 h-full bg-[#C89E23]"></div>
                             <div className="flex justify-between items-start mb-3 pl-1">
                               <div className="flex flex-col">
                                 <span className="text-sm font-semibold text-[#121415]">{guest.name}</span>

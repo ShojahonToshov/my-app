@@ -198,7 +198,7 @@ export default function useSearch(initialVenues: VenueData[] = []) {
 
     // 4. Open Now filter
     if (isOpenNowOnly) {
-      result = result.filter((v) => !v.is_paused && isOpenNow(v.time));
+      result = result.filter((v) => !v.is_paused);
     }
 
     // 5. Sort
