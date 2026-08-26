@@ -19,6 +19,7 @@ export interface PhoneInputProps extends Omit<InputHTMLAttributes<HTMLInputEleme
   label?: string;
   error?: string;
   className?: string;
+  inputClassName?: string;
   value: string;
   onChange: (value: string) => void;
   name?: string;
@@ -29,6 +30,7 @@ export function PhoneInput({
   id,
   error,
   className = "",
+  inputClassName = "",
   value = "",
   onChange,
   name = "phone",
@@ -71,14 +73,11 @@ export function PhoneInput({
     onChange(`${country.code} ${currentNumber}`);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let rawValue = e.target.value;
+  const formatPhoneNumber = (rawValue: string) => {
+    if (!rawValue) return "";
     let sanitized = rawValue.replace(/[^\d+]/g, "");
     
-    if (sanitized === "") {
-      onChange("");
-      return;
-    }
+    if (sanitized === "") return "";
 
     const hasPlus = rawValue.includes('+');
     sanitized = sanitized.replace(/\+/g, "");
@@ -87,18 +86,14 @@ export function PhoneInput({
       sanitized = '+' + sanitized;
     }
 
-    if (sanitized === "+") {
-      onChange(selectedCountry.code + " ");
-      return;
-    }
+    if (sanitized === "+") return selectedCountry.code + " ";
 
     const digitsOnly = sanitized.replace(/\D/g, "");
     const match = COUNTRIES.find(c => digitsOnly.startsWith(c.code.replace(/\D/g, "")));
     const currentCountryCode = match ? match.code : null;
 
     if (!currentCountryCode || !sanitized.startsWith(currentCountryCode)) {
-      onChange(sanitized);
-      return;
+      return sanitized;
     }
 
     let localDigits = sanitized.slice(currentCountryCode.length);
@@ -129,13 +124,17 @@ export function PhoneInput({
         formattedLocal += (formattedLocal ? " " : "") + chunk;
         currentIndex += chunkLength;
       }
-      onChange(currentCountryCode + " " + formattedLocal);
+      return currentCountryCode + " " + formattedLocal;
     } else {
-      onChange(currentCountryCode + (localDigits.length > 0 ? " " + localDigits : " "));
+      return currentCountryCode + (localDigits.length > 0 ? " " + localDigits : " ");
     }
   };
 
-  const displayValue = value === "" ? `${selectedCountry.code} ` : value;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(formatPhoneNumber(e.target.value));
+  };
+
+  const displayValue = value === "" ? `${selectedCountry.code} ` : formatPhoneNumber(value);
 
   return (
     <div className={`w-full flex flex-col gap-1.5 shrink-0 ${className} relative ${isOpen ? "z-[99]" : "z-10"}`} ref={dropdownRef}>
@@ -144,8 +143,9 @@ export function PhoneInput({
         {/* Dropdown Button */}
         <button
           type="button"
+          disabled={props.disabled}
           onClick={() => setIsOpen(!isOpen)}
-          className={`absolute left-0 top-0 bottom-0 z-20 flex items-center gap-1.5 px-3 rounded-l-xl border-r border-transparent hover:bg-black/5 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${error ? "text-brand" : "text-slate-text"}`}
+          className={`absolute left-0 top-0 bottom-0 z-20 flex items-center gap-1.5 px-3 rounded-l-xl border-r border-transparent ${props.disabled ? 'cursor-not-allowed opacity-50' : 'hover:bg-black/5'} transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${error ? "text-brand" : "text-slate-text"}`}
         >
           <img 
             src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} 
@@ -167,7 +167,7 @@ export function PhoneInput({
             error
               ? "border-brand focus:ring-brand/10 shadow-[0_0_8px] shadow-brand/30"
               : "border-border focus:border-slate-dark focus:ring-slate-dark/5"
-          }`}
+          } disabled:cursor-not-allowed disabled:opacity-70 ${inputClassName}`}
           {...props}
         />
         
@@ -190,7 +190,7 @@ export function PhoneInput({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.15 }}
-              className="absolute left-0 top-[calc(100%+8px)] w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 overflow-hidden"
+              className="absolute left-0 top-[calc(100%+8px)] w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-[99999] overflow-hidden"
             >
               <div className="max-h-60 overflow-y-auto">
                 {COUNTRIES.map((country) => (

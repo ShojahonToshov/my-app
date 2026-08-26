@@ -24,10 +24,10 @@ export class CustomerService {
       return [];
     }
 
-    // 1. Fetch profiles (might belong to this business if column exists)
-    let profilesQuery = this.supabase.from('profiles').select('*').eq('role', 'customer');
-    const { data: profilesData, error: profilesError } = await profilesQuery;
-    if (profilesError) throw profilesError;
+    // 1. Fetch manual customers explicitly belonging to this business
+    let manualQuery = this.supabase.from('business_customers').select('*').eq('business_id', businessId);
+    const { data: manualData, error: manualError } = await manualQuery;
+    if (manualError) throw manualError;
 
     // 2. Fetch bookings
     let bookingsQuery = this.supabase.from('bookings').select('*');
@@ -56,30 +56,21 @@ export class CustomerService {
     const customersMap = new Map<string, Record<string, unknown>>();
 
     // Add manual customers
-    if (profilesData) {
-      for (const p of profilesData) {
-        // If profile has business_id and it doesn't match, skip
-        if (businessId && p.business_id && p.business_id !== businessId) continue;
-        // If we strictly want to isolate and profile has no business_id but we have one, should we skip?
-        // Usually global profiles (no business_id) might be admins, but we only fetched 'customer' role.
-        // It's safer to skip if businessId is required but missing, unless it's null.
-        if (businessId && p.business_id === undefined) {
-          // If the column doesn't exist, we can't filter. But if it exists and is null/different, we skip.
-          if ('business_id' in p && p.business_id !== businessId) continue;
-        }
-
-        const key = p.phone || p.id;
+    if (manualData) {
+      for (const p of manualData) {
+        const key = p.phone || p.name || p.id;
         if (key) {
           customersMap.set(key, {
             id: p.id,
-            name: p.name || p.full_name || 'Unknown',
+            name: p.name || 'Unknown',
             phone: p.phone || '',
             visits: 0,
             lastVisit: 'Never',
             totalSpent: 0,
             status: p.status === 'regular' ? 'regular' : 'new',
             color: p.color,
-            tag: p.tag
+            tag: p.tag,
+            business_id: p.business_id
           });
         }
       }
@@ -135,7 +126,8 @@ export class CustomerService {
       }
     }
 
-    return Array.from(customersMap.values()).map(c => {
+    return Array.from(customersMap.values())
+      .map(c => {
       const spent = c.totalSpent as number;
       const ltv = spent > 0 ? `${spent.toLocaleString('en-US').replace(/,/g, ' ')} UZS` : '0 UZS';
       
@@ -148,11 +140,30 @@ export class CustomerService {
   }
 
   async createClient(customerData: Partial<Customer>): Promise<Customer> {
+    const { data: { user } } = await this.supabase.auth.getUser();
+    let businessId = null;
+    if (user) {
+      const { data: business } = await this.supabase
+        .from('businesses')
+        .select('id')
+        .eq('owner_id', user.id)
+        .maybeSingle();
+      if (business) businessId = business.id;
+    }
+
+    if (!businessId) throw new Error("No business found for the current user.");
+
     const { data, error } = await this.supabase
-      .from('profiles')
-      .insert([{ ...customerData, role: 'customer' }])
+      .from('business_customers')
+      .insert([{ 
+        name: customerData.name || 'Unknown', 
+        phone: customerData.phone, 
+        status: customerData.status || 'new',
+        business_id: businessId 
+      }])
       .select()
       .single();
+      
     if (error) throw error;
     return data as unknown as Customer;
   }
@@ -166,11 +177,12 @@ export class CustomerService {
     }
 
     const { data, error } = await this.supabase
-      .from('profiles')
+      .from('business_customers')
       .delete()
       .eq('id', id)
       .select()
       .maybeSingle();
+      
     if (error) throw error;
     return data as unknown as Customer;
   }

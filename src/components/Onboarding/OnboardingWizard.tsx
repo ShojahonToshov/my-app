@@ -23,7 +23,7 @@ function OnboardingSelect({ value, options, onChange, placeholder }: { value: st
   }, []);
 
   return (
-    <div className={`relative w-full group ${isOpen ? 'z-50' : ''}`} ref={dropdownRef}>
+    <div className={`relative w-full group ${isOpen ? 'z-[99999]' : ''}`} ref={dropdownRef}>
       <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194] group-focus-within:text-[#121415] z-10 transition-colors pointer-events-none" />
       <button
         type="button"
@@ -37,7 +37,7 @@ function OnboardingSelect({ value, options, onChange, placeholder }: { value: st
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
+        <div className="absolute z-[99999] w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
           {options.map((opt) => (
             <button
               key={opt}
@@ -130,6 +130,7 @@ export default function OnboardingWizard() {
           const { data, error } = await supabase.from("businesses").insert({
             owner_id: sessionUserId, // Use ID directly from session
             name: businessName,
+            phone: sessionData.session.user.phone || "",
           }).select().single();
           if (error) throw error;
           if (data) setBusinessId(data.id);

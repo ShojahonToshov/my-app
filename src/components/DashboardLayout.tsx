@@ -202,7 +202,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute bottom-full left-0 mb-3 w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden origin-bottom-left z-50 whitespace-normal"
+                  className="absolute bottom-full left-0 mb-3 w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden origin-bottom-left z-[99999] whitespace-normal"
                 >
                   <div className="flex items-center justify-between p-5 border-b border-[#DCDCDA] bg-white">
                     <span className="font-medium text-[#121415] text-base tracking-tight">Notifications</span>
@@ -293,7 +293,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-full right-0 mt-2 w-[300px] sm:w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden origin-top-right z-50 whitespace-normal"
+                  className="absolute top-full right-0 mt-2 w-[300px] sm:w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden origin-top-right z-[99999] whitespace-normal"
                 >
                   <div className="flex items-center justify-between p-4 border-b border-[#DCDCDA] bg-white">
                     <span className="font-medium text-[#121415] text-sm sm:text-base tracking-tight">Notifications</span>

@@ -97,7 +97,7 @@ function CustomSelect({ value, options, onChange, className }: CustomSelectProps
   }, []);
 
   return (
-    <div className={`relative ${isOpen ? 'z-50' : ''} ${className}`} ref={dropdownRef}>
+    <div className={`relative ${isOpen ? 'z-[99999]' : ''} ${className}`} ref={dropdownRef}>
       <button
         type="button"
         aria-haspopup="listbox"
@@ -112,7 +112,7 @@ function CustomSelect({ value, options, onChange, className }: CustomSelectProps
       </button>
       
       {isOpen && (
-        <div role="listbox" className="absolute z-50 w-full min-w-[140px] mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
+        <div role="listbox" className="absolute z-[99999] w-full min-w-[140px] mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
           {options.map((opt) => (
             <button
               key={opt}
@@ -180,13 +180,22 @@ export default function Settings() {
         
       if (business) {
         setBusinessId(business.id);
+
+        // If business.phone is empty, auto-fill from the owner's auth phone (set during registration)
+        let businessPhone = business.phone || '';
+        if (!businessPhone && user.phone) {
+          businessPhone = user.phone;
+          await supabase.from('businesses').update({ phone: businessPhone }).eq('id', business.id);
+        }
+
         setVenueProfile({
           name: business.name || '',
-          phone: business.phone || '',
+          phone: businessPhone,
           address: business.address || '',
           description: business.description || '',
           instagram: business.instagram || ''
         });
+
         if (business.policies_data && Object.keys(business.policies_data).length > 0) {
           const pd = business.policies_data;
           if (!pd.cancelWindow || pd.cancelWindow === "12 hours before") pd.cancelWindow = "12 hours before (Recommended)";
@@ -514,6 +523,7 @@ export default function Settings() {
                         <input type="text" value={venueProfile.instagram} onChange={(e) => setVenueProfile({...venueProfile, instagram: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" placeholder="@your.instagram" />
                       </div>
                     </div>
+
                   </div>
 
                   <div>
@@ -746,7 +756,7 @@ export default function Settings() {
 
       {/* MODAL: NEW SERVICE */}
       {isServiceModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsServiceModalOpen(false)}>
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsServiceModalOpen(false)}>
           <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <button type="button" aria-label="Close" onClick={() => setIsServiceModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">
@@ -788,7 +798,7 @@ export default function Settings() {
 
       {/* MODAL: NEW SPECIALIST */}
       {isMasterModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsMasterModalOpen(false)}>
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsMasterModalOpen(false)}>
           <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <button type="button" aria-label="Close" onClick={() => setIsMasterModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">

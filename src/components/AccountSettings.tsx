@@ -143,14 +143,27 @@ export default function AccountSettings() {
     }
   };
   
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
       setIsDeleting(true);
-      setTimeout(() => {
-        setIsDeleting(false);
+      try {
+        const response = await fetch('/api/user/delete', {
+          method: 'DELETE',
+        });
+        
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.error || 'Failed to delete account');
+        }
+        
         logout();
         router.push("/");
-      }, 1500);
+      } catch (err) {
+        console.error(err);
+        const errorMessage = err instanceof Error ? err.message : "Failed to delete account.";
+        setError(errorMessage);
+        setIsDeleting(false);
+      }
     }
   };
 

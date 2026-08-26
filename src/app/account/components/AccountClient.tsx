@@ -29,7 +29,7 @@ export function NotificationsDropdown() {
       </button>
       <AnimatePresence>
         {showNotifications && (
-          <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} transition={{ duration: 0.2 }} className="absolute top-full right-0 mt-2 w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden z-50 origin-top-right">
+          <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} transition={{ duration: 0.2 }} className="absolute top-full right-0 mt-2 w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden z-[99999] origin-top-right">
             <div className="flex items-center justify-between p-5 border-b border-[#DCDCDA] bg-white">
               <span className="font-medium text-[#121415] text-base tracking-tight">Notifications</span>
               <button type="button" onClick={() => { setNotifications([]); setShowNotifications(false); toast.success("Notifications cleared"); }} className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded">Mark all read</button>
@@ -68,7 +68,7 @@ export function KarmaTooltip({ karma }: { karma: number }) {
       </button>
       <AnimatePresence>
         {isOpen && (
-          <motion.div initial={{ opacity: 0, y: 5, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 5, scale: 0.95 }} transition={{ duration: 0.2 }} className="absolute right-0 mt-2 w-64 p-4 bg-white rounded-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.15)] border border-[#DCDCDA] z-50 text-left">
+          <motion.div initial={{ opacity: 0, y: 5, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 5, scale: 0.95 }} transition={{ duration: 0.2 }} className="absolute right-0 mt-2 w-64 p-4 bg-white rounded-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.15)] border border-[#DCDCDA] z-[99999] text-left">
             <p className="text-xs font-semibold text-[#121415] mb-1">Reliability Score ({karma}%)</p>
             <p className="text-[11px] text-[#4A4E51] font-medium leading-relaxed">Your karma reflects your attendance history. Staying above 90% ensures you can book without mandatory prepayments.</p>
           </motion.div>

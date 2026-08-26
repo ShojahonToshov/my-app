@@ -45,7 +45,7 @@ export function Input({
             error
               ? "border-brand focus:ring-brand/10 shadow-[0_0_8px] shadow-brand/30"
               : "border-border focus:border-slate-dark focus:ring-slate-dark/5"
-          }`}
+          } disabled:cursor-not-allowed disabled:opacity-70`}
           {...props}
         />
         

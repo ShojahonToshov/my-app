@@ -484,7 +484,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-xl border border-[#DCDCDA] overflow-hidden z-50 py-2"
+                      className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-xl border border-[#DCDCDA] overflow-hidden z-[99999] py-2"
                     >
                       {SORT_OPTIONS.map((option) => (
                         <button

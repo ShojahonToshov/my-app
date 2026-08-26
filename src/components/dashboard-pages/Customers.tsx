@@ -18,6 +18,7 @@ import {
   MessageCircle,
   PhoneCall
 } from "lucide-react";
+import { PhoneInput } from "@/components/ui/PhoneInput";
 
 // --- Built-in components ---
 interface EmptyStateProps {
@@ -320,10 +321,10 @@ export default function Customers() {
                       <td className="py-3 px-6 text-[#4A4E51] font-medium">{customer.lastVisit}</td>
                       <td className="py-3 px-6 text-right">
                         <div className="flex items-center justify-end gap-1 transition-opacity">
-                          <button type="button" className="p-2 text-[#4A4E51] hover:text-[#4a6b53] hover:bg-[#e8efe9] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]" title="Call">
+                          <button type="button" onClick={() => toast.info("Feature coming soon")} className="p-2 text-[#4A4E51] hover:text-[#4a6b53] hover:bg-[#e8efe9] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]" title="Call">
                             <PhoneCall className="w-4 h-4" />
                           </button>
-                          <button type="button" className="p-2 text-[#4A4E51] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]" title="Message">
+                          <button type="button" onClick={() => toast.info("Feature coming soon")} className="p-2 text-[#4A4E51] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]" title="Message">
                             <MessageCircle className="w-4 h-4" />
                           </button>
                           <div className="w-px h-4 bg-[#DCDCDA] mx-1"></div>
@@ -383,10 +384,10 @@ export default function Customers() {
                       </div>
 
                       <div className="flex gap-2">
-                        <button type="button" className="flex-1 py-2.5 bg-[#e8efe9] hover:opacity-90 text-[#4a6b53] border border-[#4a6b53]/30 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]">
+                        <button type="button" onClick={() => toast.info("Feature coming soon")} className="flex-1 py-2.5 bg-[#e8efe9] hover:opacity-90 text-[#4a6b53] border border-[#4a6b53]/30 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]">
                           <PhoneCall className="w-4 h-4" /> Call
                         </button>
-                        <button type="button" className="flex-1 py-2.5 bg-[#F5F5F4] hover:bg-[#DCDCDA] text-[#121415] border border-[#DCDCDA] rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                        <button type="button" onClick={() => toast.info("Feature coming soon")} className="flex-1 py-2.5 bg-[#F5F5F4] hover:bg-[#DCDCDA] text-[#121415] border border-[#DCDCDA] rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
                           <MessageCircle className="w-4 h-4" /> Message
                         </button>
                       </div>
@@ -422,16 +423,14 @@ export default function Customers() {
                   className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
                 />
               </div>
-              <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                <input 
-                  type="tel" 
-                  value={newCustomerPhone}
-                  onChange={e => setNewClientPhone(e.target.value)}
-                  placeholder="+998 90 000 00 00" 
-                  className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
-                />
-              </div>
+              <PhoneInput 
+                id="customer_phone"
+                name="customer_phone"
+                value={newCustomerPhone}
+                onChange={(val) => setNewClientPhone(val)}
+                placeholder="+998 90 000 00 00" 
+                inputClassName="!bg-[#F5F5F4] !py-3 !border-[#DCDCDA] text-[#121415] focus:!bg-white focus:!border-[#121415]" 
+              />
               <button disabled={createCustomerMutation.isPending} type="submit" className="w-full mt-4 py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex justify-center items-center active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] disabled:opacity-70">
                 {createCustomerMutation.isPending ? "Adding..." : "Add to Directory"}
               </button>

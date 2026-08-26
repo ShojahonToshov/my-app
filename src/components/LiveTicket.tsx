@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import bookingService from "@/services/customer/BookingService";
+import { Booking } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -148,10 +149,14 @@ export default function LiveTicket() {
         return;
       }
       try {
-        const data = await bookingService.getBookingById(id);
-        if (data) {
-          const delayMinutes = (data as any).delay_minutes || (data as any).delayMinutes || 0;
-          let formattedTime = (data as any).time || "";
+        const rawData = await bookingService.getBookingById(id);
+        if (rawData) {
+          const data = rawData as Booking & {
+            businesses?: { name?: string; category?: string };
+            services?: { name?: string };
+          };
+          const delayMinutes = data.delay_minutes ?? data.delayMinutes ?? 0;
+          let formattedTime = data.time || "";
           if (delayMinutes > 0 && formattedTime) {
             const parts = formattedTime.split(':');
             if (parts.length === 2) {
@@ -167,13 +172,13 @@ export default function LiveTicket() {
           }
 
           setBookingData({
-            venueName: (data as any).businesses?.name || "Unknown Venue",
-            venueCategory: (data as any).businesses?.category || "Venue",
-            serviceName: (data as any).service_name || (data as any).services?.name || "Unknown Service",
-            staffName: (data as any).staff_name || (data as any).staffName || "Any available",
-            date: (data as any).date || "",
+            venueName: data.businesses?.name || "Unknown Venue",
+            venueCategory: data.businesses?.category || "Venue",
+            serviceName: data.service_name || data.services?.name || data.serviceName || "Unknown Service",
+            staffName: data.staff_name || data.staffName || "Any available",
+            date: data.date || "",
             time: formattedTime,
-            status: (data as any).status || "pending",
+            status: data.status || "pending",
           });
         }
       } catch (error) {

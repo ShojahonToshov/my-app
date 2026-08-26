@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { createClient } from "@/utils/supabase/client";
+import { PhoneInput } from "@/components/ui/PhoneInput";
 import {
   Mail,
   Lock,
@@ -100,28 +101,36 @@ export default function DashboardSettings() {
     }
     
     setActiveModal(null);
-    toast.success("Card updated");
+    toast.info("Feature coming soon");
   };
 
   const handleSaveSecurity = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    const supabase = createClient();
-    const updates: any = {};
-    if (email) updates.email = email;
-    if (phone) updates.phone = phone;
-    if (password) {
-      updates.password = password;
-      updates.data = { visible_password: password }; // Store in metadata for demo
-    }
-
-    const { error } = await supabase.auth.updateUser(updates);
-    setIsSaving(false);
     
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Security info updated");
+    try {
+      const supabase = createClient();
+      const updates: any = {};
+      if (email) {
+        updates.email = email;
+      }
+      if (phone) {
+        updates.phone = phone;
+      }
+      if (password) {
+        updates.password = password;
+        updates.data = { visible_password: password };
+      }
+      
+      const { error } = await supabase.auth.updateUser(updates);
+      
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success("Security info updated");
+      }
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -131,10 +140,9 @@ export default function DashboardSettings() {
       toast.error("Please enter a valid 6-digit code");
       return;
     }
-    setIs2FAEnabled(true);
     setActiveModal(null);
     setCode2FA("");
-    toast.success("2FA enabled (Demo)");
+    toast.info("Feature coming soon");
   };
 
   const handleLogout = async () => {
@@ -143,15 +151,29 @@ export default function DashboardSettings() {
     window.location.href = "/login";
   };
 
-  const handleDeleteAccount = (e: React.FormEvent) => {
+  const handleDeleteAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     if (deleteConfirmText !== "DELETE") {
       toast.error("Please type DELETE to confirm");
       return;
     }
-    toast.success("Account deletion requested");
-    setActiveModal(null);
-    setDeleteConfirmText("");
+    try {
+      const response = await fetch('/api/user/delete', { method: 'DELETE' });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to delete account');
+      }
+      toast.success("Account deleted");
+      setActiveModal(null);
+      setDeleteConfirmText("");
+      const supabase = createClient();
+      await supabase.auth.signOut();
+      window.location.href = "/login";
+    } catch (err) {
+      console.error(err);
+      const errorMessage = err instanceof Error ? err.message : "Failed to delete account";
+      toast.error(errorMessage);
+    }
   };
 
   return (
@@ -215,22 +237,21 @@ export default function DashboardSettings() {
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]"
+                          className="w-full pl-12 pr-4 h-[46px] bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]"
                         />
                       </div>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-[#121415] mb-2">Recovery Phone</label>
-                      <div className="relative">
-                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                        <input
-                          type="tel"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          placeholder="+998"
-                          className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]"
-                        />
-                      </div>
+                      <PhoneInput
+                        id="business_recovery_phone"
+                        name="business_recovery_phone"
+                        value={phone}
+                        onChange={(val) => setPhone(val)}
+                        disabled
+                        className="opacity-70 cursor-not-allowed"
+                        inputClassName="!bg-[#F5F5F4] !border-[#DCDCDA] !h-[46px] !py-0 text-[#121415] focus:!bg-white focus:!border-[#121415] focus:!ring-[#121415]/10"
+                      />
                     </div>
                   </div>
 
@@ -243,7 +264,7 @@ export default function DashboardSettings() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full pl-12 pr-12 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]"
+                        className="w-full pl-12 pr-12 h-[46px] bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]"
                       />
                       <button
                         type="button"

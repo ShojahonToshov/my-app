@@ -100,7 +100,7 @@ function CustomSelect({ value, options, onChange, className, icon: Icon, disable
   }, []);
 
   return (
-    <div className={`relative ${isOpen ? 'z-50' : ''} ${className}`} ref={dropdownRef}>
+    <div className={`relative ${isOpen ? 'z-[99999]' : ''} ${className}`} ref={dropdownRef}>
       <button
         type="button"
         disabled={disabled}
@@ -119,7 +119,7 @@ function CustomSelect({ value, options, onChange, className, icon: Icon, disable
       </button>
       
       {isOpen && !disabled && (
-        <div role="listbox" className="absolute z-50 w-full min-w-[140px] mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
+        <div role="listbox" className="absolute z-[99999] w-full min-w-[140px] mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
           {options.map((opt) => (
             <button
               key={opt}
@@ -187,7 +187,7 @@ function CustomDatePicker({ value, onChange, className, disabled = false }: Cust
   };
 
   return (
-    <div className={`relative ${isOpen ? 'z-50' : ''} ${className}`} ref={dropdownRef}>
+    <div className={`relative ${isOpen ? 'z-[99999]' : ''} ${className}`} ref={dropdownRef}>
       <button
         type="button"
         disabled={disabled}
@@ -204,7 +204,7 @@ function CustomDatePicker({ value, onChange, className, disabled = false }: Cust
       </button>
 
       {isOpen && !disabled && (
-        <div className="absolute z-50 left-[calc(100%+1rem)] top-0 w-[280px] bg-white border border-[#DCDCDA] rounded-xl shadow-lg p-4 animate-in fade-in slide-in-from-left-2 zoom-in-95 duration-200 origin-top-left">
+        <div className="absolute z-[99999] left-[calc(100%+1rem)] top-0 w-[280px] bg-white border border-[#DCDCDA] rounded-xl shadow-lg p-4 animate-in fade-in slide-in-from-left-2 zoom-in-95 duration-200 origin-top-left">
           <div className="flex items-center justify-between mb-4">
             <button type="button" onClick={prevMonth} className="p-1 text-[#4A4E51] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
             <span className="font-semibold text-[#121415] text-sm">{format(currentMonth, "MMMM yyyy")}</span>
@@ -428,11 +428,21 @@ export default function Schedule() {
       return;
     }
 
+    const selectedDateTime = new Date(`${selectedDateStr}T${selectedTime}:00`);
+    if (selectedDateTime < new Date()) {
+      toast.error("Cannot book appointments in the past");
+      return;
+    }
+
     try {
+      const srv = servicesData.find((s: any) => s.name === newService);
+      const serviceId = srv ? String(srv.id) : newService.toLowerCase().replace(/\s+/g, '-');
+
       const newApptData = {
         guest_name: newCustomerName,
         date: selectedDateStr,
         time: selectedTime,
+        service_id: serviceId,
         service_name: newService,
         staff_name: newStaff,
         status: newStatus,
@@ -496,6 +506,12 @@ export default function Schedule() {
   };
 
   const openModalForSlot = (date: string, time: string, isSlotActive: boolean, editable = false) => {
+    const isPast = new Date(`${date}T${time}:00`) < new Date();
+    if (isPast) {
+      toast.error("Cannot book appointments in the past");
+      return;
+    }
+    
     if (!isSlotActive) {
       // You could block booking here, but often admins want the ability to bypass
       // toast.info("Note: This slot is outside regular working hours.");
@@ -529,7 +545,7 @@ export default function Schedule() {
     <div className="flex-1 flex flex-col relative h-full bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white">
         
         {/* HEADER */}
-        <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 md:h-20 shrink-0 sticky top-0 z-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 md:h-20 shrink-0 sticky top-0 z-[99999] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Schedule</h1>
             <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Manage appointments for the next 7 days</p>
@@ -627,7 +643,8 @@ export default function Schedule() {
                             isTimeActive = false;
                           }
                         }
-                        const isSlotActive = isDayActive && isTimeActive;
+                        const isPast = new Date(`${date.id}T${time}:00`) < new Date();
+                        const isSlotActive = isDayActive && isTimeActive && !isPast;
                         
                         return (
                           <td 
@@ -696,7 +713,7 @@ export default function Schedule() {
 
       {/* QUICK BOOKING MODAL */}
       {isBookingModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsBookingModalOpen(false)}>
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsBookingModalOpen(false)}>
           <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={(e) => e.stopPropagation()}>
             <button type="button" aria-label="Close" onClick={() => setIsBookingModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             

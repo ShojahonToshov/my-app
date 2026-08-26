@@ -813,7 +813,7 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-[#121415] mb-2">Staff</label>
-                  <div className={`relative ${isDropdownOpen ? 'z-50' : ''}`}>
+                  <div className={`relative ${isDropdownOpen ? 'z-[99999]' : ''}`}>
                     <button
                       type="button"
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -826,7 +826,7 @@ export default function Dashboard() {
                     {isDropdownOpen && (
                       <>
                         <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)}></div>
-                        <div className="absolute z-50 w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg py-1 animate-in fade-in slide-in-from-top-2 duration-200 max-h-48 overflow-y-auto">
+                        <div className="absolute z-[99999] w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg py-1 animate-in fade-in slide-in-from-top-2 duration-200 max-h-48 overflow-y-auto">
                           {mastersList.map((staff) => (
                             <button
                               key={staff}

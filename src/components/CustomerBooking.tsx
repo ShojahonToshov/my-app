@@ -80,7 +80,17 @@ const shakeAnimation = {
   },
 };
 
+// Format phone number for display: 998887776650 -> +998 88 777 66 50
+function formatPhone(phone: string): string {
+  const digits = phone.replace(/\D/g, '');
+  if (digits.startsWith('998') && digits.length === 12) {
+    return `+998 ${digits.slice(3, 5)} ${digits.slice(5, 8)} ${digits.slice(8, 10)} ${digits.slice(10, 12)}`;
+  }
+  return phone.startsWith('+') ? phone : `+${phone}`;
+}
+
 const defaultVenueData = {
+  id: "",
   name: "Chop-Chop Barbershop",
   address: "Tashkent, Yunusabad 19, 15",
   rating: 5.0,
@@ -132,7 +142,7 @@ const defaultVenueData = {
       { days: "Saturday - Sunday", time: "10:00 - 21:00" },
     ],
     contacts: {
-      phone: "+998 90 123 45 67",
+      phone: "",
       instagram: "@chopchop.tashkent",
       website: "chopchop.uz",
     },
@@ -234,8 +244,8 @@ export default function CustomerBooking() {
                   schedule: newAboutSchedule.length > 0 ? newAboutSchedule : prev.about.schedule,
                   contacts: {
                     ...prev.about.contacts,
-                    phone: business.phone || prev.about.contacts.phone,
-                    instagram: business.instagram || prev.about.contacts.instagram
+                    phone: business.phone || "",
+                    instagram: business.instagram || ""
                   }
                 }
               };
@@ -265,6 +275,32 @@ export default function CustomerBooking() {
   const [selectedMaster, setSelectedMaster] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState(dates[0].id);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+
+  const [bookedTimes, setBookedTimes] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function fetchBookedTimes() {
+      if (!venueData.id || !selectedDate || !selectedMaster) return;
+      const supabase = createClient();
+      let query = supabase
+        .from('bookings')
+        .select('time')
+        .eq('business_id', venueData.id)
+        .eq('date', selectedDate)
+        .in('status', ['pending', 'confirmed', 'in_progress', 'waiting']);
+        
+      if (selectedMaster !== "any") {
+        query = query.eq('staff_id', selectedMaster);
+      }
+      const { data } = await query;
+      if (data) {
+        setBookedTimes(data.map(d => d.time).filter(Boolean) as string[]);
+      } else {
+        setBookedTimes([]);
+      }
+    }
+    fetchBookedTimes();
+  }, [venueData.id, selectedDate, selectedMaster]);
 
   useEffect(() => {
     if (venueData.scheduleData) {
@@ -323,6 +359,9 @@ export default function CustomerBooking() {
 
     return slots.map(timeStr => {
       let disabled = false;
+      if (bookedTimes.includes(timeStr)) {
+        disabled = true;
+      }
       if (selectedDate === todayId) {
         const [h, m] = timeStr.split(':').map(Number);
         if (h < currentH || (h === currentH && m <= currentM)) {
@@ -331,7 +370,7 @@ export default function CustomerBooking() {
       }
       return { time: timeStr, disabled };
     });
-  }, [selectedDate, selectedMaster, venueData.scheduleData]);
+  }, [selectedDate, selectedMaster, venueData.scheduleData, bookedTimes]);
 
   useEffect(() => {
     if (selectedTime) {
@@ -956,22 +995,24 @@ export default function CustomerBooking() {
                   Contacts
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <a
-                    href={`tel:${venueData.about.contacts.phone}`}
-                    className="flex items-center gap-3 p-4 rounded-2xl border border-[#DCDCDA] hover:bg-[#F5F5F4] bg-white transition-colors group min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-[#F5F5F4] flex items-center justify-center group-hover:bg-[#121415] transition-colors shrink-0">
-                      <Phone className="w-4 h-4 text-[#4A4E51] group-hover:text-white transition-colors" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs uppercase tracking-widest font-bold text-[#4A4E51] mb-1 truncate">
-                        Phone
-                      </p>
-                      <p className="text-sm font-semibold text-[#121415] truncate">
-                        {venueData.about.contacts.phone}
-                      </p>
-                    </div>
-                  </a>
+                  {venueData.about.contacts.phone && (
+                    <a
+                      href={`tel:${venueData.about.contacts.phone}`}
+                      className="flex items-center gap-3 p-4 rounded-2xl border border-[#DCDCDA] hover:bg-[#F5F5F4] bg-white transition-colors group min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                    >
+                      <div className="w-10 h-10 rounded-full bg-[#F5F5F4] flex items-center justify-center group-hover:bg-[#121415] transition-colors shrink-0">
+                        <Phone className="w-4 h-4 text-[#4A4E51] group-hover:text-white transition-colors" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs uppercase tracking-widest font-bold text-[#4A4E51] mb-1 truncate">
+                          Phone
+                        </p>
+                        <p className="text-sm font-semibold text-[#121415] truncate">
+                          {formatPhone(venueData.about.contacts.phone)}
+                        </p>
+                      </div>
+                    </a>
+                  )}
 
                   <a
                     href={`https://instagram.com/${venueData.about.contacts.instagram.substring(1)}`}
