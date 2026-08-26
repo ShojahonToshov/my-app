@@ -264,12 +264,14 @@ type Appointment = {
 // Generate time slots (e.g. 08:00 to 20:00 every 30 mins)
 const generateTimeSlots = (startHour = 8, endHour = 20, intervalMinutes = 30) => {
   const slots = [];
-  let current = parse(`${startHour}:00`, 'H:mm', new Date());
-  const end = parse(`${endHour}:00`, 'H:mm', new Date());
+  const startMins = startHour * 60;
+  const endMins = endHour * 60;
   
-  while (current <= end) {
-    slots.push(format(current, 'HH:mm'));
-    current = addMinutes(current, intervalMinutes);
+  for (let m = startMins; m <= endMins; m += intervalMinutes) {
+    if (m >= 24 * 60) continue;
+    const h = Math.floor(m / 60);
+    const mins = m % 60;
+    slots.push(`${h.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`);
   }
   return slots;
 };
