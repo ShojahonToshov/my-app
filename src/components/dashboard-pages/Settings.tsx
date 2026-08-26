@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import {
   Plus, Scissors, Edit2, UserPlus, X, Clock, Banknote, ImagePlus,
   CalendarClock, Users, Store, Phone, MapPin, Trash2, Loader2,
-  ChevronDown, CheckCircle2, ShieldAlert, Save, ShieldCheck
+  ChevronDown, CheckCircle2, ShieldAlert, Save, ShieldCheck, Globe, Link, Send, MessageCircle, Music
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 
@@ -76,9 +76,10 @@ interface CustomSelectProps {
   options: string[];
   onChange: (value: string) => void;
   className?: string;
+  iconMap?: Record<string, React.ReactNode>;
 }
 
-function CustomSelect({ value, options, onChange, className }: CustomSelectProps) {
+function CustomSelect({ value, options, onChange, className, iconMap }: CustomSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -107,7 +108,10 @@ function CustomSelect({ value, options, onChange, className }: CustomSelectProps
           isOpen ? "border-[#121415] bg-white ring-2 ring-[#121415]/10 shadow-sm" : "border-[#DCDCDA] hover:border-[#121415]"
         }`}
       >
-        <span className="truncate">{value}</span>
+        <div className="flex items-center gap-2 truncate">
+          {iconMap && iconMap[value]}
+          <span className="truncate">{value}</span>
+        </div>
         <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "text-[#121415] rotate-180" : "text-[#8B9194]"}`} />
       </button>
       
@@ -128,9 +132,12 @@ function CustomSelect({ value, options, onChange, className }: CustomSelectProps
                 value === opt ? "bg-[#F5F5F4]" : "hover:bg-[#F5F5F4]"
               }`}
             >
-              <span className={value === opt ? "font-medium text-[#121415]" : "font-medium text-[#4A4E51] group-hover:text-[#121415]"}>
-                {opt}
-              </span>
+              <div className="flex items-center gap-2 truncate">
+                {iconMap && iconMap[opt]}
+                <span className={value === opt ? "font-medium text-[#121415]" : "font-medium text-[#4A4E51] group-hover:text-[#121415]"}>
+                  {opt}
+                </span>
+              </div>
               {value === opt && <CheckCircle2 className="w-4 h-4 text-[#121415] shrink-0" />}
             </button>
           ))}
@@ -163,7 +170,7 @@ export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
 
   // Real state data for tab views
-  const [venueProfile, setVenueProfile] = useState({ name: '', phone: '', address: '', description: '', instagram: '' });
+  const [venueProfile, setVenueProfile] = useState<{name: string; phone: string; address: string; description: string; socialLinks: {platform: string; value: string}[]}>({ name: '', phone: '', address: '', description: '', socialLinks: [] });
   const [policies, setPolicies] = useState({ cancelWindow: "12 hours before (Recommended)", requireCardForLowKarma: true, karmaThreshold: "80% (Recommended)", autoBlacklist: false });
   const [services, setServices] = useState<any[]>([]);
   const [team, setTeam] = useState<any[]>([]);
@@ -188,12 +195,17 @@ export default function Settings() {
           await supabase.from('businesses').update({ phone: businessPhone }).eq('id', business.id);
         }
 
+        let initialSocialLinks = business.social_links || [];
+        if (initialSocialLinks.length === 0 && business.instagram) {
+          initialSocialLinks = [{ platform: 'Instagram', value: business.instagram }];
+        }
+
         setVenueProfile({
           name: business.name || '',
           phone: businessPhone,
           address: business.address || '',
           description: business.description || '',
-          instagram: business.instagram || ''
+          socialLinks: initialSocialLinks
         });
 
         if (business.policies_data && Object.keys(business.policies_data).length > 0) {
@@ -257,7 +269,7 @@ export default function Settings() {
         phone: venueProfile.phone,
         address: venueProfile.address,
         description: venueProfile.description,
-        instagram: venueProfile.instagram
+        social_links: venueProfile.socialLinks
       }).eq('id', businessId);
       
       if (error) throw error;
@@ -517,21 +529,80 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-[#121415] mb-2">Instagram Username</label>
+                      <label className="block text-sm font-medium text-[#121415] mb-2">Address</label>
                       <div className="relative">
-                        <Instagram className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                        <input type="text" value={venueProfile.instagram} onChange={(e) => setVenueProfile({...venueProfile, instagram: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" placeholder="@your.instagram" />
+                        <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
+                        <input type="text" value={venueProfile.address} onChange={(e) => setVenueProfile({...venueProfile, address: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" placeholder="E.g., 123 Main St" />
                       </div>
                     </div>
-
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#121415] mb-2">Address</label>
-                    <div className="relative">
-                      <MapPin className="absolute left-4 top-4 w-5 h-5 text-[#8B9194]" />
-                      <textarea rows={2} value={venueProfile.address} onChange={(e) => setVenueProfile({...venueProfile, address: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all resize-none placeholder:text-[#8B9194]"></textarea>
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="block text-sm font-medium text-[#121415]">Social Links</label>
+                      <button 
+                        type="button" 
+                        onClick={() => setVenueProfile({...venueProfile, socialLinks: [...venueProfile.socialLinks, {platform: 'Instagram', value: ''}]})}
+                        className="px-4 py-2 bg-white text-sm font-medium flex items-center gap-1.5 text-[#121415] border border-[#DCDCDA] rounded-xl hover:bg-[#F5F5F4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Link
+                      </button>
                     </div>
+                    {venueProfile.socialLinks.length === 0 ? (
+                      <div className="text-sm text-[#8B9194] bg-[#F5F5F4] p-4 rounded-xl border border-dashed border-[#DCDCDA] text-center">
+                        No social links added yet.
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {venueProfile.socialLinks.map((link, idx) => (
+                          <div key={idx} className="flex gap-3">
+                            <div className="w-1/3">
+                              <CustomSelect 
+                                value={link.platform}
+                                options={['Instagram', 'Telegram', 'WhatsApp', 'TikTok']}
+                                iconMap={{
+                                  Instagram: <Instagram className="w-4 h-4 text-[#8B9194]" />,
+                                  Telegram: <Send className="w-4 h-4 text-[#8B9194]" />,
+                                  WhatsApp: <MessageCircle className="w-4 h-4 text-[#8B9194]" />,
+                                  TikTok: <Music className="w-4 h-4 text-[#8B9194]" />
+                                }}
+                                onChange={(val) => {
+                                  const newLinks = [...venueProfile.socialLinks];
+                                  newLinks[idx].platform = val;
+                                  setVenueProfile({...venueProfile, socialLinks: newLinks});
+                                }}
+                              />
+                            </div>
+                            <div className="relative flex-1">
+                              <Link className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
+                              <input 
+                                type="text" 
+                                value={link.value} 
+                                onChange={(e) => {
+                                  const newLinks = [...venueProfile.socialLinks];
+                                  newLinks[idx].value = e.target.value;
+                                  setVenueProfile({...venueProfile, socialLinks: newLinks});
+                                }}
+                                className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] text-sm font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
+                                placeholder={link.platform === 'WhatsApp' ? "+998 XX XXX XX XX" : "@username"}
+                              />
+                            </div>
+                            <button 
+                              type="button" 
+                              onClick={() => {
+                                const newLinks = [...venueProfile.socialLinks];
+                                newLinks.splice(idx, 1);
+                                setVenueProfile({...venueProfile, socialLinks: newLinks});
+                              }}
+                              className="px-4 py-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors"
+                            >
+                              <Trash2 className="w-5 h-5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <div>

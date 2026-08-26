@@ -22,6 +22,9 @@ import {
   Clock,
   Globe,
   Map,
+  Send,
+  MessageCircle,
+  Music
 } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -91,60 +94,25 @@ function formatPhone(phone: string): string {
 
 const defaultVenueData = {
   id: "",
-  name: "Chop-Chop Barbershop",
-  address: "Tashkent, Yunusabad 19, 15",
+  name: "Untitled Business",
+  address: "Address not provided",
   rating: 5.0,
   reviewsCount: 0,
   imageUrl: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074&auto=format&fit=crop",
-  scheduleData: [
-    { day: "Monday", isActive: true, start: "10:00", end: "20:00" },
-    { day: "Tuesday", isActive: true, start: "10:00", end: "20:00" },
-    { day: "Wednesday", isActive: true, start: "10:00", end: "20:00" },
-    { day: "Thursday", isActive: true, start: "10:00", end: "20:00" },
-    { day: "Friday", isActive: true, start: "10:00", end: "20:00" },
-    { day: "Saturday", isActive: true, start: "10:00", end: "18:00" },
-    { day: "Sunday", isActive: false, start: "10:00", end: "18:00" },
-  ],
+  scheduleData: [],
   policies: {
     cancelWindow: "12 hours before (Recommended)",
     requireCardForLowKarma: true,
     karmaThreshold: "80% (Recommended)",
   },
-  services: [
-    {
-      id: "1",
-      name: "Haircut & Beard",
-      duration: "1 h 15 min",
-      price: "$45.00",
-    },
-    {
-      id: "2",
-      name: "Men's Haircut",
-      duration: "45 min",
-      price: "$30.00",
-    },
-  ],
-  staff: [
-    {
-      id: "any",
-      name: "Any available",
-      initials: "AA",
-      role: "First available professional",
-    },
-    { id: "1", name: "Ali Ahmedov", initials: "AA", role: "Top Barber" },
-    { id: "2", name: "Sanjar I.", initials: "SI", role: "Barber" },
-  ],
+  services: [],
+  staff: [],
   about: {
-    description:
-      "Chop-Chop is more than just a barbershop. It's a place where men can get groomed, drink excellent coffee, and relax in good company. We work only with top-tier cosmetics and know everything about classic haircuts and shaves.",
-    schedule: [
-      { days: "Monday - Friday", time: "10:00 - 22:00" },
-      { days: "Saturday - Sunday", time: "10:00 - 21:00" },
-    ],
+    description: "",
+    schedule: [],
     contacts: {
       phone: "",
-      instagram: "@chopchop.tashkent",
-      website: "chopchop.uz",
+      socialLinks: []
     },
   },
 };
@@ -219,33 +187,33 @@ export default function CustomerBooking() {
             }
 
             setVenueData((prev: any) => {
-              const newAboutSchedule = actualSchedule 
+              const newAboutSchedule = actualSchedule && actualSchedule.length > 0
                 ? actualSchedule.filter((s: any) => s.isActive).map((s: any) => ({ days: s.day, time: `${s.start} - ${s.end}` }))
-                : prev.about.schedule;
+                : [];
                 
               return {
                 ...prev,
                 id: targetVenueId,
-                name: business.name || prev.name,
-                address: business.address || prev.address,
+                name: business.name || "Untitled Business",
+                address: business.address || "Address not provided",
                 imageUrl: business.image_url || prev.imageUrl,
                 rating: business.rating ?? prev.rating,
                 reviewsCount: business.reviews_count ?? prev.reviewsCount,
-                services: actualServices || prev.services,
-                staff: actualMasters || prev.staff,
-                scheduleData: actualSchedule,
+                services: actualServices && actualServices.length > 0 ? actualServices : [],
+                staff: actualMasters && actualMasters.length > 0 ? actualMasters : [],
+                scheduleData: actualSchedule && actualSchedule.length > 0 ? actualSchedule : [],
                 policies: {
                   ...prev.policies,
                   ...(business.policies_data || {})
                 },
                 about: {
                   ...prev.about,
-                  description: business.description || prev.about.description,
-                  schedule: newAboutSchedule.length > 0 ? newAboutSchedule : prev.about.schedule,
+                  description: business.description || "",
+                  schedule: newAboutSchedule,
                   contacts: {
                     ...prev.about.contacts,
                     phone: business.phone || "",
-                    instagram: business.instagram || ""
+                    socialLinks: business.social_links || []
                   }
                 }
               };
@@ -610,42 +578,48 @@ export default function CustomerBooking() {
                     Select service
                   </h2>
                   <div className="space-y-3">
-                    {venueData.services.map((service) => {
-                      const isActive = selectedService === service.id;
-                      return (
-                        <button
-                          key={service.id}
-                          type="button"
-                          onClick={() => handleServiceSelect(service.id)}
-                          className={`w-full p-5 rounded-2xl border transition-all text-left flex items-center justify-between active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${
-                            isActive
-                              ? "border-[#121415] bg-[#F5F5F4]"
-                              : "border-[#DCDCDA] hover:bg-[#F5F5F4] bg-white"
-                          }`}
-                        >
-                          <div className="min-w-0 flex-1 pr-4">
-                            <p className="font-semibold mb-1 text-[#121415] leading-snug">
-                              {service.name}
-                            </p>
-                            <p className="text-sm font-medium text-[#4A4E51]">
-                              {service.duration}
-                            </p>
-                          </div>
-                          <div className="flex items-center gap-4 shrink-0">
-                            <span className="font-semibold text-[#121415] whitespace-nowrap">
-                              {service.price}
-                            </span>
-                            {isActive ? (
-                              <div className="w-5 h-5 rounded-full bg-[#121415] flex items-center justify-center shrink-0">
-                                <Check className="w-3 h-3 text-white" />
-                              </div>
-                            ) : (
-                              <div className="w-5 h-5 rounded-full border border-[#DCDCDA] shrink-0" />
-                            )}
-                          </div>
-                        </button>
-                      );
-                    })}
+                    {venueData.services.length === 0 ? (
+                      <div className="p-5 text-center text-sm font-medium text-[#4A4E51] bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA]">
+                        No services available at the moment.
+                      </div>
+                    ) : (
+                      venueData.services.map((service: any) => {
+                        const isActive = selectedService === service.id;
+                        return (
+                          <button
+                            key={service.id}
+                            type="button"
+                            onClick={() => handleServiceSelect(service.id)}
+                            className={`w-full p-5 rounded-2xl border transition-all text-left flex items-center justify-between active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${
+                              isActive
+                                ? "border-[#121415] bg-[#F5F5F4]"
+                                : "border-[#DCDCDA] hover:bg-[#F5F5F4] bg-white"
+                            }`}
+                          >
+                            <div className="min-w-0 flex-1 pr-4">
+                              <p className="font-semibold mb-1 text-[#121415] leading-snug">
+                                {service.name}
+                              </p>
+                              <p className="text-sm font-medium text-[#4A4E51]">
+                                {service.duration}
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-4 shrink-0">
+                              <span className="font-semibold text-[#121415] whitespace-nowrap">
+                                {service.price}
+                              </span>
+                              {isActive ? (
+                                <div className="w-5 h-5 rounded-full bg-[#121415] flex items-center justify-center shrink-0">
+                                  <Check className="w-3 h-3 text-white" />
+                                </div>
+                              ) : (
+                                <div className="w-5 h-5 rounded-full border border-[#DCDCDA] shrink-0" />
+                              )}
+                            </div>
+                          </button>
+                        );
+                      })
+                    )}
                   </div>
                 </div>
 
@@ -661,39 +635,45 @@ export default function CustomerBooking() {
                     Professional
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {venueData.staff.map((staff) => {
-                      const isActive = selectedMaster === staff.id;
-                      return (
-                        <button
-                          key={staff.id}
-                          type="button"
-                          onClick={() => handleMasterSelect(staff.id)}
-                          className={`p-5 rounded-2xl border text-left transition-all active:scale-[0.98] flex flex-col items-start min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${
-                            isActive
-                              ? "border-[#121415] bg-[#F5F5F4]"
-                              : "border-[#DCDCDA] hover:bg-[#F5F5F4] bg-white"
-                          }`}
-                        >
-                          <div
-                            className={`w-12 h-12 mb-3 rounded-full flex items-center justify-center font-bold text-sm shrink-0 transition-colors ${
-                              staff.id === "any"
-                                ? "bg-white border border-[#DCDCDA] text-[#121415]"
-                                : isActive
-                                  ? "bg-[#121415] text-white"
-                                  : "bg-[#ECECEA] text-[#121415]"
+                    {venueData.staff.length === 0 ? (
+                      <div className="col-span-full p-5 text-center text-sm font-medium text-[#4A4E51] bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA]">
+                        No professionals available at the moment.
+                      </div>
+                    ) : (
+                      venueData.staff.map((staff: any) => {
+                        const isActive = selectedMaster === staff.id;
+                        return (
+                          <button
+                            key={staff.id}
+                            type="button"
+                            onClick={() => handleMasterSelect(staff.id)}
+                            className={`p-5 rounded-2xl border text-left transition-all active:scale-[0.98] flex flex-col items-start min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${
+                              isActive
+                                ? "border-[#121415] bg-[#F5F5F4]"
+                                : "border-[#DCDCDA] hover:bg-[#F5F5F4] bg-white"
                             }`}
                           >
-                            {staff.initials}
-                          </div>
-                          <p className="font-semibold text-sm text-[#121415] truncate w-full">
-                            {staff.name}
-                          </p>
-                          <p className="text-xs font-medium text-[#4A4E51] mt-0.5 truncate w-full">
-                            {staff.role}
-                          </p>
-                        </button>
-                      );
-                    })}
+                            <div
+                              className={`w-12 h-12 mb-3 rounded-full flex items-center justify-center font-bold text-sm shrink-0 transition-colors ${
+                                staff.id === "any"
+                                  ? "bg-white border border-[#DCDCDA] text-[#121415]"
+                                  : isActive
+                                    ? "bg-[#121415] text-white"
+                                    : "bg-[#ECECEA] text-[#121415]"
+                              }`}
+                            >
+                              {staff.initials}
+                            </div>
+                            <p className="font-semibold text-sm text-[#121415] truncate w-full">
+                              {staff.name}
+                            </p>
+                            <p className="text-xs font-medium text-[#4A4E51] mt-0.5 truncate w-full">
+                              {staff.role}
+                            </p>
+                          </button>
+                        );
+                      })
+                    )}
                   </div>
                 </div>
 
@@ -1014,24 +994,46 @@ export default function CustomerBooking() {
                     </a>
                   )}
 
-                  <a
-                    href={`https://instagram.com/${venueData.about.contacts.instagram.substring(1)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-3 p-4 rounded-2xl border border-[#DCDCDA] hover:bg-[#F5F5F4] bg-white transition-colors group min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-[#F5F5F4] flex items-center justify-center group-hover:bg-[#121415] transition-colors shrink-0">
-                      <Instagram className="w-4 h-4 text-[#4A4E51] group-hover:text-white transition-colors" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs uppercase tracking-widest font-bold text-[#4A4E51] mb-1 truncate">
-                        Instagram
-                      </p>
-                      <p className="text-sm font-semibold text-[#121415] truncate">
-                        {venueData.about.contacts.instagram}
-                      </p>
-                    </div>
-                  </a>
+                  {(venueData.about.contacts.socialLinks || []).map((link: any, idx: number) => {
+                    let href = link.value;
+                    if (link.platform === 'Instagram' && link.value.startsWith('@')) href = `https://instagram.com/${link.value.substring(1)}`;
+                    else if (link.platform === 'Telegram' && link.value.startsWith('@')) href = `https://t.me/${link.value.substring(1)}`;
+                    else if (link.platform === 'TikTok' && link.value.startsWith('@')) href = `https://tiktok.com/${link.value}`;
+                    else if (link.platform === 'WhatsApp' && !link.value.startsWith('http')) href = `https://wa.me/${link.value.replace(/\D/g, '')}`;
+                    else if (!link.value.startsWith('http')) href = `https://${link.value}`;
+
+                    return (
+                      <a
+                        key={idx}
+                        href={href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-3 p-4 rounded-2xl border border-[#DCDCDA] hover:bg-[#F5F5F4] bg-white transition-colors group min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-[#F5F5F4] flex items-center justify-center group-hover:bg-[#121415] transition-colors shrink-0">
+                          {link.platform === 'Instagram' ? (
+                            <Instagram className="w-4 h-4 text-[#4A4E51] group-hover:text-white transition-colors" />
+                          ) : link.platform === 'Telegram' ? (
+                            <Send className="w-4 h-4 text-[#4A4E51] group-hover:text-white transition-colors" />
+                          ) : link.platform === 'WhatsApp' ? (
+                            <MessageCircle className="w-4 h-4 text-[#4A4E51] group-hover:text-white transition-colors" />
+                          ) : link.platform === 'TikTok' ? (
+                            <Music className="w-4 h-4 text-[#4A4E51] group-hover:text-white transition-colors" />
+                          ) : (
+                            <Globe className="w-4 h-4 text-[#4A4E51] group-hover:text-white transition-colors" />
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs uppercase tracking-widest font-bold text-[#4A4E51] mb-1 truncate">
+                            {link.platform}
+                          </p>
+                          <p className="text-sm font-semibold text-[#121415] truncate">
+                            {link.value}
+                          </p>
+                        </div>
+                      </a>
+                    );
+                  })}
 
 
                 </div>

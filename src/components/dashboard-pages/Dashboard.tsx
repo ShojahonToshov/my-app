@@ -64,8 +64,8 @@ export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddingGuest, setIsAddingGuest] = useState(false);
   const [customerName, setClientName] = useState("");
-  const [staffName, setStaffName] = useState("Ali Ahmedov");
-  const [service, setService] = useState("Haircut");
+  const [staffName, setStaffName] = useState("Any Professional");
+  const [service, setService] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [isPaused, setIsPaused] = useState(true);
@@ -90,6 +90,11 @@ export default function Dashboard() {
 
         if (business.team_data && Array.isArray(business.team_data)) {
           setTeamData(business.team_data);
+          if (business.team_data.length > 0) {
+            setStaffName(business.team_data[0].name || "Any Professional");
+          } else {
+            setStaffName("Any Professional");
+          }
         }
         const { data: services } = await supabase
           .from('services')
@@ -357,7 +362,7 @@ export default function Dashboard() {
       staff_id: foundStaff ? String(foundStaff.id) : null,
       staff_name: foundStaff ? foundStaff.name : staffName,
       service_id: service,
-      service_name: chosenService ? chosenService.name : "Haircut",
+      service_name: chosenService ? chosenService.name : "Service",
       time: format(new Date(), "HH:mm"),
       date: format(new Date(), "yyyy-MM-dd"),
       status: "pending" as const,
@@ -385,7 +390,7 @@ export default function Dashboard() {
     setIsAddingGuest(false);
     setIsModalOpen(false);
     setClientName("");
-    setStaffName(mastersList[0] || "Ali Ahmedov");
+    setStaffName(mastersList[0] || "Any Professional");
     if (servicesData.length > 0) setService(servicesData[0].id);
   };
 
