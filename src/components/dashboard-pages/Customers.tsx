@@ -271,11 +271,42 @@ export default function Customers() {
 
                 <tbody className="divide-y divide-[#F5F5F4] text-sm">
                   {isLoading ? (
-                    <tr>
-                      <td colSpan={6} className="py-8 text-center text-[#4A4E51]">
-                        Loading customers...
-                      </td>
-                    </tr>
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <tr key={i} className="animate-pulse">
+                        <td className="py-3 pl-6 pr-2">
+                          <div className="w-4 h-4 bg-[#DCDCDA] rounded" />
+                        </td>
+                        <td className="py-3 px-6">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-[#DCDCDA]" />
+                            <div className="flex flex-col gap-1.5">
+                              <div className="w-32 h-4 bg-[#DCDCDA] rounded" />
+                              <div className="w-24 h-3 bg-[#DCDCDA] rounded" />
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-3 px-6">
+                          <div className="w-16 h-6 bg-[#DCDCDA] rounded-md" />
+                        </td>
+                        <td className="py-3 px-6">
+                          <div className="flex flex-col gap-1.5">
+                            <div className="w-16 h-4 bg-[#DCDCDA] rounded" />
+                            <div className="w-12 h-3 bg-[#DCDCDA] rounded" />
+                          </div>
+                        </td>
+                        <td className="py-3 px-6">
+                          <div className="w-20 h-4 bg-[#DCDCDA] rounded" />
+                        </td>
+                        <td className="py-3 px-6 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <div className="w-8 h-8 rounded-lg bg-[#DCDCDA]" />
+                            <div className="w-8 h-8 rounded-lg bg-[#DCDCDA]" />
+                            <div className="w-px h-4 bg-[#DCDCDA] mx-1" />
+                            <div className="w-8 h-8 rounded-lg bg-[#DCDCDA]" />
+                          </div>
+                        </td>
+                      </tr>
+                    ))
                   ) : filteredCustomers.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="py-8">
@@ -344,9 +375,34 @@ export default function Customers() {
               {/* MOBILE VIEW */}
               <div className="lg:hidden flex flex-col divide-y divide-[#F5F5F4]">
                 {isLoading ? (
-                  <div className="p-8 text-center text-[#4A4E51]">
-                    Loading customers...
-                  </div>
+                  Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="p-5 bg-white animate-pulse">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-xl bg-[#DCDCDA]" />
+                          <div className="flex flex-col gap-2">
+                            <div className="w-32 h-4 bg-[#DCDCDA] rounded" />
+                            <div className="w-24 h-3 bg-[#DCDCDA] rounded" />
+                          </div>
+                        </div>
+                        <div className="w-16 h-6 bg-[#DCDCDA] rounded-md" />
+                      </div>
+                      <div className="flex items-center justify-between bg-[#F5F5F4] p-3 rounded-xl border border-[#DCDCDA] mb-4">
+                        <div className="flex flex-col gap-2">
+                          <div className="w-12 h-3 bg-[#DCDCDA] rounded" />
+                          <div className="w-8 h-4 bg-[#DCDCDA] rounded" />
+                        </div>
+                        <div className="flex flex-col gap-2 items-end">
+                          <div className="w-20 h-3 bg-[#DCDCDA] rounded" />
+                          <div className="w-16 h-4 bg-[#DCDCDA] rounded" />
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="flex-1 h-10 bg-[#DCDCDA] rounded-xl" />
+                        <div className="flex-1 h-10 bg-[#DCDCDA] rounded-xl" />
+                      </div>
+                    </div>
+                  ))
                 ) : filteredCustomers.length === 0 ? (
                   <div className="p-8">
                     <EmptyState 

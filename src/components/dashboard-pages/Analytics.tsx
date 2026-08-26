@@ -14,6 +14,7 @@ import { createClient } from "@/utils/supabase/client";
 import { BookingService } from "@/services/BookingService";
 import { isToday, isThisWeek, isThisMonth, parseISO, format } from "date-fns";
 import type { Booking } from "@/types";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 function computeAnalyticsData(
   bookings: Booking[], 
@@ -118,7 +119,7 @@ function computeAnalyticsData(
 export default function Analytics() {
   const [activeTab, setActiveTab] = React.useState<"today" | "week" | "month">("today");
 
-  const { data: analyticsData } = useQuery({
+  const { data: analyticsData, isLoading } = useQuery({
     queryKey: ['analyticsData'],
     queryFn: async () => {
       const supabase = createClient();
@@ -203,9 +204,13 @@ export default function Analytics() {
                   <ArrowUpRight className="w-3 h-3" /> {currentData.kpi.revTrend}
                 </span>
               </div>
-              <div className="text-3xl font-semibold text-[#121415] tracking-tight truncate">
-                {currentData.kpi.revenue} <span className="text-sm font-medium text-[#8B9194]">UZS</span>
-              </div>
+              {isLoading ? (
+                <Skeleton className="w-24 h-8" />
+              ) : (
+                <div className="text-3xl font-semibold text-[#121415] tracking-tight truncate">
+                  {currentData.kpi.revenue} <span className="text-sm font-medium text-[#8B9194]">UZS</span>
+                </div>
+              )}
             </div>
 
             {/* Visits */}
@@ -219,9 +224,13 @@ export default function Analytics() {
                   <ArrowUpRight className="w-3 h-3" /> {currentData.kpi.visitsTrend}
                 </span>
               </div>
-              <div className="text-3xl font-semibold text-[#121415] tracking-tight truncate">
-                {currentData.kpi.visits}
-              </div>
+              {isLoading ? (
+                <Skeleton className="w-16 h-8" />
+              ) : (
+                <div className="text-3xl font-semibold text-[#121415] tracking-tight truncate">
+                  {currentData.kpi.visits}
+                </div>
+              )}
             </div>
 
             {/* Cancellations */}
@@ -235,9 +244,13 @@ export default function Analytics() {
                   Total
                 </span>
               </div>
-              <div className="text-3xl font-semibold text-[#8A2532] tracking-tight truncate">
-                {currentData.kpi.cancels}
-              </div>
+              {isLoading ? (
+                <Skeleton className="w-16 h-8" />
+              ) : (
+                <div className="text-3xl font-semibold text-[#8A2532] tracking-tight truncate">
+                  {currentData.kpi.cancels}
+                </div>
+              )}
             </div>
 
             {/* Wait Time */}
@@ -251,9 +264,13 @@ export default function Analytics() {
                   Realtime
                 </span>
               </div>
-              <div className="text-3xl font-semibold text-[#121415] tracking-tight truncate">
-                {currentData.kpi.wait}
-              </div>
+              {isLoading ? (
+                <Skeleton className="w-20 h-8" />
+              ) : (
+                <div className="text-3xl font-semibold text-[#121415] tracking-tight truncate">
+                  {currentData.kpi.wait}
+                </div>
+              )}
             </div>
           </div>
 
@@ -278,29 +295,40 @@ export default function Analytics() {
               </div>
 
               <div className="flex-1 flex items-end justify-between gap-2 md:gap-4 h-52 pt-6 overflow-x-auto scrollbar-hide">
-                {currentData.chart.map((col, idx) => {
-                  const maxVal = Math.max(...currentData.chart.map(c => c.value), 1);
-                  const heightPercent = Math.round((col.value / maxVal) * 100);
-
-                  return (
-                    <div key={idx} className="flex-1 flex flex-col items-center gap-3 h-full justify-end group min-w-[40px]">
-                      <div className="w-full bg-[#F5F5F4] rounded-t-xl flex items-end relative group-hover:bg-[#ECECEA] transition-colors border border-transparent group-hover:border-[#DCDCDA]/50">
-                        {/* Tooltip */}
-                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#121415] text-white text-[10px] font-medium py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-sm">
-                          {col.value} visits
-                        </div>
-                        {/* Bar */}
-                        <div 
-                          className={`w-full rounded-t-xl transition-all duration-500 ease-out ${heightPercent > 85 ? "bg-[#8A2532]" : heightPercent > 50 ? "bg-[#121415]" : "bg-[#DCDCDA]"}`}
-                          style={{ height: `${heightPercent}%` }}
-                        ></div>
+                {isLoading ? (
+                  Array.from({ length: 6 }).map((_, idx) => (
+                    <div key={idx} className="flex-1 flex flex-col items-center gap-3 h-full justify-end min-w-[40px]">
+                      <div className="w-full flex justify-center" style={{ height: `${Math.max(20, Math.random() * 80)}%` }}>
+                        <Skeleton className="w-full h-full rounded-t-xl" />
                       </div>
-                      <span className="text-xs font-medium text-[#8B9194] group-hover:text-[#121415] transition-colors whitespace-nowrap">
-                        {col.time}
-                      </span>
+                      <Skeleton className="w-8 h-3" />
                     </div>
-                  );
-                })}
+                  ))
+                ) : (
+                  currentData.chart.map((col, idx) => {
+                    const maxVal = Math.max(...currentData.chart.map(c => c.value), 1);
+                    const heightPercent = Math.round((col.value / maxVal) * 100);
+
+                    return (
+                      <div key={idx} className="flex-1 flex flex-col items-center gap-3 h-full justify-end group min-w-[40px]">
+                        <div className="w-full bg-[#F5F5F4] rounded-t-xl flex items-end relative group-hover:bg-[#ECECEA] transition-colors border border-transparent group-hover:border-[#DCDCDA]/50">
+                          {/* Tooltip */}
+                          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#121415] text-white text-[10px] font-medium py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-sm">
+                            {col.value} visits
+                          </div>
+                          {/* Bar */}
+                          <div 
+                            className={`w-full rounded-t-xl transition-all duration-500 ease-out ${heightPercent > 85 ? "bg-[#8A2532]" : heightPercent > 50 ? "bg-[#121415]" : "bg-[#DCDCDA]"}`}
+                            style={{ height: `${heightPercent}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-xs font-medium text-[#8B9194] group-hover:text-[#121415] transition-colors whitespace-nowrap">
+                          {col.time}
+                        </span>
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </div>
 
@@ -316,7 +344,22 @@ export default function Analytics() {
               </div>
 
               <div className="space-y-3 mt-6 flex-1 overflow-y-auto scrollbar-hide">
-                {currentData.services.length === 0 ? (
+                {isLoading ? (
+                  Array.from({ length: 3 }).map((_, idx) => (
+                    <div key={idx} className="p-4 bg-[#F5F5F4] rounded-xl border border-[#DCDCDA] flex flex-col gap-3">
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="w-10 h-10 rounded-xl" />
+                        <div className="flex flex-col gap-1.5 w-full">
+                          <Skeleton className="w-24 h-4" />
+                          <Skeleton className="w-16 h-3" />
+                        </div>
+                      </div>
+                      <div className="pt-3 border-t border-[#DCDCDA] flex justify-end">
+                         <Skeleton className="w-20 h-4" />
+                      </div>
+                    </div>
+                  ))
+                ) : currentData.services.length === 0 ? (
                   <div className="text-sm text-[#4A4E51] text-center pt-10">No services found for this period.</div>
                 ) : (
                   currentData.services.map((service, idx) => (

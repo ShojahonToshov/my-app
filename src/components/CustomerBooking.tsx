@@ -92,7 +92,37 @@ function formatPhone(phone: string): string {
   return phone.startsWith('+') ? phone : `+${phone}`;
 }
 
-const defaultVenueData = {
+type SocialLink = { platform: string; value: string };
+type ScheduleItem = { day?: string; days?: string[]; isActive?: boolean; start?: string; end?: string; time?: string[] };
+type StaffItem = { id: string; name: string; role?: string; avatar?: string; rating?: number };
+type ServiceItem = { id: string; name: string; price: string; duration: string; description?: string };
+
+type VenueData = {
+  id: string;
+  name: string;
+  address: string;
+  rating: number;
+  reviewsCount: number;
+  imageUrl: string;
+  scheduleData: ScheduleItem[];
+  policies: {
+    cancelWindow: string;
+    requireCardForLowKarma: boolean;
+    karmaThreshold: string;
+  };
+  services: ServiceItem[];
+  staff: StaffItem[];
+  about: {
+    description: string;
+    schedule: ScheduleItem[];
+    contacts: {
+      phone: string;
+      socialLinks: SocialLink[];
+    }
+  }
+};
+
+const defaultVenueData: VenueData = {
   id: "",
   name: "Untitled Business",
   address: "Address not provided",
@@ -113,8 +143,8 @@ const defaultVenueData = {
     contacts: {
       phone: "",
       socialLinks: []
-    },
-  },
+    }
+  }
 };
 
 
@@ -302,7 +332,7 @@ export default function CustomerBooking() {
       const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
       
       const daySchedule = scheduleData.find((d: any) => d.day === dayName);
-      if (daySchedule && daySchedule.isActive) {
+      if (daySchedule && daySchedule.isActive && daySchedule.start && daySchedule.end) {
         let [startH, startM] = daySchedule.start.split(':').map(Number);
         const [endH, endM] = daySchedule.end.split(':').map(Number);
         

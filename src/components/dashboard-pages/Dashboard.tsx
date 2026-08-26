@@ -475,6 +475,8 @@ export default function Dashboard() {
   const filteredInChair = selectedFilter === "All" ? inChairGuests : inChairGuests.filter(g => g.staff === selectedFilter);
   const filteredCompleted = selectedFilter === "All" ? completedGuests : completedGuests.filter(g => g.staff === selectedFilter);
 
+  const isDashboardLoading = !isMounted || !businessId || isBookingsLoading;
+
   if (!isMounted) return null;
 
   return (
@@ -536,7 +538,7 @@ export default function Dashboard() {
                 <TrendingUp className="w-4 h-4" /> 
                 <span className="text-xs font-medium uppercase tracking-wider">Total Bookings</span>
               </div>
-              <div className="text-3xl font-semibold text-[#121415]">{totalBookings}</div>
+              {isDashboardLoading ? <Skeleton className="w-12 h-8" /> : <div className="text-3xl font-semibold text-[#121415]">{totalBookings}</div>}
             </div>
             
             <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between">
@@ -544,7 +546,7 @@ export default function Dashboard() {
                 <Users className="w-4 h-4" />
                 <span className="text-xs font-medium uppercase tracking-wider">In Salon Now</span>
               </div>
-              <div className="text-3xl font-semibold text-[#121415]">{inSalonNow}</div>
+              {isDashboardLoading ? <Skeleton className="w-12 h-8" /> : <div className="text-3xl font-semibold text-[#121415]">{inSalonNow}</div>}
             </div>
   
             <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between min-w-0">
@@ -552,7 +554,7 @@ export default function Dashboard() {
                 <Scissors className="w-4 h-4" />
                 <span className="text-xs font-medium uppercase tracking-wider">Top Service</span>
               </div>
-              <div className="text-xl font-semibold text-[#121415] truncate" title={topService}>{topService}</div>
+              {isDashboardLoading ? <Skeleton className="w-24 h-6 mt-1" /> : <div className="text-xl font-semibold text-[#121415] truncate" title={topService}>{topService}</div>}
             </div>
   
             <div className="bg-[#FFF4F4] p-5 rounded-2xl border border-[#FDE8E8] shadow-sm flex flex-col justify-between">
@@ -560,7 +562,7 @@ export default function Dashboard() {
                 <AlertTriangle className="w-4 h-4" />
                 <span className="text-xs font-medium uppercase tracking-wider">Total Delay</span>
               </div>
-              <div className="text-3xl font-semibold text-[#8A2532]">{totalDelay} min</div>
+              {isDashboardLoading ? <Skeleton className="w-16 h-8" /> : <div className="text-3xl font-semibold text-[#8A2532]">{totalDelay} min</div>}
             </div>
           </div>
 
@@ -568,16 +570,24 @@ export default function Dashboard() {
           <div className="px-6 md:px-10 pb-4 shrink-0 flex items-center justify-between w-full overflow-hidden">
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide bg-[#F5F5F4] p-1.5 rounded-xl border border-[#DCDCDA] w-full max-w-full">
               <Filter className="w-4 h-4 text-[#8B9194] shrink-0 ml-2" />
-              {["All", ...mastersList].map(filter => (
-                <button
-                  key={filter}
-                  type="button"
-                  onClick={() => setSelectedFilter(filter)}
-                  className={`shrink-0 px-5 py-1.5 rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${selectedFilter === filter ? 'bg-white text-[#121415] shadow-sm border border-[#DCDCDA]' : 'text-[#4A4E51] hover:text-[#121415] border border-transparent'}`}
-                >
-                  {filter}
-                </button>
-              ))}
+              {isDashboardLoading ? (
+                <>
+                  <Skeleton className="w-16 h-8 rounded-lg" />
+                  <Skeleton className="w-24 h-8 rounded-lg" />
+                  <Skeleton className="w-20 h-8 rounded-lg" />
+                </>
+              ) : (
+                ["All", ...mastersList].map(filter => (
+                  <button
+                    key={filter}
+                    type="button"
+                    onClick={() => setSelectedFilter(filter)}
+                    className={`shrink-0 px-5 py-1.5 rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] ${selectedFilter === filter ? 'bg-white text-[#121415] shadow-sm border border-[#DCDCDA]' : 'text-[#4A4E51] hover:text-[#121415] border border-transparent'}`}
+                  >
+                    {filter}
+                  </button>
+                ))
+              )}
             </div>
           </div>
 
@@ -591,7 +601,9 @@ export default function Dashboard() {
                   <span className="w-2.5 h-2.5 rounded-full bg-[#8A2532]"></span>
                   Waiting
                 </h2>
-                <span className="text-xs font-medium text-[#121415] bg-white border border-[#DCDCDA] shadow-sm px-2.5 py-1 rounded-lg">{filteredWaiting.length}</span>
+                <span className="text-xs font-medium text-[#121415] bg-white border border-[#DCDCDA] shadow-sm px-2.5 py-1 rounded-lg">
+                  {isDashboardLoading ? "-" : filteredWaiting.length}
+                </span>
               </div>
               
               <Droppable droppableId="waiting">
@@ -601,7 +613,7 @@ export default function Dashboard() {
                     ref={provided.innerRef} 
                     {...provided.droppableProps}
                   >
-                    {isBookingsLoading ? (
+                    {isDashboardLoading ? (
                       Array.from({ length: 3 }).map((_, i) => (
                         <div key={i} className="bg-white border border-[#DCDCDA] rounded-xl p-3 flex flex-col justify-between min-h-[120px] mx-1 mb-2">
                           <Skeleton className="w-24 h-4 mb-2" />
@@ -668,7 +680,9 @@ export default function Dashboard() {
                   <span className="w-2.5 h-2.5 rounded-full bg-[#4a6b53] animate-pulse"></span>
                   In Chair
                 </h2>
-                <span className="text-xs font-medium text-[#4a6b53] bg-[#e8efe9] border border-[#4a6b53]/30 px-2.5 py-1 rounded-lg">{filteredInChair.length}</span>
+                <span className="text-xs font-medium text-[#4a6b53] bg-[#e8efe9] border border-[#4a6b53]/30 px-2.5 py-1 rounded-lg">
+                  {isDashboardLoading ? "-" : filteredInChair.length}
+                </span>
               </div>
               
               <Droppable droppableId="inChair">
@@ -678,41 +692,59 @@ export default function Dashboard() {
                     ref={provided.innerRef} 
                     {...provided.droppableProps}
                   >
-                    {filteredInChair.map((guest, index) => (
-                      <Draggable key={guest.id} draggableId={guest.id} index={index}>
-                        {(provided, snapshot) => (
-                          <div 
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={`bg-white p-5 rounded-2xl shadow-sm border border-[#4a6b53]/30 relative group touch-pan-y overflow-hidden ${snapshot.isDragging ? 'shadow-xl scale-[1.02] z-50 ring-2 ring-[#4a6b53]/30' : ''}`}
-                          >
-                            <div className="absolute top-0 left-0 w-1.5 h-full bg-[#4a6b53]"></div>
-                            <div className="flex justify-between items-start mb-4 pl-2">
-                              <div className="flex flex-col">
-                                <span className="text-xs font-medium text-[#4a6b53] uppercase tracking-wider mb-1">Staff: {guest.staff}</span>
-                                <span className="text-lg font-semibold text-[#121415] tracking-tight leading-tight">{guest.name}</span>
-                                <span className="text-sm font-medium text-[#4A4E51] mt-0.5">{guest.service}</span>
-                              </div>
-                              <div className="bg-[#F5F5F4] px-2.5 py-1 rounded-lg border border-[#DCDCDA] text-xs font-medium text-[#4A4E51] flex items-center gap-1.5">
-                                <Clock className="w-3 h-3" /> {guest.time}
-                              </div>
+                    {isDashboardLoading ? (
+                      Array.from({ length: 2 }).map((_, i) => (
+                        <div key={i} className="bg-white p-5 rounded-2xl shadow-sm border border-[#4a6b53]/30 relative overflow-hidden mx-1 mb-2 min-h-[140px] flex flex-col justify-between">
+                          <div className="flex justify-between items-start mb-4">
+                            <div className="flex flex-col">
+                              <Skeleton className="w-16 h-3 mb-2" />
+                              <Skeleton className="w-32 h-5 mb-2" />
+                              <Skeleton className="w-24 h-4" />
                             </div>
-                            <div className="flex flex-col gap-2 pl-2 border-t border-[#DCDCDA] pt-4">
-                              <button type="button" onClick={() => handleComplete(guest.id)} className="w-full py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                                <CheckCircle2 className="w-4 h-4 text-white/70" /> Complete & Call Next
-                              </button>
-                              <div className="flex items-center gap-2">
-                                <button type="button" onClick={() => handleAddDelay(guest.id)} className="flex-1 py-2.5 bg-white text-[#121415] hover:bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-xs transition-colors flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                                  <TimerReset className="w-3.5 h-3.5" /> +10 min delay
-                                </button>
-                              </div>
-                            </div>
+                            <Skeleton className="w-12 h-6 rounded-lg" />
                           </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {filteredInChair.length === 0 && (
+                          <div className="flex flex-col gap-2 pt-4">
+                            <Skeleton className="w-full h-10 rounded-xl" />
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      filteredInChair.map((guest, index) => (
+                        <Draggable key={guest.id} draggableId={guest.id} index={index}>
+                          {(provided, snapshot) => (
+                            <div 
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className={`bg-white p-5 rounded-2xl shadow-sm border border-[#4a6b53]/30 relative group touch-pan-y overflow-hidden ${snapshot.isDragging ? 'shadow-xl scale-[1.02] z-50 ring-2 ring-[#4a6b53]/30' : ''}`}
+                            >
+                              <div className="absolute top-0 left-0 w-1.5 h-full bg-[#4a6b53]"></div>
+                              <div className="flex justify-between items-start mb-4 pl-2">
+                                <div className="flex flex-col">
+                                  <span className="text-xs font-medium text-[#4a6b53] uppercase tracking-wider mb-1">Staff: {guest.staff}</span>
+                                  <span className="text-lg font-semibold text-[#121415] tracking-tight leading-tight">{guest.name}</span>
+                                  <span className="text-sm font-medium text-[#4A4E51] mt-0.5">{guest.service}</span>
+                                </div>
+                                <div className="bg-[#F5F5F4] px-2.5 py-1 rounded-lg border border-[#DCDCDA] text-xs font-medium text-[#4A4E51] flex items-center gap-1.5">
+                                  <Clock className="w-3 h-3" /> {guest.time}
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-2 pl-2 border-t border-[#DCDCDA] pt-4">
+                                <button type="button" onClick={() => handleComplete(guest.id)} className="w-full py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                                  <CheckCircle2 className="w-4 h-4 text-white/70" /> Complete & Call Next
+                                </button>
+                                <div className="flex items-center gap-2">
+                                  <button type="button" onClick={() => handleAddDelay(guest.id)} className="flex-1 py-2.5 bg-white text-[#121415] hover:bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-xs transition-colors flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+                                    <TimerReset className="w-3.5 h-3.5" /> +10 min delay
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))
+                    )}
+                    {!isDashboardLoading && filteredInChair.length === 0 && (
                       <div className="flex flex-col items-center justify-center h-32 text-center border-2 border-dashed border-[#4a6b53]/30 rounded-2xl mx-1 bg-white/50">
                         <span className="text-sm font-medium text-[#4a6b53]/70">All chairs are free</span>
                         <span className="text-[10px] text-[#4a6b53]/50 mt-1 uppercase tracking-wider">Ready for work</span>
@@ -730,6 +762,9 @@ export default function Dashboard() {
                 <h2 className="font-medium text-[#8B9194] flex items-center gap-2 text-sm uppercase tracking-widest">
                   Completed
                 </h2>
+                <span className="text-xs font-medium text-[#8B9194] bg-[#F5F5F4] border border-[#DCDCDA] px-2.5 py-1 rounded-lg">
+                  {isDashboardLoading ? "-" : filteredCompleted.length}
+                </span>
               </div>
               
               <Droppable droppableId="completed">
@@ -739,32 +774,47 @@ export default function Dashboard() {
                     ref={provided.innerRef} 
                     {...provided.droppableProps}
                   >
-                    {filteredCompleted.map((guest, index) => (
-                      <Draggable key={guest.id} draggableId={guest.id} index={index}>
-                        {(provided, snapshot) => (
-                          <div 
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={`bg-white p-3 rounded-xl border border-[#DCDCDA] flex items-center justify-between opacity-80 group touch-pan-y overflow-hidden ${snapshot.isDragging ? 'shadow-xl scale-[1.02] z-50 ring-2 ring-[#8B9194]/30 opacity-100' : ''}`}
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-[#F5F5F4] flex items-center justify-center border border-[#DCDCDA]">
-                                <CheckCircle2 className="w-4 h-4 text-[#8B9194]" />
-                              </div>
-                              <div className="flex flex-col">
-                                <span className="text-xs font-medium text-[#121415] truncate max-w-[120px]">{guest.name}</span>
-                                <span className="text-[10px] font-medium text-[#8B9194]">{guest.time}</span>
-                              </div>
+                    {isDashboardLoading ? (
+                      Array.from({ length: 4 }).map((_, i) => (
+                        <div key={i} className="bg-white p-3 rounded-xl border border-[#DCDCDA] flex items-center justify-between mx-1 mb-2">
+                          <div className="flex items-center gap-3">
+                            <Skeleton className="w-8 h-8 rounded-full" />
+                            <div className="flex flex-col gap-1.5">
+                              <Skeleton className="w-20 h-3" />
+                              <Skeleton className="w-12 h-2" />
                             </div>
-                            <span className="text-[10px] font-medium text-[#4A4E51] bg-[#F5F5F4] px-2 py-1 rounded-lg border border-[#DCDCDA] truncate max-w-[80px]">
-                              {guest.staff}
-                            </span>
                           </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {filteredCompleted.length === 0 && (
+                          <Skeleton className="w-16 h-5 rounded-lg" />
+                        </div>
+                      ))
+                    ) : (
+                      filteredCompleted.map((guest, index) => (
+                        <Draggable key={guest.id} draggableId={guest.id} index={index}>
+                          {(provided, snapshot) => (
+                            <div 
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className={`bg-white p-3 rounded-xl border border-[#DCDCDA] flex items-center justify-between opacity-80 group touch-pan-y overflow-hidden ${snapshot.isDragging ? 'shadow-xl scale-[1.02] z-50 ring-2 ring-[#8B9194]/30 opacity-100' : ''}`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full bg-[#F5F5F4] flex items-center justify-center border border-[#DCDCDA]">
+                                  <CheckCircle2 className="w-4 h-4 text-[#8B9194]" />
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="text-xs font-medium text-[#121415] truncate max-w-[120px]">{guest.name}</span>
+                                  <span className="text-[10px] font-medium text-[#8B9194]">{guest.time}</span>
+                                </div>
+                              </div>
+                              <span className="text-[10px] font-medium text-[#4A4E51] bg-[#F5F5F4] px-2 py-1 rounded-lg border border-[#DCDCDA] truncate max-w-[80px]">
+                                {guest.staff}
+                              </span>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))
+                    )}
+                    {!isDashboardLoading && filteredCompleted.length === 0 && (
                       <div className="flex flex-col items-center justify-center h-32 text-center border-2 border-dashed border-[#DCDCDA]/50 rounded-xl mx-1">
                         <span className="text-xs font-medium text-[#8B9194]">No completed yet</span>
                       </div>

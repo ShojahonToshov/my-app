@@ -176,12 +176,15 @@ export default function Settings() {
   const [team, setTeam] = useState<any[]>([]);
   const [schedule, setSchedule] = useState<any[]>([]);
   const [businessId, setBusinessId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadBusinessData() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      setIsLoading(true);
+      try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
       
       const { data: business } = await supabase.from('businesses').select('*').eq('owner_id', user.id).single();
         
@@ -236,9 +239,12 @@ export default function Settings() {
           id: s.id, name: s.name, duration: s.duration_minutes + " min", price: s.price + " UZS", isActive: true
         })));
       }
+    } finally {
+      setIsLoading(false);
     }
-    loadBusinessData();
-  }, []);
+  }
+  loadBusinessData();
+}, []);
 
   // Modal states
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
@@ -495,6 +501,12 @@ export default function Settings() {
         </div>
 
         <main className="flex-1 p-6 md:p-10 overflow-y-auto">
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center h-full gap-3 text-[#8B9194]">
+              <Loader2 className="w-8 h-8 animate-spin" />
+              <p className="text-sm font-medium">Loading settings...</p>
+            </div>
+          ) : (
           <div className="max-w-4xl mx-auto">
             
             {/* PROFILE */}
@@ -820,8 +832,8 @@ export default function Settings() {
                 </div>
               </div>
             )}
-            
-          </div>
+                      </div>
+          )}
         </main>
       </div>
 
