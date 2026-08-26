@@ -33,9 +33,10 @@ import {
   Calendar
 } from "lucide-react";
 import customerBookingService from "@/services/customer/BookingService";
+import { CustomerService } from "@/services/CustomerService";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { createClient } from "@/utils/supabase/client";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/queryKeys";
 
 // --- ConfirmModal ---
@@ -279,6 +280,16 @@ export default function Schedule() {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isDateEditable, setIsDateEditable] = useState(true);
+
+  const supabase = createClient();
+  const customerService = useMemo(() => new CustomerService(supabase), [supabase]);
+  const { data: customersData = [] } = useQuery({
+    queryKey: queryKeys.customers.all,
+    queryFn: async () => {
+      const res = await customerService.getCustomers();
+      return res || [];
+    }
+  });
   
   // Real business data
   const [businessId, setBusinessId] = useState<string | null>(null);
@@ -296,7 +307,13 @@ export default function Schedule() {
   
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [appointmentToDelete, setAppointmentToDelete] = useState<string | null>(null);
-  
+  const [showCustomerSuggestions, setShowCustomerSuggestions] = useState(false);
+
+  const filteredCustomers = useMemo(() => {
+    if (!newCustomerName) return customersData;
+    return customersData.filter((c: { name?: string }) => c.name && c.name.toLowerCase().includes(newCustomerName.toLowerCase()));
+  }, [customersData, newCustomerName]);
+
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -728,7 +745,40 @@ export default function Schedule() {
                 <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Client Name</label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-                  <input autoFocus required type="text" value={newCustomerName} onChange={e => setNewCustomerName(e.target.value)} placeholder="e.g. John Doe" className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                  <input 
+                    autoFocus 
+                    required 
+                    type="text" 
+                    name="newCustomerName"
+                    autoComplete="off"
+                    value={newCustomerName} 
+                    onChange={e => {
+                      setNewCustomerName(e.target.value);
+                      setShowCustomerSuggestions(true);
+                    }}
+                    onFocus={() => setShowCustomerSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowCustomerSuggestions(false), 200)}
+                    placeholder="e.g. John Doe" 
+                    className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
+                  />
+                  {showCustomerSuggestions && filteredCustomers.length > 0 && (
+                    <div className="absolute z-[100] w-full mt-1 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-48 overflow-y-auto py-1 animate-in fade-in zoom-in-95 duration-200">
+                      {filteredCustomers.map((c: { id: string | number; name: string; phone?: string }) => (
+                        <button
+                          key={c.id}
+                          type="button"
+                          className="w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-[#F5F5F4] flex justify-between items-center"
+                          onClick={() => {
+                            setNewCustomerName(c.name);
+                            setShowCustomerSuggestions(false);
+                          }}
+                        >
+                          <span className="font-medium text-[#121415]">{c.name}</span>
+                          {c.phone && <span className="text-xs text-[#8B9194]">{c.phone}</span>}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 

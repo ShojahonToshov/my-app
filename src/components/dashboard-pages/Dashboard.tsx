@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import BookingService from "@/services/customer/BookingService";
+import { CustomerService } from "@/services/CustomerService";
 import { queryKeys } from "@/lib/queryKeys";
 import { Booking } from "@/types";
 import { format } from "date-fns";
@@ -61,17 +62,33 @@ export default function Dashboard() {
   const [isMounted, setIsMounted] = useState(false);
   const [businessId, setBusinessId] = useState<string | null>(null);
   
+  const supabase = createClient();
+  const customerService = useMemo(() => new CustomerService(supabase), [supabase]);
+  const { data: customersData = [] } = useQuery({
+    queryKey: queryKeys.customers.all,
+    queryFn: async () => {
+      const res = await customerService.getCustomers();
+      return res || [];
+    }
+  });
+
   const [teamData, setTeamData] = useState<any[]>([]);
   const [servicesData, setServicesData] = useState<any[]>([]);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddingGuest, setIsAddingGuest] = useState(false);
   const [customerName, setClientName] = useState("");
+  const [showCustomerSuggestions, setShowCustomerSuggestions] = useState(false);
   const [staffName, setStaffName] = useState("Any Professional");
   const [service, setService] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [isPaused, setIsPaused] = useState(true);
+
+  const filteredCustomers = useMemo(() => {
+    if (!customerName) return customersData;
+    return customersData.filter((c: { name?: string }) => c.name && c.name.toLowerCase().includes(customerName.toLowerCase()));
+  }, [customersData, customerName]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -881,11 +898,35 @@ export default function Dashboard() {
                     <input 
                       type="text" 
                       name="customerName" 
+                      autoComplete="off"
                       value={customerName}
-                      onChange={(e) => setClientName(e.target.value)}
+                      onChange={(e) => {
+                        setClientName(e.target.value);
+                        setShowCustomerSuggestions(true);
+                      }}
+                      onFocus={() => setShowCustomerSuggestions(true)}
+                      onBlur={() => setTimeout(() => setShowCustomerSuggestions(false), 200)}
                       placeholder="e.g., Azamat" 
                       className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
                     />
+                    {showCustomerSuggestions && filteredCustomers.length > 0 && (
+                      <div className="absolute z-[100] w-full mt-1 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-48 overflow-y-auto py-1 animate-in fade-in zoom-in-95 duration-200">
+                        {filteredCustomers.map((c: { id: string | number; name: string; phone?: string }) => (
+                          <button
+                            key={c.id}
+                            type="button"
+                            className="w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-[#F5F5F4] flex justify-between items-center"
+                            onClick={() => {
+                              setClientName(c.name);
+                              setShowCustomerSuggestions(false);
+                            }}
+                          >
+                            <span className="font-medium text-[#121415]">{c.name}</span>
+                            {c.phone && <span className="text-xs text-[#8B9194]">{c.phone}</span>}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div>
