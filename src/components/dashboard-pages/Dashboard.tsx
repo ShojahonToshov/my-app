@@ -23,6 +23,7 @@ import {
   Filter,
   ChevronDown,
   Loader2,
+  Star,
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -38,6 +39,8 @@ interface Guest {
   delay?: string | null;
   delayMinutes: number;
   status: string;
+  rating?: number | null;
+  reviewText?: string | null;
 }
 
 const addMinutesToTimeStr = (timeStr: string, minsToAdd: number): string => {
@@ -270,6 +273,8 @@ export default function Dashboard() {
         delay: delayMins > 0 ? `Delay +${delayMins}m` : null,
         delayMinutes: delayMins,
         status: b.status,
+        rating: b.rating,
+        reviewText: b.reviewText,
       };
 
       if (b.status === "in_progress") {
@@ -795,20 +800,37 @@ export default function Dashboard() {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              className={`bg-white p-3 rounded-xl border border-[#DCDCDA] flex items-center justify-between opacity-80 group touch-pan-y overflow-hidden ${snapshot.isDragging ? 'shadow-xl scale-[1.02] z-50 ring-2 ring-[#8B9194]/30 opacity-100' : ''}`}
+                              className={`bg-white p-3 rounded-xl border border-[#DCDCDA] flex flex-col gap-2 opacity-80 group touch-pan-y overflow-hidden ${snapshot.isDragging ? 'shadow-xl scale-[1.02] z-50 ring-2 ring-[#8B9194]/30 opacity-100' : ''}`}
                             >
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-[#F5F5F4] flex items-center justify-center border border-[#DCDCDA]">
-                                  <CheckCircle2 className="w-4 h-4 text-[#8B9194]" />
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-[#F5F5F4] flex items-center justify-center border border-[#DCDCDA]">
+                                    <CheckCircle2 className="w-4 h-4 text-[#8B9194]" />
+                                  </div>
+                                  <div className="flex flex-col">
+                                    <span className="text-xs font-medium text-[#121415] truncate max-w-[120px]">{guest.name}</span>
+                                    <div className="flex items-center gap-1.5 mt-0.5">
+                                      <span className="text-[10px] font-medium text-[#8B9194]">{guest.time}</span>
+                                      {guest.rating && (
+                                        <div className="flex items-center">
+                                          <Star className="w-2.5 h-2.5 fill-[#C89E23] text-[#C89E23]" />
+                                          <span className="text-[10px] font-medium text-[#C89E23] ml-0.5">{guest.rating}</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
-                                <div className="flex flex-col">
-                                  <span className="text-xs font-medium text-[#121415] truncate max-w-[120px]">{guest.name}</span>
-                                  <span className="text-[10px] font-medium text-[#8B9194]">{guest.time}</span>
+                                <div className="flex flex-col items-end gap-1.5">
+                                  <span className="text-[10px] font-medium text-[#4A4E51] bg-[#F5F5F4] px-2 py-1 rounded-lg border border-[#DCDCDA] truncate max-w-[80px]">
+                                    {guest.staff}
+                                  </span>
                                 </div>
                               </div>
-                              <span className="text-[10px] font-medium text-[#4A4E51] bg-[#F5F5F4] px-2 py-1 rounded-lg border border-[#DCDCDA] truncate max-w-[80px]">
-                                {guest.staff}
-                              </span>
+                              {guest.reviewText && (
+                                <div className="bg-[#F5F5F4]/50 p-2 rounded-lg text-xs italic text-[#4A4E51] border border-[#DCDCDA]/50">
+                                  "{guest.reviewText}"
+                                </div>
+                              )}
                             </div>
                           )}
                         </Draggable>

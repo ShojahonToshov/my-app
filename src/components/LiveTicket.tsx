@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import bookingService from "@/services/customer/BookingService";
 import { Booking } from "@/types";
+import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -16,6 +17,7 @@ import {
   Info,
   CheckCircle,
   ArrowLeft,
+  Star,
 } from "lucide-react";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 import { Button } from "@/components/ui/Button";
@@ -138,8 +140,15 @@ export default function LiveTicket() {
     date: string;
     time: string;
     status: string;
+    rating?: number | null;
+    reviewText?: string | null;
   } | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // Review states
+  const [reviewRating, setReviewRating] = useState<number>(0);
+  const [reviewInput, setReviewInput] = useState("");
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -171,15 +180,27 @@ export default function LiveTicket() {
             }
           }
 
-          setBookingData({
-            venueName: data.businesses?.name || "Unknown Venue",
-            venueCategory: data.businesses?.category || "Venue",
-            serviceName: data.service_name || data.services?.name || data.serviceName || "Unknown Service",
-            staffName: data.staff_name || data.staffName || "Any available",
-            date: data.date || "",
-            time: formattedTime,
-            status: data.status || "pending",
+          setBookingData((prev) => {
+             // Only update if something changed to avoid re-rendering
+             return {
+              venueName: data.businesses?.name || "Unknown Venue",
+              venueCategory: data.businesses?.category || "Venue",
+              serviceName: data.service_name || data.services?.name || data.serviceName || "Unknown Service",
+              staffName: data.staff_name || data.staffName || "Any available",
+              date: data.date || "",
+              time: formattedTime,
+              status: data.status || "pending",
+              rating: data.rating,
+              reviewText: data.reviewText,
+             };
           });
+          
+          if (data.rating && reviewRating === 0) {
+            setReviewRating(data.rating);
+          }
+          if (data.reviewText && reviewInput === "") {
+            setReviewInput(data.reviewText);
+          }
         }
       } catch (error) {
         console.error("Error fetching booking:", error);
@@ -191,6 +212,28 @@ export default function LiveTicket() {
     interval = setInterval(fetchBooking, 3000); // Polling
     return () => clearInterval(interval);
   }, [id]);
+
+  const handleReviewSubmit = async () => {
+    if (!id || reviewRating === 0) return;
+    setIsSubmittingReview(true);
+    try {
+      await bookingService.updateBooking(id, { 
+        rating: reviewRating, 
+        reviewText: reviewInput 
+      });
+      // Updating local state immediately for better UX
+      setBookingData((prev) => prev ? { ...prev, rating: reviewRating, reviewText: reviewInput } : null);
+      toast.success("Review submitted successfully!");
+    } catch (error) {
+      console.error("Failed to submit review:", error);
+      toast.error("Failed to submit review. Please try again.");
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
+
+  const isCompleted = bookingData?.status === 'completed' || bookingData?.status === 'done';
+  const hasReviewed = !!bookingData?.rating;
 
   useLockBodyScroll(isCancelModalOpen);
 
@@ -412,26 +455,78 @@ export default function LiveTicket() {
               </div>
             </div>
 
-            {/* Layout Actions */}
-            <div className="flex flex-col gap-3 shrink-0">
-              <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" shape="rounded" icon={Navigation} className="h-12 w-full text-sm">
-                  Directions
-                </Button>
-                <Button variant="outline" shape="rounded" icon={PhoneCall} className="h-12 w-full text-sm">
-                  Contact
+            {/* Layout Actions or Review UI */}
+            {isCompleted ? (
+              <div className="flex flex-col items-center p-5 bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA] w-full">
+                <h3 className="text-sm font-semibold text-[#121415] mb-4 text-center">
+                  {hasReviewed ? "Thank you for your review!" : "How was your visit?"}
+                </h3>
+                
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      disabled={hasReviewed || isSubmittingReview}
+                      onClick={() => setReviewRating(star)}
+                      className={`p-1 transition-all ${
+                        (reviewRating >= star) ? "text-[#C89E23]" : "text-[#DCDCDA]"
+                      } hover:scale-110 focus:outline-none`}
+                    >
+                      <Star className={`w-8 h-8 ${(reviewRating >= star) ? "fill-[#C89E23]" : ""}`} />
+                    </button>
+                  ))}
+                </div>
+
+                {!hasReviewed ? (
+                  <div className="w-full flex flex-col gap-3">
+                    <textarea
+                      value={reviewInput}
+                      onChange={(e) => setReviewInput(e.target.value)}
+                      placeholder="Share your experience (optional)"
+                      disabled={isSubmittingReview}
+                      className="w-full min-h-[80px] p-3 text-sm rounded-xl border border-[#DCDCDA] bg-white text-[#121415] placeholder:text-[#A0A4A8] focus:outline-none focus:ring-2 focus:ring-[#121415] resize-none"
+                    />
+                    <Button
+                      onClick={handleReviewSubmit}
+                      disabled={isSubmittingReview || reviewRating === 0}
+                      variant="secondary"
+                      shape="rounded"
+                      className="w-full h-12"
+                    >
+                      {isSubmittingReview ? "Submitting..." : "Submit Review"}
+                    </Button>
+                  </div>
+                ) : (
+                  bookingData.reviewText && (
+                    <div className="w-full p-4 bg-white rounded-xl border border-[#DCDCDA] mt-2">
+                      <p className="text-sm text-[#4A4E51] italic text-center">
+                        "{bookingData.reviewText}"
+                      </p>
+                    </div>
+                  )
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3 shrink-0">
+                <div className="grid grid-cols-2 gap-3">
+                  <Button variant="outline" shape="rounded" icon={Navigation} className="h-12 w-full text-sm">
+                    Directions
+                  </Button>
+                  <Button variant="outline" shape="rounded" icon={PhoneCall} className="h-12 w-full text-sm">
+                    Contact
+                  </Button>
+                </div>
+
+                <Button
+                  onClick={() => setIsCancelModalOpen(true)}
+                  variant="ghost"
+                  shape="rounded"
+                  className="h-12 w-full text-xs font-bold uppercase tracking-widest text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5"
+                >
+                  Cancel booking
                 </Button>
               </div>
-
-              <Button
-                onClick={() => setIsCancelModalOpen(true)}
-                variant="ghost"
-                shape="rounded"
-                className="h-12 w-full text-xs font-bold uppercase tracking-widest text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5"
-              >
-                Cancel booking
-              </Button>
-            </div>
+            )}
           </div>
         </div>
       </motion.div>

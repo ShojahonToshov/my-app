@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { DynamicMap } from "@/components/map";
 
 const Instagram: React.FC<{ className?: string }> = ({ className }) => (
   <svg
@@ -96,6 +97,7 @@ type SocialLink = { platform: string; value: string };
 type ScheduleItem = { day?: string; days?: string[]; isActive?: boolean; start?: string; end?: string; time?: string[] };
 type StaffItem = { id: string; name: string; role?: string; avatar?: string; rating?: number };
 type ServiceItem = { id: string; name: string; price: string; duration: string; description?: string };
+type ReviewItem = { id: string; author: string; rating: number; text: string; date: string; };
 
 type VenueData = {
   id: string;
@@ -119,14 +121,15 @@ type VenueData = {
       phone: string;
       socialLinks: SocialLink[];
     }
-  }
+  };
+  reviewsList: ReviewItem[];
 };
 
 const defaultVenueData: VenueData = {
   id: "",
   name: "Untitled Business",
   address: "Address not provided",
-  rating: 5.0,
+  rating: 0.0,
   reviewsCount: 0,
   imageUrl: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074&auto=format&fit=crop",
   scheduleData: [],
@@ -144,7 +147,8 @@ const defaultVenueData: VenueData = {
       phone: "",
       socialLinks: []
     }
-  }
+  },
+  reviewsList: []
 };
 
 
@@ -173,11 +177,12 @@ export default function CustomerBooking() {
             return;
           }
         }
-        const { data: business } = await supabase.from('businesses').select('*').eq('id', targetVenueId).maybeSingle();
+          const { data: business } = await supabase.from('businesses').select('*').eq('id', targetVenueId).maybeSingle();
           if (business) {
             let actualServices = null;
             let actualMasters = null;
             let actualSchedule = null;
+            let actualReviews: any[] = [];
 
             const { data: dbServices } = await supabase.from('services').select('*').eq('business_id', targetVenueId);
             if (dbServices) {
@@ -186,6 +191,22 @@ export default function CustomerBooking() {
                 name: s.name,
                 duration: s.duration_minutes + ' min',
                 price: s.price + ' UZS'
+              }));
+            }
+
+            const { data: dbReviews } = await supabase.from('bookings')
+              .select('id, rating, reviewText, guest_name, client_id, created_at')
+              .eq('business_id', targetVenueId)
+              .not('rating', 'is', null)
+              .order('created_at', { ascending: false });
+              
+            if (dbReviews) {
+              actualReviews = dbReviews.map((r: any) => ({
+                id: r.id,
+                author: r.guest_name || 'Anonymous',
+                rating: r.rating || 5,
+                text: r.reviewText || '',
+                date: new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
               }));
             }
 
@@ -232,6 +253,7 @@ export default function CustomerBooking() {
                 services: actualServices && actualServices.length > 0 ? actualServices : [],
                 staff: actualMasters && actualMasters.length > 0 ? actualMasters : [],
                 scheduleData: actualSchedule && actualSchedule.length > 0 ? actualSchedule : [],
+                reviewsList: actualReviews,
                 policies: {
                   ...prev.policies,
                   ...(business.policies_data || {})
@@ -938,32 +960,19 @@ export default function CustomerBooking() {
                   </div>
                 </div>
 
-                <div className="w-full h-48 md:h-64 bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA] overflow-hidden relative flex items-center justify-center shadow-inner">
-                  <svg
-                    width="100%"
-                    height="100%"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="absolute inset-0 opacity-40"
-                  >
-                    <defs>
-                      <pattern
-                        id="grid"
-                        width="40"
-                        height="40"
-                        patternUnits="userSpaceOnUse"
-                      >
-                        <path
-                          d="M 40 0 L 0 0 0 40"
-                          fill="none"
-                          stroke="#DCDCDA"
-                          strokeWidth="1"
-                        />
-                      </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#grid)" />
-                  </svg>
-
-                  <div className="relative z-10 flex flex-col items-center max-w-[80%]">
+                <div className="w-full h-48 md:h-64 bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA] overflow-hidden relative shadow-inner">
+                  <DynamicMap 
+                    center={[41.311081, 69.240562]}
+                    venues={[{
+                      id: venueData.id || "current",
+                      name: venueData.name,
+                      rating: venueData.rating || 5,
+                      coordinates: [41.311081, 69.240562] // Fallback coordinates to Tashkent, UZB
+                    }]}
+                    activeVenueId={venueData.id || "current"}
+                    zoom={14}
+                  />
+                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/20 backdrop-blur-[2px] opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
                     <div className="w-10 h-10 bg-[#121415] text-white rounded-full flex items-center justify-center shadow-lg mb-2 shrink-0">
                       <Map className="w-5 h-5" />
                     </div>
@@ -1085,21 +1094,36 @@ export default function CustomerBooking() {
                   </div>
                 </div>
 
-                <div className="bg-[#F5F5F4] rounded-2xl p-6 text-center border border-[#DCDCDA]">
-                  <p className="text-sm font-medium text-[#4A4E51]">
-                    Only customers who have successfully completed their visit can
-                    leave a review.
-                  </p>
-                  <Button 
-                    onClick={() => toast.info("Customer reviews will be available soon.")}
-                    variant="outline"
-                    shape="rounded"
-                    className="mt-4"
-                  >
-                    Read all reviews
-                  </Button>
-                </div>
-              </section>
+
+
+                  {venueData.reviewsList && venueData.reviewsList.length > 0 ? (
+                    <div className="space-y-4">
+                      {venueData.reviewsList.map((review) => (
+                        <div key={review.id} className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex flex-col">
+                              <span className="font-semibold text-[#121415]">{review.author}</span>
+                              <span className="text-xs text-[#8B9194] mt-0.5">{review.date}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Star className="w-4 h-4 fill-[#C89E23] text-[#C89E23]" />
+                              <span className="text-sm font-bold text-[#121415]">{review.rating}</span>
+                            </div>
+                          </div>
+                          {review.text && (
+                            <p className="text-sm text-[#4A4E51] mt-3 leading-relaxed">
+                              {review.text}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-[#8B9194] text-sm">
+                      No reviews yet. Be the first to leave one after your visit!
+                    </div>
+                  )}
+                </section>
 
             </motion.div>
           )}

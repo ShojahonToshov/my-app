@@ -23,6 +23,7 @@ import {
   Unlock,
   AlertCircle,
   CheckCircle2,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
 import ElaraLogo from "@/components/ElaraLogo";
@@ -32,6 +33,7 @@ import { Badge } from "@/components/ui/Badge";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 import useSearch, { isOpenNow } from "@/hooks/useSearch";
 import Avatar from "@/components/ui/Avatar";
+import { DynamicMap } from "@/components/map";
 
 
 // ─── Animations ──────────────────────────────────────────────────────────────
@@ -127,33 +129,6 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [setSortOpen]);
 
-  // Map
-  const [mapScale, setMapScale] = useState(1);
-  const canvasRef        = useRef<HTMLDivElement>(null);
-  const mapPositionRef   = useRef({ x: 0, y: 0 });
-  const isDragging       = useRef(false);
-  const dragStart        = useRef({ x: 0, y: 0 });
-  const mapWidth         = 1400;
-  const mapHeight        = 1200;
-
-  const handleZoomIn  = () => setMapScale((p) => Math.min(p + 0.3, 3));
-  const handleZoomOut = () => setMapScale((p) => Math.max(p - 0.3, 0.5));
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    isDragging.current = true;
-    e.currentTarget.setPointerCapture(e.pointerId);
-    dragStart.current = { x: e.clientX - mapPositionRef.current.x, y: e.clientY - mapPositionRef.current.y };
-  };
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging.current) return;
-    mapPositionRef.current = { x: e.clientX - dragStart.current.x, y: e.clientY - dragStart.current.y };
-    if (canvasRef.current)
-      canvasRef.current.style.transform = `translate(${mapPositionRef.current.x}px, ${mapPositionRef.current.y}px) scale(${mapScale})`;
-  };
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    isDragging.current = false;
-    e.currentTarget.releasePointerCapture(e.pointerId);
-  };
 
   useLockBodyScroll(mobileMenuOpen);
 
@@ -530,7 +505,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
 
             {/* Active filter hint */}
             {(isSavedOnly || isOpenNowOnly) && (
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="hidden flex-wrap gap-2 mb-4">
                 {isSavedOnly && (
                   <span className="flex items-center gap-1.5 px-3 py-1.5 bg-[#121415] text-white text-xs font-semibold rounded-full">
                     <Heart className="w-3 h-3 fill-white" /> Saved only
@@ -655,16 +630,18 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                                 </div>
                               </div>
 
-                              <div className={`flex flex-col justify-center shrink-0 bg-[#F5F5F4] px-3 py-2 rounded-xl border border-[#DCDCDA] min-w-[64px] min-h-[52px] ${venue.reviews > 0 ? "items-end" : "items-center"}`}>
+                                <div className={`flex flex-col justify-center shrink-0 bg-[#F5F5F4] px-3 py-2.5 rounded-xl border border-[#DCDCDA] min-w-[68px] min-h-[56px] items-center gap-1.5`}>
                                 {venue.reviews > 0 ? (
                                   <>
-                                    <div className="flex items-center gap-1.5">
-                                      <Star className="w-4 h-4 fill-[#8A2532] text-[#8A2532] shrink-0" />
-                                      <span className="font-semibold text-[#121415] text-sm">{venue.rating}</span>
-                                    </div>
-                                    <span className="text-[#4A4E51] text-[10px] uppercase font-bold mt-1">
-                                      {venue.reviews} rev.
-                                    </span>
+                                      <div className="flex items-center gap-1.5 w-full justify-between">
+                                        <Star className="w-4 h-4 fill-[#8A2532] text-[#8A2532] shrink-0" />
+                                        <span className="font-semibold text-[#121415] text-[14px]">{venue.rating}</span>
+                                      </div>
+                                      <div className="w-full h-[1px] bg-[#DCDCDA]/70" />
+                                      <div className="flex items-center gap-1.5 w-full justify-between">
+                                        <Users className="w-4 h-4 text-[#4A4E51] shrink-0" />
+                                        <span className="font-semibold text-[#4A4E51] text-[14px]">{venue.reviews}</span>
+                                      </div>
                                   </>
                                 ) : (
                                   <span className="font-semibold text-[#4A4E51] text-xs uppercase tracking-wide">
@@ -736,87 +713,8 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
 
           {/* Right: Interactive Virtual Map */}
           <div className={`${mobileView === "map" ? "block" : "hidden"} lg:block w-full lg:w-[45%] xl:w-[40%] relative mt-2 lg:mt-0`}>
-            <div
-              className="lg:sticky lg:top-[160px] h-[500px] lg:h-[calc(100vh-180px)] min-h-[500px] w-full bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA] shadow-inner overflow-hidden relative cursor-grab active:cursor-grabbing touch-none"
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerUp}
-              onPointerLeave={handlePointerUp}
-            >
-              {/* Zoom controls */}
-              <div className="absolute top-5 right-5 flex flex-col gap-2 z-20">
-                {[
-                  { action: handleZoomIn,  Icon: Plus  },
-                  { action: handleZoomOut, Icon: Minus },
-                ].map(({ action, Icon }, i) => (
-                  <button
-                    key={i}
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onClick={(e) => { e.stopPropagation(); action(); }}
-                    className="w-10 h-10 bg-white/90 backdrop-blur-md rounded-full border border-[#DCDCDA] flex items-center justify-center text-[#121415] hover:text-[#8A2532] hover:bg-[#F5F5F4] transition-colors duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
-                  >
-                    <Icon className="w-5 h-5" />
-                  </button>
-                ))}
-              </div>
-
-              {/* Location badge */}
-              <div className="absolute bottom-5 right-5 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-xl text-[10px] uppercase font-bold text-[#121415] border border-[#DCDCDA] z-20 flex items-center gap-2 shadow-sm max-w-[80%] pointer-events-none">
-                <Navigation className="w-3.5 h-3.5 text-[#8A2532] fill-[#8A2532] shrink-0" />
-                <span>City Center</span>
-              </div>
-
-              {/* Virtual Canvas */}
-              <div
-                ref={canvasRef}
-                className="absolute origin-center will-change-transform"
-                style={{
-                  width: mapWidth,
-                  height: mapHeight,
-                  top: "50%",
-                  left: "50%",
-                  marginLeft: -mapWidth / 2,
-                  marginTop: -mapHeight / 2,
-                  transform: `translate(${mapPositionRef.current.x}px, ${mapPositionRef.current.y}px) scale(${mapScale})`,
-                }}
-              >
-                {/* SVG Background */}
-                <div className="absolute inset-0 z-0 opacity-80 pointer-events-none">
-                  <svg width="100%" height="100%" viewBox="0 0 1400 1200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
-                        <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#DCDCDA" strokeWidth="1" />
-                      </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#grid)" />
-                    <path d="M 0 1200 Q 300 700 700 300 T 1400 100 L 1400 0 L 0 0 Z" fill="#E6E6E4" />
-                    <path d="M 800 600 Q 900 800 1100 600 T 1000 400 Z" fill="#E2E2E0" />
-                    <path d="M -100 800 Q 400 600 800 800 T 1400 400" fill="none" stroke="#FFFFFF" strokeWidth="10" strokeLinecap="round" />
-                    <path d="M 200 -100 L 400 1400" fill="none" stroke="#FFFFFF" strokeWidth="12" />
-                    <path d="M 400 600 L 1400 900" fill="none" stroke="#FFFFFF" strokeWidth="8" />
-                  </svg>
-                </div>
-
-                {/* Interactive Pins */}
-                {[
-                  { top: "40%", left: "45%", rating: "4.9", active: true  },
-                  { top: "60%", left: "30%", rating: "4.7", active: false },
-                  { top: "25%", left: "70%", rating: "4.8", active: false },
-                ].map(({ top, left, rating, active }, i) => (
-                  <button
-                    key={i}
-                    onPointerDown={(e) => e.stopPropagation()}
-                    className="absolute flex flex-col items-center cursor-pointer transition-transform duration-300 ease-out z-10 hover:z-20 hover:scale-110 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 rounded-full"
-                    style={{ top, left, transform: "translate(-50%, -100%)" }}
-                  >
-                    <div className={`px-4 py-2.5 rounded-full font-semibold text-sm flex items-center gap-1.5 shadow-md ${active ? "bg-[#121415] text-white" : "bg-white text-[#121415] border border-[#DCDCDA] shadow-sm"}`}>
-                      <Star className="w-3.5 h-3.5 fill-[#8A2532] text-[#8A2532] shrink-0" />
-                      {rating}
-                    </div>
-                    <div className={`w-3 h-3 rotate-45 -mt-1.5 ${active ? "bg-[#121415]" : "bg-white border-b border-r border-[#DCDCDA]"}`} />
-                  </button>
-                ))}
-              </div>
+            <div className="lg:sticky lg:top-[160px] h-[500px] lg:h-[calc(100vh-180px)] min-h-[500px] w-full">
+              <DynamicMap venues={filtered} />
             </div>
           </div>
 

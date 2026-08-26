@@ -1,0 +1,1 @@
+﻿import { createClient } from "@supabase/supabase-js"; const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY); supabase.from("bookings").select("id, rating, reviewText, guest_name, customerName, client_id, created_at").limit(1).then(console.log);

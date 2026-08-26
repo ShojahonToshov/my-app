@@ -40,7 +40,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ icon: Icon, title, action }) =>
   </div>
 );
 
-export default async function AccountPage({ searchParams }: { searchParams: { tab?: string } }) {
+export default async function AccountPage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const supabase = await createClient();
   const authService = new AuthService(supabase);
   const venueService = new VenueService(supabase);
@@ -63,7 +63,8 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
   const userEmail = (authUser?.email as string) ?? "";
   const avatarUrl = (authUser?.profile?.avatar_url as string) ?? "";
 
-  const activeTab = searchParams.tab || DEFAULT_TAB;
+  const searchParams = await props.searchParams;
+  const activeTab = (searchParams.tab as string) || DEFAULT_TAB;
 
   let upcomingBookings: any[] = [];
   let historyList: any[] = [];
@@ -199,16 +200,26 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
           {activeTab === "history" && (
             <AnimatedList className="space-y-4">
               {historyList.length > 0 ? historyList.map((booking) => (
-                <AnimatedListItem key={String(booking.id)} className="bg-white rounded-2xl p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.08)] transition-all">
-                  <div className="flex-1 min-w-0">
+                <AnimatedListItem key={String(booking.id)} className="bg-white rounded-2xl p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.08)] transition-all relative group hover:ring-2 hover:ring-[#121415]/5">
+                  <Link href={`/ticket?id=${booking.id}`} className="absolute inset-0 z-10 rounded-2xl" aria-label="View ticket" />
+                  
+                  <div className="flex-1 min-w-0 relative z-0">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A4E51] bg-[#F5F5F4] px-2.5 py-1 rounded-lg border border-[#DCDCDA]">{booking.date}</span>
+                      {booking.status === 'cancelled' && (
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-[#DC2626] bg-[#DC2626]/10 px-2.5 py-1 rounded-lg">Cancelled</span>
+                      )}
+                      {(booking.status === 'completed' || booking.status === 'done') && (
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A6B53] bg-[#E8EFE9] px-2.5 py-1 rounded-lg border border-[#4A6B53]/20">Completed</span>
+                      )}
                     </div>
-                    <h3 className="font-semibold text-[#121415] text-xl tracking-tight leading-snug">{booking.serviceName}</h3>
+                    <h3 className="font-semibold text-[#121415] text-xl tracking-tight leading-snug group-hover:text-[#8A2532] transition-colors">{booking.serviceName}</h3>
                     <p className="text-sm text-[#4A4E51] font-medium mt-1 leading-relaxed">{booking.venueName} • Pro: {booking.staffName}</p>
                   </div>
-                  <div className="shrink-0 flex sm:flex-col items-center sm:items-end gap-3 sm:gap-2">
-                    {booking.isReviewed ? (
+                  <div className="shrink-0 flex sm:flex-col items-center sm:items-end gap-3 sm:gap-2 relative z-20">
+                    {booking.status === 'cancelled' ? (
+                      <span className="text-xs font-medium text-[#8B9194] px-2 py-1 bg-[#F5F5F4] rounded-lg border border-[#DCDCDA]/50">No review needed</span>
+                    ) : booking.isReviewed ? (
                       <div className="flex flex-col items-end gap-1.5">
                         <div className="flex gap-0.5">
                           {[1, 2, 3, 4, 5].map((star) => (
@@ -220,10 +231,12 @@ export default async function AccountPage({ searchParams }: { searchParams: { ta
                     ) : (
                       <ReviewAction venueName={booking.venueName} bookingId={booking.id} />
                     )}
-                    <Link href={`/booking?id=${booking.venueId}`} className="text-sm font-medium text-[#121415] hover:text-[#8A2532] flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:underline rounded mt-0 sm:mt-2">
-                      <RefreshCw className="w-4 h-4 text-[#4A4E51] shrink-0" />
-                      <span>Book again</span>
-                    </Link>
+                    <div className="flex items-center gap-4 mt-0 sm:mt-2">
+                      <Link href={`/booking?id=${booking.venueId}`} className="text-sm font-medium text-[#121415] hover:text-[#8A2532] flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:underline rounded">
+                        <RefreshCw className="w-4 h-4 text-[#4A4E51] shrink-0" />
+                        <span>Book again</span>
+                      </Link>
+                    </div>
                   </div>
                 </AnimatedListItem>
               )) : (

@@ -1,0 +1,1 @@
+﻿import { createClient } from "@supabase/supabase-js"; const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY); async function run() { const { data: authData } = await supabase.auth.signInWithPassword({ email: "fedya@example.com", password: "password123" }); /* I dont know fedyas credentials, so I cant run as him */ } run();

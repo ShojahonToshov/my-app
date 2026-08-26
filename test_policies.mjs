@@ -1,0 +1,1 @@
+﻿import { createClient } from "@supabase/supabase-js"; const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY); async function run() { const { data } = await supabase.rpc("exec_sql", { sql_string: "select cmd, roles, qual, with_check from pg_policies where tablename = 'bookings';" }); console.log(data); } run();
