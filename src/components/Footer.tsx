@@ -13,7 +13,7 @@ export default function Footer() {
         {/* Brand Column */}
         <div className="col-span-1 md:col-span-2 flex flex-col items-start gap-6">
           <ElaraLogo dark={true} />
-          <p className="max-w-sm text-sm font-medium leading-relaxed text-[#787D80] m-0">
+          <p className="max-w-sm text-sm font-medium leading-relaxed text-[#9CA3AF] m-0">
             The premium destination for discovering and booking top-tier
             services in your city. Elevating the standard of appointment
             management.
@@ -96,7 +96,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="max-w-7xl mx-auto pt-8 border-t border-[#24282B] flex flex-col md:flex-row items-center justify-between text-xs font-medium text-[#787D80] gap-4">
+      <div className="max-w-7xl mx-auto pt-8 border-t border-[#24282B] flex flex-col md:flex-row items-center justify-between text-xs font-medium text-[#9CA3AF] gap-4">
         <p>© {new Date().getFullYear()} Elara. All rights reserved.</p>
 
         <div className="flex gap-6">

@@ -96,7 +96,10 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export default function Landing() {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   const { isAuthenticated, user } = useUser();
   const accountLink = user?.profile?.role === "business" ? "/dashboard" : "/account";
@@ -723,7 +726,7 @@ export default function Landing() {
                         {i + 1}
                       </div>
                       <div>
-                        <h4 className="text-white font-semibold mb-1">{item.title}</h4>
+                        <h3 className="text-white font-semibold mb-1">{item.title}</h3>
                         <p className="text-[#8B9194] text-sm font-medium">{item.desc}</p>
                       </div>
                     </div>
@@ -879,9 +882,9 @@ export default function Landing() {
                       01
                     </div>
                     <div>
-                      <h4 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
+                      <h3 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
                         Discover
-                      </h4>
+                      </h3>
                       <p className="text-[#4A4E51] font-medium leading-relaxed">
                         Search for premium services by category, precise
                         location, or find your favorite professional.
@@ -894,9 +897,9 @@ export default function Landing() {
                       02
                     </div>
                     <div>
-                      <h4 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
+                      <h3 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
                         Select & Book
-                      </h4>
+                      </h3>
                       <p className="text-[#4A4E51] font-medium leading-relaxed">
                         Choose a time that fits your schedule from real-time
                         available slots. Confirm in one tap.
@@ -909,9 +912,9 @@ export default function Landing() {
                       03
                     </div>
                     <div>
-                      <h4 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
+                      <h3 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
                         Experience
-                      </h4>
+                      </h3>
                       <p className="text-[#4A4E51] font-medium leading-relaxed">
                         Arrive and enjoy. Your appointment is confirmed
                         instantly and synced to your schedule.
@@ -1052,9 +1055,6 @@ export default function Landing() {
 
       {/* Footer */}
       <Footer />
-      <React.Suspense fallback={null}>
-        <SignupRoleModal isOpen={signupModalOpen} onClose={() => setSignupModalOpen(false)} />
-      </React.Suspense>
     </div>
   );
 }
