@@ -22,12 +22,19 @@ export async function getAdminUsers() {
     .from("profiles")
     .select("*");
   if (profilesError) throw profilesError;
+  
+  const { data: businesses, error: bizError } = await supabase
+    .from("businesses")
+    .select("owner_id, name");
+  if (bizError) throw bizError;
 
   return usersData.users.map((user) => {
     const profile = profiles.find((p) => p.id === user.id);
+    const business = businesses.find((b) => b.owner_id === user.id);
     return {
       ...user,
       profile,
+      business_name: business ? business.name : undefined
     };
   });
 }

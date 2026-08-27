@@ -15,6 +15,7 @@ export interface AdminUser {
     role?: string;
     [key: string]: unknown;
   };
+  business_name?: string;
   [key: string]: unknown;
 }
 
@@ -187,8 +188,23 @@ export default function AdminPage() {
                   users.map((user) => (
                     <tr key={user.id} className="hover:bg-[#F8F9FA] transition-colors group">
                       <td className="px-6 py-4 align-top">
-                        <div className="font-medium text-[15px]">{user.email || user.phone || 'No email/phone'}</div>
-                        <div className="text-[13px] text-gray-400 mt-1 font-mono">{user.id}</div>
+                        <div className="space-y-1.5">
+                          <div className="text-[14px]">
+                            <span className="text-gray-400 mr-2 inline-block w-12">Phone:</span>
+                            <span className="font-semibold text-gray-900">
+                              {user.phone ? (user.phone.startsWith('+') ? user.phone : '+' + user.phone) : <span className="italic text-gray-400 font-normal">Не задан</span>}
+                            </span>
+                          </div>
+                          <div className="text-[14px]">
+                            <span className="text-gray-400 mr-2 inline-block w-12">Email:</span>
+                            <span className="font-semibold text-gray-900">
+                              {user.email ? user.email : <span className="italic text-gray-400 font-normal">Не задан</span>}
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-gray-400 mt-2 font-mono flex items-center">
+                            <span className="mr-2">ID:</span>{user.id}
+                          </div>
+                        </div>
                       </td>
                       <td className="px-6 py-4 align-top">
                         <div className="space-y-1 text-[13px]">
@@ -196,10 +212,26 @@ export default function AdminPage() {
                             <>
                               {user.profile.full_name && <div><span className="text-gray-400 mr-2">Name:</span><span className="font-medium">{user.profile.full_name}</span></div>}
                               {user.profile.role && <div><span className="text-gray-400 mr-2">Role:</span><span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md text-[11px] uppercase font-bold tracking-wider">{user.profile.role}</span></div>}
+                              {user.business_name && (
+                                <div className="mt-2">
+                                  <span className="text-gray-400 mr-2">Business:</span>
+                                  <span className="text-sm font-black text-[#8A2532] uppercase tracking-wide">{user.business_name}</span>
+                                </div>
+                              )}
                               <details className="mt-3 text-xs text-gray-400 cursor-pointer group-open">
                                 <summary className="hover:text-gray-600 outline-none">Show Raw Data</summary>
                                 <pre className="mt-2 p-3 bg-[#F8F9FA] border border-gray-100 rounded-lg whitespace-pre-wrap font-mono text-[11px] text-gray-600 overflow-x-auto">
-                                  {JSON.stringify(user.profile, null, 2)}
+                                  {JSON.stringify({
+                                    id: user.id,
+                                    email: user.email,
+                                    phone: user.phone,
+                                    created_at: user.created_at,
+                                    last_sign_in_at: user.last_sign_in_at,
+                                    app_metadata: user.app_metadata,
+                                    user_metadata: user.user_metadata,
+                                    identities: user.identities,
+                                    profile: user.profile
+                                  }, null, 2)}
                                 </pre>
                               </details>
                             </>
@@ -217,7 +249,6 @@ export default function AdminPage() {
                           variant="danger" 
                           size="sm"
                           onClick={() => handleDeleteClick(user.id)}
-                          className="opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                           Delete
                         </Button>
