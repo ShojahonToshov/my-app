@@ -13,7 +13,7 @@ export async function POST(request: Request) {
 
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
       return NextResponse.json({ 
-        error: 'ОШИБКА: SUPABASE_SERVICE_ROLE_KEY не найден в .env.local! Чтобы регистрация была реальной, добавь этот ключ из настроек Supabase и обязательно ПЕРЕЗАПУСТИ сервер (npm run dev).' 
+        error: 'ERROR: SUPABASE_SERVICE_ROLE_KEY not found in .env.local! For real registration, add this key from Supabase settings and RESTART the server (npm run dev).' 
       }, { status: 500 });
     }
 
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid verification code' }, { status: 400 });
     }
 
-    // Успешная верификация!
+    // Successful verification!
     const userData = otpRequest.data;
 
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
@@ -83,15 +83,15 @@ export async function POST(request: Request) {
 
     if (loginError) {
       console.error('Login error after user creation. Rolling back user creation:', loginError);
-      // ROLLBACK: удаляем созданного пользователя, чтобы он не "висел" без сессии
+      // ROLLBACK: delete created user so they don't get stuck without a session
       await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
       return NextResponse.json({ error: 'Failed to create session. Registration rolled back.' }, { status: 500 });
     }
 
-    // Удаляем из базы OTP ТОЛЬКО после успешного создания и логина
+    // Delete OTP from database ONLY after successful creation and login
     await supabaseAdmin.from('otp_requests').delete().eq('phone', phone);
     
-    // Получаем профиль (он создается триггером или мы просто возвращаем то что есть)
+    // Fetch profile (created by a trigger or we just return what exists)
     const { data: profile } = await supabaseAdmin
       .from('profiles')
       .select('*')

@@ -13,7 +13,7 @@ export async function POST(request: Request) {
 
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
       return NextResponse.json({ 
-        error: 'ОШИБКА: SUPABASE_SERVICE_ROLE_KEY не найден в .env.local!' 
+        error: 'ERROR: SUPABASE_SERVICE_ROLE_KEY not found in .env.local!' 
       }, { status: 500 });
     }
 
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
-    // Генерируем 6-значный код
+    // Generate 6-digit code
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     
     // Hash the code
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Failed to save verification request' }, { status: 500 });
     }
 
-    // DEMO AUTH - Вывод в консоль сервера!
+    // DEMO AUTH - Output to server console!
     console.log('\n=============================================');
     console.log(`[DEMO AUTH]`);
     console.log(`Phone: ${phone}`);

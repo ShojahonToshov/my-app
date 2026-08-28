@@ -16,7 +16,7 @@ export default function ButtonShowcasePage() {
       <div className="max-w-4xl">
         <h1 className="text-4xl font-bold mb-4">Button Interaction Sandbox</h1>
         <p className="text-[#25282B] text-lg">
-          Здесь собраны 5 топовых концепций hover-анимаций для кнопок. Все они соответствуют премиальному дизайну, но предлагают разный пользовательский опыт (UX).
+          Here are 5 top concepts of hover-animations for buttons. All of them correspond to a premium design, but offer a different user experience (UX).
         </p>
       </div>
 
@@ -24,7 +24,7 @@ export default function ButtonShowcasePage() {
       <section className="flex flex-col gap-8">
         <div className="border-b border-[#8D9195]/20 pb-4">
           <h2 className="text-2xl font-bold">1. Elastic Tactile (Apple / iOS Style)</h2>
-          <p className="text-[#25282B]">Максимально физические кнопки. Сильно пружинят при наведении и нажатии. Идеально для мобилок и планшетов.</p>
+          <p className="text-[#25282B]">Highly physical buttons. Strongly springy on hover and tap. Perfect for mobile devices and tablets.</p>
         </div>
         
         <div className="flex flex-wrap gap-8 items-center bg-[#F3F4F4] p-10 rounded-3xl border border-white shadow-sm">
@@ -67,7 +67,7 @@ export default function ButtonShowcasePage() {
       <section className="flex flex-col gap-8">
         <div className="border-b border-[#8D9195]/20 pb-4">
           <h2 className="text-2xl font-bold">2. Deep Lift 3D (Stripe / Vercel Style)</h2>
-          <p className="text-[#25282B]">При наведении кнопка «взлетает» над страницей и отбрасывает мягкую, глубокую тень. При клике продавливается вниз.</p>
+          <p className="text-[#25282B]">On hover, the button "takes off" above the page and casts a soft, deep shadow. On click, it presses down.</p>
         </div>
         
         <div className="flex flex-wrap gap-8 items-center bg-[#F3F4F4] p-10 rounded-3xl border border-white shadow-sm">
@@ -110,7 +110,7 @@ export default function ButtonShowcasePage() {
       <section className="flex flex-col gap-8">
         <div className="border-b border-[#8D9195]/20 pb-4">
           <h2 className="text-2xl font-bold">3. Icon Reveal (Raycast Style)</h2>
-          <p className="text-[#25282B]">Очень элегантный микро-интеракшн: при наведении текст сдвигается, и плавно выезжает иконка-стрелка. Выглядит сверхтехнологично.</p>
+          <p className="text-[#25282B]">A very elegant micro-interaction: on hover, the text shifts and an arrow icon smoothly slides out. Looks highly technological.</p>
         </div>
         
         <div className="flex flex-wrap gap-8 items-center bg-[#F3F4F4] p-10 rounded-3xl border border-white shadow-sm">
@@ -152,7 +152,7 @@ export default function ButtonShowcasePage() {
       <section className="flex flex-col gap-8">
         <div className="border-b border-[#8D9195]/20 pb-4">
           <h2 className="text-2xl font-bold">4. Magnetic Glow (Web3 / AI Style)</h2>
-          <p className="text-[#25282B]">При наведении вокруг кнопки разгорается мягкое свечение. Круто привлекает внимание к CTA (Call to action).</p>
+          <p className="text-[#25282B]">On hover, a soft glow flares up around the button. Cool way to draw attention to the CTA (Call to action).</p>
         </div>
         
         <div className="flex flex-wrap gap-8 items-center bg-[#F3F4F4] p-10 rounded-3xl border border-white shadow-sm">
@@ -185,7 +185,7 @@ export default function ButtonShowcasePage() {
       <section className="flex flex-col gap-8">
         <div className="border-b border-[#8D9195]/20 pb-4">
           <h2 className="text-2xl font-bold">5. Swipe Fill (Editorial / High Fashion Style)</h2>
-          <p className="text-[#25282B]">Стильная, резкая анимация заливки фона слева направо. Часто используется в топовых дизайн-студиях.</p>
+          <p className="text-[#25282B]">Stylish, sharp background fill animation from left to right. Often used in top design studios.</p>
         </div>
         
         <div className="flex flex-wrap gap-8 items-center bg-[#F3F4F4] p-10 rounded-3xl border border-white shadow-sm">

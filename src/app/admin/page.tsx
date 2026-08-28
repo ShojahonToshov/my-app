@@ -192,13 +192,13 @@ export default function AdminPage() {
                           <div className="text-[14px]">
                             <span className="text-gray-400 mr-2 inline-block w-12">Phone:</span>
                             <span className="font-semibold text-gray-900">
-                              {user.phone ? (user.phone.startsWith('+') ? user.phone : '+' + user.phone) : <span className="italic text-gray-400 font-normal">Не задан</span>}
+                              {user.phone ? (user.phone.startsWith('+') ? user.phone : '+' + user.phone) : <span className="italic text-gray-400 font-normal">Not specified</span>}
                             </span>
                           </div>
                           <div className="text-[14px]">
                             <span className="text-gray-400 mr-2 inline-block w-12">Email:</span>
                             <span className="font-semibold text-gray-900">
-                              {user.email ? user.email : <span className="italic text-gray-400 font-normal">Не задан</span>}
+                              {user.email ? user.email : <span className="italic text-gray-400 font-normal">Not specified</span>}
                             </span>
                           </div>
                           <div className="text-[11px] text-gray-400 mt-2 font-mono flex items-center">

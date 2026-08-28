@@ -173,7 +173,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   if (notifications.length > 0) {
                     setShowNotifications(!showNotifications);
                   } else {
-                    toast("У вас нет новых уведомлений");
+                    toast("You have no new notifications");
                   }
                 }}
                 className={`w-full flex items-center justify-between py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA] overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"}`}
@@ -211,7 +211,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       onClick={() => {
                         setNotifications([]);
                         setShowNotifications(false);
-                        toast.success("Все уведомления прочитаны");
+                        toast.success("All notifications read");
                       }}
                       className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
                     >
@@ -275,7 +275,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 if (notifications.length > 0) {
                   setShowMobileNotifications(!showMobileNotifications);
                 } else {
-                  toast("У вас нет новых уведомлений");
+                  toast("You have no new notifications");
                 }
               }}
               className="p-2 text-[#4A4E51] hover:text-[#121415] transition-colors relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-xl active:scale-95"
@@ -302,7 +302,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       onClick={() => {
                         setNotifications([]);
                         setShowMobileNotifications(false);
-                        toast.success("Все уведомления прочитаны");
+                        toast.success("All notifications read");
                       }}
                       className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
                     >

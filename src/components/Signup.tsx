@@ -96,7 +96,7 @@ export default function Signup() {
         throw new Error(data.error || 'Invalid verification code');
       }
 
-      // API verify-phone теперь сам создает пользователя, логинит его и ставит куки!
+      // API verify-phone now creates the user, logs them in, and sets cookies itself!
       if (data.user) {
         toast.success("Account created successfully");
         loginStore(data.user);
