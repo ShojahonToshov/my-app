@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import AuthService from "@/services/customer/AuthService";
 import useAuthStore from "@/stores/authStore";
+import { useI18nStore } from "@/stores/i18nStore";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -21,6 +22,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
 
   useEffect(() => {
+    useI18nStore.getState().init();
+    
     // Intercept native HTML5 validation tooltips globally
     const handleInvalid = (e: Event) => {
       e.preventDefault(); // Stop browser from showing default tooltip

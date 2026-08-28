@@ -12,7 +12,10 @@ import SignupRoleModal from "@/components/SignupRoleModal";
 
 type LoginType = "phone" | "email" | "name";
 
+import { useI18nStore } from "@/stores/i18nStore";
+
 export default function Login() {
+  const { t } = useI18nStore();
   const { form, showPassword, setShowPassword, isSubmitting, handleSubmit } = useLogin("/search");
   const { register, formState: { errors }, setValue } = form;
   
@@ -28,13 +31,13 @@ export default function Login() {
   const getLoginProps = () => {
     switch(loginType) {
       case "phone":
-        return { icon: Phone, placeholder: "+998 90 123 45 67", label: "Phone number" };
+        return { icon: Phone, placeholder: "+998 90 123 45 67", label: t("auth.phoneNumber") };
       case "email":
-        return { icon: Mail, placeholder: "name@example.com", label: "Email address" };
+        return { icon: Mail, placeholder: "name@example.com", label: t("auth.emailAddress") };
       case "name":
-        return { icon: UserIcon, placeholder: "Username", label: "Username" };
+        return { icon: UserIcon, placeholder: "Username", label: t("auth.username") };
       default:
-        return { icon: Phone, placeholder: "+998...", label: "Phone number" };
+        return { icon: Phone, placeholder: "+998...", label: t("auth.phoneNumber") };
     }
   };
 
@@ -48,12 +51,8 @@ export default function Login() {
             <ElaraLogo />
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-semibold mb-2 text-center text-[#121415] tracking-tight w-full">
-            Welcome back
-          </h1>
-          <p className="text-sm text-[#4A4E51] text-center mb-6 font-medium w-full leading-relaxed">
-            Choose how you want to log in
-          </p>
+          <h1 className="text-2xl sm:text-3xl font-semibold mb-2 text-center text-[#121415] tracking-tight w-full">{t("auth.welcomeBack")}</h1>
+          <p className="text-sm text-[#4A4E51] text-center mb-6 font-medium w-full leading-relaxed">{t("auth.chooseLogin")}</p>
 
           {/* Login Type Tabs */}
           <div className="flex p-1 bg-gray-100 rounded-lg mb-6 w-full">
@@ -61,23 +60,17 @@ export default function Login() {
               type="button"
               onClick={() => handleTypeChange("phone")}
               className={`flex-1 text-sm font-medium py-2 rounded-md transition-all ${loginType === "phone" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-gray-700"}`}
-            >
-              Phone
-            </button>
+            >{t("auth.phone")}</button>
             <button
               type="button"
               onClick={() => handleTypeChange("email")}
               className={`flex-1 text-sm font-medium py-2 rounded-md transition-all ${loginType === "email" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-gray-700"}`}
-            >
-              Email
-            </button>
+            >{t("auth.email")}</button>
             <button
               type="button"
               onClick={() => handleTypeChange("name")}
               className={`flex-1 text-sm font-medium py-2 rounded-md transition-all ${loginType === "name" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-gray-700"}`}
-            >
-              Name
-            </button>
+            >{t("auth.name")}</button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5 flex flex-col w-full">
@@ -112,7 +105,7 @@ export default function Login() {
 
             <Input
               id="password"
-              label="Password"
+              label={t("auth.password")}
               type={showPassword ? "text" : "password"}
               icon={Lock}
               actionIcon={showPassword ? EyeOff : Eye}

@@ -1,4 +1,5 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -71,9 +72,7 @@ function EmptyState({ query }: { query?: string }) {
       <div className="w-14 h-14 rounded-2xl bg-[#8A2532]/10 text-[#8A2532] flex items-center justify-center mb-6">
         <SearchX className="w-7 h-7" />
       </div>
-      <h3 className="text-xl font-semibold text-[#121415] tracking-tight mb-2">
-        Nothing found
-      </h3>
+      <h3 className="text-xl font-semibold text-[#121415] tracking-tight mb-2">{useI18nStore.getState().t("app.t1")}</h3>
       <p className="text-[#4A4E51] font-medium leading-relaxed max-w-sm">
         {query
           ? `No results for "${query}". Try adjusting your search or clearing the filters.`
@@ -165,9 +164,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               <label
                 htmlFor="desktop_search"
                 className="absolute left-11 top-1/2 -translate-y-1/2 text-[#4A4E51] text-sm font-medium pointer-events-none peer-[:not(:placeholder-shown)]:opacity-0"
-              >
-                Service or salon
-              </label>
+              >{useI18nStore.getState().t("app.t2")}</label>
               <AnimatePresence>
                 {searchQuery && (
                   <motion.button
@@ -212,9 +209,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               </AnimatePresence>
             </div>
 
-            <Button variant="primary" size="sm" shape="pill" className="px-6 py-2.5 shrink-0">
-              Search
-            </Button>
+            <Button variant="primary" size="sm" shape="pill" className="px-6 py-2.5 shrink-0">{useI18nStore.getState().t("app.t0")}</Button>
           </div>
 
           {/* Desktop Auth / Account */}
@@ -263,13 +258,9 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                 <Link
                   href="/login"
                   className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
-                >
-                  Log in
-                </Link>
+                >{useI18nStore.getState().t("app.t4")}</Link>
                 <Link href="/signup" className="outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-full flex items-center justify-center">
-                  <Button variant="secondary" size="sm" shape="pill" className="px-6 py-2.5 shrink-0">
-                    Sign up
-                  </Button>
+                  <Button variant="secondary" size="sm" shape="pill" className="px-6 py-2.5 shrink-0">{useI18nStore.getState().t("app.t5")}</Button>
                 </Link>
               </>
             )}
@@ -303,9 +294,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                       placeholder=" "
                       className="peer w-full pl-11 pr-10 py-3.5 bg-white border border-[#DCDCDA] rounded-2xl text-sm text-[#121415] font-medium focus:border-[#121415] outline-none"
                     />
-                    <label htmlFor="mobile_search" className="absolute left-11 top-1/2 -translate-y-1/2 text-[#4A4E51] text-sm font-medium pointer-events-none peer-[:not(:placeholder-shown)]:opacity-0">
-                      Service or salon
-                    </label>
+                    <label htmlFor="mobile_search" className="absolute left-11 top-1/2 -translate-y-1/2 text-[#4A4E51] text-sm font-medium pointer-events-none peer-[:not(:placeholder-shown)]:opacity-0">{useI18nStore.getState().t("app.t2")}</label>
                     <AnimatePresence>
                       {mobileSearchQuery && (
                         <motion.button
@@ -329,9 +318,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                       placeholder=" "
                       className="peer w-full pl-11 pr-10 py-3.5 bg-white border border-[#DCDCDA] rounded-2xl text-sm text-[#121415] font-medium focus:border-[#121415] outline-none"
                     />
-                    <label htmlFor="mobile_location" className="absolute left-11 top-1/2 -translate-y-1/2 text-[#4A4E51] text-sm font-medium pointer-events-none peer-[:not(:placeholder-shown)]:opacity-0">
-                      City, district...
-                    </label>
+                    <label htmlFor="mobile_location" className="absolute left-11 top-1/2 -translate-y-1/2 text-[#4A4E51] text-sm font-medium pointer-events-none peer-[:not(:placeholder-shown)]:opacity-0">{useI18nStore.getState().t("app.t6")}</label>
                     <AnimatePresence>
                       {mobileLocationQuery && (
                         <motion.button
@@ -354,9 +341,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                       setLocationQuery(mobileLocationQuery);
                       setMobileMenuOpen(false);
                     }}
-                  >
-                    Search
-                  </Button>
+                  >{useI18nStore.getState().t("app.t0")}</Button>
                 </div>
 
                 <div className="h-px bg-[#DCDCDA] my-2" />
@@ -367,8 +352,8 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                   </Link>
                 ) : (
                   <>
-                    <Link href="/login"  className="text-lg font-medium text-[#121415]" onClick={() => setMobileMenuOpen(false)}>Log in</Link>
-                    <Link href="/signup" className="text-lg font-medium text-[#8A2532]" onClick={() => setMobileMenuOpen(false)}>Sign up</Link>
+                    <Link href="/login"  className="text-lg font-medium text-[#121415]" onClick={() => setMobileMenuOpen(false)}>{useI18nStore.getState().t("app.t4")}</Link>
+                    <Link href="/signup" className="text-lg font-medium text-[#8A2532]" onClick={() => setMobileMenuOpen(false)}>{useI18nStore.getState().t("app.t5")}</Link>
                   </>
                 )}
               </div>
@@ -395,7 +380,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                 className="px-4 sm:px-5"
               >
                 <Heart className={`w-4 h-4 transition-all ${isSavedOnly ? "fill-white" : ""}`} />
-                <span>Saved</span>
+                <span>{useI18nStore.getState().t("app.t7")}</span>
                 {savedIds.size > 0 && (
                   <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full leading-none ${isSavedOnly ? "bg-white/20 text-white" : "bg-[#8A2532]/10 text-[#8A2532]"}`}>
                     {savedIds.size}
@@ -433,7 +418,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                 className="px-4"
               >
                 <Clock className="w-4 h-4" />
-                <span className="hidden sm:inline">Open Now</span>
+                <span className="hidden sm:inline">{useI18nStore.getState().t("app.t8")}</span>
               </Button>
 
               {/* Sort dropdown */}
@@ -448,7 +433,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                   <span className="hidden sm:inline">
                     Sort by {SORT_OPTIONS.find((o) => o.id === sortBy)?.shortLabel ?? "relevance"}
                   </span>
-                  <span className="sm:hidden">Sort</span>
+                  <span className="sm:hidden">{useI18nStore.getState().t("app.t9")}</span>
                   <ChevronDown className={`w-4 h-4 text-[#4A4E51] transition-transform duration-300 ${sortOpen ? "rotate-180" : ""}`} />
                 </Button>
 
@@ -516,8 +501,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                 )}
                 {isOpenNowOnly && (
                   <span className="flex items-center gap-1.5 px-3 py-1.5 bg-[#121415] text-white text-xs font-semibold rounded-full">
-                    <Clock className="w-3 h-3" /> Open now
-                    <button onClick={toggleOpenNow} className="ml-1 hover:opacity-70 active:scale-95 transition-all">
+                    <Clock className="w-3 h-3" />{useI18nStore.getState().t("app.t10")}<button onClick={toggleOpenNow} className="ml-1 hover:opacity-70 active:scale-95 transition-all">
                       <X className="w-3 h-3" />
                     </button>
                   </span>
@@ -553,18 +537,14 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
 
                             <div className="absolute top-3 left-3 flex flex-col gap-2 items-start max-w-[90%]">
                               {venue.badges.includes("Popular") && (
-                                <Badge variant="brand" icon={Flame} className="bg-white/95 backdrop-blur-md">
-                                  Popular
-                                </Badge>
+                                <Badge variant="brand" icon={Flame} className="bg-white/95 backdrop-blur-md">{useI18nStore.getState().t("app.t11")}</Badge>
                               )}
                               <Badge variant="dark" icon={Timer}>
                                 {venue.badges.find((b) => b.includes("time")) ?? "Verified"}
                               </Badge>
                               {venue.is_paused ? (
                                 <div className="relative group inline-block">
-                                  <Badge variant="dark" icon={Lock} className="!bg-[#8A2532] !text-white backdrop-blur-md border-none cursor-pointer hover:!bg-[#8A2532]/90">
-                                    Closed
-                                  </Badge>
+                                  <Badge variant="dark" icon={Lock} className="!bg-[#8A2532] !text-white backdrop-blur-md border-none cursor-pointer hover:!bg-[#8A2532]/90">{useI18nStore.getState().t("app.t12")}</Badge>
                                   <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-[#DCDCDA] z-[60] text-left opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none">
                                     <p className="text-xs font-semibold text-[#121415] mb-1 flex items-center gap-1.5">
                                       <AlertCircle className="w-3.5 h-3.5 text-[#8A2532]" /> Temporarily Closed
@@ -576,9 +556,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                                 </div>
                               ) : (
                                 <div className="relative group inline-block">
-                                  <Badge variant="dark" icon={Unlock} className="!bg-[#4a6b53] !text-white backdrop-blur-md border-none cursor-pointer hover:!bg-[#4a6b53]/90">
-                                    Open
-                                  </Badge>
+                                  <Badge variant="dark" icon={Unlock} className="!bg-[#4a6b53] !text-white backdrop-blur-md border-none cursor-pointer hover:!bg-[#4a6b53]/90">{useI18nStore.getState().t("app.t13")}</Badge>
                                   <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-[#DCDCDA] z-[60] text-left opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none">
                                     <p className="text-xs font-semibold text-[#121415] mb-1 flex items-center gap-1.5">
                                       <CheckCircle2 className="w-3.5 h-3.5 text-[#4a6b53]" /> Currently Open
@@ -644,9 +622,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                                       </div>
                                   </>
                                 ) : (
-                                  <span className="font-semibold text-[#4A4E51] text-xs uppercase tracking-wide">
-                                    New
-                                  </span>
+                                  <span className="font-semibold text-[#4A4E51] text-xs uppercase tracking-wide">{useI18nStore.getState().t("app.t14")}</span>
                                 )}
                               </div>
                             </div>
@@ -679,17 +655,13 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                                 shape="pill" 
                                 className="w-full xl:w-auto px-6 py-3"
                                 onClick={() => setInterceptedVenue(venue)}
-                              >
-                                Book now
-                              </Button>
+                              >{useI18nStore.getState().t("app.t15")}</Button>
                             ) : (
                               <Link
                                 href={`/booking?id=${venue.id}`}
                                 className="w-full xl:w-auto shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 rounded-full"
                               >
-                                <Button variant="primary" icon={ChevronRight} iconPosition="right" shape="pill" className="w-full xl:w-auto px-6 py-3">
-                                  Book now
-                                </Button>
+                                <Button variant="primary" icon={ChevronRight} iconPosition="right" shape="pill" className="w-full xl:w-auto px-6 py-3">{useI18nStore.getState().t("app.t15")}</Button>
                               </Link>
                             )}
                           </div>
@@ -762,13 +734,9 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                   shape="pill"
                   className="flex-1"
                   onClick={() => setInterceptedVenue(null)}
-                >
-                  Cancel
-                </Button>
+                >{useI18nStore.getState().t("app.t16")}</Button>
                 <Link href={`/booking?id=${interceptedVenue.id}`} className="flex-1">
-                  <Button variant="primary" shape="pill" className="w-full" onClick={() => setInterceptedVenue(null)}>
-                    Proceed to Book
-                  </Button>
+                  <Button variant="primary" shape="pill" className="w-full" onClick={() => setInterceptedVenue(null)}>{useI18nStore.getState().t("app.t17")}</Button>
                 </Link>
               </div>
             </motion.div>

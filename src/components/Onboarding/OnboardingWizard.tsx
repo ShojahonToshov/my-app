@@ -8,11 +8,13 @@ import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { MapPin, Store, Briefcase, ChevronDown, CheckCircle2 } from "lucide-react";
+import { MapPin, Store, Briefcase, ChevronDown, CheckCircle2, Scissors, Users, DollarSign, Clock } from "lucide-react";
 
-function OnboardingSelect({ value, options, onChange, placeholder }: { value: string, options: string[], onChange: (v: string) => void, placeholder: string }) {
+function OnboardingSuggestInput({ value, options, onChange, placeholder, icon: Icon }: { value: string, options: string[], onChange: (v: string) => void, placeholder: string, icon: any }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  const filteredOptions = options.filter(opt => opt.toLowerCase().includes(value.toLowerCase()) && opt !== value);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -24,21 +26,23 @@ function OnboardingSelect({ value, options, onChange, placeholder }: { value: st
 
   return (
     <div className={`relative w-full group ${isOpen ? 'z-[99999]' : ''}`} ref={dropdownRef}>
-      <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194] group-focus-within:text-[#121415] z-10 transition-colors pointer-events-none" />
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between pl-12 pr-4 py-4 rounded-xl outline-none transition-all duration-300 text-sm font-medium border text-[#121415] appearance-none ${
-          isOpen ? "bg-white ring-4 ring-[#121415]/5 border-[#121415]" : "bg-[#F5F5F4] border-[#DCDCDA] hover:border-[#121415]"
-        }`}
-      >
-        <span className="truncate">{value || placeholder}</span>
-        <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isOpen ? "text-[#121415] rotate-180" : "text-[#8B9194]"}`} />
-      </button>
+      <Icon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194] group-focus-within:text-[#121415] z-10 transition-colors pointer-events-none" />
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => {
+          onChange(e.target.value);
+          setIsOpen(true);
+        }}
+        onFocus={() => setIsOpen(true)}
+        placeholder={placeholder}
+        className={`w-full flex items-center justify-between pl-12 pr-4 py-4 rounded-xl outline-none transition-all duration-300 text-sm font-medium border text-[#121415] bg-[#F5F5F4] border-[#DCDCDA] focus:bg-white focus:ring-4 focus:ring-[#121415]/5 focus:border-[#121415] placeholder:text-[#8B9194]`}
+      />
 
-      {isOpen && (
+      {isOpen && filteredOptions.length > 0 && (
         <div className="absolute z-[99999] w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
-          {options.map((opt) => (
+          <div className="px-4 py-2 text-xs font-semibold text-[#8B9194] uppercase tracking-wider">Suggestions</div>
+          {filteredOptions.map((opt) => (
             <button
               key={opt}
               type="button"
@@ -47,14 +51,11 @@ function OnboardingSelect({ value, options, onChange, placeholder }: { value: st
                 onChange(opt);
                 setIsOpen(false);
               }}
-              className={`w-full text-left px-4 py-3 text-sm transition-colors flex items-center justify-between group hover:bg-[#F5F5F4] ${
-                value === opt ? "bg-[#F5F5F4]" : ""
-              }`}
+              className="w-full text-left px-4 py-3 text-sm transition-colors flex items-center justify-between group hover:bg-[#F5F5F4]"
             >
-              <span className={value === opt ? "font-medium text-[#121415]" : "font-medium text-[#4A4E51] group-hover:text-[#121415]"}>
+              <span className="font-medium text-[#4A4E51] group-hover:text-[#121415]">
                 {opt}
               </span>
-              {value === opt && <CheckCircle2 className="w-5 h-5 text-[#121415] shrink-0" />}
             </button>
           ))}
         </div>
@@ -76,6 +77,15 @@ export default function OnboardingWizard() {
   const [businessName, setBusinessName] = useState("");
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
+
+  // Service Data
+  const [serviceName, setServiceName] = useState("");
+  const [servicePrice, setServicePrice] = useState("");
+  const [serviceDuration, setServiceDuration] = useState("60");
+
+  // Staff Data
+  const [staffName, setStaffName] = useState("");
+  const [staffRole, setStaffRole] = useState("Barber");
   
   // We need businessId if created on Step 1
   const [businessId, setBusinessId] = useState("");
@@ -84,7 +94,7 @@ export default function OnboardingWizard() {
   useEffect(() => {
     if (user?.profile?.onboarding_step !== undefined) {
       // Ensure we don't jump to a completed step if they are fully onboarded (handled by Guard, but just in case)
-      const currentStep = Math.min(user.profile.onboarding_step as number, 2);
+      const currentStep = Math.min(user.profile.onboarding_step as number, 4);
       setStep(currentStep);
     }
   }, [user]);
@@ -148,9 +158,70 @@ export default function OnboardingWizard() {
          if (!category.trim()) throw new Error("Please select a category");
          await supabase.from("businesses").update({ category }).eq("id", businessId);
       }
+      
+      if (step === 3) {
+         // Step 4: First Service
+         if (!serviceName.trim()) throw new Error("Please enter a service name");
+         if (!servicePrice.trim()) throw new Error("Please enter a price");
+         const numericPrice = parseFloat(servicePrice.replace(/\s/g, ''));
+         if (isNaN(numericPrice)) throw new Error("Price must be a valid number");
+         
+         // Delete existing if resuming step?
+         // Safer to just check if there's any service for this business. If yes, skip or update.
+         // Let's just insert one. To prevent dupes if they go back and forth:
+         const { data: existingServices } = await supabase.from("services").select("id").eq("business_id", businessId);
+         if (existingServices && existingServices.length > 0) {
+           await supabase.from("services").update({
+             name: serviceName,
+             price: numericPrice,
+             duration_minutes: parseInt(serviceDuration) || 60
+           }).eq("id", existingServices[0].id);
+         } else {
+           await supabase.from("services").insert({
+             business_id: businessId,
+             name: serviceName,
+             price: numericPrice,
+             duration_minutes: parseInt(serviceDuration) || 60
+           });
+         }
+      }
+      
+      if (step === 4) {
+         // Step 5: First Staff Member
+         if (!staffName.trim()) throw new Error("Please enter a team member name");
+         
+         const parts = staffName.trim().split(" ");
+         const initials = parts.length > 1 
+           ? (parts[0][0] + parts[1][0]).toUpperCase()
+           : parts[0].substring(0, 2).toUpperCase();
+           
+         const newStaff = {
+           id: Date.now().toString(),
+           name: staffName.trim(),
+           role: staffRole,
+           initials: initials,
+           isActive: true
+         };
+         
+         const defaultSchedule = [
+            { day: "Monday", isActive: true, start: "10:00", end: "20:00" },
+            { day: "Tuesday", isActive: true, start: "10:00", end: "20:00" },
+            { day: "Wednesday", isActive: true, start: "10:00", end: "20:00" },
+            { day: "Thursday", isActive: true, start: "10:00", end: "20:00" },
+            { day: "Friday", isActive: true, start: "10:00", end: "20:00" },
+            { day: "Saturday", isActive: true, start: "10:00", end: "18:00" },
+            { day: "Sunday", isActive: false, start: "10:00", end: "18:00" },
+         ];
+         
+         await supabase.from("businesses").update({ 
+           team_data: [newStaff],
+           schedule_data: defaultSchedule,
+           description: "Welcome to our business! We offer top quality services."
+         }).eq("id", businessId);
+      }
 
       // Update onboarding step
-      const stepToSave = final ? 3 : nextStepIndex;
+      const stepToSave = final ? 5 : nextStepIndex;
       await AuthService.updateProfile(sessionUserId, { onboarding_step: stepToSave });
       
       updateUser({
@@ -212,15 +283,82 @@ export default function OnboardingWizard() {
       subtitle: "What is your main service area?",
       content: (
         <div className="space-y-4 w-full">
-          <OnboardingSelect
+          <OnboardingSuggestInput
             value={category}
             onChange={(val) => setCategory(val)}
             placeholder="Select a category"
-            options={["Barbershop", "Beauty Salon", "Manicure"]}
+            icon={Briefcase}
+            options={["Barbershop", "Beauty Salon", "Pet Grooming"]}
           />
           <p className="text-xs text-[#4A4E51] mt-2">
              You can add more details later in the dashboard.
           </p>
+        </div>
+      )
+    },
+    {
+      title: "First Service",
+      subtitle: "Add a service you offer.",
+      content: (
+        <div className="space-y-4 w-full">
+          <OnboardingSuggestInput
+            value={serviceName}
+            onChange={(val) => setServiceName(val)}
+            placeholder="e.g. Men's Haircut"
+            icon={Scissors}
+            options={["Men's Haircut", "Women's Haircut", "Beard Trim", "Manicure", "Pedicure", "Coloring", "Dog Grooming", "Cat Grooming"]}
+          />
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <Input
+                id="servicePrice"
+                label="Price (UZS)"
+                icon={DollarSign}
+                placeholder="100 000"
+                value={servicePrice}
+                onChange={(e) => {
+                  const raw = e.target.value.replace(/\D/g, '');
+                  const formatted = raw.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+                  setServicePrice(formatted);
+                }}
+                type="text"
+              />
+            </div>
+            <div className="flex-1">
+              <Input
+                id="serviceDuration"
+                label="Duration (min)"
+                icon={Clock}
+                placeholder="45"
+                value={serviceDuration}
+                onChange={(e) => setServiceDuration(e.target.value)}
+                type="number"
+              />
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      title: "Add a Team Member",
+      subtitle: "Who provides these services?",
+      content: (
+        <div className="space-y-4 w-full">
+          <Input
+            id="staffName"
+            label="Staff Name"
+            icon={Users}
+            placeholder="e.g. John Doe"
+            value={staffName}
+            onChange={(e) => setStaffName(e.target.value)}
+          />
+          <OnboardingSuggestInput
+            value={staffRole}
+            onChange={(val) => setStaffRole(val)}
+            placeholder="Select a role"
+            icon={Briefcase}
+            options={["Barber", "Stylist", "Nail Technician", "Groomer"]}
+          />
         </div>
       )
     }
@@ -238,9 +376,9 @@ export default function OnboardingWizard() {
 
   return (
     <div className="min-h-screen bg-[#ECECEA] flex items-center justify-center p-4 selection:bg-[#8A2532] selection:text-white">
-      <div className="w-full max-w-[480px] bg-white rounded-3xl shadow-sm p-6 sm:p-8 flex flex-col relative overflow-hidden">
+      <div className="w-full max-w-[480px] bg-white rounded-3xl shadow-sm p-6 sm:p-8 flex flex-col relative">
         {/* Progress Bar */}
-        <div className="absolute top-0 left-0 w-full h-1.5 bg-gray-100">
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-gray-100 rounded-t-3xl overflow-hidden">
           <motion.div 
             className="h-full bg-[#8A2532]"
             initial={{ width: `${(step / steps.length) * 100}%` }}

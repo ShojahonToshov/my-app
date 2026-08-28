@@ -25,7 +25,7 @@ const customFont = Plus_Jakarta_Sans({
 });
 
 // Extremely smooth easing curve
-const smoothEase = [0.22, 1, 0.36, 1];
+const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 // Increased logo size
 function AdaptedLogo() {

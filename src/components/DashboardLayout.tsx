@@ -27,7 +27,11 @@ import Tooltip from "@/components/ui/Tooltip";
 
 import { usePathname } from "next/navigation";
 
+import { useI18nStore } from "@/stores/i18nStore";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { t } = useI18nStore();
   const pathname = usePathname();
   
   const isActive = (href: string) => {
@@ -133,31 +137,31 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Schedule</span>
             </Link>
           </Tooltip>
-          <Tooltip content="Customers"  className="w-full">
+          <Tooltip content={t("dashboard.customers")}  className="w-full">
             <Link
               href="/dashboard/customers"
               className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/customers') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
             >
               <Users className="w-5 h-5 shrink-0" />
-              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Customers</span>
+              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>{t("dashboard.customers")}</span>
             </Link>
           </Tooltip>
-          <Tooltip content="Analytics"  className="w-full">
+          <Tooltip content={t("dashboard.analytics")}  className="w-full">
             <Link
               href="/dashboard/analytics"
               className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/analytics') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
             >
               <BarChart3 className="w-5 h-5 shrink-0" />
-              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Analytics</span>
+              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>{t("dashboard.analytics")}</span>
             </Link>
           </Tooltip>
-          <Tooltip content="Settings"  className="w-full">
+          <Tooltip content={t("dashboard.settings")}  className="w-full">
             <Link
               href="/dashboard/settings"
               className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/settings') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
             >
               <Settings className="w-5 h-5 shrink-0" />
-              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Settings</span>
+              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>{t("dashboard.settings")}</span>
             </Link>
           </Tooltip>
         </nav>
@@ -166,7 +170,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="py-4 px-4 border-t border-[#DCDCDA] flex flex-col gap-2 shrink-0 bg-[#F5F5F4] relative whitespace-nowrap">
           
           <div className="relative" ref={notifRef}>
-            <Tooltip content="Notifications"  className="w-full">
+            <Tooltip content={t("dashboard.notifications")}  className="w-full">
               <button
                 type="button"
                 onClick={() => {
@@ -185,7 +189,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#F5F5F4]"></span>
                     )}
                   </div>
-                  <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Notifications</span>
+                  <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>{t("dashboard.notifications")}</span>
                 </div>
                 {notifications.length > 0 && (
                   <span className={`bg-[#8A2532] text-white text-xs font-medium px-2 py-0.5 rounded-md shrink-0 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>
@@ -205,7 +209,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   className="absolute bottom-full left-0 mb-3 w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden origin-bottom-left z-[99999] whitespace-normal"
                 >
                   <div className="flex items-center justify-between p-5 border-b border-[#DCDCDA] bg-white">
-                    <span className="font-medium text-[#121415] text-base tracking-tight">Notifications</span>
+                    <span className="font-medium text-[#121415] text-base tracking-tight">{t("dashboard.notifications")}</span>
                     <button 
                       type="button" 
                       onClick={() => {
@@ -296,7 +300,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   className="absolute top-full right-0 mt-2 w-[300px] sm:w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden origin-top-right z-[99999] whitespace-normal"
                 >
                   <div className="flex items-center justify-between p-4 border-b border-[#DCDCDA] bg-white">
-                    <span className="font-medium text-[#121415] text-sm sm:text-base tracking-tight">Notifications</span>
+                    <span className="font-medium text-[#121415] text-sm sm:text-base tracking-tight">{t("dashboard.notifications")}</span>
                     <button 
                       type="button" 
                       onClick={() => {
@@ -362,14 +366,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Calendar className="w-5 h-5" /> Schedule
             </Link>
             <Link href="/dashboard/customers" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/customers') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
-              <Users className="w-5 h-5" /> Customers
-            </Link>
+              <Users className="w-5 h-5" />{t("dashboard.customers")}</Link>
             <Link href="/dashboard/analytics" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/analytics') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
-              <BarChart3 className="w-5 h-5" /> Analytics
-            </Link>
+              <BarChart3 className="w-5 h-5" />{t("dashboard.analytics")}</Link>
             <Link href="/dashboard/settings" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/settings') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
-              <Settings className="w-5 h-5" /> Settings
-            </Link>
+              <Settings className="w-5 h-5" />{t("dashboard.settings")}</Link>
 
           </nav>
           <div className="p-4 border-t border-[#DCDCDA] flex flex-col gap-2">
@@ -386,8 +387,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </div>
             </Link>
             <button type="button" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[#4A4E51] hover:text-[#dc2626] hover:bg-white font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] active:scale-95">
-              <LogOut className="w-5 h-5" /> Log out
-            </button>
+              <LogOut className="w-5 h-5" />{t("dashboard.logout")}</button>
           </div>
         </aside>
       </div>

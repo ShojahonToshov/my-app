@@ -1,4 +1,5 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -54,9 +55,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }: Confir
         <h2 className="text-2xl font-semibold text-[#121415] tracking-tight mb-2">{title}</h2>
         <p className="text-sm text-[#4A4E51] font-medium mb-6">{description}</p>
         <div className="flex gap-3 w-full mt-2">
-          <button type="button" onClick={onClose} className="flex-1 py-3 bg-white text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm hover:bg-[#F5F5F4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
-            Cancel
-          </button>
+          <button type="button" onClick={onClose} className="flex-1 py-3 bg-white text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm hover:bg-[#F5F5F4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">{useI18nStore.getState().t("app.t16")}</button>
           <button type="button" onClick={onConfirm} className="flex-1 py-3 rounded-xl font-medium text-sm text-white transition-all shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] bg-[#dc2626] hover:opacity-90">
             Delete
           </button>
@@ -261,11 +260,11 @@ export default function Customers() {
                         className="w-4 h-4 text-[#121415] bg-white border-[#DCDCDA] rounded focus:ring-[#121415] cursor-pointer accent-[#121415]" 
                       />
                     </th>
-                    <th className="py-3 px-6">Customer</th>
-                    <th className="py-3 px-6">Status</th>
+                    <th className="py-3 px-6">{useI18nStore.getState().t("app.t43")}</th>
+                    <th className="py-3 px-6">{useI18nStore.getState().t("app.t44")}</th>
                     <th className="py-3 px-6">Visits / LTV</th>
                     <th className="py-3 px-6">Last Visit</th>
-                    <th className="py-3 px-6 text-right">Actions</th>
+                    <th className="py-3 px-6 text-right">{useI18nStore.getState().t("app.t45")}</th>
                   </tr>
                 </thead>
 
@@ -430,7 +429,7 @@ export default function Customers() {
                       
                       <div className="flex items-center justify-between bg-[#F5F5F4] p-3 rounded-xl border border-[#DCDCDA] mb-4">
                         <div>
-                          <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">Visits</p>
+                          <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">{useI18nStore.getState().t("app.t42")}</p>
                           <p className="font-semibold text-[#121415]">{customer.visits}</p>
                         </div>
                         <div className="text-right">

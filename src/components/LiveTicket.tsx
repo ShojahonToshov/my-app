@@ -1,4 +1,5 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -129,6 +130,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 };
 
 export default function LiveTicket() {
+  const { t } = useI18nStore();
+
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
@@ -249,7 +252,7 @@ export default function LiveTicket() {
     return (
       <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-[#ECECEA] p-4 text-center">
         <h2 className="text-xl font-semibold mb-2">Booking not found</h2>
-        <Link href="/account" className="text-sm font-medium text-[#4A4E51] underline">Back to profile</Link>
+        <Link href="/account" className="text-sm font-medium text-[#4A4E51] underline">{t("app.t29")}</Link>
       </div>
     );
   }
@@ -262,7 +265,7 @@ export default function LiveTicket() {
         className="absolute top-6 left-6 md:top-10 md:left-10 flex items-center gap-2 text-[#4A4E51] hover:text-[#121415] font-medium text-sm transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-lg p-1 z-50"
       >
         <ArrowLeft className="w-4 h-4 shrink-0" />
-        <span className="truncate">Back to profile</span>
+        <span className="truncate">{t("app.t29")}</span>
       </Link>
 
       <motion.div
@@ -371,9 +374,7 @@ export default function LiveTicket() {
                       }`}>
                         {stateLevel > 1 ? <CheckCircle className="w-4 h-4 text-white" /> : <Calendar className={`w-4 h-4 ${stateLevel === 1 ? 'text-[#121415]' : 'text-[#DCDCDA]'}`} />}
                       </div>
-                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel >= 1 ? 'text-[#121415]' : 'text-[#787D80]'}`}>
-                        Upcoming
-                      </span>
+                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel >= 1 ? 'text-[#121415]' : 'text-[#787D80]'}`}>{t("app.t30")}</span>
                     </div>
 
                     {/* Step 2: Queue */}
@@ -387,9 +388,7 @@ export default function LiveTicket() {
                       }`}>
                         {stateLevel > 2 ? <CheckCircle className="w-4 h-4 text-white" /> : <MoreHorizontal className={`w-4 h-4 ${stateLevel === 2 ? 'text-[#C89E23]' : 'text-[#DCDCDA]'}`} />}
                       </div>
-                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 2 ? 'text-[#C89E23]' : stateLevel > 2 ? 'text-[#121415]' : 'text-[#787D80]'}`}>
-                        Queue
-                      </span>
+                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 2 ? 'text-[#C89E23]' : stateLevel > 2 ? 'text-[#121415]' : 'text-[#787D80]'}`}>{t("app.t31")}</span>
                     </div>
 
                     {/* Step 3: In Chair */}
@@ -403,9 +402,7 @@ export default function LiveTicket() {
                       }`}>
                         {stateLevel > 3 ? <CheckCircle className="w-4 h-4 text-white" /> : <Scissors className={`w-4 h-4 ${stateLevel === 3 ? 'text-[#4A6B53]' : 'text-[#DCDCDA]'}`} />}
                       </div>
-                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 3 ? 'text-[#4A6B53]' : stateLevel > 3 ? 'text-[#121415]' : 'text-[#787D80]'}`}>
-                        In chair
-                      </span>
+                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 3 ? 'text-[#4A6B53]' : stateLevel > 3 ? 'text-[#121415]' : 'text-[#787D80]'}`}>{t("app.t32")}</span>
                     </div>
 
                     {/* Step 4: Completed */}
@@ -417,9 +414,7 @@ export default function LiveTicket() {
                       }`}>
                         <CheckCircle2 className={`w-4 h-4 ${stateLevel === 4 ? 'text-[#8A2532]' : 'text-[#DCDCDA]'}`} />
                       </div>
-                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 4 ? 'text-[#8A2532]' : 'text-[#787D80]'}`}>
-                        Completed
-                      </span>
+                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 4 ? 'text-[#8A2532]' : 'text-[#787D80]'}`}>{t("app.t33")}</span>
                     </div>
                   </>
                 );
@@ -429,9 +424,7 @@ export default function LiveTicket() {
             {/* Details */}
             <div className="space-y-4 mb-8 bg-[#F5F5F4] p-5 rounded-2xl border border-[#DCDCDA] flex flex-col min-w-0 w-full">
               <div className="flex items-center justify-between gap-4 min-w-0">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#4A4E51] shrink-0">
-                  Professional
-                </span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#4A4E51] shrink-0">{t("app.t21")}</span>
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-full bg-white border border-[#DCDCDA] flex items-center justify-center text-[10px] font-bold text-[#121415] shrink-0">
                     {bookingData.staffName.substring(0, 2).toUpperCase()}
@@ -445,9 +438,7 @@ export default function LiveTicket() {
               <div className="w-full h-px bg-[#DCDCDA] shrink-0" />
 
               <div className="flex items-center justify-between gap-4 min-w-0">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#4A4E51] shrink-0">
-                  Date
-                </span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#4A4E51] shrink-0">{t("app.t34")}</span>
                 <span className="text-sm font-semibold text-[#121415] flex items-center gap-1.5 truncate">
                   <Calendar className="w-4 h-4 text-[#4A4E51] shrink-0" />
                   <span className="truncate">{bookingData.date}</span>
@@ -509,12 +500,8 @@ export default function LiveTicket() {
             ) : (
               <div className="flex flex-col gap-3 shrink-0">
                 <div className="grid grid-cols-2 gap-3">
-                  <Button variant="outline" shape="rounded" icon={Navigation} className="h-12 w-full text-sm">
-                    Directions
-                  </Button>
-                  <Button variant="outline" shape="rounded" icon={PhoneCall} className="h-12 w-full text-sm">
-                    Contact
-                  </Button>
+                  <Button variant="outline" shape="rounded" icon={Navigation} className="h-12 w-full text-sm">{t("app.t35")}</Button>
+                  <Button variant="outline" shape="rounded" icon={PhoneCall} className="h-12 w-full text-sm">{t("app.t36")}</Button>
                 </div>
 
                 <Button
@@ -522,9 +509,7 @@ export default function LiveTicket() {
                   variant="ghost"
                   shape="rounded"
                   className="h-12 w-full text-xs font-bold uppercase tracking-widest text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5"
-                >
-                  Cancel booking
-                </Button>
+                >{t("app.t37")}</Button>
               </div>
             )}
           </div>

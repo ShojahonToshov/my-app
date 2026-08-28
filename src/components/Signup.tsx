@@ -16,7 +16,10 @@ import { createClient } from "@/utils/supabase/client";
 
 type StepType = "form" | "otp";
 
+import { useI18nStore } from "@/stores/i18nStore";
+
 export default function Signup() {
+  const { t } = useI18nStore();
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || "customer";
   
@@ -209,13 +212,11 @@ export default function Signup() {
               </Button>
 
               <p className="text-center text-sm text-[#4A4E51] font-medium mt-4 w-full">
-                <span className="mr-1">Already have an account?</span>
+                <span className="mr-1">{t("auth.hasAccount")}</span>
                 <Link
                   href={`/login${searchParams.get("redirect") ? `?redirect=${encodeURIComponent(searchParams.get("redirect") as string)}` : ""}`}
                   className="text-[#121415] font-semibold hover:underline transition-colors"
-                >
-                  Log in
-                </Link>
+                >{t("auth.signInBtn")}</Link>
               </p>
             </form>
           </>

@@ -1,4 +1,5 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -156,6 +157,8 @@ const defaultVenueData: VenueData = {
 
 
 export default function CustomerBooking() {
+  const { t } = useI18nStore();
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const venueId = searchParams.get('id');
@@ -583,7 +586,7 @@ export default function CustomerBooking() {
             }`}
           >
             <CalendarDays className="w-4 h-4 shrink-0" />
-            <span>Booking</span>
+            <span>{t("app.t18")}</span>
           </button>
           <button
             type="button"
@@ -595,7 +598,7 @@ export default function CustomerBooking() {
             }`}
           >
             <Info className="w-4 h-4 shrink-0" />
-            <span>About</span>
+            <span>{t("app.t19")}</span>
           </button>
         </motion.div>
 
@@ -648,9 +651,7 @@ export default function CustomerBooking() {
                   <h2 className="text-xl font-semibold text-[#121415] mb-5 tracking-tight flex items-center gap-3">
                     <span className="relative z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white text-[#121415] text-xs font-bold border border-[#DCDCDA] shrink-0">
                       1
-                    </span>
-                    Select service
-                  </h2>
+                    </span>{t("app.t20")}</h2>
                   <div className="space-y-3">
                     {venueData.services.length === 0 ? (
                       <div className="p-5 text-center text-sm font-medium text-[#4A4E51] bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA]">
@@ -705,9 +706,7 @@ export default function CustomerBooking() {
                   <h2 className="text-xl font-semibold text-[#121415] mb-5 tracking-tight flex items-center gap-3">
                     <span className="relative z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white text-[#121415] text-xs font-bold border border-[#DCDCDA] shrink-0">
                       2
-                    </span>
-                    Professional
-                  </h2>
+                    </span>{t("app.t21")}</h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {venueData.staff.length === 0 ? (
                       <div className="col-span-full p-5 text-center text-sm font-medium text-[#4A4E51] bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA]">
@@ -832,9 +831,7 @@ export default function CustomerBooking() {
                     <h2 className="text-xl font-semibold text-[#121415] mb-5 tracking-tight flex items-center gap-3">
                       <span className="relative z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white text-[#121415] text-xs font-bold border border-[#DCDCDA] shrink-0">
                         4
-                      </span>
-                      Sign in to continue
-                    </h2>
+                      </span>{t("app.t22")}</h2>
 
                     <div className="flex flex-col items-center justify-center p-8 bg-white border border-[#DCDCDA] rounded-2xl shadow-sm">
                       <p className="text-sm font-medium text-[#4A4E51] mb-5 text-center">
@@ -859,9 +856,7 @@ export default function CustomerBooking() {
                   <h2 className="text-xl font-semibold text-[#121415] mb-5 mt-6 tracking-tight flex items-center gap-3">
                     <span className="relative z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white text-[#121415] text-xs font-bold border border-[#DCDCDA] shrink-0">
                       {user ? 4 : 5}
-                    </span>
-                    Confirmation
-                  </h2>
+                    </span>{t("app.t23")}</h2>
 
                   <div
                     className={`bg-[#F5F5F4] rounded-[1.5rem] p-6 border transition-colors duration-300 ${
@@ -968,9 +963,7 @@ export default function CustomerBooking() {
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-[#121415] mb-4 tracking-tight">
-                  Location
-                </h2>
+                <h2 className="text-xl font-semibold text-[#121415] mb-4 tracking-tight">{t("app.t24")}</h2>
                 <div className="flex items-start gap-3 mb-4 min-w-0">
                   <MapPin className="w-5 h-5 text-[#8A2532] shrink-0 mt-0.5" />
                   <div className="min-w-0 flex-1">
@@ -1007,9 +1000,7 @@ export default function CustomerBooking() {
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-[#121415] mb-4 tracking-tight">
-                  Opening hours
-                </h2>
+                <h2 className="text-xl font-semibold text-[#121415] mb-4 tracking-tight">{t("app.t25")}</h2>
                 <div className="bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA] p-5">
                   <div className="space-y-4">
                     {venueData.about.schedule.map((slot, index) => (
@@ -1033,9 +1024,7 @@ export default function CustomerBooking() {
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-[#121415] mb-4 tracking-tight">
-                  Contacts
-                </h2>
+                <h2 className="text-xl font-semibold text-[#121415] mb-4 tracking-tight">{t("app.t26")}</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {venueData.about.contacts.phone && (
                     <a
@@ -1103,9 +1092,7 @@ export default function CustomerBooking() {
 
               <section className="border-t border-[#DCDCDA] pt-10">
                 <div className="flex items-center justify-between mb-6 gap-4 min-w-0">
-                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">
-                    Reviews
-                  </h2>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("app.t27")}</h2>
                   <div className="flex items-center gap-2 shrink-0">
                     <Star className="w-5 h-5 fill-[#8A2532] text-[#8A2532]" />
                     <span className="text-xl font-semibold text-[#121415]">
@@ -1176,7 +1163,7 @@ export default function CustomerBooking() {
             shape="rounded"
             className="w-full py-3.5 shadow-[0_8px_20px_rgba(0,0,0,0.08)]"
           >
-            <span className="truncate">Go to booking</span>
+            <span className="truncate">{t("app.t28")}</span>
           </Button>
         )}
       </div>

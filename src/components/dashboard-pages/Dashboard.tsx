@@ -1,4 +1,5 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
 import React, { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -58,6 +59,8 @@ const addMinutesToTimeStr = (timeStr: string, minsToAdd: number): string => {
 };
 
 export default function Dashboard() {
+  const { t } = useI18nStore();
+
   const queryClient = useQueryClient();
   const [isMounted, setIsMounted] = useState(false);
   const [businessId, setBusinessId] = useState<string | null>(null);
@@ -558,7 +561,7 @@ export default function Dashboard() {
             <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between">
               <div className="flex items-center gap-2 text-[#4A4E51] mb-2">
                 <TrendingUp className="w-4 h-4" /> 
-                <span className="text-xs font-medium uppercase tracking-wider">Total Bookings</span>
+                <span className="text-xs font-medium uppercase tracking-wider">{t("app.t38")}</span>
               </div>
               {isDashboardLoading ? <Skeleton className="w-12 h-8" /> : <div className="text-3xl font-semibold text-[#121415]">{totalBookings}</div>}
             </div>
@@ -566,7 +569,7 @@ export default function Dashboard() {
             <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between">
               <div className="flex items-center gap-2 text-[#4A4E51] mb-2">
                 <Users className="w-4 h-4" />
-                <span className="text-xs font-medium uppercase tracking-wider">In Salon Now</span>
+                <span className="text-xs font-medium uppercase tracking-wider">{t("app.t39")}</span>
               </div>
               {isDashboardLoading ? <Skeleton className="w-12 h-8" /> : <div className="text-3xl font-semibold text-[#121415]">{inSalonNow}</div>}
             </div>
@@ -620,9 +623,7 @@ export default function Dashboard() {
             <div className="flex-1 min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#F5F5F4]/80 border-[#DCDCDA]">
               <div className="flex justify-between items-center mb-5 px-2">
                 <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-lg tracking-tight">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#C89E23]"></span>
-                  Waiting
-                </h2>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#C89E23]"></span>{t("app.t40")}</h2>
                 <span className="text-xs font-medium text-[#121415] bg-white border border-[#DCDCDA] shadow-sm px-2.5 py-1 rounded-lg">
                   {isDashboardLoading ? "-" : filteredWaiting.length}
                 </span>
@@ -781,9 +782,7 @@ export default function Dashboard() {
             {/* COLUMN 3: COMPLETED */}
             <div className="flex-1 min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#ECECEA]/30 border-[#DCDCDA]/50 opacity-70 hover:opacity-100">
               <div className="flex justify-between items-center mb-5 px-2">
-                <h2 className="font-medium text-[#8B9194] flex items-center gap-2 text-sm uppercase tracking-widest">
-                  Completed
-                </h2>
+                <h2 className="font-medium text-[#8B9194] flex items-center gap-2 text-sm uppercase tracking-widest">{t("app.t33")}</h2>
                 <span className="text-xs font-medium text-[#8B9194] bg-[#F5F5F4] border border-[#DCDCDA] px-2.5 py-1 rounded-lg">
                   {isDashboardLoading ? "-" : filteredCompleted.length}
                 </span>
@@ -930,7 +929,7 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#121415] mb-2">Staff</label>
+                  <label className="block text-sm font-medium text-[#121415] mb-2">{t("app.t48")}</label>
                   <div className={`relative ${isDropdownOpen ? 'z-[99999]' : ''}`}>
                     <button
                       type="button"
@@ -964,7 +963,7 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#121415] mb-2">Service</label>
+                  <label className="block text-sm font-medium text-[#121415] mb-2">{t("app.t49")}</label>
                   <div className="grid grid-cols-2 gap-3">
                     {servicesData.length > 0 ? servicesData.map(s => (
                       <button 
@@ -983,7 +982,7 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="flex gap-3 mt-8 pt-6 border-t border-[#DCDCDA] pb-2">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3 bg-white hover:bg-[#F5F5F4] border border-[#DCDCDA] text-[#121415] rounded-xl font-medium text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Cancel</button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3 bg-white hover:bg-[#F5F5F4] border border-[#DCDCDA] text-[#121415] rounded-xl font-medium text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{t("app.t16")}</button>
                 <button 
                   type="submit" 
                   disabled={isAddingGuest}

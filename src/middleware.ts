@@ -78,7 +78,7 @@ export default async function proxy(request: NextRequest) {
 
     const userRole = (rawRole === 'business' || rawRole === 'customer') ? rawRole : 'customer';
     onboardingStep = onboardingStep || 0;
-    const isUnonboardedBusiness = userRole === 'business' && onboardingStep < 3;
+    const isUnonboardedBusiness = userRole === 'business' && onboardingStep < 5;
 
     let homeRoute = userRole === 'business' ? '/dashboard' : '/search';
     if (isUnonboardedBusiness) {

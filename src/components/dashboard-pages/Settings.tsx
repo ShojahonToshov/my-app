@@ -1,4 +1,5 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import {
@@ -59,9 +60,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm,
         <h2 className="text-2xl font-semibold text-[#121415] mb-2">{title}</h2>
         <p className="text-sm text-[#4A4E51] font-medium mb-6">{description}</p>
         <div className="flex gap-3 w-full">
-          <button type="button" onClick={onClose} className="flex-1 py-3 bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm transition-colors hover:bg-[#ECECEA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-            Cancel
-          </button>
+          <button type="button" onClick={onClose} className="flex-1 py-3 bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm transition-colors hover:bg-[#ECECEA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{useI18nStore.getState().t("app.t16")}</button>
           <button type="button" onClick={onConfirm} className="flex-1 py-3 rounded-xl font-medium text-sm shadow-sm transition-all bg-[#dc2626] text-white hover:opacity-90 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]">
             Delete
           </button>
@@ -360,10 +359,11 @@ export default function Settings() {
         }
       }
       setServiceFormDuration(mins);
-      setServiceFormPrice(service.price.replace(/[^\d]/g, ""));
+      const raw = String(service.price).replace(/\D/g, "");
+      setServiceFormPrice(raw.replace(/\B(?=(\d{3})+(?!\d))/g, " "));
     } else {
       setEditingServiceId(null);
-      setServiceFormName(STANDARD_SERVICES[0]);
+      setServiceFormName("");
       setServiceFormDuration("45");
       setServiceFormPrice("");
     }
@@ -848,12 +848,31 @@ export default function Settings() {
             <form onSubmit={handleServiceSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Service Name</label>
-                <CustomSelect 
-                  value={serviceFormName} 
-                  options={STANDARD_SERVICES} 
-                  onChange={setServiceFormName} 
-                  className="w-full"
-                />
+                <div className="relative">
+                  <Scissors className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
+                  <input 
+                    required 
+                    type="text" 
+                    placeholder="E.g. Laser Hair Removal" 
+                    value={serviceFormName} 
+                    onChange={(e) => setServiceFormName(e.target.value)} 
+                    className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
+                  />
+                </div>
+                {!editingServiceId && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {STANDARD_SERVICES.map(s => (
+                      <button 
+                        type="button" 
+                        key={s} 
+                        onClick={() => setServiceFormName(s)} 
+                        className="px-3 py-1.5 bg-[#F5F5F4] hover:bg-[#ECECEA] border border-[#DCDCDA] text-xs font-medium text-[#4A4E51] rounded-lg transition-colors focus-visible:outline-none focus-visible:border-[#121415]"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -867,7 +886,12 @@ export default function Settings() {
                   <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Price (UZS)</label>
                   <div className="relative">
                     <Banknote className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-                    <input required name="price" type="number" placeholder="80000" value={serviceFormPrice} onChange={(e) => setServiceFormPrice(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                    <input required name="price" type="text" placeholder="80 000" value={serviceFormPrice} 
+onChange={(e) => {
+  const raw = e.target.value.replace(/\D/g, '');
+  const formatted = raw.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  setServiceFormPrice(formatted);
+}} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
                   </div>
                 </div>
               </div>

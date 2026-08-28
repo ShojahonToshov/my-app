@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import ElaraLogo from "@/components/ElaraLogo";
 import SignupRoleModal from "@/components/SignupRoleModal";
+import { useI18nStore } from "@/stores/i18nStore";
 
 export default function Footer() {
+  const { t } = useI18nStore();
   const [signupModalOpen, setSignupModalOpen] = useState(false);
 
   return (
@@ -14,41 +16,31 @@ export default function Footer() {
         <div className="col-span-1 md:col-span-2 flex flex-col items-start gap-6">
           <ElaraLogo dark={true} />
           <p className="max-w-sm text-sm font-medium leading-relaxed text-[#9CA3AF] m-0">
-            The premium destination for discovering and booking top-tier
-            services in your city. Elevating the standard of appointment
-            management.
+            {t("footer.desc")}
           </p>
         </div>
 
         {/* Platform Column */}
         <div>
-          <h4 className="text-white font-medium text-sm tracking-tight mb-6">
-            Platform
-          </h4>
+          <h4 className="text-white font-medium text-sm tracking-tight mb-6">{t("footer.platform")}</h4>
           <ul className="space-y-4 text-sm font-medium">
             <li>
               <Link
                 href="/search"
                 className="hover:text-white transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-white rounded"
-              >
-                Search
-              </Link>
+              >{t("footer.search")}</Link>
             </li>
             <li>
               <Link
                 href="/login"
                 className="hover:text-white transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-white rounded"
-              >
-                Log in
-              </Link>
+              >{t("auth.signIn")}</Link>
             </li>
             <li>
               <button
                 onClick={() => setSignupModalOpen(true)}
                 className="hover:text-white transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-white rounded text-left"
-              >
-                Sign up
-              </button>
+              >{t("auth.getStarted")}</button>
             </li>
           </ul>
         </div>
@@ -57,9 +49,7 @@ export default function Footer() {
 
         {/* Connect Column */}
         <div>
-          <h4 className="text-white font-medium text-sm tracking-tight mb-6">
-            Connect
-          </h4>
+          <h4 className="text-white font-medium text-sm tracking-tight mb-6">{t("footer.connect")}</h4>
           <ul className="space-y-4 text-sm font-medium">
             <li>
               <a
@@ -97,21 +87,17 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto pt-8 border-t border-[#24282B] flex flex-col md:flex-row items-center justify-between text-xs font-medium text-[#9CA3AF] gap-4">
-        <p>© {new Date().getFullYear()} Elara. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Elara. {t("footer.rights")}</p>
 
         <div className="flex gap-6">
           <Link
             href="/privacy"
             className="hover:text-white transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-white rounded"
-          >
-            Privacy Policy
-          </Link>
+          >{t("footer.privacy")}</Link>
           <Link
             href="/terms"
             className="hover:text-white transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-white rounded"
-          >
-            Terms of Service
-          </Link>
+          >{t("footer.terms")}</Link>
         </div>
       </div>
       <React.Suspense fallback={null}>

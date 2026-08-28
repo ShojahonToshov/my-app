@@ -25,6 +25,8 @@ import ElaraLogo from "@/components/ElaraLogo";
 import SignupRoleModal from "@/components/SignupRoleModal";
 import { Button } from "@/components/ui/Button";
 import useUser from "@/hooks/useUser";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useI18nStore } from "@/stores/i18nStore";
 
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
@@ -96,6 +98,8 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export default function Landing() {
   const [mounted, setMounted] = useState(false);
+  const { t } = useI18nStore();
+  
   useEffect(() => {
     const timer = setTimeout(() => setMounted(true), 0);
     return () => clearTimeout(timer);
@@ -137,32 +141,33 @@ export default function Landing() {
               onClick={(e) => scrollToSection(e, "features")}
               className="hover:text-[#121415] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
             >
-              Features
+              {t("nav.features")}
             </Link>
             <Link
               href="#how-it-works"
               onClick={(e) => scrollToSection(e, "how-it-works")}
               className="hover:text-[#121415] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
             >
-              How it works
+              {t("nav.howItWorks")}
             </Link>
             <Link
               href="#faq"
               onClick={(e) => scrollToSection(e, "faq")}
               className="hover:text-[#121415] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
             >
-              FAQ
+              {t("nav.faq")}
             </Link>
           </div>
 
           
             <div className="hidden md:flex items-center gap-4 shrink-0">
+              <LanguageSwitcher />
               {mounted && isAuthenticated ? (
                 <Link
                   href={accountLink}
                   className="px-5 py-2.5 text-sm font-medium text-white bg-[#121415] hover:bg-[#1E2123] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
                 >
-                  My Account
+                  {t("auth.account")}
                 </Link>
               ) : (
                 <>
@@ -170,7 +175,7 @@ export default function Landing() {
                     href="/login"
                     className="px-5 py-2.5 text-sm font-medium text-[#121415] border border-[#DCDCDA] bg-white hover:bg-[#F5F5F4] rounded-full transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center"
                   >
-                    Log in
+                    {t("auth.signIn")}
                   </Link>
                   <Button 
                     onClick={() => setSignupModalOpen(true)}
@@ -179,7 +184,7 @@ export default function Landing() {
                     shape="pill" 
                     className="px-5 shadow-sm hover:shadow-md"
                   >
-                    Sign up
+                    {t("auth.getStarted")}
                   </Button>
                 </>
               )}
@@ -213,31 +218,36 @@ export default function Landing() {
                   onClick={(e) => scrollToSection(e, "features")}
                   className="text-lg font-medium text-[#121415] outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
                 >
-                  Features
+                  {t("nav.features")}
                 </Link>
                 <Link
                   href="#how-it-works"
                   onClick={(e) => scrollToSection(e, "how-it-works")}
                   className="text-lg font-medium text-[#121415] outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
                 >
-                  How it works
+                  {t("nav.howItWorks")}
                 </Link>
                 <Link
                   href="#faq"
                   onClick={(e) => scrollToSection(e, "faq")}
                   className="text-lg font-medium text-[#121415] outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
                 >
-                  FAQ
+                  {t("nav.faq")}
                 </Link>
 
                 <div className="h-px bg-[#DCDCDA] my-2" />
+
+                <div className="flex items-center mb-4">
+                   <LanguageSwitcher />
+                   <span className="ml-3 font-medium text-[#121415]">Language</span>
+                </div>
 
                 <Link
                   href="/login"
                   className="text-lg font-medium text-[#121415] outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Log in
+                  {t("auth.signIn")}
                 </Link>
                 <button
                   onClick={() => {
@@ -246,7 +256,7 @@ export default function Landing() {
                   }}
                   className="text-lg font-medium text-[#8A2532] outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded text-left"
                 >
-                  Sign up
+                  {t("auth.getStarted")}
                 </button>
               </div>
             </motion.div>
@@ -268,15 +278,15 @@ export default function Landing() {
               variants={fadeUp}
               className="text-5xl md:text-6xl lg:text-7xl leading-[1.1] font-semibold text-[#121415] tracking-tighter mb-6"
             >
-              Premium experience for clients.<br className="hidden md:block" />
-              <span className="text-[#8A2532]">Intelligent growth for business.</span>
+              {t("hero.title").split(",")[0]},<br className="hidden md:block" />
+              <span className="text-[#8A2532]">{t("hero.title").split(",").slice(1).join(",").trim() || "simplified."}</span>
             </motion.h1>
 
             <motion.p
               variants={fadeUp}
               className="text-lg md:text-xl text-[#4A4E51] max-w-2xl mx-auto font-medium mb-12 leading-relaxed tracking-tight"
             >
-              Book appointments at the city&apos;s finest salons, or power your business with a platform that drives revenue and completely eliminates no-shows.
+              {t("hero.subtitle")}
             </motion.p>
 
             <motion.div
@@ -293,9 +303,7 @@ export default function Landing() {
                   icon={ArrowRight}
                   iconPosition="right"
                   className="w-full sm:w-auto px-8 py-3.5 text-base"
-                >
-                  Start your journey
-                </Button>
+                >{t("landing.startJourney")}</Button>
               </Link>
 
               <Link
@@ -307,9 +315,7 @@ export default function Landing() {
                   variant="outline"
                   shape="pill"
                   className="w-full sm:w-auto px-8 py-3.5 text-base"
-                >
-                  Explore features
-                </Button>
+                >{t("landing.exploreFeatures")}</Button>
               </Link>
             </motion.div>
           </motion.div>
@@ -326,25 +332,21 @@ export default function Landing() {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="flex-1 space-y-6"
             >
-              <h2 className="text-3xl md:text-5xl font-semibold text-[#121415] tracking-tight leading-tight">
-                An experience clients love.
-              </h2>
-              <p className="text-[#4A4E51] text-lg font-medium leading-relaxed max-w-lg">
-                Delight your customers with a Digital Live Ticket. They get real-time booking updates, seamless QR check-ins, and one-tap rescheduling—all beautifully organized in a single, interactive pass. When booking is this easy, they keep coming back.
-              </p>
+              <h2 className="text-3xl md:text-5xl font-semibold text-[#121415] tracking-tight leading-tight">{t("landing.experienceLove")}</h2>
+              <p className="text-[#4A4E51] text-lg font-medium leading-relaxed max-w-lg">{t("landing.digitalTicket")}</p>
               
               <div className="pt-6 space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-[#F5F5F4] border border-[#DCDCDA] flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-4 h-4 text-[#8A2532]" />
                   </div>
-                  <span className="text-[#121415] font-medium">Real-time status tracking</span>
+                  <span className="text-[#121415] font-medium">{t("landing.realTimeStatus")}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-[#F5F5F4] border border-[#DCDCDA] flex items-center justify-center shrink-0">
                     <Navigation className="w-4 h-4 text-[#8A2532]" />
                   </div>
-                  <span className="text-[#121415] font-medium">Instant venue navigation</span>
+                  <span className="text-[#121415] font-medium">{t("landing.instantNav")}</span>
                 </div>
               </div>
             </motion.div>
@@ -503,25 +505,21 @@ export default function Landing() {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="flex-1 space-y-6"
             >
-              <h2 className="text-3xl md:text-5xl font-semibold text-[#121415] tracking-tight leading-tight">
-                When clients are happy, your business thrives.
-              </h2>
-              <p className="text-[#4A4E51] text-lg font-medium leading-relaxed max-w-lg">
-                Take total operational control. Manage your team's schedules, analyze revenue insights, and track Karma metrics in a calm, distraction-free environment. Elara saves your administrators hours of work every week.
-              </p>
+              <h2 className="text-3xl md:text-5xl font-semibold text-[#121415] tracking-tight leading-tight">{t("landing.businessThrives")}</h2>
+              <p className="text-[#4A4E51] text-lg font-medium leading-relaxed max-w-lg">{t("landing.totalControl")}</p>
               
               <div className="pt-6 space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-white border border-[#DCDCDA] flex items-center justify-center shrink-0 shadow-sm">
                     <Calendar className="w-4 h-4 text-[#8A2532]" />
                   </div>
-                  <span className="text-[#121415] font-medium">Kanban-style appointment flow</span>
+                  <span className="text-[#121415] font-medium">{t("landing.kanbanFlow")}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-white border border-[#DCDCDA] flex items-center justify-center shrink-0 shadow-sm">
                     <ShieldCheck className="w-4 h-4 text-[#8A2532]" />
                   </div>
-                  <span className="text-[#121415] font-medium">Smart no-show protection</span>
+                  <span className="text-[#121415] font-medium">{t("landing.smartProtection")}</span>
                 </div>
               </div>
             </motion.div>
@@ -708,12 +706,8 @@ export default function Landing() {
                   <ShieldCheck className="w-4 h-4" />
                   Business Protection
                 </div>
-                <h2 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight">
-                  Stop losing money to no-shows.
-                </h2>
-                <p className="text-[#8B9194] text-lg font-medium leading-relaxed max-w-lg">
-                  Missed appointments cost the industry billions. Our proprietary Karma System automatically identifies risky clients and requires non-refundable deposits, protecting your calendar and your revenue.
-                </p>
+                <h2 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight">{t("landing.stopLosingMoney")}</h2>
+                <p className="text-[#8B9194] text-lg font-medium leading-relaxed max-w-lg">{t("landing.karmaDesc")}</p>
 
                 <div className="space-y-6 pt-4">
                   {[
@@ -798,9 +792,7 @@ export default function Landing() {
         <section id="features" className="py-24 px-6 bg-[#ECECEA]">
           <div className="max-w-7xl mx-auto">
             <div className="mb-16 max-w-2xl">
-              <h2 className="text-3xl md:text-5xl font-semibold text-[#121415] tracking-tight mb-4 leading-tight">
-                A new standard for premium bookings.
-              </h2>
+              <h2 className="text-3xl md:text-5xl font-semibold text-[#121415] tracking-tight mb-4 leading-tight">{t("landing.newStandard")}</h2>
               <p className="text-[#4A4E51] text-lg font-medium leading-relaxed">
                 Everything you need to manage your appointments, wrapped in a
                 calm, intelligent interface.
@@ -872,9 +864,7 @@ export default function Landing() {
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
               <div>
-                <h2 className="text-3xl md:text-5xl font-semibold text-[#121415] tracking-tight mb-12">
-                  How Elara works
-                </h2>
+                <h2 className="text-3xl md:text-5xl font-semibold text-[#121415] tracking-tight mb-12">{t("landing.howElaraWorks")}</h2>
 
                 <div className="space-y-10">
                   <div className="flex gap-6 group">
@@ -1023,9 +1013,7 @@ export default function Landing() {
         {/* FAQ Section */}
         <section id="faq" className="py-32 px-6 bg-white">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-semibold text-[#121415] tracking-tight mb-12 text-center">
-              Frequently asked questions
-            </h2>
+            <h2 className="text-3xl md:text-5xl font-semibold text-[#121415] tracking-tight mb-12 text-center">{t("landing.frequentlyAsked")}</h2>
 
             <div className="divide-y divide-[#DCDCDA]">
               {[
@@ -1055,6 +1043,8 @@ export default function Landing() {
 
       {/* Footer */}
       <Footer />
+      
+      <SignupRoleModal isOpen={signupModalOpen} onClose={() => setSignupModalOpen(false)} />
     </div>
   );
 }

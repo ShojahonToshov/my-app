@@ -1,4 +1,5 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
 import React from "react";
 import {
   ArrowUpRight,
@@ -117,6 +118,8 @@ function computeAnalyticsData(
 }
 
 export default function Analytics() {
+  const { t } = useI18nStore();
+
   const [activeTab, setActiveTab] = React.useState<"today" | "week" | "month">("today");
 
   const { data: analyticsData, isLoading } = useQuery({
@@ -198,7 +201,7 @@ export default function Analytics() {
               <div className="flex items-center justify-between gap-2 text-[#4A4E51] mb-4">
                 <div className="flex items-center gap-2">
                   <Coins className="w-4 h-4" /> 
-                  <span className="text-xs font-medium uppercase tracking-wider">Revenue</span>
+                  <span className="text-xs font-medium uppercase tracking-wider">{t("app.t41")}</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#e8efe9] text-[#4a6b53] border border-[#4a6b53]/30">
                   <ArrowUpRight className="w-3 h-3" /> {currentData.kpi.revTrend}
@@ -218,7 +221,7 @@ export default function Analytics() {
               <div className="flex items-center justify-between gap-2 text-[#4A4E51] mb-4">
                 <div className="flex items-center gap-2">
                   <Activity className="w-4 h-4" /> 
-                  <span className="text-xs font-medium uppercase tracking-wider">Visits</span>
+                  <span className="text-xs font-medium uppercase tracking-wider">{t("app.t42")}</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#e8efe9] text-[#4a6b53] border border-[#4a6b53]/30">
                   <ArrowUpRight className="w-3 h-3" /> {currentData.kpi.visitsTrend}

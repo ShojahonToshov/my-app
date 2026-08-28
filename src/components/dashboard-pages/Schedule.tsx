@@ -1,4 +1,5 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { toast } from "sonner";
 import {
@@ -277,6 +278,8 @@ const generateTimeSlots = (startHour = 8, endHour = 20, intervalMinutes = 30) =>
 };
 
 export default function Schedule() {
+  const { t } = useI18nStore();
+
   const queryClient = useQueryClient();
   const [isMounted, setIsMounted] = useState(false);
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
@@ -566,7 +569,7 @@ export default function Schedule() {
         {/* HEADER */}
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 md:h-20 shrink-0 sticky top-0 z-[99999] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Schedule</h1>
+            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">{t("app.t46")}</h1>
             <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Manage appointments for the next 7 days</p>
           </div>
 
@@ -618,9 +621,7 @@ export default function Schedule() {
                 <thead>
                   <tr>
                     {/* Empty corner */}
-                    <th className="p-4 border-b border-r border-[#DCDCDA] bg-[#F5F5F4] w-20 text-center text-[#4A4E51] font-semibold text-sm sticky top-0 left-0 z-30 shadow-[1px_1px_0_#DCDCDA]">
-                      Time
-                    </th>
+                    <th className="p-4 border-b border-r border-[#DCDCDA] bg-[#F5F5F4] w-20 text-center text-[#4A4E51] font-semibold text-sm sticky top-0 left-0 z-30 shadow-[1px_1px_0_#DCDCDA]">{t("app.t47")}</th>
                     {/* Day Columns */}
                     {weekDaysView.map(date => {
                       const dayConfig = scheduleConfig.find(d => d.day === date.fullDayName);
@@ -787,7 +788,7 @@ export default function Schedule() {
               {/* Row 2: Service & Staff */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Service</label>
+                  <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("app.t49")}</label>
                   <CustomSelect 
                     icon={Scissors}
                     value={newService}
@@ -812,7 +813,7 @@ export default function Schedule() {
               {/* Row 3: Date & Time */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                   <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Date</label>
+                   <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("app.t34")}</label>
                    <CustomDatePicker 
                      value={selectedDateStr} 
                      onChange={setSelectedDateStr} 
@@ -822,7 +823,7 @@ export default function Schedule() {
                 </div>
 
                 <div>
-                   <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Time</label>
+                   <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("app.t47")}</label>
                    <CustomSelect 
                      icon={Clock}
                      value={selectedTime}
@@ -836,7 +837,7 @@ export default function Schedule() {
 
               {/* Row 4: Status */}
               <div>
-                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Status</label>
+                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("app.t44")}</label>
                 <CustomSelect 
                   value={newStatus}
                   options={["waiting", "in_progress", "completed"]}
