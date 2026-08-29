@@ -533,18 +533,18 @@ export default function Settings() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-[#121415] mb-2">{t("extra.t8")}</label>
+                      <label htmlFor="venue-name" className="block text-sm font-medium text-[#121415] mb-2">{t("extra.t8")}</label>
                       <div className="relative">
                         <Store className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                        <input required type="text" value={venueProfile.name} onChange={(e) => setVenueProfile({...venueProfile, name: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                        <input id="venue-name" name="venue-name" required type="text" value={venueProfile.name} onChange={(e) => setVenueProfile({...venueProfile, name: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-[#121415] mb-2">{t("extra.t9")}</label>
+                      <label htmlFor="venue-address" className="block text-sm font-medium text-[#121415] mb-2">{t("extra.t9")}</label>
                       <div className="relative">
                         <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                        <input type="text" value={venueProfile.address} onChange={(e) => setVenueProfile({...venueProfile, address: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" placeholder={t("extra.t10")} />
+                        <input id="venue-address" name="venue-address" type="text" value={venueProfile.address} onChange={(e) => setVenueProfile({...venueProfile, address: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" placeholder={t("extra.t10")} />
                       </div>
                     </div>
                   </div>
@@ -587,6 +587,9 @@ export default function Settings() {
                             <div className="relative flex-1">
                               <Link className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
                               <input 
+                                aria-label="Social link"
+                                name={`social-link-${index}`}
+                                id={`social-link-${index}`}
                                 type="text" 
                                 value={link.value} 
                                 onChange={(e) => {
@@ -839,10 +842,12 @@ export default function Settings() {
             </div>
             <form onSubmit={handleServiceSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t26")}</label>
+                <label htmlFor="service-name" className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t26")}</label>
                 <div className="relative">
                   <Scissors className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
                   <input 
+                    id="service-name"
+                    name="service-name"
                     required 
                     type="text" 
                     placeholder={t("extra.t27")} 
@@ -868,17 +873,17 @@ export default function Settings() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t28")}</label>
+                  <label htmlFor="service-duration" className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t28")}</label>
                   <div className="relative">
                     <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-                    <input required name="time" type="number" placeholder="45" value={serviceFormDuration} onChange={(e) => setServiceFormDuration(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                    <input id="service-duration" required name="time" type="number" placeholder="45" value={serviceFormDuration} onChange={(e) => setServiceFormDuration(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t29")}</label>
+                  <label htmlFor="service-price" className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t29")}</label>
                   <div className="relative">
                     <Banknote className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-                    <input required name="price" type="text" placeholder="80 000" value={serviceFormPrice} 
+                    <input id="service-price" required name="price" type="text" placeholder="80 000" value={serviceFormPrice} 
 onChange={(e) => {
   const raw = e.target.value.replace(/\D/g, '');
   const formatted = raw.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -905,10 +910,10 @@ onChange={(e) => {
             </div>
             <form onSubmit={handleSpecialistSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{useI18nStore.getState().t("extra.t180")}</label>
+                <label htmlFor="staff-name" className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{useI18nStore.getState().t("extra.t180")}</label>
                 <div className="relative">
                   <UserPlus className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-                  <input autoFocus required name="name" type="text" placeholder={useI18nStore.getState().t("extra.t336")} value={specialistFormName} onChange={(e) => setSpecialistFormName(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                  <input id="staff-name" autoFocus required name="name" type="text" placeholder={useI18nStore.getState().t("extra.t336")} value={specialistFormName} onChange={(e) => setSpecialistFormName(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
                 </div>
               </div>
               <div>

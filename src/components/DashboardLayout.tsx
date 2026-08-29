@@ -29,6 +29,7 @@ import { usePathname } from "next/navigation";
 
 import { useI18nStore } from "@/stores/i18nStore";
 import { useI18n } from "@/hooks/useI18n";
+import { useNotificationStore } from "@/stores/notificationStore";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -45,29 +46,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMobileNotifications, setShowMobileNotifications] = useState(false);
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: "success",
-      title: "New online booking",
-      message: "Azamat booked a Haircut (14:30)",
-      time: "5 min ago",
-    },
-    {
-      id: 2,
-      type: "cancel",
-      title: "Customer cancelled appointment",
-      message: "Alexey V. cancelled his appointment for today",
-      time: "1 hour ago",
-    },
-    {
-      id: 3,
-      type: "warning",
-      title: "System notification",
-      message: "SMS package almost exhausted (110 remaining)",
-      time: "Yesterday",
-    },
-  ]);
+  
+  const { notifications, clearAll, markAsRead, unreadCount } = useNotificationStore();
+  const unread = unreadCount();
 
   const notifRef = useRef<HTMLDivElement>(null);
   const mobileNotifRef = useRef<HTMLDivElement>(null);
@@ -186,15 +167,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <div className="flex items-center font-medium text-sm">
                   <div className="relative shrink-0">
                     <Bell className="w-5 h-5 shrink-0" />
-                    {notifications.length > 0 && (
+                    {unread > 0 && (
                       <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#F5F5F4]"></span>
                     )}
                   </div>
                   <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>{t("dashboard.notifications")}</span>
                 </div>
-                {notifications.length > 0 && (
+                {unread > 0 && (
                   <span className={`bg-[#8A2532] text-white text-xs font-medium px-2 py-0.5 rounded-md shrink-0 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>
-                    {notifications.length}
+                    {unread}
                   </span>
                 )}
               </button>
@@ -214,17 +195,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <button 
                       type="button" 
                       onClick={() => {
-                        setNotifications([]);
+                        clearAll();
                         setShowNotifications(false);
-                        toast.success("All notifications read");
+                        toast.success("All notifications cleared");
                       }}
                       className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
                     >{useI18nStore.getState().t("extra.t256")}</button>
                   </div>
                   <div className="max-h-[340px] overflow-y-auto">
                     {notifications.map((notif) => (
-                      <button key={notif.id} type="button" className="w-full text-left p-4 border-b border-[#DCDCDA] last:border-0 hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] bg-white">
+                      <button 
+                        key={notif.id} 
+                        type="button" 
+                        onClick={() => markAsRead(notif.id)}
+                        className={`w-full text-left p-4 border-b border-[#DCDCDA] last:border-0 hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] ${notif.read ? 'bg-white opacity-70' : 'bg-[#FAFAFA]'}`}
+                      >
                         <div className="flex items-start gap-3">
+                          {!notif.read && (
+                            <div className="mt-3 w-1.5 h-1.5 bg-[#8A2532] rounded-full shrink-0 shadow-sm" />
+                          )}
                           <div className={`mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${notif.type === 'warning' ? 'bg-[#ECECEA] border-transparent' : 'bg-[#F5F5F4] border-[#DCDCDA]'}`}>
                             {notif.type === "success" && <CheckCircle2 className="w-4 h-4 text-[#4A6B53]" />}
                             {notif.type === "cancel" && <X className="w-4 h-4 text-[#dc2626]" />}
@@ -282,7 +271,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               className="p-2 text-[#4A4E51] hover:text-[#121415] transition-colors relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-xl active:scale-95"
             >
               <Bell className="w-5 h-5" />
-              {notifications.length > 0 && (
+              {unread > 0 && (
                 <span className="absolute top-2 right-2 w-2 h-2 bg-[#8A2532] rounded-full border border-[#ECECEA]"></span>
               )}
             </button>
@@ -301,17 +290,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <button 
                       type="button" 
                       onClick={() => {
-                        setNotifications([]);
+                        clearAll();
                         setShowMobileNotifications(false);
-                        toast.success("All notifications read");
+                        toast.success("All notifications cleared");
                       }}
                       className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
                     >{useI18nStore.getState().t("extra.t256")}</button>
                   </div>
                   <div className="max-h-[300px] overflow-y-auto">
                     {notifications.map((notif) => (
-                      <button key={notif.id} type="button" className="w-full text-left p-3 sm:p-4 border-b border-[#DCDCDA] last:border-0 hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] bg-white">
+                      <button 
+                        key={notif.id} 
+                        type="button" 
+                        onClick={() => markAsRead(notif.id)}
+                        className={`w-full text-left p-3 sm:p-4 border-b border-[#DCDCDA] last:border-0 hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] ${notif.read ? 'bg-white opacity-70' : 'bg-[#FAFAFA]'}`}
+                      >
                         <div className="flex items-start gap-3">
+                          {!notif.read && (
+                            <div className="mt-3 w-1.5 h-1.5 bg-[#8A2532] rounded-full shrink-0 shadow-sm" />
+                          )}
                           <div className={`mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${notif.type === 'warning' ? 'bg-[#ECECEA] border-transparent' : 'bg-[#F5F5F4] border-[#DCDCDA]'}`}>
                             {notif.type === "success" && <CheckCircle2 className="w-4 h-4 text-[#4A6B53]" />}
                             {notif.type === "cancel" && <X className="w-4 h-4 text-[#dc2626]" />}

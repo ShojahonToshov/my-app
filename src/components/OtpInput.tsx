@@ -58,7 +58,10 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
 
       <form onSubmit={handleSubmit} className="w-full max-w-sm">
         <div className="mb-6">
+          <label htmlFor="otp-code" className="sr-only">Enter code</label>
           <input
+            id="otp-code"
+            name="otp-code"
             type="text"
             maxLength={6}
             value={code}

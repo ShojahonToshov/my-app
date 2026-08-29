@@ -545,7 +545,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                               {venue.is_paused ? (
                                 <div className="relative group inline-block">
                                   <Badge variant="dark" icon={Lock} className="!bg-[#8A2532] !text-white backdrop-blur-md border-none cursor-pointer hover:!bg-[#8A2532]/90">{t("app.t12")}</Badge>
-                                  <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-[#DCDCDA] z-[60] text-left opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none">
+                                  <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-[#DCDCDA] z-30 text-left opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none">
                                     <p className="text-xs font-semibold text-[#121415] mb-1 flex items-center gap-1.5">
                                       <AlertCircle className="w-3.5 h-3.5 text-[#8A2532]" /> {t("extra.t522")}</p>
                                     <p className="text-[11px] text-[#4A4E51] leading-relaxed">
@@ -555,7 +555,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                               ) : (
                                 <div className="relative group inline-block">
                                   <Badge variant="dark" icon={Unlock} className="!bg-[#4a6b53] !text-white backdrop-blur-md border-none cursor-pointer hover:!bg-[#4a6b53]/90">{t("app.t13")}</Badge>
-                                  <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-[#DCDCDA] z-[60] text-left opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none">
+                                  <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-[#DCDCDA] z-30 text-left opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none">
                                     <p className="text-xs font-semibold text-[#121415] mb-1 flex items-center gap-1.5">
                                       <CheckCircle2 className="w-3.5 h-3.5 text-[#4a6b53]" /> {t("extra.t524")}</p>
                                     <p className="text-[11px] text-[#4A4E51] leading-relaxed">

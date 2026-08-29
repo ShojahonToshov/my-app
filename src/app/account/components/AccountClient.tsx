@@ -16,30 +16,31 @@ export const fadeUp = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0,
 export const staggerContainer = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
 const modalBackdrop = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.3 } }, exit: { opacity: 0, transition: { duration: 0.2 } } };
 const modalContent = { hidden: { opacity: 0, scale: 0.95, y: 10 }, show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const } }, exit: { opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.2 } } };
+import { useNotificationStore } from "@/stores/notificationStore";
 
 export function NotificationsDropdown() {
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState([
-    { id: 1, title: "Booking confirmed", message: "Your appointment at Chop-Chop Barbershop is confirmed for tomorrow 14:00.", time: "2 hours ago", type: "success" },
-    { id: 2, title: "Review reminder", message: "How was your visit to Glow Beauty Studio? Leave a review!", time: "1 day ago", type: "info" }
-  ]);
+  const { notifications, clearAll, markAsRead, unreadCount } = useNotificationStore();
+  const unread = unreadCount();
+  
   return (
     <div className="relative hidden sm:block shrink-0">
       <button aria-label={useI18nStore.getState().t("extra.t261")} onClick={() => notifications.length > 0 ? setShowNotifications(!showNotifications) : toast.info("No new notifications")} className="relative p-2.5 text-[#4A4E51] hover:text-[#121415] rounded-full hover:bg-white border border-transparent hover:border-[#DCDCDA] transition-all active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
         <Bell className="w-5 h-5" />
-        {notifications.length > 0 && <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#ECECEA]"></span>}
+        {unread > 0 && <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[#8A2532] rounded-full border border-[#ECECEA]"></span>}
       </button>
       <AnimatePresence>
         {showNotifications && (
           <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} transition={{ duration: 0.2 }} className="absolute top-full right-0 mt-2 w-[340px] bg-white rounded-2xl shadow-lg border border-[#DCDCDA] overflow-hidden z-[99999] origin-top-right">
             <div className="flex items-center justify-between p-5 border-b border-[#DCDCDA] bg-white">
               <span className="font-medium text-[#121415] text-base tracking-tight">{useI18nStore.getState().t("extra.t261")}</span>
-              <button type="button" onClick={() => { setNotifications([]); setShowNotifications(false); toast.success("Notifications cleared"); }} className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded">{useI18nStore.getState().t("extra.t256")}</button>
+              <button type="button" onClick={() => { clearAll(); setShowNotifications(false); toast.success("Notifications cleared"); }} className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded">{useI18nStore.getState().t("extra.t256")}</button>
             </div>
             <div className="max-h-[340px] overflow-y-auto">
               {notifications.map((notif) => (
-                <button key={notif.id} type="button" className="w-full text-left p-4 border-b border-[#DCDCDA] last:border-0 hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] bg-white">
+                <button key={notif.id} type="button" onClick={() => markAsRead(notif.id)} className={`w-full text-left p-4 border-b border-[#DCDCDA] last:border-0 hover:bg-[#F5F5F4] transition-colors flex items-center justify-between group outline-none focus-visible:bg-[#F5F5F4] ${notif.read ? 'bg-white opacity-70' : 'bg-[#FAFAFA]'}`}>
                   <div className="flex items-start gap-3">
+                    {!notif.read && <div className="mt-3 w-1.5 h-1.5 bg-[#8A2532] rounded-full shrink-0 shadow-sm" />}
                     <div className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border bg-[#F5F5F4] border-[#DCDCDA]">
                       {notif.type === "success" ? <CheckCircle2 className="w-4 h-4 text-[#4A6B53]" /> : <Bell className="w-4 h-4 text-[#4A4E51]" />}
                     </div>
