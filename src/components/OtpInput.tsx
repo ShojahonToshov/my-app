@@ -33,11 +33,13 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
 
   useEffect(() => {
     if (code.length === 6 && !isVerifying && code !== lastVerifiedCodeRef.current) {
-      lastVerifiedCodeRef.current = code;
       const timerId = setTimeout(async () => {
+        lastVerifiedCodeRef.current = code;
         setIsVerifying(true);
         try {
           await onVerifyRef.current(code);
+        } catch (err) {
+          console.error("[OtpInput] onVerify error:", err);
         } finally {
           setIsVerifying(false);
         }
