@@ -147,7 +147,7 @@ function CustomSelect({ value, options, onChange, className, iconMap }: CustomSe
 // ---------------------------------------------
 
 const TABS = [
-  { id: "profile", label: "Profile", icon: Store },
+  { id: "profile", label: useI18nStore.getState().t("extra.t368"), icon: Store },
   { id: "schedule", label: "Working Hours", icon: CalendarClock },
   { id: "services", label: "Services", icon: Scissors },
   { id: "team", label: "Team", icon: Users },
@@ -558,13 +558,11 @@ export default function Settings() {
                         className="px-4 py-2 bg-white text-sm font-medium flex items-center gap-1.5 text-[#121415] border border-[#DCDCDA] rounded-xl hover:bg-[#F5F5F4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
                       >
                         <Plus className="w-4 h-4" />
-                        Add Link
-                      </button>
+                        {t("extra.t499")}</button>
                     </div>
                     {venueProfile.socialLinks.length === 0 ? (
                       <div className="text-sm text-[#8B9194] bg-[#F5F5F4] p-4 rounded-xl border border-dashed border-[#DCDCDA] text-center">
-                        No social links added yet.
-                      </div>
+                        {t("extra.t500")}</div>
                     ) : (
                       <div className="space-y-3">
                         {venueProfile.socialLinks.map((link, idx) => (
@@ -626,8 +624,7 @@ export default function Settings() {
 
                   <div className="pt-6 border-t border-[#DCDCDA] flex justify-end">
                     <button type="submit" className="px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 w-full sm:w-auto">
-                      Save Profile
-                    </button>
+                      {t("extra.t501")}</button>
                   </div>
                 </form>
               </div>
@@ -669,8 +666,7 @@ export default function Settings() {
                         </div>
                       ) : (
                         <div className="text-xs font-medium text-[#8B9194] px-4 w-full sm:w-auto text-left sm:text-right">
-                          Day off
-                        </div>
+                          {t("extra.t502")}</div>
                       )}
                     </div>
                   ))}
@@ -678,8 +674,7 @@ export default function Settings() {
 
                 <div className="pt-6 border-t border-[#DCDCDA] flex justify-end">
                   <button type="button" onClick={saveWorkingHours} className="px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 w-full sm:w-auto">
-                    Save Working Hours
-                  </button>
+                    {t("extra.t503")}</button>
                 </div>
               </div>
             )}
@@ -693,8 +688,7 @@ export default function Settings() {
                     <p className="text-sm text-[#4A4E51] font-medium mt-1">{t("extra.t17")}</p>
                   </div>
                   <button type="button" onClick={() => openServiceModal()} className="bg-[#121415] text-white px-5 py-3 rounded-xl text-sm font-medium shadow-sm hover:opacity-90 transition-all flex justify-center items-center gap-2 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
-                    <Plus className="w-4 h-4" /> Add Service
-                  </button>
+                    <Plus className="w-4 h-4" /> {t("extra.t504")}</button>
                 </div>
 
                 <div className="space-y-3">
@@ -735,8 +729,7 @@ export default function Settings() {
                     <p className="text-sm text-[#4A4E51] font-medium mt-1">{t("extra.t18")}</p>
                   </div>
                   <button type="button" onClick={() => { setIsMasterModalOpen(true); setSpecialistFormName(""); }} className="bg-[#121415] text-white px-5 py-3 rounded-xl text-sm font-medium shadow-sm hover:opacity-90 transition-all flex justify-center items-center gap-2 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
-                    <UserPlus className="w-4 h-4" /> Add Specialist
-                  </button>
+                    <UserPlus className="w-4 h-4" /> {t("extra.t505")}</button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -827,8 +820,7 @@ export default function Settings() {
 
                 <div className="pt-8 mt-6 border-t border-[#DCDCDA] flex justify-end">
                   <button type="button" onClick={savePolicies} className="px-8 py-3 bg-[#121415] text-white hover:opacity-90 rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 w-full sm:w-auto">
-                    <Save className="w-4 h-4" /> Save Policies
-                  </button>
+                    <Save className="w-4 h-4" /> {t("extra.t506")}</button>
                 </div>
               </div>
             )}
@@ -843,7 +835,7 @@ export default function Settings() {
           <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <button type="button" aria-label={useI18nStore.getState().t("extra.t128")} onClick={() => setIsServiceModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">
-              <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{editingServiceId ? "Edit Service" : "New Service"}</h2>
+              <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{editingServiceId ? t("extra.t507") : t("extra.t508")}</h2>
             </div>
             <form onSubmit={handleServiceSubmit} className="p-6 space-y-4">
               <div>
@@ -896,7 +888,7 @@ onChange={(e) => {
                 </div>
               </div>
               <button type="submit" className="w-full mt-4 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm hover:opacity-90 transition-all flex justify-center items-center shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
-                {editingServiceId ? "Save Changes" : "Save Service"}
+                {editingServiceId ? t("extra.t509") : t("extra.t510")}
               </button>
             </form>
           </div>
@@ -929,8 +921,7 @@ onChange={(e) => {
                 />
               </div>
               <button type="submit" className="w-full mt-4 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm hover:opacity-90 transition-all shadow-sm flex justify-center items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
-                Save Specialist
-              </button>
+                {t("extra.t511")}</button>
             </form>
           </div>
         </div>

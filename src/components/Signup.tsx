@@ -209,8 +209,7 @@ export default function Signup() {
                 iconPosition="right"
                 isLoading={isSubmitting}
               >
-                Continue
-              </Button>
+                {t("extra.t401")}</Button>
 
               <p className="text-center text-sm text-[#4A4E51] font-medium mt-4 w-full">
                 <span className="mr-1">{t("auth.hasAccount")}</span>

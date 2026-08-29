@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/hooks/useI18n";
 import { useI18nStore } from "@/stores/i18nStore";
 
 
@@ -22,6 +23,8 @@ export interface AdminUser {
 }
 
 export default function AdminPage() {
+  const { t } = useI18n();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [login, setLogin] = useState("");
@@ -141,18 +144,15 @@ export default function AdminPage() {
         <div className="flex justify-between items-center bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
           <div>
             <h1 className="text-2xl font-bold text-[#121415]">{useI18nStore.getState().t("extra.t227")}</h1>
-            <p className="text-sm text-gray-500 mt-1">Total users: {users.length}</p>
+            <p className="text-sm text-gray-500 mt-1">{t("extra.t415")}{users.length}</p>
           </div>
           <div className="flex items-center gap-3">
             <Button variant="danger" onClick={handleDeleteAllClick} disabled={users.length === 0}>
-              Delete All
-            </Button>
+              {t("extra.t416")}</Button>
             <Button variant="outline" onClick={fetchUsers} isLoading={isLoading}>
-              Refresh
-            </Button>
+              {t("extra.t417")}</Button>
             <Button variant="secondary" onClick={handleLogout}>
-              Logout
-            </Button>
+              {t("extra.t418")}</Button>
           </div>
         </div>
 
@@ -177,14 +177,12 @@ export default function AdminPage() {
                 {isLoading && users.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="px-6 py-12 text-center text-gray-500 font-medium">
-                      Loading platform accounts...
-                    </td>
+                      {t("extra.t419")}</td>
                   </tr>
                 ) : users.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="px-6 py-12 text-center text-gray-500 font-medium">
-                      No accounts found.
-                    </td>
+                      {t("extra.t420")}</td>
                   </tr>
                 ) : (
                   users.map((user) => (
@@ -266,18 +264,17 @@ export default function AdminPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 border border-gray-100">
             <h2 className="text-xl font-bold text-gray-900 mb-2">
-              {modalConfig.mode === 'all' ? 'Delete All Users?' : 'Delete User?'}
+              {modalConfig.mode === 'all' ? t("extra.t421") : t("extra.t422")}
             </h2>
             <p className="text-gray-500 mb-6 text-sm">
               {modalConfig.mode === 'all' 
-                ? 'Are you sure you want to delete ALL users from the platform? This action is permanent and cannot be undone.'
-                : 'Are you sure you want to delete this user? This action is permanent and cannot be undone.'}
+                ? t("extra.t423")
+                : t("extra.t424")}
             </p>
             <div className="flex gap-3 justify-end">
               <Button variant="outline" onClick={() => setModalConfig({ isOpen: false, mode: 'single' })}>{useI18nStore.getState().t("extra.t284")}</Button>
               <Button variant="danger" onClick={confirmDelete}>
-                Confirm Delete
-              </Button>
+                {t("extra.t425")}</Button>
             </div>
           </div>
         </div>

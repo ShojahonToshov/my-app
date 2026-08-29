@@ -201,7 +201,7 @@ function CustomDatePicker({ value, onChange, className, disabled = false }: Cust
       >
         <div className="flex items-center">
           <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-          <span className="pl-6" suppressHydrationWarning>{value ? format(parseISO(value), "MMM dd, yyyy") : "Select date"}</span>
+          <span className="pl-6" suppressHydrationWarning>{value ? format(parseISO(value), "MMM dd, yyyy") : "Select Date"}</span>
         </div>
         <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "text-[#121415] rotate-180" : "text-[#8B9194]"}`} />
       </button>
@@ -365,7 +365,7 @@ export default function Schedule() {
             time: (b.time || "09:00").substring(0, 5),
             service: b.service_name || "Haircut",
             masterName: b.staff_name || "Any available",
-            status: b.status === "in_progress" ? "in_progress" : b.status === "completed" ? "completed" : "waiting",
+            status: b.status === "in_progress" ? "in_progress" : b.status === t("extra.t387") ? t("extra.t387") : "waiting",
             duration: 30
           })) as Appointment[];
           setAppointments(mappedAppointments);
@@ -685,7 +685,7 @@ export default function Schedule() {
                                 {apptsInSlot.map(appt => (
                                   <div 
                                     key={appt.id} 
-                                    className={`w-full bg-white border border-[#DCDCDA] rounded-xl p-2 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group/card flex flex-col justify-between ${appt.status === 'completed' ? 'opacity-60' : ''}`}
+                                    className={`w-full bg-white border border-[#DCDCDA] rounded-xl p-2 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group/card flex flex-col justify-between ${appt.status === t("extra.t387") ? 'opacity-60' : ''}`}
                                     onClick={(e) => e.stopPropagation()}
                                   >
                                     <div className="flex justify-between items-start mb-1.5">
@@ -841,15 +841,14 @@ export default function Schedule() {
                 <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("app.t44")}</label>
                 <CustomSelect 
                   value={newStatus}
-                  options={["waiting", "in_progress", "completed"]}
+                  options={["waiting", "in_progress", t("extra.t387")]}
                   onChange={(val) => setNewStatus(val as AppointmentStatus)}
                   className="w-full"
                 />
               </div>
 
               <button type="submit" className="w-full mt-4 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm hover:opacity-90 transition-all flex justify-center items-center shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
-                Confirm Booking
-              </button>
+                {t("extra.t361")}</button>
             </form>
           </div>
         </div>
@@ -862,8 +861,8 @@ export default function Schedule() {
         onConfirm={confirmDelete}
         title={useI18nStore.getState().t("extra.t216")}
         description="Are you sure you want to cancel this booking? This action cannot be undone."
-        confirmText="Cancel Booking"
-        cancelText="Keep"
+        confirmText={t("extra.t62")}
+        cancelText={t("extra.t498")}
         isDestructive={true}
       />
     </div>

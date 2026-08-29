@@ -312,7 +312,7 @@ export default function CustomerBooking() {
         .select('time')
         .eq('business_id', venueData.id)
         .eq('date', selectedDate)
-        .in('status', ['pending', 'confirmed', 'in_progress', 'waiting']);
+        .in('status', ['pending', 'confirmed', 'in_progress', t("extra.t346")]);
         
       if (selectedMaster !== "any") {
         query = query.eq('staff_id', selectedMaster);
@@ -618,11 +618,9 @@ export default function CustomerBooking() {
                   <Clock className="w-8 h-8 text-[#4A4E51]" />
                 </div>
                 <h2 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
-                  Bookings Paused
-                </h2>
+                  {t("extra.t347")}</h2>
                 <p className="text-[#4A4E51] font-medium max-w-md">
-                  This business has temporarily paused new bookings. Please check back later.
-                </p>
+                  {t("extra.t348")}</p>
               </motion.div>
             ) : (
             <motion.div
@@ -655,8 +653,7 @@ export default function CustomerBooking() {
                   <div className="space-y-3">
                     {venueData.services.length === 0 ? (
                       <div className="p-5 text-center text-sm font-medium text-[#4A4E51] bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA]">
-                        No services available at the moment.
-                      </div>
+                        {t("extra.t349")}</div>
                     ) : (
                       venueData.services.map((service: any) => {
                         const isActive = selectedService === service.id;
@@ -710,8 +707,7 @@ export default function CustomerBooking() {
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {venueData.staff.length === 0 ? (
                       <div className="col-span-full p-5 text-center text-sm font-medium text-[#4A4E51] bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA]">
-                        No professionals available at the moment.
-                      </div>
+                        {t("extra.t350")}</div>
                     ) : (
                       venueData.staff.map((staff: any) => {
                         const isActive = selectedMaster === staff.id;
@@ -759,8 +755,7 @@ export default function CustomerBooking() {
                     <span className="relative z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white text-[#121415] text-xs font-bold border border-[#DCDCDA] shrink-0">
                       3
                     </span>
-                    Date & Time
-                  </h2>
+                    {t("extra.t351")}</h2>
 
                   <div className="flex gap-2.5 overflow-x-auto pb-4 pt-1 px-1 -mx-1 no-scrollbar">
                     {dates.map((date) => {
@@ -835,15 +830,13 @@ export default function CustomerBooking() {
 
                     <div className="flex flex-col items-center justify-center p-8 bg-white border border-[#DCDCDA] rounded-2xl shadow-sm">
                       <p className="text-sm font-medium text-[#4A4E51] mb-5 text-center">
-                        You need to have an account to confirm your booking.
-                      </p>
+                        {t("extra.t352")}</p>
                       <Button
                         onClick={() => router.push(`/login?redirect=/booking?id=${venueId}`)}
                         variant="secondary"
                         className="px-6 py-3"
                       >
-                        Log in or Register
-                      </Button>
+                        {t("extra.t353")}</Button>
                     </div>
                   </div>
                 )}
@@ -869,12 +862,12 @@ export default function CustomerBooking() {
                       <ShieldCheck className="w-6 h-6 text-[#121415] shrink-0" />
                       <div>
                         <p className="font-semibold text-[#121415] text-base mb-1">
-                          Free cancellation up to {(venueData.policies?.cancelWindow || "12 hours before").replace(' before', '')}
+                          {t("extra.t354")}{(venueData.policies?.cancelWindow || "12 hours before").replace(' before', '')}
                         </p>
                         <p className="text-sm font-medium text-[#4A4E51] leading-relaxed">
                           {venueData.policies.requireCardForLowKarma
-                            ? "Please respect the professionals' time. Frequent late cancellations or no-shows will lower your karma score, requiring prepayments for future bookings."
-                            : "Please respect the professionals' time. We kindly ask you to arrive on time or cancel your appointment in advance."}
+                            ? t("extra.t355")
+                            : t("extra.t356")}
                         </p>
                       </div>
                     </div>
@@ -883,8 +876,7 @@ export default function CustomerBooking() {
                       <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-xl border border-[#DCDCDA] mb-6 w-max max-w-full shadow-sm">
                         <Star className="w-4 h-4 fill-[#8A2532] text-[#8A2532] shrink-0" />
                         <span className="text-xs font-bold uppercase tracking-widest text-[#121415] truncate">
-                          Karma: {userKarma}%. No prepayment needed.
-                        </span>
+                          {t("extra.t357")}{userKarma}{t("extra.t358")}</span>
                       </div>
                     )}
 
@@ -917,8 +909,7 @@ export default function CustomerBooking() {
                             : "text-[#4A4E51] group-hover:text-[#121415]"
                         }`}
                       >
-                        I commit to arriving on time or canceling in advance.
-                      </span>
+                        {t("extra.t359")}</span>
                     </motion.label>
                   </div>
                 </div>
@@ -936,7 +927,7 @@ export default function CustomerBooking() {
                   shape="rounded"
                   className="w-full py-4 text-sm"
                 >
-                  {isSubmitting ? "Confirming..." : "Confirm Booking"}
+                  {isSubmitting ? t("extra.t360") : t("extra.t361")}
                 </Button>
               </div>
             </motion.div>
@@ -955,8 +946,7 @@ export default function CustomerBooking() {
             >
               <section>
                 <h2 className="text-xl font-semibold text-[#121415] mb-4 tracking-tight">
-                  About us
-                </h2>
+                  {t("extra.t12")}</h2>
                 <p className="text-[#4A4E51] font-medium leading-relaxed text-sm md:text-base whitespace-pre-wrap">
                   {venueData.about.description}
                 </p>
@@ -971,8 +961,7 @@ export default function CustomerBooking() {
                       {venueData.address}
                     </p>
                     <p className="text-sm font-medium text-[#4A4E51] mt-1 truncate">
-                      Landmark: near the business center
-                    </p>
+                      {t("extra.t362")}</p>
                   </div>
                 </div>
 
@@ -993,8 +982,7 @@ export default function CustomerBooking() {
                       <Map className="w-5 h-5" />
                     </div>
                     <span className="text-xs uppercase tracking-widest font-bold text-[#121415] bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg border border-[#DCDCDA] text-center">
-                      Show on map
-                    </span>
+                      {t("extra.t363")}</span>
                   </div>
                 </div>
               </section>
@@ -1036,8 +1024,7 @@ export default function CustomerBooking() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-xs uppercase tracking-widest font-bold text-[#4A4E51] mb-1 truncate">
-                          Phone
-                        </p>
+                          {t("extra.t364")}</p>
                         <p className="text-sm font-semibold text-[#121415] truncate">
                           {formatPhone(venueData.about.contacts.phone)}
                         </p>
@@ -1130,8 +1117,7 @@ export default function CustomerBooking() {
                     </div>
                   ) : (
                     <div className="text-center py-8 text-[#8B9194] text-sm">
-                      No reviews yet. Be the first to leave one after your visit!
-                    </div>
+                      {t("extra.t365")}</div>
                   )}
                 </section>
 
@@ -1151,7 +1137,7 @@ export default function CustomerBooking() {
             shape="rounded"
             className="w-full py-3.5"
           >
-            <span className="truncate">{isSubmitting ? "Confirming..." : "Confirm Booking"}</span>
+            <span className="truncate">{isSubmitting ? t("extra.t360") : t("extra.t361")}</span>
           </Button>
         ) : (
           <Button

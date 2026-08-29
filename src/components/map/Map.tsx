@@ -1,4 +1,5 @@
 'use client';
+import { useI18n } from "@/hooks/useI18n";
 import { useI18nStore } from "@/stores/i18nStore";
 
 
@@ -82,6 +83,8 @@ const createCustomIcon = (rating: number, isActive: boolean, name: string) => {
 const DEFAULT_CENTER: [number, number] = [41.3775, 64.5853]; // Center of Uzbekistan
 
 export default function Map({ venues, center = DEFAULT_CENTER, zoom = 6, activeVenueId, onVenueClick }: MapProps) {
+  const { t } = useI18n();
+
   // Fix for Next.js SSR and client-side mismatch in generating random points
   const [mounted, setMounted] = useState(false);
   const [venueCoordinates, setVenueCoordinates] = useState<Record<string, [number, number]>>({});

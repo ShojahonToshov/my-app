@@ -365,8 +365,7 @@ export default function Landing() {
                   <div className="absolute top-[-50%] left-[-20%] w-[140%] h-[200%] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent pointer-events-none opacity-50" />
                   <div className="relative z-10">
                     <p className="text-[10px] uppercase tracking-widest font-bold text-white/70 mb-2 truncate">
-                      Scheduled for
-                    </p>
+                      {t("extra.t369")}</p>
                     <h2 className="text-6xl sm:text-7xl font-semibold mb-6 tracking-tighter text-white truncate w-full">
                       14:00
                     </h2>
@@ -381,8 +380,7 @@ export default function Landing() {
                 <div className="p-6 pt-8 pb-4 flex flex-col min-w-0 w-full">
                   <div className="text-center mb-8 min-w-0 w-full flex flex-col items-center">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A2532] bg-[#8A2532]/10 px-3 py-1 rounded-full mb-3 inline-flex">
-                      Hair Salon
-                    </span>
+                      {t("extra.t370")}</span>
                     <h1 className="text-xl font-semibold text-[#121415] tracking-tight leading-snug">{useI18nStore.getState().t("extra.t262")}</h1>
                     <p className="text-sm font-medium text-[#4A4E51] mt-1 leading-relaxed">{useI18nStore.getState().t("extra.t198")}</p>
                   </div>
@@ -392,8 +390,7 @@ export default function Landing() {
                     <p className="text-xs font-medium text-[#121415] leading-relaxed flex items-center justify-center gap-2">
                       <Info className="w-4 h-4 text-[#8A2532] shrink-0" />
                       <span>
-                        The professional will be available exactly on time.
-                      </span>
+                        {t("extra.t371")}</span>
                     </p>
                   </div>
 
@@ -471,16 +468,13 @@ export default function Landing() {
                   <div className="flex flex-col gap-3 shrink-0">
                     <div className="grid grid-cols-2 gap-3">
                       <Button variant="outline" shape="rounded" icon={Navigation} className="h-12 w-full text-sm">
-                        Directions
-                      </Button>
+                        {t("app.t35")}</Button>
                       <Button variant="outline" shape="rounded" icon={PhoneCall} className="h-12 w-full text-sm">
-                        Contact
-                      </Button>
+                        {t("app.t36")}</Button>
                     </div>
 
                     <Button variant="ghost" shape="rounded" className="h-12 w-full text-xs font-bold uppercase tracking-widest text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5">
-                      Cancel booking
-                    </Button>
+                      {t("app.t37")}</Button>
                   </div>
                 </div>
               </div>
@@ -537,8 +531,7 @@ export default function Landing() {
                            <div className="text-sm md:text-base font-bold text-[#121415]">{t("extra.t37")}</div>
                            <div className="text-xs font-medium text-[#4A6B53] flex items-center gap-1">
                              <div className="w-1.5 h-1.5 rounded-full bg-[#4A6B53]" />
-                             Online & Accepting Bookings
-                           </div>
+                             {t("extra.t372")}</div>
                         </div>
                      </div>
                      <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-[#121415] text-white rounded-lg text-xs font-semibold shadow-sm">
@@ -572,11 +565,9 @@ export default function Landing() {
                               </div>
                               <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#F5F5F4] pl-2">
                                  <span className="text-[9px] font-medium uppercase tracking-wider text-[#4A4E51] bg-[#F5F5F4] px-1.5 py-0.5 rounded border border-[#DCDCDA]">
-                                    Any Professional
-                                 </span>
+                                    {t("extra.t373")}</span>
                                  <button type="button" className="px-2 py-1 bg-[#4a6b53]/10 text-[#4a6b53] rounded text-[9px] font-medium shadow-sm flex items-center gap-1">
-                                    <Play className="w-2 h-2" /> Call In
-                                 </button>
+                                    <Play className="w-2 h-2" /> {t("extra.t374")}</button>
                               </div>
                            </div>
 
@@ -593,11 +584,9 @@ export default function Landing() {
                               </div>
                               <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#F5F5F4] pl-2">
                                  <span className="text-[9px] font-medium uppercase tracking-wider text-[#4A4E51] bg-[#F5F5F4] px-1.5 py-0.5 rounded border border-[#DCDCDA]">
-                                    Any Professional
-                                 </span>
+                                    {t("extra.t373")}</span>
                                  <button type="button" className="px-2 py-1 bg-[#4a6b53]/10 text-[#4a6b53] rounded text-[9px] font-medium shadow-sm flex items-center gap-1">
-                                    <Play className="w-2 h-2" /> Call In
-                                 </button>
+                                    <Play className="w-2 h-2" /> {t("extra.t374")}</button>
                               </div>
                            </div>
                         </div>
@@ -627,12 +616,10 @@ export default function Landing() {
                               </div>
                               <div className="flex flex-col gap-2 pl-2 border-t border-[#DCDCDA] pt-3">
                                  <button type="button" className="w-full py-1.5 bg-[#121415] text-white rounded-lg font-medium text-[10px] shadow-sm flex items-center justify-center gap-1">
-                                    <CheckCircle2 className="w-3 h-3 text-white/70" /> Complete & Call Next
-                                 </button>
+                                    <CheckCircle2 className="w-3 h-3 text-white/70" /> {t("extra.t375")}</button>
                                  <div className="flex items-center gap-2">
                                     <button type="button" className="flex-1 py-1.5 bg-white text-[#121415] border border-[#DCDCDA] rounded-lg font-medium text-[9px] flex items-center justify-center gap-1">
-                                       <TimerReset className="w-2.5 h-2.5" /> +10 min delay
-                                    </button>
+                                       <TimerReset className="w-2.5 h-2.5" /> {t("extra.t376")}</button>
                                  </div>
                               </div>
                            </div>
@@ -691,8 +678,7 @@ export default function Landing() {
               >
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#8A2532]/20 border border-[#8A2532]/30 text-[#8A2532] text-xs font-bold uppercase tracking-wider">
                   <ShieldCheck className="w-4 h-4" />
-                  Business Protection
-                </div>
+                  {t("extra.t377")}</div>
                 <h2 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight">{t("landing.stopLosingMoney")}</h2>
                 <p className="text-[#8B9194] text-lg font-medium leading-relaxed max-w-lg">{t("landing.karmaDesc")}</p>
 
@@ -766,8 +752,7 @@ export default function Landing() {
                        <span className="text-xs text-[#4A4E51] font-medium leading-tight">{t("extra.t49")}</span>
                      </div>
                      <Button variant="secondary" shape="pill" className="w-full text-xs">
-                       Pay Deposit & Book
-                     </Button>
+                       {t("extra.t378")}</Button>
                   </div>
                 </div>
               </motion.div>
@@ -858,8 +843,7 @@ export default function Landing() {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
-                        Discover
-                      </h3>
+                        {t("extra.t379")}</h3>
                       <p className="text-[#4A4E51] font-medium leading-relaxed">
                         Search for premium services by category, precise
                         location, or find your favorite professional.
@@ -873,8 +857,7 @@ export default function Landing() {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
-                        Select & Book
-                      </h3>
+                        {t("extra.t380")}</h3>
                       <p className="text-[#4A4E51] font-medium leading-relaxed">
                         Choose a time that fits your schedule from real-time
                         available slots. Confirm in one tap.
@@ -888,8 +871,7 @@ export default function Landing() {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">
-                        Experience
-                      </h3>
+                        {t("extra.t381")}</h3>
                       <p className="text-[#4A4E51] font-medium leading-relaxed">
                         Arrive and enjoy. Your appointment is confirmed
                         instantly and synced to your schedule.
@@ -946,8 +928,7 @@ export default function Landing() {
         <section className="py-24 px-6 bg-[#ECECEA] border-y border-[#DCDCDA]">
           <div className="max-w-7xl mx-auto text-center">
             <h2 className="text-3xl md:text-5xl font-semibold text-[#121415] tracking-tight mb-16">
-              Trusted by those who know.
-            </h2>
+              {t("extra.t382")}</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
               {[
@@ -1003,19 +984,19 @@ export default function Landing() {
             <div className="divide-y divide-[#DCDCDA]">
               {[
                 {
-                  q: "Is Elara free to use?",
+                  q: t("extra.t383"),
                   a: "Yes, booking through Elara is completely free for customers. You only pay for the services you book directly at the venue.",
                 },
                 {
-                  q: "Can I cancel or reschedule my appointment?",
+                  q: t("extra.t384"),
                   a: "Absolutely. You can manage all your bookings directly from your account dashboard, subject to the venue's policy.",
                 },
                 {
-                  q: "Are the reviews authentic?",
+                  q: t("extra.t385"),
                   a: "We only allow reviews from customers who have actually completed an appointment at the venue.",
                 },
                 {
-                  q: "How do I list my business on Elara?",
+                  q: t("extra.t386"),
                   a: "If you own a premium salon or clinic, you can register for our Business Portal to manage operations on the Elara network.",
                 },
               ].map((faq, i) => (

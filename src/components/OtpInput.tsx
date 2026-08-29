@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/hooks/useI18n";
 import { useI18nStore } from "@/stores/i18nStore";
 
 import React, { useState, useEffect } from 'react';
@@ -11,6 +12,8 @@ interface OtpInputProps {
 }
 
 export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProps) {
+  const { t } = useI18n();
+
   const [code, setCode] = useState<string>('');
   const [timeLeft, setTimeLeft] = useState<number>(30);
   const [canResend, setCanResend] = useState<boolean>(false);
@@ -47,8 +50,7 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
   return (
     <div className="flex flex-col items-center w-full">
       <h3 className="text-lg font-semibold mb-2 text-center text-gray-800">
-        Verify your number
-      </h3>
+        {t("extra.t398")}</h3>
       <p className="text-sm text-gray-500 mb-6 text-center">
         We've sent a 6-digit code to <br />
         <span className="font-medium text-gray-700">{phone}</span>
@@ -73,8 +75,7 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
           className="w-full mb-4 py-3"
           disabled={code.length !== 6}
         >
-          Verify
-        </Button>
+          {t("extra.t399")}</Button>
       </form>
 
       <div className="text-sm text-center">
@@ -83,8 +84,7 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
             onClick={handleResend}
             className="text-[#121415] hover:underline font-semibold transition-colors"
           >
-            Resend code
-          </button>
+            {t("extra.t400")}</button>
         ) : (
           <span className="text-gray-500 font-medium">
             Resend available in {timeLeft}s

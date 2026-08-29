@@ -1,0 +1,2048 @@
+[
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\account\\components\\AccountClient.tsx",
+    "line": 69,
+    "text": "Karma:",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\account\\components\\AccountClient.tsx",
+    "line": 74,
+    "text": "Reliability Score (",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\account\\components\\AccountClient.tsx",
+    "line": 348,
+    "text": "When you interact with venues or book services, they will appear right here.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\account\\page.tsx",
+    "line": 38,
+    "text": "When you interact with venues or book services, they will appear right here.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\account\\page.tsx",
+    "line": 131,
+    "text": "Hello,",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\account\\page.tsx",
+    "line": 166,
+    "text": "at",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\account\\page.tsx",
+    "line": 176,
+    "text": "Professional:",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\account\\page.tsx",
+    "line": 218,
+    "text": "• Pro:",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\account\\page.tsx",
+    "line": 230,
+    "text": "Rated",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\admin\\page.tsx",
+    "line": 144,
+    "text": "Total users:",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\admin\\page.tsx",
+    "line": 148,
+    "text": "Delete All",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\admin\\page.tsx",
+    "line": 151,
+    "text": "Refresh",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\admin\\page.tsx",
+    "line": 154,
+    "text": "Logout",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\admin\\page.tsx",
+    "line": 180,
+    "text": "Loading platform accounts...",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\admin\\page.tsx",
+    "line": 186,
+    "text": "No accounts found.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\admin\\page.tsx",
+    "line": 269,
+    "text": "Delete All Users?",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\admin\\page.tsx",
+    "line": 269,
+    "text": "Delete User?",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\admin\\page.tsx",
+    "line": 273,
+    "text": "Are you sure you want to delete ALL users from the platform? This action is permanent and cannot be undone.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\admin\\page.tsx",
+    "line": 274,
+    "text": "Are you sure you want to delete this user? This action is permanent and cannot be undone.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\admin\\page.tsx",
+    "line": 279,
+    "text": "Confirm Delete",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 61,
+    "text": "Elara",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 176,
+    "text": "activeNavPill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 246,
+    "text": "Intelligent growth.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 247,
+    "text": "Zero no-shows.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 256,
+    "text": "Stop losing revenue to missed appointments. Elara combines smart deposits with a seamless booking flow to completely protect your time.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 272,
+    "text": "Find Services",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 281,
+    "text": "How it Works",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 323,
+    "text": "Everything you need,",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 323,
+    "text": "elegantly arranged.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 326,
+    "text": "We stripped away the clutter to build a workspace that administrators and professionals actually enjoy using.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 347,
+    "text": "Flow State Booking",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 350,
+    "text": "A beautiful, Kanban-style timeline gives you absolute clarity over your day. Drag, drop, and manage without missing a beat.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 414,
+    "text": "Karma Engine",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 417,
+    "text": "Risky clients automatically pay deposits.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 472,
+    "text": "The Live Ticket",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 475,
+    "text": "Delight your customers with a digital pass that updates in real-time. Navigation, wait times, and direct contact—beautifully organized.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 483,
+    "text": "See how it works",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 520,
+    "text": "Hair Salon",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 528,
+    "text": "Directions",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 553,
+    "text": "Frequently asked questions",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 559,
+    "text": "Is Elara free to use?",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 560,
+    "text": "Elara offers a free tier for individual professionals just starting out. For established salons and larger teams, we provide premium plans that unlock advanced features like the Karma Engine and comprehensive analytics.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 564,
+    "text": "Can I cancel or reschedule my appointment?",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 565,
+    "text": "Yes, clients can easily manage their bookings directly through the Live Ticket link sent via SMS or email, subject to the salon's individual cancellation policy.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 569,
+    "text": "Are the reviews authentic?",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 570,
+    "text": "Absolutely. Only clients who have completed an appointment through Elara are eligible to leave a verified review, ensuring total transparency.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 574,
+    "text": "How do I list my business on Elara?",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 575,
+    "text": "You can list your business by signing up for a Business Account. The onboarding process takes less than 5 minutes, allowing you to start accepting bookings immediately.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 593,
+    "text": "Ready to upgrade",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 593,
+    "text": "your salon?",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 596,
+    "text": "Join the businesses that have completely eliminated no-shows and elevated their client experience with Elara.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 605,
+    "text": "Create an Account",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 613,
+    "text": "Contact Sales",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 634,
+    "text": "The premium destination for discovering and booking top-tier\r\n              services in your city. Elevating the standard of appointment\r\n              management.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 681,
+    "text": "Platform",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 686,
+    "text": "Search",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 707,
+    "text": "Resources",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 712,
+    "text": "Help Center",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 717,
+    "text": "Guides",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 722,
+    "text": "Blog",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 737,
+    "text": "Company",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 745,
+    "text": "Careers",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 750,
+    "text": "Contact",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\design\\page.tsx",
+    "line": 766,
+    "text": "Elara. All rights reserved.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\pricing\\page.tsx",
+    "line": 20,
+    "text": "Pricing",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\pricing\\page.tsx",
+    "line": 35,
+    "text": "Simple, transparent pricing.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\pricing\\page.tsx",
+    "line": 43,
+    "text": "Whether you're just starting out or scaling a premium salon, Elara aligns with your success. No subscriptions, no hidden fees.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\pricing\\page.tsx",
+    "line": 59,
+    "text": "/ forever",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\pricing\\page.tsx",
+    "line": 62,
+    "text": "Perfect for independent professionals building their client base. Access premium tools completely free.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\pricing\\page.tsx",
+    "line": 71,
+    "text": "(Resets automatically every Monday)",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\pricing\\page.tsx",
+    "line": 82,
+    "text": "Get Started for Free",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\pricing\\page.tsx",
+    "line": 101,
+    "text": "RevShare",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\pricing\\page.tsx",
+    "line": 109,
+    "text": "For established businesses that demand total operational control and powerful no-show protection.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\pricing\\page.tsx",
+    "line": 132,
+    "text": "Join the Network",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 81,
+    "text": "No venues match the selected filters. Try a different category.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 200,
+    "text": "Where to search?",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 215,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 266,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 340,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 354,
+    "text": "My account",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 382,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 402,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 413,
+    "text": "venue",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 413,
+    "text": "venues",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 420,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 432,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 437,
+    "text": "Sort by",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 483,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 499,
+    "text": "Saved only",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 553,
+    "text": "Temporarily Closed",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 556,
+    "text": "This venue is currently closed and not accepting instant walk-ins. You can still make an advance booking, but immediate service is not guaranteed.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 565,
+    "text": "Currently Open",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 568,
+    "text": "This venue is open and currently accepting instant walk-ins and bookings.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 657,
+    "text": "right",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 658,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 667,
+    "text": "right",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 667,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 682,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 683,
+    "text": "Load more venues",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 728,
+    "text": "Venue is Currently Closed",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 731,
+    "text": "is not accepting instant walk-ins right now. You can still make an advance booking for a future date, but immediate service is not guaranteed.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 737,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\search\\components\\SearchClient.tsx",
+    "line": 742,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\xxx\\page.tsx",
+    "line": 21,
+    "text": "Here are 5 top concepts of hover-animations for buttons. All of them correspond to a premium design, but offer a different user experience (UX).",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\xxx\\page.tsx",
+    "line": 28,
+    "text": "1. Elastic Tactile (Apple / iOS Style)",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\xxx\\page.tsx",
+    "line": 57,
+    "text": "View Live Demo",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\xxx\\page.tsx",
+    "line": 67,
+    "text": "2. Deep Lift 3D (Stripe / Vercel Style)",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\xxx\\page.tsx",
+    "line": 96,
+    "text": "View Live Demo",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\xxx\\page.tsx",
+    "line": 106,
+    "text": "3. Icon Reveal (Raycast Style)",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\xxx\\page.tsx",
+    "line": 146,
+    "text": "4. Magnetic Glow (Web3 / AI Style)",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\xxx\\page.tsx",
+    "line": 158,
+    "text": "Create an Account",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\xxx\\page.tsx",
+    "line": 169,
+    "text": "Contact Sales",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\app\\xxx\\page.tsx",
+    "line": 179,
+    "text": "5. Swipe Fill (Editorial / High Fashion Style)",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\AccountSettings.tsx",
+    "line": 218,
+    "text": "Account Settings",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\AccountSettings.tsx",
+    "line": 221,
+    "text": "Manage your personal data and security",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\AccountSettings.tsx",
+    "line": 235,
+    "text": "Customize your appearance with a unique matte color palette.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\AccountSettings.tsx",
+    "line": 245,
+    "text": "Generate Colors",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\AccountSettings.tsx",
+    "line": 299,
+    "text": "new-password",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\AccountSettings.tsx",
+    "line": 309,
+    "text": "Saving...",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\AccountSettings.tsx",
+    "line": 309,
+    "text": "Save changes",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\AccountSettings.tsx",
+    "line": 322,
+    "text": "Log out",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\AccountSettings.tsx",
+    "line": 333,
+    "text": "Deleting...",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\AccountSettings.tsx",
+    "line": 333,
+    "text": "Delete account",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 605,
+    "text": "wait",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 621,
+    "text": "Bookings Paused",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 624,
+    "text": "This business has temporarily paused new bookings. Please check back later.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 658,
+    "text": "No services available at the moment.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 713,
+    "text": "No professionals available at the moment.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 762,
+    "text": "Date & Time",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 838,
+    "text": "You need to have an account to confirm your booking.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 845,
+    "text": "Log in or Register",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 872,
+    "text": "Free cancellation up to",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 876,
+    "text": "Please respect the professionals' time. Frequent late cancellations or no-shows will lower your karma score, requiring prepayments for future bookings.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 877,
+    "text": "Please respect the professionals' time. We kindly ask you to arrive on time or cancel your appointment in advance.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 886,
+    "text": "Karma:",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 886,
+    "text": "%. No prepayment needed.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 920,
+    "text": "I commit to arriving on time or canceling in advance.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 936,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 939,
+    "text": "Confirming...",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 939,
+    "text": "Confirm Booking",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 958,
+    "text": "About us",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 974,
+    "text": "Landmark: near the business center",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 996,
+    "text": "Show on map",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 1039,
+    "text": "Phone",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 1133,
+    "text": "No reviews yet. Be the first to leave one after your visit!",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 1151,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 1154,
+    "text": "Confirming...",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 1154,
+    "text": "Confirm Booking",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\CustomerBooking.tsx",
+    "line": 1163,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Analytics.tsx",
+    "line": 157,
+    "text": "Key business metrics and actionable insights",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Analytics.tsx",
+    "line": 193,
+    "text": "Viewing real-time data for the selected period. Revenue is calculated dynamically based on completed appointments.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Analytics.tsx",
+    "line": 248,
+    "text": "Total",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Analytics.tsx",
+    "line": 268,
+    "text": "Realtime",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Analytics.tsx",
+    "line": 289,
+    "text": "Appointments Rate",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Analytics.tsx",
+    "line": 292,
+    "text": "Visits density for the selected period",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Analytics.tsx",
+    "line": 321,
+    "text": "visits",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Analytics.tsx",
+    "line": 343,
+    "text": "Top Services",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Analytics.tsx",
+    "line": 346,
+    "text": "Revenue drivers for selected period",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Analytics.tsx",
+    "line": 380,
+    "text": "visits",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 313,
+    "text": "No results found",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 313,
+    "text": "No customers found",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 342,
+    "text": "Regular",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 342,
+    "text": "New",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 347,
+    "text": "visits",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 408,
+    "text": "No results found",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 408,
+    "text": "No customers found",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 426,
+    "text": "Regular",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 426,
+    "text": "New",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 485,
+    "text": "!bg-[#F5F5F4] !py-3 !border-[#DCDCDA] text-[#121415] focus:!bg-white focus:!border-[#121415]",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 488,
+    "text": "Adding...",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 488,
+    "text": "Add to Directory",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Customers.tsx",
+    "line": 508,
+    "text": "Are you sure you want to remove this customer from the directory?",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 544,
+    "text": "Resume Bookings",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 544,
+    "text": "Pause Bookings",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 553,
+    "text": "Add Guest",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 591,
+    "text": "min",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 633,
+    "text": "waiting",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 680,
+    "text": "Call In",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 710,
+    "text": "inChair",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 746,
+    "text": "Staff:",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 756,
+    "text": "Complete & Call Next",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 760,
+    "text": "+10 min delay",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 790,
+    "text": "completed",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 899,
+    "text": "off",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Dashboard.tsx",
+    "line": 991,
+    "text": "Save",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 192,
+    "text": "Business security, recovery, and authentication settings",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 220,
+    "text": "Upgrade Plan",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 229,
+    "text": "Primary contact, recovery details, and authentication settings",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 255,
+    "text": "!bg-[#F5F5F4] !border-[#DCDCDA] !h-[46px] !py-0 text-[#121415] focus:!bg-white focus:!border-[#121415] focus:!ring-[#121415]/10",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 288,
+    "text": "Saving...",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 288,
+    "text": "Save Security Info",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 305,
+    "text": "Expires",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 309,
+    "text": "Update",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 328,
+    "text": "Enabled",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 328,
+    "text": "Disabled",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 355,
+    "text": "Log out",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 364,
+    "text": "Danger Zone",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 398,
+    "text": "numeric",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 399,
+    "text": "off",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 412,
+    "text": "numeric",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 413,
+    "text": "off",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 425,
+    "text": "numeric",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 426,
+    "text": "off",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 437,
+    "text": "Protected by 256-bit SSL encryption",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 440,
+    "text": "Link Payment Card",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 461,
+    "text": "numeric",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 462,
+    "text": "off",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 472,
+    "text": "Enable Authentication",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 509,
+    "text": "off",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\DashboardSettings.tsx",
+    "line": 522,
+    "text": "Permanently Delete",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Schedule.tsx",
+    "line": 204,
+    "text": "Select date",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Schedule.tsx",
+    "line": 757,
+    "text": "off",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Schedule.tsx",
+    "line": 851,
+    "text": "Confirm Booking",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Schedule.tsx",
+    "line": 864,
+    "text": "Are you sure you want to cancel this booking? This action cannot be undone.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Schedule.tsx",
+    "line": 865,
+    "text": "Cancel Booking",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Schedule.tsx",
+    "line": 866,
+    "text": "Keep",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 479,
+    "text": "Manage your business profile, operating hours, and staff",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 507,
+    "text": "Loading settings...",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 529,
+    "text": "Recommended size: 512x512px. Formats: JPG, PNG. Max 2MB.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 561,
+    "text": "Add Link",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 566,
+    "text": "No social links added yet.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 600,
+    "text": "+998 XX XXX XX XX",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 600,
+    "text": "@username",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 629,
+    "text": "Save Profile",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 672,
+    "text": "Day off",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 681,
+    "text": "Save Working Hours",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 696,
+    "text": "Add Service",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 702,
+    "text": "Add your first service for customers.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 738,
+    "text": "Add Specialist",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 744,
+    "text": "Add specialists to start taking bookings.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 802,
+    "text": "Require card hold (deposit) only for first-time customers or those with karma score below",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 802,
+    "text": ". Loyal customers book in 1-click.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 830,
+    "text": "Save Policies",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 846,
+    "text": "Edit Service",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 846,
+    "text": "New Service",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 899,
+    "text": "Save Changes",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 899,
+    "text": "Save Service",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\dashboard-pages\\Settings.tsx",
+    "line": 932,
+    "text": "Save Specialist",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\DashboardLayout.tsx",
+    "line": 108,
+    "text": "Expand sidebar",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\DashboardLayout.tsx",
+    "line": 108,
+    "text": "Collapse sidebar",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\DashboardLayout.tsx",
+    "line": 123,
+    "text": "Queue (Live)",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\DashboardLayout.tsx",
+    "line": 132,
+    "text": "Schedule",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\DashboardLayout.tsx",
+    "line": 248,
+    "text": "Profile",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\ElaraLogo.tsx",
+    "line": 51,
+    "text": "Elara",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Footer.tsx",
+    "line": 61,
+    "text": "Instagram",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Footer.tsx",
+    "line": 71,
+    "text": "Twitter",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Footer.tsx",
+    "line": 81,
+    "text": "LinkedIn",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Footer.tsx",
+    "line": 90,
+    "text": "Elara.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 185,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 303,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 305,
+    "text": "right",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 317,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 368,
+    "text": "Scheduled for",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 384,
+    "text": "Hair Salon",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 395,
+    "text": "The professional will be available exactly on time.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 408,
+    "text": "Upcoming",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 418,
+    "text": "Queue",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 428,
+    "text": "In chair",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 445,
+    "text": "Professional",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 449,
+    "text": "MI",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 452,
+    "text": "Michael",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 461,
+    "text": "Date",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 473,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 474,
+    "text": "Directions",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 476,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 477,
+    "text": "Contact",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 481,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 482,
+    "text": "Cancel booking",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 534,
+    "text": "A",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 540,
+    "text": "Online & Accepting Bookings",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 546,
+    "text": "Today, Oct 24",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 575,
+    "text": "Any Professional",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 578,
+    "text": "Call In",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 596,
+    "text": "Any Professional",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 599,
+    "text": "Call In",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 630,
+    "text": "Complete & Call Next",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 634,
+    "text": "+10 min delay",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 666,
+    "text": "Michael",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 694,
+    "text": "Business Protection",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 732,
+    "text": "S",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 738,
+    "text": "12 completed visits · 0 no-shows",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 744,
+    "text": "M",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 750,
+    "text": "2 completed visits · 1 no-show",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 768,
+    "text": "pill",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 769,
+    "text": "Pay Deposit & Book",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 784,
+    "text": "Everything you need to manage your appointments, wrapped in a\r\n                calm, intelligent interface.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 792,
+    "text": "Real-time availability",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 795,
+    "text": "Skip the back-and-forth messaging. See exactly when your\r\n                  favorite professionals are free and secure your spot\r\n                  instantly.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 816,
+    "text": "Verified reviews",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 819,
+    "text": "Read authentic feedback from real customers. We only allow\r\n                  reviews from completed appointments.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 827,
+    "text": "Effortless rescheduling",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 830,
+    "text": "Plans change. Reschedule your appointments with a single tap,\r\n                  directly from your dashboard—without the awkward phone calls.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 835,
+    "text": "Modify time",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 861,
+    "text": "Discover",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 864,
+    "text": "Search for premium services by category, precise\r\n                        location, or find your favorite professional.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 876,
+    "text": "Select & Book",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 879,
+    "text": "Choose a time that fits your schedule from real-time\r\n                        available slots. Confirm in one tap.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 891,
+    "text": "Experience",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 894,
+    "text": "Arrive and enjoy. Your appointment is confirmed\r\n                        instantly and synced to your schedule.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Landing.tsx",
+    "line": 949,
+    "text": "Trusted by those who know.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 112,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 120,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 348,
+    "text": "The professional will be available exactly on time. See you\r\n                  soon!",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 454,
+    "text": "Thank you for your review!",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 454,
+    "text": "How was your visit?",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 485,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 488,
+    "text": "Submitting...",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 488,
+    "text": "Submit Review",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 504,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 505,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 511,
+    "text": "rounded",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 525,
+    "text": "Canceling in advance helps professionals manage their time and maintains your reliability karma.",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 526,
+    "text": "Yes, cancel",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\LiveTicket.tsx",
+    "line": 527,
+    "text": "Keep booking",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Login.tsx",
+    "line": 132,
+    "text": "Remember me",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Login.tsx",
+    "line": 141,
+    "text": "Forgot password?",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Login.tsx",
+    "line": 159,
+    "text": "Create an account",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\map\\Map.tsx",
+    "line": 131,
+    "text": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">{useI18nStore.getState().t(\"extra.t330\")}</a>",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\map\\Map.tsx",
+    "line": 132,
+    "text": "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\NotFound.tsx",
+    "line": 19,
+    "text": "Page not found",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\NotFound.tsx",
+    "line": 22,
+    "text": "The address may have been entered incorrectly, or the page has been\r\n          moved or deleted.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\NotFound.tsx",
+    "line": 31,
+    "text": "Go home",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Onboarding\\OnboardingWizard.tsx",
+    "line": 298,
+    "text": "You can add more details later in the dashboard.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Onboarding\\OnboardingWizard.tsx",
+    "line": 400,
+    "text": "wait",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Onboarding\\OnboardingWizard.tsx",
+    "line": 422,
+    "text": "Back",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Onboarding\\OnboardingWizard.tsx",
+    "line": 432,
+    "text": "Finish",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Onboarding\\OnboardingWizard.tsx",
+    "line": 432,
+    "text": "Next",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\OtpInput.tsx",
+    "line": 50,
+    "text": "Verify your number",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\OtpInput.tsx",
+    "line": 53,
+    "text": "We've sent a 6-digit code to",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\OtpInput.tsx",
+    "line": 76,
+    "text": "Verify",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\OtpInput.tsx",
+    "line": 86,
+    "text": "Resend code",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\OtpInput.tsx",
+    "line": 90,
+    "text": "Resend available in",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\OtpInput.tsx",
+    "line": 90,
+    "text": "s",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Signup.tsx",
+    "line": 209,
+    "text": "right",
+    "type": "StringLiteral"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\Signup.tsx",
+    "line": 212,
+    "text": "Continue",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\SignupRoleModal.tsx",
+    "line": 51,
+    "text": "Join Elara",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\SignupRoleModal.tsx",
+    "line": 54,
+    "text": "How would you like to use our platform?",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\SignupRoleModal.tsx",
+    "line": 68,
+    "text": "As a Customer",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\SignupRoleModal.tsx",
+    "line": 71,
+    "text": "Book appointments, discover salons, and manage your schedule.",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\SignupRoleModal.tsx",
+    "line": 86,
+    "text": "As a Business",
+    "type": "JSXText"
+  },
+  {
+    "file": "C:\\Users\\user\\Desktop\\Elara\\my-app\\src\\components\\SignupRoleModal.tsx",
+    "line": 89,
+    "text": "Manage bookings, staff, and grow your presence on Elara.",
+    "type": "JSXText"
+  }
+]

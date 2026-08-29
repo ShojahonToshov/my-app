@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/hooks/useI18n";
 import { useI18nStore } from "@/stores/i18nStore";
 
 import React, { useState, useEffect } from "react";
@@ -23,6 +24,8 @@ import {
 } from "lucide-react";
 
 export default function DashboardSettings() {
+  const { t } = useI18n();
+
   const [email, setEmail] = useState("Loading...");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -217,8 +220,7 @@ export default function DashboardSettings() {
                     </div>
                   </div>
                   <Link href="/pricing" className="px-5 py-2.5 bg-[#8A2532] text-white font-semibold text-sm rounded-xl hover:bg-[#6b1c26] transition-colors shadow-sm active:scale-95 shrink-0 inline-flex items-center justify-center">
-                    Upgrade Plan
-                  </Link>
+                    {t("extra.t487")}</Link>
                 </div>
               </div>
 
@@ -285,7 +287,7 @@ export default function DashboardSettings() {
                       className="w-full sm:w-auto px-8 py-3 bg-[#121415] text-white hover:bg-[#2A2E30] rounded-xl font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95 disabled:!bg-[#E5E9EA] disabled:!text-[#8B9194] disabled:!shadow-none disabled:pointer-events-none"
                     >
                       {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                      {isSaving ? "Saving..." : "Save Security Info"}
+                      {isSaving ? t("extra.t341") : t("extra.t488")}
                     </button>
                   </div>
                 </form>
@@ -302,12 +304,11 @@ export default function DashboardSettings() {
                     <div className="w-12 h-8 bg-[#121415] rounded flex items-center justify-center text-xs text-white font-semibold shrink-0 shadow-sm">{cardType}</div>
                     <div className="flex flex-col pr-2">
                       <span className="text-sm font-semibold text-[#121415] tracking-tight">•••• {cardLast4}</span>
-                      <span className="text-[10px] text-[#8B9194] font-medium mt-0.5 uppercase">Expires {cardExpiry}</span>
+                      <span className="text-[10px] text-[#8B9194] font-medium mt-0.5 uppercase">{t("extra.t489")}{cardExpiry}</span>
                     </div>
                   </div>
                   <button type="button" onClick={() => setActiveModal("payment")} className="px-5 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm rounded-xl hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-colors shadow-sm active:scale-95 shrink-0">
-                    Update
-                  </button>
+                    {t("extra.t490")}</button>
                 </div>
               </div>
 
@@ -325,7 +326,7 @@ export default function DashboardSettings() {
                     <div className="flex flex-col pr-4">
                       <span className="text-sm font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t245")}</span>
                       <span className={`text-[10px] font-medium mt-0.5 uppercase ${is2FAEnabled ? 'text-[#4a6b53]' : 'text-[#8B9194]'}`}>
-                        {is2FAEnabled ? 'Enabled' : 'Disabled'}
+                        {is2FAEnabled ? t("extra.t491") : t("extra.t492")}
                       </span>
                     </div>
                   </div>
@@ -352,8 +353,7 @@ export default function DashboardSettings() {
                     </div>
                   </div>
                   <button type="button" onClick={() => setActiveModal("logout")} className="px-5 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm rounded-xl hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-colors shadow-sm flex items-center justify-center gap-2 active:scale-95 shrink-0">
-                    <LogOut className="w-4 h-4 text-[#4A4E51]" /> Log out
-                  </button>
+                    <LogOut className="w-4 h-4 text-[#4A4E51]" /> {t("extra.t343")}</button>
                 </div>
               </div>
 
@@ -361,8 +361,7 @@ export default function DashboardSettings() {
               <div className="p-6 sm:p-8 bg-[#fef2f2]/50 rounded-b-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
                   <h3 className="text-lg font-semibold text-[#dc2626] tracking-tight mb-1 flex items-center gap-2">
-                    <ShieldAlert className="w-5 h-5" /> Danger Zone
-                  </h3>
+                    <ShieldAlert className="w-5 h-5" /> {t("extra.t493")}</h3>
                   <p className="text-sm text-[#991b1b] font-medium">{useI18nStore.getState().t("extra.t232")}</p>
                 </div>
                 <button type="button" onClick={() => setActiveModal("delete")} className="w-full sm:w-auto px-5 py-2.5 bg-white text-[#dc2626] hover:bg-[#dc2626]/10 border border-[#dc2626] rounded-xl font-medium text-sm transition-colors shadow-sm active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]">{useI18nStore.getState().t("extra.t310")}</button>
@@ -437,8 +436,7 @@ export default function DashboardSettings() {
                     <ShieldCheck className="w-3.5 h-3.5" /> Protected by 256-bit SSL encryption
                   </div>
                   <button type="submit" className="w-full py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:bg-[#2A2E30] transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                    Link Payment Card
-                  </button>
+                    {t("extra.t494")}</button>
                 </form>
               </>
             )}
@@ -469,8 +467,7 @@ export default function DashboardSettings() {
                     </div>
                   </div>
                   <button type="submit" className="w-full mt-6 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:bg-[#2A2E30] transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                    Enable Authentication
-                  </button>
+                    {t("extra.t495")}</button>
                 </form>
               </>
             )}
@@ -519,8 +516,7 @@ export default function DashboardSettings() {
                     disabled={deleteConfirmText !== "DELETE"}
                     className="w-full mt-6 py-3.5 bg-[#dc2626] text-white rounded-xl font-medium text-sm shadow-sm hover:bg-[#b91c1c] transition-all flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] disabled:!bg-[#E5E9EA] disabled:!text-[#8B9194] disabled:!shadow-none disabled:pointer-events-none"
                   >
-                    Permanently Delete
-                  </button>
+                    {t("extra.t496")}</button>
                 </form>
               </>
             )}

@@ -295,8 +295,7 @@ export default function OnboardingWizard() {
             options={["Barbershop", "Beauty Salon", "Pet Grooming"]}
           />
           <p className="text-xs text-[#4A4E51] mt-2">
-             You can add more details later in the dashboard.
-          </p>
+             {t("extra.t512")}</p>
         </div>
       )
     },
@@ -419,8 +418,7 @@ export default function OnboardingWizard() {
             className="px-6"
             type="button"
           >
-            Back
-          </Button>
+            {t("extra.t513")}</Button>
           
           <Button 
             variant="primary" 
@@ -429,7 +427,7 @@ export default function OnboardingWizard() {
             className="px-8"
             type="button"
           >
-            {step === steps.length - 1 ? "Finish" : "Next"}
+            {step === steps.length - 1 ? t("extra.t514") : t("extra.t515")}
           </Button>
         </div>
       </div>

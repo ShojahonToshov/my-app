@@ -68,7 +68,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }: Confir
 const TABS = [
   { id: "all", label: "All" },
   { id: "regular", label: "Regulars" },
-  { id: "new", label: "New" }
+  { id: "new", label: useI18nStore.getState().t("app.t14") }
 ];
 
 export default function Customers() {
@@ -310,7 +310,7 @@ export default function Customers() {
                     <tr>
                       <td colSpan={6} className="py-8">
                         <EmptyState 
-                          title={searchQuery ? "No results found" : "No customers found"} 
+                          title={searchQuery ? t("extra.t475") : t("extra.t476")} 
                           description={searchQuery ? `No customers match "${searchQuery}". Try a different name or phone number.` : `There are no ${activeTab === "regular" ? "regular" : activeTab === "new" ? "new" : ""} customers.`} 
                         />
                       </td>
@@ -339,12 +339,12 @@ export default function Customers() {
                       </td>
                       <td className="py-3 px-6">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider border ${customer.statusColor}`}>
-                          {customer.status === "regular" ? "Regular" : "New"}
+                          {customer.status === "regular" ? t("extra.t477") : useI18nStore.getState().t("app.t14")}
                         </span>
                       </td>
                       <td className="py-3 px-6">
                         <div className="flex flex-col">
-                          <span className="text-[#121415] font-medium">{customer.visits} visits</span>
+                          <span className="text-[#121415] font-medium">{customer.visits} {t("extra.t473")}</span>
                           <span className="text-xs font-medium text-[#8B9194] mt-0.5">{customer.ltv}</span>
                         </div>
                       </td>
@@ -405,7 +405,7 @@ export default function Customers() {
                 ) : filteredCustomers.length === 0 ? (
                   <div className="p-8">
                     <EmptyState 
-                      title={searchQuery ? "No results found" : "No customers found"} 
+                      title={searchQuery ? t("extra.t475") : t("extra.t476")} 
                       description={searchQuery ? `No customers match "${searchQuery}". Try a different name or phone number.` : `There are no ${activeTab === "regular" ? "regular" : activeTab === "new" ? "new" : ""} customers.`} 
                     />
                   </div>
@@ -423,7 +423,7 @@ export default function Customers() {
                           </div>
                         </div>
                         <span className={`inline-flex px-2 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider border ${customer.statusColor}`}>
-                          {customer.status === "regular" ? "Regular" : "New"}
+                          {customer.status === "regular" ? t("extra.t477") : useI18nStore.getState().t("app.t14")}
                         </span>
                       </div>
                       
@@ -485,7 +485,7 @@ export default function Customers() {
                 inputClassName="!bg-[#F5F5F4] !py-3 !border-[#DCDCDA] text-[#121415] focus:!bg-white focus:!border-[#121415]" 
               />
               <button disabled={createCustomerMutation.isPending} type="submit" className="w-full mt-4 py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all flex justify-center items-center active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] disabled:opacity-70">
-                {createCustomerMutation.isPending ? "Adding..." : "Add to Directory"}
+                {createCustomerMutation.isPending ? t("extra.t478") : t("extra.t479")}
               </button>
             </form>
           </div>

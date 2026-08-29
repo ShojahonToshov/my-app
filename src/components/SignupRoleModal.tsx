@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, User, Briefcase, ArrowRight } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
+import { useI18n } from "@/hooks/useI18n";
 
 export interface SignupRoleModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ export interface SignupRoleModalProps {
 }
 
 export default function SignupRoleModal({ isOpen, onClose }: SignupRoleModalProps) {
+    const { t } = useI18n();
   const router = useRouter();
   const searchParams = useSearchParams();
   useLockBodyScroll(isOpen);
@@ -48,11 +50,9 @@ export default function SignupRoleModal({ isOpen, onClose }: SignupRoleModalProp
 
             <div className="text-center mb-8 mt-2">
               <h2 className="text-2xl font-semibold text-[#121415] tracking-tight mb-2">
-                Join Elara
-              </h2>
+                {t("extra.t402")}</h2>
               <p className="text-sm text-[#4A4E51] font-medium">
-                How would you like to use our platform?
-              </p>
+                {t("extra.t403")}</p>
             </div>
 
             <div className="space-y-4">
@@ -65,11 +65,9 @@ export default function SignupRoleModal({ isOpen, onClose }: SignupRoleModalProp
                 </div>
                 <div className="flex-1">
                   <h3 className="text-base font-semibold text-[#121415] mb-1">
-                    As a Customer
-                  </h3>
+                    {t("extra.t404")}</h3>
                   <p className="text-sm text-[#4A4E51] font-medium leading-relaxed">
-                    Book appointments, discover salons, and manage your schedule.
-                  </p>
+                    {t("extra.t405")}</p>
                 </div>
                 <ArrowRight className="w-5 h-5 text-[#DCDCDA] group-hover:text-[#121415] self-center transition-colors shrink-0" />
               </button>
@@ -83,11 +81,9 @@ export default function SignupRoleModal({ isOpen, onClose }: SignupRoleModalProp
                 </div>
                 <div className="flex-1">
                   <h3 className="text-base font-semibold text-[#8A2532] mb-1">
-                    As a Business
-                  </h3>
+                    {t("extra.t406")}</h3>
                   <p className="text-sm text-[#4A4E51] font-medium leading-relaxed">
-                    Manage bookings, staff, and grow your presence on Elara.
-                  </p>
+                    {t("extra.t407")}</p>
                 </div>
                 <ArrowRight className="w-5 h-5 text-[#DCDCDA] group-hover:text-[#8A2532] self-center transition-colors shrink-0" />
               </button>

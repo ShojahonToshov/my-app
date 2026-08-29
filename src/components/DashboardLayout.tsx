@@ -105,7 +105,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           {/* TOGGLE BUTTON */}
-          <Tooltip content={isCollapsed ? "Expand sidebar" : "Collapse sidebar"} position="right" className="flex">
+          <Tooltip content={isCollapsed ? t("extra.t366") : t("extra.t367")} position="right" className="flex">
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
               className={`flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all duration-300 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] shrink-0 ${
@@ -245,7 +245,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </AnimatePresence>
           </div>
 
-          <Tooltip content="Profile"  className="w-full mt-1">
+          <Tooltip content={t("extra.t368")}  className="w-full mt-1">
             <Link
               href="/dashboard/profile"
               className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent hover:bg-[#ECECEA] text-left group overflow-hidden whitespace-nowrap ${isCollapsed ? "px-3" : "px-4"}`}

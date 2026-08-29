@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/hooks/useI18n";
 import { useI18nStore } from "@/stores/i18nStore";
 
 import React from "react";
@@ -9,6 +10,8 @@ import ElaraLogo from "@/components/ElaraLogo";
 import Footer from "@/components/Footer";
 
 export default function PricingPage() {
+  const { t } = useI18n();
+
   return (
     <div className="min-h-screen bg-[#F5F5F4] flex flex-col font-sans selection:bg-[#8A2532]/20">
       {/* Navigation */}
@@ -17,8 +20,7 @@ export default function PricingPage() {
           <ElaraLogo />
           <div className="flex items-center gap-6">
             <Link href="/pricing" className="text-sm font-medium text-[#121415] hover:text-[#8A2532] transition-colors">
-              Pricing
-            </Link>
+              {t("extra.t459")}</Link>
             <Link href="/login" className="text-sm font-semibold text-[#121415] hover:text-[#8A2532] transition-colors">{useI18nStore.getState().t("extra.t106")}</Link>
           </div>
         </div>
@@ -32,16 +34,14 @@ export default function PricingPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-6xl font-semibold text-[#121415] tracking-tight mb-6 leading-tight"
           >
-            Simple, transparent pricing.
-          </motion.h1>
+            {t("extra.t460")}</motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="text-lg md:text-xl text-[#4A4E51] font-medium leading-relaxed max-w-2xl mx-auto"
           >
-            Whether you're just starting out or scaling a premium salon, Elara aligns with your success. No subscriptions, no hidden fees.
-          </motion.p>
+            {t("extra.t461")}</motion.p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -56,11 +56,10 @@ export default function PricingPage() {
               <h3 className="text-2xl font-bold text-[#121415] mb-2">{useI18nStore.getState().t("extra.t197")}</h3>
               <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-5xl font-bold text-[#121415] tracking-tight">$0</span>
-                <span className="text-[#8B9194] font-medium">/ forever</span>
+                <span className="text-[#8B9194] font-medium">{t("extra.t462")}</span>
               </div>
               <p className="text-[#4A4E51] font-medium leading-relaxed">
-                Perfect for independent professionals building their client base. Access premium tools completely free.
-              </p>
+                {t("extra.t463")}</p>
             </div>
 
             <div className="space-y-5 mb-12 flex-1">
@@ -68,7 +67,7 @@ export default function PricingPage() {
                 "Digital Live Ticket for customers",
                 "Kanban appointment dashboard",
                 "Verified authentic reviews",
-                <span key="limits">{useI18nStore.getState().t("extra.t199")}<br/><span className="text-sm font-normal text-[#8B9194] mt-1 inline-block">(Resets automatically every Monday)</span></span>
+                <span key="limits">{useI18nStore.getState().t("extra.t199")}<br/><span className="text-sm font-normal text-[#8B9194] mt-1 inline-block">{t("extra.t464")}</span></span>
               ].map((feature, i) => (
                 <div key={i} className="flex gap-4">
                   <CheckCircle2 className="w-6 h-6 text-[#121415] shrink-0" />
@@ -79,8 +78,7 @@ export default function PricingPage() {
 
             <Link href="/signup">
               <button className="w-full py-4 bg-[#F5F5F4] border border-[#DCDCDA] hover:bg-[#ECECEA] text-[#121415] rounded-xl font-semibold transition-colors shadow-sm active:scale-[0.98]">
-                Get Started for Free
-              </button>
+                {t("extra.t465")}</button>
             </Link>
           </motion.div>
 
@@ -98,16 +96,14 @@ export default function PricingPage() {
               <div className="flex justify-between items-start mb-2">
                 <h3 className="text-2xl font-bold text-white">{useI18nStore.getState().t("extra.t134")}</h3>
                 <span className="px-3 py-1 bg-[#8A2532] text-white text-xs font-bold rounded-full uppercase tracking-wider shadow-sm">
-                  RevShare
-                </span>
+                  {t("extra.t466")}</span>
               </div>
               <div className="flex flex-col mb-4 space-y-1">
                 <span className="text-3xl font-bold text-white leading-tight tracking-tight">{useI18nStore.getState().t("extra.t193")}</span>
                 <span className="text-xl font-semibold text-[#8B9194]">{useI18nStore.getState().t("extra.t207")}</span>
               </div>
               <p className="text-[#8B9194] font-medium leading-relaxed">
-                For established businesses that demand total operational control and powerful no-show protection.
-              </p>
+                {t("extra.t467")}</p>
             </div>
 
             <div className="space-y-5 mb-12 flex-1 relative z-10">
@@ -129,8 +125,7 @@ export default function PricingPage() {
 
             <Link href="/signup" className="relative z-10">
               <button className="w-full py-4 bg-white hover:bg-[#F5F5F4] text-[#121415] rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 shadow-sm active:scale-[0.98]">
-                Join the Network
-                <ArrowRight className="w-4 h-4" />
+                {t("extra.t468")}<ArrowRight className="w-4 h-4" />
               </button>
             </Link>
           </motion.div>

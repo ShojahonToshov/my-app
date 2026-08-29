@@ -245,8 +245,7 @@ export default function Analytics() {
                   <span className="text-xs font-medium uppercase tracking-wider">{useI18nStore.getState().t("extra.t200")}</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium bg-[#F5F5F4] text-[#4A4E51] border border-[#DCDCDA]">
-                  Total
-                </span>
+                  {t("extra.t470")}</span>
               </div>
               {isLoading ? (
                 <Skeleton className="w-16 h-8" />
@@ -265,8 +264,7 @@ export default function Analytics() {
                   <span className="text-xs font-medium uppercase tracking-wider">{useI18nStore.getState().t("extra.t173")}</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#e8efe9] text-[#4a6b53] border border-[#4a6b53]/30">
-                  Realtime
-                </span>
+                  {t("extra.t471")}</span>
               </div>
               {isLoading ? (
                 <Skeleton className="w-20 h-8" />
@@ -286,8 +284,7 @@ export default function Analytics() {
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h3 className="text-lg font-semibold tracking-tight text-[#121415]">
-                    Appointments Rate
-                  </h3>
+                    {t("extra.t472")}</h3>
                   <p className="text-sm font-medium text-[#4A4E51] mt-0.5">
                     Visits density for the selected period
                   </p>
@@ -318,8 +315,7 @@ export default function Analytics() {
                         <div className="w-full bg-[#F5F5F4] rounded-t-xl flex items-end relative group-hover:bg-[#ECECEA] transition-colors border border-transparent group-hover:border-[#DCDCDA]/50">
                           {/* Tooltip */}
                           <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#121415] text-white text-[10px] font-medium py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-sm">
-                            {col.value} visits
-                          </div>
+                            {col.value} {t("extra.t473")}</div>
                           {/* Bar */}
                           <div 
                             className={`w-full rounded-t-xl transition-all duration-500 ease-out ${heightPercent > 85 ? "bg-[#8A2532]" : heightPercent > 50 ? "bg-[#121415]" : "bg-[#DCDCDA]"}`}
@@ -340,8 +336,7 @@ export default function Analytics() {
             <div className="bg-white rounded-2xl border border-[#DCDCDA] shadow-sm p-5 md:p-6 flex flex-col justify-between overflow-hidden">
               <div>
                 <h3 className="text-lg font-semibold tracking-tight text-[#121415]">
-                  Top Services
-                </h3>
+                  {t("extra.t474")}</h3>
                 <p className="text-sm font-medium text-[#4A4E51] mt-0.5">
                   Revenue drivers for selected period
                 </p>
@@ -377,8 +372,7 @@ export default function Analytics() {
                             {service.name}
                           </span>
                           <span className="text-xs text-[#8B9194] font-medium mt-0.5">
-                            {service.count} visits
-                          </span>
+                            {service.count} {t("extra.t473")}</span>
                         </div>
                       </div>
                       <div className="pt-3 border-t border-[#DCDCDA] text-right">

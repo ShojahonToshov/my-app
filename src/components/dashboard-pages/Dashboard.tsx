@@ -83,7 +83,7 @@ export default function Dashboard() {
   const [isAddingGuest, setIsAddingGuest] = useState(false);
   const [customerName, setClientName] = useState("");
   const [showCustomerSuggestions, setShowCustomerSuggestions] = useState(false);
-  const [staffName, setStaffName] = useState("Any Professional");
+  const [staffName, setStaffName] = useState(t("extra.t373"));
   const [service, setService] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All");
@@ -115,9 +115,9 @@ export default function Dashboard() {
         if (business.team_data && Array.isArray(business.team_data)) {
           setTeamData(business.team_data);
           if (business.team_data.length > 0) {
-            setStaffName(business.team_data[0].name || "Any Professional");
+            setStaffName(business.team_data[0].name || t("extra.t373"));
           } else {
-            setStaffName("Any Professional");
+            setStaffName(t("extra.t373"));
           }
         }
         const { data: services } = await supabase
@@ -300,7 +300,7 @@ export default function Dashboard() {
 
       if (b.status === "in_progress") {
         inChair.push(guest);
-      } else if (b.status === "completed" || b.status === "done") {
+      } else if (b.status === t("extra.t387") || b.status === "done") {
         completed.push(guest);
       } else {
         waiting.push(guest);
@@ -332,7 +332,7 @@ export default function Dashboard() {
     });
 
     const list = Array.from(set);
-    return list.length > 0 ? list : ["Any Professional"];
+    return list.length > 0 ? list : [t("extra.t373")];
   }, [allVenueBookings, teamData]);
 
   // KPI calculations
@@ -416,7 +416,7 @@ export default function Dashboard() {
     setIsAddingGuest(false);
     setIsModalOpen(false);
     setClientName("");
-    setStaffName(mastersList[0] || "Any Professional");
+    setStaffName(mastersList[0] || t("extra.t373"));
     if (servicesData.length > 0) setService(servicesData[0].id);
   };
 
@@ -481,15 +481,15 @@ export default function Dashboard() {
 
     if (source.droppableId !== destination.droppableId) {
       let newStatus: Booking["status"] = "pending";
-      if (destination.droppableId === "inChair") newStatus = "in_progress";
-      else if (destination.droppableId === "completed") newStatus = "completed";
+      if (destination.droppableId === t("extra.t480")) newStatus = "in_progress";
+      else if (destination.droppableId === t("extra.t387")) newStatus = "completed";
       else newStatus = "pending";
 
       updateStatusMutation.mutate({ bookingId: guest.id, status: newStatus });
 
-      if (destination.droppableId === 'inChair') {
+      if (destination.droppableId === t("extra.t480")) {
         toast.success(`${guest.name} moved to chair`);
-      } else if (destination.droppableId === 'completed') {
+      } else if (destination.droppableId === t("extra.t387")) {
         toast.success(`Session with ${guest.name} completed`);
       } else {
         toast.info(`${guest.name} moved to waiting queue`);
@@ -541,7 +541,7 @@ export default function Dashboard() {
             >
               <Power className="w-4 h-4" /> 
               <span className="hidden sm:inline">
-                {isPaused ? "Resume Bookings" : "Pause Bookings"}
+                {isPaused ? t("extra.t481") : t("extra.t482")}
               </span>
             </button>
 
@@ -550,8 +550,7 @@ export default function Dashboard() {
               onClick={() => setIsModalOpen(true)}
               className="bg-[#121415] text-white px-5 py-2.5 rounded-xl text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
             >
-              <Plus className="w-4 h-4" /> Add Guest
-            </button>
+              <Plus className="w-4 h-4" /> {t("extra.t483")}</button>
           </div>
         </header>
 
@@ -588,7 +587,7 @@ export default function Dashboard() {
                 <AlertTriangle className="w-4 h-4" />
                 <span className="text-xs font-medium uppercase tracking-wider">{useI18nStore.getState().t("extra.t101")}</span>
               </div>
-              {isDashboardLoading ? <Skeleton className="w-16 h-8" /> : <div className="text-3xl font-semibold text-[#8A2532]">{totalDelay} min</div>}
+              {isDashboardLoading ? <Skeleton className="w-16 h-8" /> : <div className="text-3xl font-semibold text-[#8A2532]">{totalDelay} {t("extra.t484")}</div>}
             </div>
           </div>
 
@@ -630,7 +629,7 @@ export default function Dashboard() {
                 </span>
               </div>
               
-              <Droppable droppableId="waiting">
+              <Droppable droppableId={t("extra.t346")}>
                 {(provided) => (
                   <div 
                     className="space-y-4 pb-4 min-h-[100px]" 
@@ -677,8 +676,7 @@ export default function Dashboard() {
                                 <span className="text-[10px] font-medium text-[#8A2532] bg-[#8A2532]/10 px-2 py-1 rounded-md">{guest.delay}</span>
                               ) : (
                                 <button type="button" onClick={() => handleCallIn(guest.id)} className="px-4 py-2 bg-[#4a6b53]/10 text-[#4a6b53] hover:bg-[#4a6b53] hover:text-white rounded-lg text-xs font-medium transition-colors shadow-sm flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]">
-                                  <Play className="w-3 h-3" /> Call In
-                                </button>
+                                  <Play className="w-3 h-3" /> {t("extra.t374")}</button>
                               )}
                             </div>
                           </div>
@@ -707,7 +705,7 @@ export default function Dashboard() {
                 </span>
               </div>
               
-              <Droppable droppableId="inChair">
+              <Droppable droppableId={t("extra.t480")}>
                 {(provided) => (
                   <div 
                     className="space-y-4 pb-4 min-h-[100px]"
@@ -743,7 +741,7 @@ export default function Dashboard() {
                               <div className="absolute top-0 left-0 w-1.5 h-full bg-[#4a6b53]"></div>
                               <div className="flex justify-between items-start mb-4 pl-2">
                                 <div className="flex flex-col">
-                                  <span className="text-xs font-medium text-[#4a6b53] uppercase tracking-wider mb-1">Staff: {guest.staff}</span>
+                                  <span className="text-xs font-medium text-[#4a6b53] uppercase tracking-wider mb-1">{t("extra.t485")}{guest.staff}</span>
                                   <span className="text-lg font-semibold text-[#121415] tracking-tight leading-tight">{guest.name}</span>
                                   <span className="text-sm font-medium text-[#4A4E51] mt-0.5">{guest.service}</span>
                                 </div>
@@ -753,12 +751,10 @@ export default function Dashboard() {
                               </div>
                               <div className="flex flex-col gap-2 pl-2 border-t border-[#DCDCDA] pt-4">
                                 <button type="button" onClick={() => handleComplete(guest.id)} className="w-full py-3 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                                  <CheckCircle2 className="w-4 h-4 text-white/70" /> Complete & Call Next
-                                </button>
+                                  <CheckCircle2 className="w-4 h-4 text-white/70" /> {t("extra.t375")}</button>
                                 <div className="flex items-center gap-2">
                                   <button type="button" onClick={() => handleAddDelay(guest.id)} className="flex-1 py-2.5 bg-white text-[#121415] hover:bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-xs transition-colors flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                                    <TimerReset className="w-3.5 h-3.5" /> +10 min delay
-                                  </button>
+                                    <TimerReset className="w-3.5 h-3.5" /> {t("extra.t376")}</button>
                                 </div>
                               </div>
                             </div>
@@ -787,7 +783,7 @@ export default function Dashboard() {
                 </span>
               </div>
               
-              <Droppable droppableId="completed">
+              <Droppable droppableId={t("extra.t387")}>
                 {(provided) => (
                   <div 
                     className="space-y-4 pb-4 min-h-[100px]" 
@@ -988,8 +984,7 @@ export default function Dashboard() {
                   className="flex-1 py-3 bg-[#121415] hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed text-white rounded-xl font-medium text-sm transition-opacity shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] flex items-center justify-center gap-2"
                 >
                   {isAddingGuest && <Loader2 className="w-4 h-4 animate-spin" />}
-                  Save
-                </button>
+                  {t("extra.t486")}</button>
               </div>
             </form>
           </div>

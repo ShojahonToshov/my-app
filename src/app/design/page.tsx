@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/hooks/useI18n";
 import { useI18nStore } from "@/stores/i18nStore";
 
 
@@ -117,6 +118,8 @@ function FaqItem({ question, answer, delay }: { question: string; answer: string
 }
 
 export default function DesignConceptPage() {
+  const { t } = useI18n();
+
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("platform");
@@ -159,7 +162,7 @@ export default function DesignConceptPage() {
           {/* CENTER: INTERACTIVE SEGMENTED PILL */}
           <div className="hidden md:flex items-center bg-[#D8DADC]/60 p-1.5 rounded-full border border-white/40 shadow-[inset_0_1px_4px_rgba(0,0,0,0.04)] backdrop-blur-md relative">
             {[
-              { id: "platform", label: "Platform" },
+              { id: "platform", label: t("extra.t426") },
               { id: "faq", label: "FAQ" },
               { id: "cta", label: "Get Started" },
             ].map((tab) => (
@@ -243,9 +246,8 @@ export default function DesignConceptPage() {
               transition={{ duration: 1.2, ease: smoothEase }}
               className="text-6xl md:text-8xl lg:text-[7.5rem] font-bold tracking-[-0.04em] leading-[0.95] mb-8 bg-gradient-to-b from-white via-white to-white/40 bg-clip-text text-transparent"
             >
-              Intelligent growth.<br/>
-              Zero no-shows.
-            </motion.h1>
+              {t("extra.t427")}<br/>
+              {t("extra.t428")}</motion.h1>
 
             <motion.p 
               initial={{ opacity: 0, y: 30 }}
@@ -253,8 +255,7 @@ export default function DesignConceptPage() {
               transition={{ duration: 1.2, delay: 0.15, ease: smoothEase }}
               className="text-lg md:text-2xl text-white/50 max-w-3xl font-medium leading-relaxed mb-14"
             >
-              Stop losing revenue to missed appointments. Elara combines smart deposits with a seamless booking flow to completely protect your time.
-            </motion.p>
+              {t("extra.t429")}</motion.p>
 
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -269,8 +270,7 @@ export default function DesignConceptPage() {
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className="h-16 px-10 bg-white text-[#151719] font-bold rounded-full flex items-center justify-center w-full sm:w-auto text-[16px] cursor-pointer"
               >
-                Find Services
-              </motion.a>
+                {t("extra.t430")}</motion.a>
               <motion.a 
                 href="#platform"
                 whileHover={{ scale: 1.04, backgroundColor: "rgba(255,255,255,0.1)" }}
@@ -278,8 +278,7 @@ export default function DesignConceptPage() {
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className="h-16 px-10 bg-white/5 text-white font-bold rounded-full flex items-center justify-center border border-white/10 w-full sm:w-auto text-[16px] backdrop-blur-sm cursor-pointer"
               >
-                How it Works
-              </motion.a>
+                {t("extra.t431")}</motion.a>
             </motion.div>
           </motion.div>
 
@@ -320,11 +319,9 @@ export default function DesignConceptPage() {
             className="mb-24 md:text-center max-w-4xl md:mx-auto"
           >
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-[-0.03em] leading-tight mb-8 text-[#0B0C0D]">
-              Everything you need,<br /> elegantly arranged.
-            </h2>
+              {t("extra.t432")}<br /> {t("extra.t433")}</h2>
             <p className="text-[#25282B] text-xl font-medium leading-relaxed max-w-2xl mx-auto">
-              We stripped away the clutter to build a workspace that administrators and professionals actually enjoy using. 
-            </p>
+              {t("extra.t434")}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[480px]">
@@ -344,11 +341,9 @@ export default function DesignConceptPage() {
                   <LayoutDashboard className="w-6 h-6 text-[#0B0C0D]" />
                 </div>
                 <h3 className="text-3xl font-bold tracking-tight text-[#0B0C0D] mb-4">
-                  Flow State Booking
-                </h3>
+                  {t("extra.t435")}</h3>
                 <p className="text-[#25282B] text-lg font-medium leading-relaxed">
-                  A beautiful, Kanban-style timeline gives you absolute clarity over your day. Drag, drop, and manage without missing a beat.
-                </p>
+                  {t("extra.t436")}</p>
               </div>
               
               <div className="absolute right-0 bottom-0 translate-x-12 translate-y-12 w-[500px] h-[360px] bg-[#D8DADC]/50 backdrop-blur-md rounded-tl-[2.5rem] border-t border-l border-white shadow-2xl p-8 flex flex-col gap-5 group-hover:-translate-x-6 group-hover:-translate-y-6 transition-transform duration-700 ease-out">
@@ -411,11 +406,9 @@ export default function DesignConceptPage() {
                   <ShieldCheck className="w-6 h-6 text-[#0B0C0D]" />
                 </div>
                 <h3 className="text-3xl font-bold tracking-tight text-[#0B0C0D] mb-4">
-                  Karma Engine
-                </h3>
+                  {t("extra.t437")}</h3>
                 <p className="text-[#25282B] text-lg font-medium leading-relaxed">
-                  Risky clients automatically pay deposits.
-                </p>
+                  {t("extra.t438")}</p>
               </div>
 
               <div className="absolute inset-x-0 bottom-0 p-10 flex justify-center">
@@ -469,19 +462,16 @@ export default function DesignConceptPage() {
                   <Calendar className="w-6 h-6 text-[#0B0C0D]" />
                 </div>
                 <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-[#0B0C0D] mb-6 leading-tight">
-                  The Live Ticket
-                </h3>
+                  {t("extra.t439")}</h3>
                 <p className="text-[#25282B] text-xl font-medium leading-relaxed mb-10">
-                  Delight your customers with a digital pass that updates in real-time. Navigation, wait times, and direct contact—beautifully organized.
-                </p>
+                  {t("extra.t440")}</p>
                 <motion.button 
                   whileHover={{ scale: 1.04, backgroundColor: "#ffffff" }}
                   whileTap={{ scale: 0.92 }}
                   transition={{ type: "spring", stiffness: 400, damping: 25 }}
                   className="self-start text-[14px] font-bold text-[#151719] flex items-center gap-3 group/btn uppercase tracking-widest bg-white/50 px-6 py-3 rounded-full"
                 >
-                  See how it works
-                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1.5 transition-transform" />
+                  {t("extra.t441")}<ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1.5 transition-transform" />
                 </motion.button>
               </div>
 
@@ -517,16 +507,14 @@ export default function DesignConceptPage() {
                     <div className="p-8 text-center flex flex-col gap-6 bg-white rounded-b-[2rem]">
                        <div>
                          <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 bg-emerald-50 px-4 py-1.5 rounded-full mb-4 inline-block">
-                           Hair Salon
-                         </span>
+                           {t("extra.t370")}</span>
                          <h4 className="text-2xl font-bold text-[#0B0C0D] mb-2 tracking-tight">{useI18nStore.getState().t("extra.t262")}</h4>
                          <p className="text-[13px] font-bold text-[#25282B]">{useI18nStore.getState().t("extra.t198")}</p>
                        </div>
                        
                        <div className="flex gap-3 mt-2">
                           <button className="flex-1 py-3.5 rounded-full border border-[#8D9195]/30 bg-[#F3F4F4] text-[#0B0C0D] text-[13px] font-bold flex items-center justify-center gap-2 hover:bg-[#8D9195]/10 transition-colors">
-                            <Navigation className="w-4 h-4" /> Directions
-                          </button>
+                            <Navigation className="w-4 h-4" /> {t("app.t35")}</button>
                           <button className="w-12 h-12 rounded-full border border-[#8D9195]/30 bg-white flex items-center justify-center hover:bg-[#8D9195]/10 transition-colors">
                             <QrCode className="w-5 h-5 text-[#0B0C0D]" />
                           </button>
@@ -550,29 +538,28 @@ export default function DesignConceptPage() {
             className="max-w-4xl mx-auto"
           >
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#0B0C0D] mb-12 text-center">
-              Frequently asked questions
-            </h2>
+              {t("extra.t442")}</h2>
             
             <div className="flex flex-col border-t border-[#8D9195]/20">
               <FaqItem 
                 delay={0.1}
-                question="Is Elara free to use?" 
-                answer="Elara offers a free tier for individual professionals just starting out. For established salons and larger teams, we provide premium plans that unlock advanced features like the Karma Engine and comprehensive analytics." 
+                question={t("extra.t383")} 
+                answer={t("extra.t443")} 
               />
               <FaqItem 
                 delay={0.2}
-                question="Can I cancel or reschedule my appointment?" 
-                answer="Yes, clients can easily manage their bookings directly through the Live Ticket link sent via SMS or email, subject to the salon's individual cancellation policy." 
+                question={t("extra.t384")} 
+                answer={t("extra.t444")} 
               />
               <FaqItem 
                 delay={0.3}
-                question="Are the reviews authentic?" 
-                answer="Absolutely. Only clients who have completed an appointment through Elara are eligible to leave a verified review, ensuring total transparency." 
+                question={t("extra.t385")} 
+                answer={t("extra.t445")} 
               />
               <FaqItem 
                 delay={0.4}
-                question="How do I list my business on Elara?" 
-                answer="You can list your business by signing up for a Business Account. The onboarding process takes less than 5 minutes, allowing you to start accepting bookings immediately." 
+                question={t("extra.t386")} 
+                answer={t("extra.t446")} 
               />
             </div>
           </motion.div>
@@ -590,11 +577,9 @@ export default function DesignConceptPage() {
             className="max-w-4xl mx-auto flex flex-col items-center relative z-10"
           >
             <h2 className="text-5xl md:text-7xl font-bold tracking-[-0.03em] mb-8 text-[#0B0C0D] leading-tight">
-              Ready to upgrade <br /> your salon?
-            </h2>
+              {t("extra.t447")}<br /> {t("extra.t448")}</h2>
             <p className="text-xl text-[#25282B] font-medium mb-16 max-w-2xl">
-              Join the businesses that have completely eliminated no-shows and elevated their client experience with Elara.
-            </p>
+              {t("extra.t449")}</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full">
               <motion.button 
                 whileHover={{ scale: 1.04, boxShadow: "0 20px 40px -15px rgba(21,23,25,0.4)" }}
@@ -602,16 +587,14 @@ export default function DesignConceptPage() {
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className="h-16 px-12 bg-[#151719] text-white font-bold rounded-full text-[16px] w-full sm:w-auto"
               >
-                Create an Account
-              </motion.button>
+                {t("extra.t450")}</motion.button>
               <motion.button 
                 whileHover={{ scale: 1.04, backgroundColor: "rgba(255,255,255,0.5)" }}
                 whileTap={{ scale: 0.92 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className="h-16 px-10 bg-white text-[#0B0C0D] font-bold rounded-full border border-[#8D9195]/30 w-full sm:w-auto flex items-center justify-center gap-2 text-[16px] shadow-sm"
               >
-                Contact Sales
-              </motion.button>
+                {t("extra.t451")}</motion.button>
             </div>
           </motion.div>
         </section>
@@ -678,13 +661,11 @@ export default function DesignConceptPage() {
               className="pt-2 md:pt-[10px]"
             >
               <h4 className="text-[#0B0C0D] font-bold text-[16px] tracking-tight mb-6">
-                Platform
-              </h4>
+                {t("extra.t426")}</h4>
               <ul className="space-y-4 text-[14px] font-bold text-[#8D9195]">
                 <li>
                   <Link href="/search" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">
-                    Search
-                  </Link>
+                    {t("app.t0")}</Link>
                 </li>
                 <li>
                   <Link href="/login" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">{useI18nStore.getState().t("extra.t106")}</Link>
@@ -704,23 +685,19 @@ export default function DesignConceptPage() {
               className="pt-2 md:pt-[10px]"
             >
               <h4 className="text-[#0B0C0D] font-bold text-[16px] tracking-tight mb-6">
-                Resources
-              </h4>
+                {t("extra.t452")}</h4>
               <ul className="space-y-4 text-[14px] font-bold text-[#8D9195]">
                 <li>
                   <a href="#" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">
-                    Help Center
-                  </a>
+                    {t("extra.t453")}</a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">
-                    Guides
-                  </a>
+                    {t("extra.t454")}</a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">
-                    Blog
-                  </a>
+                    {t("extra.t455")}</a>
                 </li>
               </ul>
             </motion.div>
@@ -734,21 +711,18 @@ export default function DesignConceptPage() {
               className="pt-2 md:pt-[10px]"
             >
               <h4 className="text-[#0B0C0D] font-bold text-[16px] tracking-tight mb-6">
-                Company
-              </h4>
+                {t("extra.t456")}</h4>
               <ul className="space-y-4 text-[14px] font-bold text-[#8D9195]">
                 <li>
                   <a href="#" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">{useI18nStore.getState().t("extra.t326")}</a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">
-                    Careers
-                  </a>
+                    {t("extra.t457")}</a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">
-                    Contact
-                  </a>
+                    {t("app.t36")}</a>
                 </li>
               </ul>
             </motion.div>
@@ -763,7 +737,7 @@ export default function DesignConceptPage() {
           transition={{ duration: 1, delay: 0.4, ease: smoothEase }}
           className="max-w-7xl mx-auto pt-8 border-t border-[#8D9195]/20 flex flex-col md:flex-row items-center justify-between text-[13px] font-bold text-[#8D9195] gap-4"
         >
-          <p>© {new Date().getFullYear()} Elara. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {t("extra.t458")}</p>
           <div className="flex gap-8">
             <Link href="/privacy" className="hover:text-[#0B0C0D] transition-colors underline underline-offset-4">{useI18nStore.getState().t("extra.t259")}</Link>
             <Link href="/terms" className="hover:text-[#0B0C0D] transition-colors underline underline-offset-4">{useI18nStore.getState().t("extra.t192")}</Link>

@@ -236,7 +236,7 @@ export default function LiveTicket() {
     }
   };
 
-  const isCompleted = bookingData?.status === 'completed' || bookingData?.status === 'done';
+  const isCompleted = bookingData?.status === t("extra.t387") || bookingData?.status === 'done';
   const hasReviewed = !!bookingData?.rating;
 
   useLockBodyScroll(isCancelModalOpen);
@@ -280,7 +280,7 @@ export default function LiveTicket() {
           {/* Top Dark Card Section */}
           <div className={`text-white rounded-[1.8rem] p-8 text-center relative overflow-hidden shrink-0 transition-colors duration-500 ${
             (() => {
-              const isCompleted = bookingData.status === 'completed' || bookingData.status === 'done';
+              const isCompleted = bookingData.status === t("extra.t387") || bookingData.status === 'done';
               const isInProgress = bookingData.status === 'in_progress';
               const today = new Date();
               const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -297,13 +297,13 @@ export default function LiveTicket() {
             <div className="relative z-10">
               <p className="text-[10px] uppercase tracking-widest font-bold text-white/70 mb-2 truncate">
                 {(() => {
-                  const isCompleted = bookingData.status === 'completed' || bookingData.status === 'done';
+                  const isCompleted = bookingData.status === t("extra.t387") || bookingData.status === 'done';
                   if (isCompleted) return 'Completed at';
                   if (bookingData.status === 'in_progress') return 'Started at';
                   const today = new Date();
                   const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
                   if (bookingData.date === todayStr) return 'Arrive by';
-                  return 'Scheduled for';
+                  return t("extra.t369");
                 })()}
               </p>
               <h2 className="text-6xl sm:text-7xl font-semibold mb-6 tracking-tighter text-white truncate w-full">
@@ -313,7 +313,7 @@ export default function LiveTicket() {
                 <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-white truncate">
                   {(() => {
-                    const isCompleted = bookingData.status === 'completed' || bookingData.status === 'done';
+                    const isCompleted = bookingData.status === t("extra.t387") || bookingData.status === 'done';
                     if (isCompleted) return 'All done';
                     if (bookingData.status === 'in_progress') return 'In chair';
                     const today = new Date();
@@ -354,7 +354,7 @@ export default function LiveTicket() {
             {/* Stepper */}
             <div className="grid grid-cols-4 mb-10 px-1 shrink-0 w-full relative z-0">
               {(() => {
-                const isCompleted = bookingData.status === 'completed' || bookingData.status === 'done';
+                const isCompleted = bookingData.status === t("extra.t387") || bookingData.status === 'done';
                 const isInProgress = bookingData.status === 'in_progress';
                 const today = new Date();
                 const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -451,7 +451,7 @@ export default function LiveTicket() {
             {isCompleted ? (
               <div className="flex flex-col items-center p-5 bg-[#F5F5F4] rounded-2xl border border-[#DCDCDA] w-full">
                 <h3 className="text-sm font-semibold text-[#121415] mb-4 text-center">
-                  {hasReviewed ? "Thank you for your review!" : "How was your visit?"}
+                  {hasReviewed ? t("extra.t388") : t("extra.t389")}
                 </h3>
                 
                 <div className="flex items-center justify-center gap-2 mb-4">
@@ -485,7 +485,7 @@ export default function LiveTicket() {
                       shape="rounded"
                       className="w-full h-12"
                     >
-                      {isSubmittingReview ? "Submitting..." : "Submit Review"}
+                      {isSubmittingReview ? t("extra.t390") : "Submit Review"}
                     </Button>
                   </div>
                 ) : (
@@ -523,8 +523,8 @@ export default function LiveTicket() {
         onConfirm={() => setIsCancelModalOpen(false)}
         title={useI18nStore.getState().t("extra.t109")}
         description="Canceling in advance helps professionals manage their time and maintains your reliability karma."
-        confirmText="Yes, cancel"
-        cancelText="Keep booking"
+        confirmText={t("extra.t391")}
+        cancelText={t("extra.t392")}
         isDestructive={true}
       />
     </div>

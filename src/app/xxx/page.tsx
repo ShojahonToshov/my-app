@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/hooks/useI18n";
 import { useI18nStore } from "@/stores/i18nStore";
 
 
@@ -13,6 +14,8 @@ const customFont = Plus_Jakarta_Sans({
 });
 
 export default function ButtonShowcasePage() {
+  const { t } = useI18n();
+
   return (
     <div className={`min-h-screen bg-[#D8DADC] text-[#0B0C0D] ${customFont.className} p-10 md:p-20 flex flex-col gap-32`}>
       <div className="max-w-4xl">
@@ -54,8 +57,7 @@ export default function ButtonShowcasePage() {
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
               className="px-8 py-3.5 bg-white/10 border border-white/20 text-white text-[15px] font-bold rounded-full backdrop-blur-md"
             >
-              View Live Demo
-            </motion.button>
+              {t("extra.t469")}</motion.button>
           </div>
         </div>
       </section>
@@ -93,8 +95,7 @@ export default function ButtonShowcasePage() {
               transition={{ duration: 0.2, ease: "easeOut" }}
               className="px-8 py-3.5 bg-white/10 border border-white/20 text-white text-[15px] font-bold rounded-full backdrop-blur-md"
             >
-              View Live Demo
-            </motion.button>
+              {t("extra.t469")}</motion.button>
           </div>
         </div>
       </section>
@@ -155,8 +156,7 @@ export default function ButtonShowcasePage() {
               whileTap={{ scale: 0.95 }}
               className="relative px-8 py-3.5 bg-[#151719] text-white text-[15px] font-bold rounded-full group-hover:bg-[#25282B] transition-colors duration-300"
             >
-              Create an Account
-            </motion.button>
+              {t("extra.t450")}</motion.button>
           </div>
 
           {/* Secondary */}
@@ -166,8 +166,7 @@ export default function ButtonShowcasePage() {
               whileTap={{ scale: 0.95 }}
               className="relative px-8 py-3.5 bg-white text-[#0B0C0D] border border-[#8D9195]/20 text-[15px] font-bold rounded-full group-hover:border-[#0B0C0D]/50 transition-colors duration-300"
             >
-              Contact Sales
-            </motion.button>
+              {t("extra.t451")}</motion.button>
           </div>
         </div>
       </section>

@@ -129,8 +129,7 @@ export default function Login() {
                   <Check className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity duration-200" />
                 </div>
                 <span className={`text-sm font-medium transition-colors select-none ${isSubmitting ? "text-[#4A4E51]/60" : "text-[#4A4E51] group-hover:text-[#121415]"}`}>
-                  Remember me
-                </span>
+                  {t("extra.t393")}</span>
               </label>
 
               <button
@@ -138,8 +137,7 @@ export default function Login() {
                 disabled={isSubmitting}
                 className="text-sm font-medium text-[#4A4E51] hover:text-[#121415] transition-colors outline-none focus-visible:underline shrink-0"
               >
-                Forgot password?
-              </button>
+                {t("extra.t394")}</button>
             </div>
 
             <Button
@@ -156,8 +154,7 @@ export default function Login() {
                 onClick={() => setIsRoleModalOpen(true)}
                 className="text-[#121415] font-semibold hover:underline transition-colors outline-none"
               >
-                Create an account
-              </button>
+                {t("extra.t395")}</button>
             </p>
           </form>
         </Card>

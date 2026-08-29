@@ -1,0 +1,798 @@
+{
+  "Karma:": {
+    "ru": "Карма:",
+    "uz": "Karma:"
+  },
+  "Reliability Score (": {
+    "ru": "Индекс надежности (",
+    "uz": "Ishonchlilik reytingi ("
+  },
+  "When you interact with venues or book services, they will appear right here.": {
+    "ru": "Когда вы взаимодействуете с заведениями или бронируете услуги, они появятся здесь.",
+    "uz": "Muassasalar bilan aloqada bo'lganingizda yoki xizmatlarni band qilganingizda, ular shu yerda ko'rinadi."
+  },
+  "Hello,": {
+    "ru": "Здравствуйте,",
+    "uz": "Assalomu alaykum,"
+  },
+  "at": {
+    "ru": "в",
+    "uz": "da"
+  },
+  "Professional:": {
+    "ru": "Специалист:",
+    "uz": "Mutaxassis:"
+  },
+  "• Pro:": {
+    "ru": "• Профи:",
+    "uz": "• Pro:"
+  },
+  "Rated": {
+    "ru": "Оценено",
+    "uz": "Baho"
+  },
+  "Total users:": {
+    "ru": "Всего пользователей:",
+    "uz": "Jami foydalanuvchilar:"
+  },
+  "Delete All": {
+    "ru": "Удалить всех",
+    "uz": "Barchasini o'chirish"
+  },
+  "Refresh": {
+    "ru": "Обновить",
+    "uz": "Yangilash"
+  },
+  "Logout": {
+    "ru": "Выйти",
+    "uz": "Chiqish"
+  },
+  "Loading platform accounts...": {
+    "ru": "Загрузка аккаунтов платформы...",
+    "uz": "Platforma hisoblari yuklanmoqda..."
+  },
+  "No accounts found.": {
+    "ru": "Аккаунты не найдены.",
+    "uz": "Hisoblar topilmadi."
+  },
+  "Delete All Users?": {
+    "ru": "Удалить всех пользователей?",
+    "uz": "Barcha foydalanuvchilarni o'chirish?"
+  },
+  "Delete User?": {
+    "ru": "Удалить пользователя?",
+    "uz": "Foydalanuvchini o'chirish?"
+  },
+  "Are you sure you want to delete ALL users from the platform? This action is permanent and cannot be undone.": {
+    "ru": "Вы уверены, что хотите удалить ВСЕХ пользователей с платформы? Это действие необратимо.",
+    "uz": "Platformadagi BARCHA foydalanuvchilarni o'chirishga ishonchingiz komilmi? Bu harakatni bekor qilib bo'lmaydi."
+  },
+  "Are you sure you want to delete this user? This action is permanent and cannot be undone.": {
+    "ru": "Вы уверены, что хотите удалить этого пользователя? Это действие необратимо.",
+    "uz": "Bu foydalanuvchini o'chirishga ishonchingiz komilmi? Bu harakatni bekor qilib bo'lmaydi."
+  },
+  "Confirm Delete": {
+    "ru": "Подтвердить удаление",
+    "uz": "O'chirishni tasdiqlash"
+  },
+  "Intelligent growth.": {
+    "ru": "Интеллектуальный рост.",
+    "uz": "Intellektual o'sish."
+  },
+  "Zero no-shows.": {
+    "ru": "Ноль неявок.",
+    "uz": "Nol kelmaslik."
+  },
+  "Stop losing revenue to missed appointments. Elara combines smart deposits with a seamless booking flow to completely protect your time.": {
+    "ru": "Хватит терять доход из-за пропущенных записей. Elara объединяет умные депозиты с удобным бронированием для полной защиты вашего времени.",
+    "uz": "O'tkazib yuborilgan yozuvlar tufayli daromad yo'qotishni to'xtating. Elara sizning vaqtingizni to'liq himoya qilish uchun aqlli depozitlarni qulay band qilish bilan birlashtiradi."
+  },
+  "Find Services": {
+    "ru": "Найти услуги",
+    "uz": "Xizmatlarni topish"
+  },
+  "How it Works": {
+    "ru": "Как это работает",
+    "uz": "Qanday ishlaydi"
+  },
+  "Everything you need,": {
+    "ru": "Всё, что вам нужно,",
+    "uz": "Sizga kerak bo'lgan hamma narsa,"
+  },
+  "elegantly arranged.": {
+    "ru": "элегантно устроено.",
+    "uz": "nafis tartibga solingan."
+  },
+  "We stripped away the clutter to build a workspace that administrators and professionals actually enjoy using.": {
+    "ru": "Мы убрали все лишнее, чтобы создать рабочее пространство, которым администраторы и специалисты действительно наслаждаются.",
+    "uz": "Biz ma'murlar va mutaxassislar foydalanishdan zavqlanadigan ish maydonini yaratish uchun barcha keraksiz narsalarni olib tashladik."
+  },
+  "Flow State Booking": {
+    "ru": "Бронирование в состоянии потока",
+    "uz": "Oqim holatida band qilish"
+  },
+  "A beautiful, Kanban-style timeline gives you absolute clarity over your day. Drag, drop, and manage without missing a beat.": {
+    "ru": "Красивый таймлайн в стиле канбан дает абсолютную ясность вашего дня. Перетаскивайте и управляйте без единой запинки.",
+    "uz": "Kanban uslubidagi chiroyli vaqt jadvali kuningizni aniq ko'rsatadi. Torting, tashlang va hech narsani o'tkazib yubormasdan boshqaring."
+  },
+  "Karma Engine": {
+    "ru": "Движок Кармы",
+    "uz": "Karma dvigateli"
+  },
+  "Risky clients automatically pay deposits.": {
+    "ru": "Рискованные клиенты автоматически вносят депозиты.",
+    "uz": "Xavfli mijozlar avtomatik ravishda depozit to'laydilar."
+  },
+  "The Live Ticket": {
+    "ru": "Живой Билет",
+    "uz": "Jonli chipta"
+  },
+  "Delight your customers with a digital pass that updates in real-time. Navigation, wait times, and direct contact—beautifully organized.": {
+    "ru": "Радуйте клиентов цифровым пропуском, который обновляется в реальном времени. Навигация, время ожидания и прямая связь — всё отлично организовано.",
+    "uz": "Mijozlaringizni real vaqtda yangilanadigan raqamli chipta bilan xursand qiling. Navigatsiya, kutish vaqti va to'g'ridan-to'g'ri aloqa - chiroyli tashkil etilgan."
+  },
+  "See how it works": {
+    "ru": "Посмотреть, как это работает",
+    "uz": "Qanday ishlashini ko'rish"
+  },
+  "Hair Salon": {
+    "ru": "Парикмахерская",
+    "uz": "Sartaroshxona"
+  },
+  "Directions": {
+    "ru": "Маршрут",
+    "uz": "Yo'nalish"
+  },
+  "Frequently asked questions": {
+    "ru": "Часто задаваемые вопросы",
+    "uz": "Ko'p so'raladigan savollar"
+  },
+  "Is Elara free to use?": {
+    "ru": "Elara бесплатна для использования?",
+    "uz": "Elara dan foydalanish bepulmi?"
+  },
+  "Elara offers a free tier for individual professionals just starting out. For established salons and larger teams, we provide premium plans that unlock advanced features like the Karma Engine and comprehensive analytics.": {
+    "ru": "Elara предлагает бесплатный тариф для начинающих специалистов. Для состоявшихся салонов мы предоставляем премиум-планы с продвинутыми функциями, такими как Karma Engine и подробная аналитика.",
+    "uz": "Elara endigina boshlayotgan mutaxassislar uchun bepul tarifni taklif qiladi. Katta salonlar uchun biz Karma Engine va batafsil tahlil kabi ilg'or xususiyatlarga ega premium rejalarni taqdim etamiz."
+  },
+  "Can I cancel or reschedule my appointment?": {
+    "ru": "Могу ли я отменить или перенести запись?",
+    "uz": "Yozuvni bekor qilishim yoki boshqa vaqtga ko'chirishim mumkinmi?"
+  },
+  "Yes, clients can easily manage their bookings directly through the Live Ticket link sent via SMS or email, subject to the salon's individual cancellation policy.": {
+    "ru": "Да, клиенты могут легко управлять своими записями через ссылку Живого Билета, отправленную по SMS или email (согласно политике отмены салона).",
+    "uz": "Ha, mijozlar SMS yoki elektron pochta orqali yuborilgan Jonli Chipta havolasi orqali o'z yozuvlarini osongina boshqarishlari mumkin."
+  },
+  "Are the reviews authentic?": {
+    "ru": "Отзывы настоящие?",
+    "uz": "Sharhlar haqiqiymi?"
+  },
+  "Absolutely. Only clients who have completed an appointment through Elara are eligible to leave a verified review, ensuring total transparency.": {
+    "ru": "Абсолютно. Только клиенты, завершившие визит через Elara, могут оставить верифицированный отзыв.",
+    "uz": "Mutlaqo. Faqatgina Elara orqali tashrifni yakunlagan mijozlar tasdiqlangan sharh qoldirishlari mumkin."
+  },
+  "How do I list my business on Elara?": {
+    "ru": "Как разместить мой бизнес на Elara?",
+    "uz": "O'z biznesimni Elaraga qanday qo'shishim mumkin?"
+  },
+  "You can list your business by signing up for a Business Account. The onboarding process takes less than 5 minutes, allowing you to start accepting bookings immediately.": {
+    "ru": "Вы можете разместить свой бизнес, зарегистрировав Бизнес-аккаунт. Процесс подключения занимает менее 5 минут.",
+    "uz": "Biznes hisobini ro'yxatdan o'tkazish orqali biznesingizni qo'shishingiz mumkin. Boshlash jarayoni 5 daqiqadan kamroq vaqtni oladi."
+  },
+  "Ready to upgrade": {
+    "ru": "Готовы прокачать",
+    "uz": "Yangilashga tayyormisiz"
+  },
+  "your salon?": {
+    "ru": "свой салон?",
+    "uz": "saloningizni?"
+  },
+  "Join the businesses that have completely eliminated no-shows and elevated their client experience with Elara.": {
+    "ru": "Присоединяйтесь к бизнесам, которые полностью избавились от неявок и улучшили клиентский опыт вместе с Elara.",
+    "uz": "Elaradan foydalanib, kelmasliklarni butunlay yo'q qilgan va mijozlar tajribasini yaxshilagan bizneslarga qo'shiling."
+  },
+  "Create an Account": {
+    "ru": "Создать аккаунт",
+    "uz": "Hisob yaratish"
+  },
+  "Contact Sales": {
+    "ru": "Связаться с отделом продаж",
+    "uz": "Savdo bo'limi bilan bog'lanish"
+  },
+  "Platform": {
+    "ru": "Платформа",
+    "uz": "Platforma"
+  },
+  "Search": {
+    "ru": "Поиск",
+    "uz": "Qidirish"
+  },
+  "Resources": {
+    "ru": "Ресурсы",
+    "uz": "Resurslar"
+  },
+  "Help Center": {
+    "ru": "Справочный центр",
+    "uz": "Yordam markazi"
+  },
+  "Guides": {
+    "ru": "Руководства",
+    "uz": "Qo'llanmalar"
+  },
+  "Blog": {
+    "ru": "Блог",
+    "uz": "Blog"
+  },
+  "Company": {
+    "ru": "Компания",
+    "uz": "Kompaniya"
+  },
+  "Careers": {
+    "ru": "Карьера",
+    "uz": "Karyera"
+  },
+  "Contact": {
+    "ru": "Контакты",
+    "uz": "Aloqa"
+  },
+  "Elara. All rights reserved.": {
+    "ru": "Elara. Все права защищены.",
+    "uz": "Elara. Barcha huquqlar himoyalangan."
+  },
+  "Pricing": {
+    "ru": "Цены",
+    "uz": "Narxlar"
+  },
+  "Simple, transparent pricing.": {
+    "ru": "Простые и прозрачные цены.",
+    "uz": "Oddiy, shaffof narxlar."
+  },
+  "Whether you're just starting out or scaling a premium salon, Elara aligns with your success. No subscriptions, no hidden fees.": {
+    "ru": "Начинаете ли вы или масштабируете премиум-салон, Elara работает на ваш успех. Никаких подписок и скрытых платежей.",
+    "uz": "Yangi boshlayapsizmi yoki premium salonni kengaytiryapsizmi, Elara muvaffaqiyatingizga moslashadi. Obunalar va yashirin to'lovlar yo'q."
+  },
+  "/ forever": {
+    "ru": "/ навсегда",
+    "uz": "/ abadiy"
+  },
+  "Perfect for independent professionals building their client base. Access premium tools completely free.": {
+    "ru": "Идеально для независимых специалистов. Доступ к премиум инструментам совершенно бесплатно.",
+    "uz": "Mustaqil mutaxassislar uchun juda mos. Premium vositalardan mutlaqo bepul foydalaning."
+  },
+  "(Resets automatically every Monday)": {
+    "ru": "(Сбрасывается автоматически каждый понедельник)",
+    "uz": "(Har dushanba kuni avtomatik ravishda tiklanadi)"
+  },
+  "Get Started for Free": {
+    "ru": "Начать бесплатно",
+    "uz": "Bepul boshlash"
+  },
+  "RevShare": {
+    "ru": "Разделение дохода",
+    "uz": "Daromadni bo'lishish"
+  },
+  "For established businesses that demand total operational control and powerful no-show protection.": {
+    "ru": "Для состоявшегося бизнеса, которому требуется полный контроль и мощная защита от неявок.",
+    "uz": "To'liq operatsion nazorat va kelmaslikdan kuchli himoyani talab qiladigan bizneslar uchun."
+  },
+  "Join the Network": {
+    "ru": "Присоединиться к сети",
+    "uz": "Tarmoqqa qo'shilish"
+  },
+  "No venues match the selected filters. Try a different category.": {
+    "ru": "Нет заведений, соответствующих фильтрам. Попробуйте другую категорию.",
+    "uz": "Tanlangan filtrlarga mos keladigan joylar yo'q. Boshqa toifani sinab ko'ring."
+  },
+  "Where to search?": {
+    "ru": "Где искать?",
+    "uz": "Qayerda izlash kerak?"
+  },
+  "My account": {
+    "ru": "Мой аккаунт",
+    "uz": "Mening hisobim"
+  },
+  "venue": {
+    "ru": "заведение",
+    "uz": "muassasa"
+  },
+  "venues": {
+    "ru": "заведения",
+    "uz": "muassasalar"
+  },
+  "Sort by": {
+    "ru": "Сортировать по",
+    "uz": "Saralash"
+  },
+  "Saved only": {
+    "ru": "Только сохраненные",
+    "uz": "Faqat saqlanganlar"
+  },
+  "Temporarily Closed": {
+    "ru": "Временно закрыто",
+    "uz": "Vaqtinchalik yopiq"
+  },
+  "This venue is currently closed and not accepting instant walk-ins. You can still make an advance booking, but immediate service is not guaranteed.": {
+    "ru": "Это заведение закрыто и не принимает моментальных визитов. Вы можете забронировать заранее.",
+    "uz": "Bu muassasa hozirda yopiq va darhol qabul qilmaydi. Oldindan band qilishingiz mumkin."
+  },
+  "Currently Open": {
+    "ru": "Сейчас открыто",
+    "uz": "Hozir ochiq"
+  },
+  "This venue is open and currently accepting instant walk-ins and bookings.": {
+    "ru": "Это заведение открыто и принимает бронирования.",
+    "uz": "Ushbu muassasa ochiq va band qilishlarni qabul qilmoqda."
+  },
+  "Load more venues": {
+    "ru": "Загрузить еще",
+    "uz": "Yana yuklash"
+  },
+  "Venue is Currently Closed": {
+    "ru": "Заведение сейчас закрыто",
+    "uz": "Muassasa hozirda yopiq"
+  },
+  "is not accepting instant walk-ins right now. You can still make an advance booking for a future date, but immediate service is not guaranteed.": {
+    "ru": "сейчас не принимает. Вы можете забронировать на будущую дату.",
+    "uz": "hozir qabul qilmaydi. Kelajakdagi sana uchun oldindan band qilishingiz mumkin."
+  },
+  "View Live Demo": {
+    "ru": "Смотреть демо",
+    "uz": "Demoni ko'rish"
+  },
+  "Account Settings": {
+    "ru": "Настройки аккаунта",
+    "uz": "Hisob sozlamalari"
+  },
+  "Manage your personal data and security": {
+    "ru": "Управление личными данными и безопасностью",
+    "uz": "Shaxsiy ma'lumotlar va xavfsizlikni boshqarish"
+  },
+  "Generate Colors": {
+    "ru": "Сгенерировать цвета",
+    "uz": "Ranglarni yaratish"
+  },
+  "Saving...": {
+    "ru": "Сохранение...",
+    "uz": "Saqlanmoqda..."
+  },
+  "Save changes": {
+    "ru": "Сохранить изменения",
+    "uz": "O'zgarishlarni saqlash"
+  },
+  "Log out": {
+    "ru": "Выйти",
+    "uz": "Chiqish"
+  },
+  "Deleting...": {
+    "ru": "Удаление...",
+    "uz": "O'chirilmoqda..."
+  },
+  "Delete account": {
+    "ru": "Удалить аккаунт",
+    "uz": "Hisobni o'chirish"
+  },
+  "Bookings Paused": {
+    "ru": "Бронирование приостановлено",
+    "uz": "Band qilish to'xtatildi"
+  },
+  "This business has temporarily paused new bookings. Please check back later.": {
+    "ru": "Этот бизнес временно приостановил новые бронирования. Пожалуйста, зайдите позже.",
+    "uz": "Ushbu biznes yangi band qilishlarni vaqtincha to'xtatdi. Iltimos, keyinroq tekshirib ko'ring."
+  },
+  "No services available at the moment.": {
+    "ru": "На данный момент услуг нет.",
+    "uz": "Hozircha xizmatlar mavjud emas."
+  },
+  "No professionals available at the moment.": {
+    "ru": "На данный момент специалистов нет.",
+    "uz": "Hozircha mutaxassislar mavjud emas."
+  },
+  "Date & Time": {
+    "ru": "Дата и время",
+    "uz": "Sana va vaqt"
+  },
+  "You need to have an account to confirm your booking.": {
+    "ru": "Вам необходимо иметь аккаунт для подтверждения бронирования.",
+    "uz": "Band qilishni tasdiqlash uchun hisobingiz bo'lishi kerak."
+  },
+  "Log in or Register": {
+    "ru": "Войти или зарегистрироваться",
+    "uz": "Kirish yoki ro'yxatdan o'tish"
+  },
+  "Free cancellation up to": {
+    "ru": "Бесплатная отмена до",
+    "uz": "gacha bepul bekor qilish"
+  },
+  "Please respect the professionals' time. Frequent late cancellations or no-shows will lower your karma score, requiring prepayments for future bookings.": {
+    "ru": "Пожалуйста, уважайте время специалистов. Частые отмены понизят вашу карму.",
+    "uz": "Iltimos, mutaxassislarning vaqtini hurmat qiling. Tez-tez bekor qilishlar karmangizni pasaytiradi."
+  },
+  "Please respect the professionals' time. We kindly ask you to arrive on time or cancel your appointment in advance.": {
+    "ru": "Пожалуйста, приходите вовремя или отменяйте заранее.",
+    "uz": "Iltimos, o'z vaqtida keling yoki yozuvni oldindan bekor qiling."
+  },
+  "%. No prepayment needed.": {
+    "ru": "%. Предоплата не нужна.",
+    "uz": "%. Oldindan to'lov kerak emas."
+  },
+  "I commit to arriving on time or canceling in advance.": {
+    "ru": "Обязуюсь прийти вовремя или отменить заранее.",
+    "uz": "Men o'z vaqtida kelishga yoki oldindan bekor qilishga majburiyat olaman."
+  },
+  "Confirming...": {
+    "ru": "Подтверждение...",
+    "uz": "Tasdiqlanmoqda..."
+  },
+  "Confirm Booking": {
+    "ru": "Подтвердить бронирование",
+    "uz": "Band qilishni tasdiqlash"
+  },
+  "About us": {
+    "ru": "О нас",
+    "uz": "Biz haqimizda"
+  },
+  "Landmark: near the business center": {
+    "ru": "Ориентир: рядом с бизнес-центром",
+    "uz": "Mo'ljal: biznes markazi yaqinida"
+  },
+  "Show on map": {
+    "ru": "Показать на карте",
+    "uz": "Xaritada ko'rsatish"
+  },
+  "Phone": {
+    "ru": "Телефон",
+    "uz": "Telefon"
+  },
+  "No reviews yet. Be the first to leave one after your visit!": {
+    "ru": "Отзывов пока нет. Станьте первым!",
+    "uz": "Hozircha sharhlar yo'q. Birinchi bo'lib qoldiring!"
+  },
+  "Total": {
+    "ru": "Всего",
+    "uz": "Jami"
+  },
+  "Realtime": {
+    "ru": "В реальном времени",
+    "uz": "Real vaqtda"
+  },
+  "Appointments Rate": {
+    "ru": "Уровень записей",
+    "uz": "Yozuvlar darajasi"
+  },
+  "visits": {
+    "ru": "визиты",
+    "uz": "tashriflar"
+  },
+  "Top Services": {
+    "ru": "Топ услуги",
+    "uz": "Top xizmatlar"
+  },
+  "No results found": {
+    "ru": "Ничего не найдено",
+    "uz": "Hech narsa topilmadi"
+  },
+  "No customers found": {
+    "ru": "Клиенты не найдены",
+    "uz": "Mijozlar topilmadi"
+  },
+  "Regular": {
+    "ru": "Постоянный",
+    "uz": "Doimiy"
+  },
+  "New": {
+    "ru": "Новый",
+    "uz": "Yangi"
+  },
+  "Adding...": {
+    "ru": "Добавление...",
+    "uz": "Qo'shilmoqda..."
+  },
+  "Add to Directory": {
+    "ru": "Добавить в справочник",
+    "uz": "Katalogga qo'shish"
+  },
+  "Resume Bookings": {
+    "ru": "Возобновить бронирования",
+    "uz": "Band qilishlarni tiklash"
+  },
+  "Pause Bookings": {
+    "ru": "Приостановить бронирования",
+    "uz": "Band qilishlarni to'xtatish"
+  },
+  "Add Guest": {
+    "ru": "Добавить гостя",
+    "uz": "Mehmon qo'shish"
+  },
+  "min": {
+    "ru": "мин",
+    "uz": "daq"
+  },
+  "waiting": {
+    "ru": "ожидает",
+    "uz": "kutmoqda"
+  },
+  "Call In": {
+    "ru": "Пригласить",
+    "uz": "Taklif qilish"
+  },
+  "inChair": {
+    "ru": "в кресле",
+    "uz": "kresloda"
+  },
+  "Staff:": {
+    "ru": "Сотрудник:",
+    "uz": "Xodim:"
+  },
+  "Complete & Call Next": {
+    "ru": "Завершить и вызвать следующего",
+    "uz": "Tugatish va keyingisini chaqirish"
+  },
+  "+10 min delay": {
+    "ru": "+10 мин задержка",
+    "uz": "+10 daq kechikish"
+  },
+  "completed": {
+    "ru": "завершено",
+    "uz": "tugallandi"
+  },
+  "Save": {
+    "ru": "Сохранить",
+    "uz": "Saqlash"
+  },
+  "Upgrade Plan": {
+    "ru": "Обновить план",
+    "uz": "Rejani yangilash"
+  },
+  "Save Security Info": {
+    "ru": "Сохранить инфо безопасности",
+    "uz": "Xavfsizlik ma'lumotlarini saqlash"
+  },
+  "Expires": {
+    "ru": "Истекает",
+    "uz": "Tugaydi"
+  },
+  "Update": {
+    "ru": "Обновить",
+    "uz": "Yangilash"
+  },
+  "Enabled": {
+    "ru": "Включено",
+    "uz": "Yoqilgan"
+  },
+  "Disabled": {
+    "ru": "Отключено",
+    "uz": "O'chirilgan"
+  },
+  "Danger Zone": {
+    "ru": "Опасная зона",
+    "uz": "Xavfli hudud"
+  },
+  "Link Payment Card": {
+    "ru": "Привязать карту",
+    "uz": "Karta ulash"
+  },
+  "Enable Authentication": {
+    "ru": "Включить аутентификацию",
+    "uz": "Autentifikatsiyani yoqish"
+  },
+  "Permanently Delete": {
+    "ru": "Удалить навсегда",
+    "uz": "Barcha narsani o'chirish"
+  },
+  "Select date": {
+    "ru": "Выберите дату",
+    "uz": "Sanani tanlang"
+  },
+  "Cancel Booking": {
+    "ru": "Отменить запись",
+    "uz": "Band qilishni bekor qilish"
+  },
+  "Keep": {
+    "ru": "Оставить",
+    "uz": "Qoldirish"
+  },
+  "Add Link": {
+    "ru": "Добавить ссылку",
+    "uz": "Havola qo'shish"
+  },
+  "No social links added yet.": {
+    "ru": "Социальные ссылки еще не добавлены.",
+    "uz": "Ijtimoiy havolalar hali qo'shilmagan."
+  },
+  "Save Profile": {
+    "ru": "Сохранить профиль",
+    "uz": "Profilni saqlash"
+  },
+  "Day off": {
+    "ru": "Выходной",
+    "uz": "Dam olish kuni"
+  },
+  "Save Working Hours": {
+    "ru": "Сохранить часы работы",
+    "uz": "Ish vaqtini saqlash"
+  },
+  "Add Service": {
+    "ru": "Добавить услугу",
+    "uz": "Xizmat qo'shish"
+  },
+  "Add Specialist": {
+    "ru": "Добавить специалиста",
+    "uz": "Mutaxassis qo'shish"
+  },
+  "Save Policies": {
+    "ru": "Сохранить политики",
+    "uz": "Siyosatlarni saqlash"
+  },
+  "Edit Service": {
+    "ru": "Редактировать услугу",
+    "uz": "Xizmatni tahrirlash"
+  },
+  "New Service": {
+    "ru": "Новая услуга",
+    "uz": "Yangi xizmat"
+  },
+  "Save Changes": {
+    "ru": "Сохранить изменения",
+    "uz": "O'zgarishlarni saqlash"
+  },
+  "Save Service": {
+    "ru": "Сохранить услугу",
+    "uz": "Xizmatni saqlash"
+  },
+  "Save Specialist": {
+    "ru": "Сохранить специалиста",
+    "uz": "Mutaxassisni saqlash"
+  },
+  "Expand sidebar": {
+    "ru": "Развернуть боковую панель",
+    "uz": "Yon panelni yoyish"
+  },
+  "Collapse sidebar": {
+    "ru": "Свернуть боковую панель",
+    "uz": "Yon panelni yig'ish"
+  },
+  "Profile": {
+    "ru": "Профиль",
+    "uz": "Profil"
+  },
+  "Scheduled for": {
+    "ru": "Запланировано на",
+    "uz": "Rejalashtirilgan"
+  },
+  "The professional will be available exactly on time.": {
+    "ru": "Специалист будет доступен ровно в срок.",
+    "uz": "Mutaxassis o'z vaqtida bo'sh bo'ladi."
+  },
+  "Cancel booking": {
+    "ru": "Отменить запись",
+    "uz": "Yozuvni bekor qilish"
+  },
+  "Online & Accepting Bookings": {
+    "ru": "Онлайн и принимает записи",
+    "uz": "Onlayn va yozuvlarni qabul qilmoqda"
+  },
+  "Any Professional": {
+    "ru": "Любой специалист",
+    "uz": "Har qanday mutaxassis"
+  },
+  "Business Protection": {
+    "ru": "Защита бизнеса",
+    "uz": "Biznes himoyasi"
+  },
+  "Pay Deposit & Book": {
+    "ru": "Внести депозит и забронировать",
+    "uz": "Depozit to'lash va band qilish"
+  },
+  "Discover": {
+    "ru": "Откройте для себя",
+    "uz": "Kashf eting"
+  },
+  "Select & Book": {
+    "ru": "Выберите и забронируйте",
+    "uz": "Tanlang va band qiling"
+  },
+  "Experience": {
+    "ru": "Опыт",
+    "uz": "Tajriba"
+  },
+  "Trusted by those who know.": {
+    "ru": "Доверяют те, кто знает.",
+    "uz": "Bilenlar ishonadi."
+  },
+  "Thank you for your review!": {
+    "ru": "Спасибо за ваш отзыв!",
+    "uz": "Sharhingiz uchun rahmat!"
+  },
+  "How was your visit?": {
+    "ru": "Как прошел ваш визит?",
+    "uz": "Tashrifingiz qanday o'tdi?"
+  },
+  "Submitting...": {
+    "ru": "Отправка...",
+    "uz": "Yuborilmoqda..."
+  },
+  "Yes, cancel": {
+    "ru": "Да, отменить",
+    "uz": "Ha, bekor qilish"
+  },
+  "Keep booking": {
+    "ru": "Оставить запись",
+    "uz": "Yozuvni qoldirish"
+  },
+  "Remember me": {
+    "ru": "Запомнить меня",
+    "uz": "Meni eslab qolish"
+  },
+  "Forgot password?": {
+    "ru": "Забыли пароль?",
+    "uz": "Parolni unutdingizmi?"
+  },
+  "Create an account": {
+    "ru": "Создать аккаунт",
+    "uz": "Hisob yaratish"
+  },
+  "Page not found": {
+    "ru": "Страница не найдена",
+    "uz": "Sahifa topilmadi"
+  },
+  "Go home": {
+    "ru": "На главную",
+    "uz": "Asosiyga"
+  },
+  "You can add more details later in the dashboard.": {
+    "ru": "Вы можете добавить больше деталей позже в панели управления.",
+    "uz": "Siz keyinroq boshqaruv panelida ko'proq ma'lumot qo'shishingiz mumkin."
+  },
+  "Back": {
+    "ru": "Назад",
+    "uz": "Orqaga"
+  },
+  "Finish": {
+    "ru": "Завершить",
+    "uz": "Tugatish"
+  },
+  "Next": {
+    "ru": "Далее",
+    "uz": "Keyingisi"
+  },
+  "Verify your number": {
+    "ru": "Подтвердите свой номер",
+    "uz": "Raqamingizni tasdiqlang"
+  },
+  "Verify": {
+    "ru": "Подтвердить",
+    "uz": "Tasdiqlash"
+  },
+  "Resend code": {
+    "ru": "Отправить код повторно",
+    "uz": "Kodni qayta yuborish"
+  },
+  "Continue": {
+    "ru": "Продолжить",
+    "uz": "Davom etish"
+  },
+  "Join Elara": {
+    "ru": "Присоединиться к Elara",
+    "uz": "Elaraga qo'shilish"
+  },
+  "How would you like to use our platform?": {
+    "ru": "Как бы вы хотели использовать нашу платформу?",
+    "uz": "Platformamizdan qanday foydalanmoqchisiz?"
+  },
+  "As a Customer": {
+    "ru": "Как клиент",
+    "uz": "Mijoz sifatida"
+  },
+  "Book appointments, discover salons, and manage your schedule.": {
+    "ru": "Бронируйте записи, открывайте салоны и управляйте расписанием.",
+    "uz": "Yozuvlarni band qiling, salonlarni kashf eting va jadvalingizni boshqaring."
+  },
+  "As a Business": {
+    "ru": "Как бизнес",
+    "uz": "Biznes sifatida"
+  },
+  "Manage bookings, staff, and grow your presence on Elara.": {
+    "ru": "Управляйте бронированиями, персоналом и развивайте присутствие на Elara.",
+    "uz": "Band qilishlarni, xodimlarni boshqaring va Elarada ishtirokingizni o'stiring."
+  }
+}

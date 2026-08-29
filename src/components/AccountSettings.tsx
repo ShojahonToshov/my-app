@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/hooks/useI18n";
 import { useI18nStore } from "@/stores/i18nStore";
 
 import React, { useState, useEffect } from "react";
@@ -62,6 +63,8 @@ function generateAvatarColors(): string {
 }
 
 export default function AccountSettings() {
+  const { t } = useI18n();
+
   const router = useRouter();
   const { user, updateUser, logout } = useUser();
   
@@ -215,11 +218,9 @@ export default function AccountSettings() {
 
           <div className="mb-8 w-full mt-2">
             <h1 className="text-2xl sm:text-3xl font-semibold mb-2 text-[#121415] tracking-tight">
-              Account Settings
-            </h1>
+              {t("extra.t338")}</h1>
             <p className="text-sm text-[#4A4E51] font-medium leading-relaxed">
-              Manage your personal data and security
-            </p>
+              {t("extra.t339")}</p>
           </div>
           
           <div className="flex items-center gap-6 mb-8 p-5 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl">
@@ -242,8 +243,7 @@ export default function AccountSettings() {
                 onClick={handleGenerateAvatar}
                 className="w-max shadow-sm active:scale-95"
               >
-                Generate Colors
-              </Button>
+                {t("extra.t340")}</Button>
             </div>
           </div>
 
@@ -306,7 +306,7 @@ export default function AccountSettings() {
               icon={loading ? Loader2 : Save}
               disabled={loading}
             >
-              {loading ? "Saving..." : "Save changes"}
+              {loading ? t("extra.t341") : t("extra.t342")}
             </Button>
           </form>
 
@@ -319,8 +319,7 @@ export default function AccountSettings() {
               icon={LogOut}
               className="flex-1 h-12"
             >
-              Log out
-            </Button>
+              {t("extra.t343")}</Button>
 
             <Button 
               type="button"
@@ -330,7 +329,7 @@ export default function AccountSettings() {
               onClick={handleDeleteAccount}
               disabled={isDeleting}
             >
-              {isDeleting ? "Deleting..." : "Delete account"}
+              {isDeleting ? t("extra.t344") : t("extra.t345")}
             </Button>
           </div>
         </Card>

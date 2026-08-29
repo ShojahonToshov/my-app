@@ -78,7 +78,7 @@ function EmptyState({ query }: { query?: string }) {
       <p className="text-[#4A4E51] font-medium leading-relaxed max-w-sm">
         {query
           ? `No results for "${query}". Try adjusting your search or clearing the filters.`
-          : "No venues match the selected filters. Try a different category."}
+          : t("extra.t517")}
       </p>
     </div>
   );
@@ -197,8 +197,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                 htmlFor="desktop_location"
                 className="absolute left-11 top-1/2 -translate-y-1/2 text-[#4A4E51] text-sm font-medium pointer-events-none peer-[:not(:placeholder-shown)]:opacity-0"
               >
-                Where to search?
-              </label>
+                {t("app.t3")}</label>
               <AnimatePresence>
                 {locationQuery && (
                   <motion.button
@@ -223,7 +222,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                   (currentUser?.profile?.full_name as string) ||
                   (currentUser?.name as string) ||
                   (currentUser?.email as string)?.split("@")[0] ||
-                  "My account";
+                  t("extra.t518");
                 const avatarSrc = (currentUser?.profile?.avatar_url as string) || null;
                 return (
                   <Link
@@ -351,8 +350,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
 
                 {currentUser ? (
                   <Link href={accountLink} className="text-lg font-medium text-[#121415]" onClick={() => setMobileMenuOpen(false)}>
-                    My account
-                  </Link>
+                    {t("extra.t518")}</Link>
                 ) : (
                   <>
                     <Link href="/login"  className="text-lg font-medium text-[#121415]" onClick={() => setMobileMenuOpen(false)}>{t("app.t4")}</Link>
@@ -410,7 +408,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
             {/* Right: count + Open Now + Sort */}
             <div className="flex items-center gap-2 sm:gap-3 shrink-0 border-l border-[#DCDCDA] pl-3 sm:pl-4">
               <span className="text-[#121415] font-semibold text-sm tracking-tight px-1 hidden md:block">
-                {totalCount} {totalCount === 1 ? "venue" : "venues"}
+                {totalCount} {totalCount === 1 ? t("extra.t519") : t("extra.t408")}
               </span>
 
               {/* Open Now button */}
@@ -434,7 +432,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                 >
                   <SlidersHorizontal className="w-4 h-4 text-[#8A2532]" />
                   <span className="hidden sm:inline">
-                    Sort by {SORT_OPTIONS.find((o) => o.id === sortBy)?.shortLabel ?? "relevance"}
+                    {t("extra.t520")}{SORT_OPTIONS.find((o) => o.id === sortBy)?.shortLabel ?? "relevance"}
                   </span>
                   <span className="sm:hidden">{t("app.t9")}</span>
                   <ChevronDown className={`w-4 h-4 text-[#4A4E51] transition-transform duration-300 ${sortOpen ? "rotate-180" : ""}`} />
@@ -496,8 +494,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               <div className="hidden flex-wrap gap-2 mb-4">
                 {isSavedOnly && (
                   <span className="flex items-center gap-1.5 px-3 py-1.5 bg-[#121415] text-white text-xs font-semibold rounded-full">
-                    <Heart className="w-3 h-3 fill-white" /> Saved only
-                    <button onClick={toggleSavedFilter} className="ml-1 hover:opacity-70 active:scale-95 transition-all">
+                    <Heart className="w-3 h-3 fill-white" /> {t("extra.t521")}<button onClick={toggleSavedFilter} className="ml-1 hover:opacity-70 active:scale-95 transition-all">
                       <X className="w-3 h-3" />
                     </button>
                   </span>
@@ -550,11 +547,9 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                                   <Badge variant="dark" icon={Lock} className="!bg-[#8A2532] !text-white backdrop-blur-md border-none cursor-pointer hover:!bg-[#8A2532]/90">{t("app.t12")}</Badge>
                                   <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-[#DCDCDA] z-[60] text-left opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none">
                                     <p className="text-xs font-semibold text-[#121415] mb-1 flex items-center gap-1.5">
-                                      <AlertCircle className="w-3.5 h-3.5 text-[#8A2532]" /> Temporarily Closed
-                                    </p>
+                                      <AlertCircle className="w-3.5 h-3.5 text-[#8A2532]" /> {t("extra.t522")}</p>
                                     <p className="text-[11px] text-[#4A4E51] leading-relaxed">
-                                      This venue is currently closed and not accepting instant walk-ins. You can still make an advance booking, but immediate service is not guaranteed.
-                                    </p>
+                                      {t("extra.t523")}</p>
                                   </div>
                                 </div>
                               ) : (
@@ -562,11 +557,9 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                                   <Badge variant="dark" icon={Unlock} className="!bg-[#4a6b53] !text-white backdrop-blur-md border-none cursor-pointer hover:!bg-[#4a6b53]/90">{t("app.t13")}</Badge>
                                   <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white rounded-xl shadow-lg border border-[#DCDCDA] z-[60] text-left opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none">
                                     <p className="text-xs font-semibold text-[#121415] mb-1 flex items-center gap-1.5">
-                                      <CheckCircle2 className="w-3.5 h-3.5 text-[#4a6b53]" /> Currently Open
-                                    </p>
+                                      <CheckCircle2 className="w-3.5 h-3.5 text-[#4a6b53]" /> {t("extra.t524")}</p>
                                     <p className="text-[11px] text-[#4A4E51] leading-relaxed">
-                                      This venue is open and currently accepting instant walk-ins and bookings.
-                                    </p>
+                                      {t("extra.t525")}</p>
                                   </div>
                                 </div>
                               )}
@@ -680,8 +673,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
             {hasMore && (
               <div className="mb-16 flex justify-center">
                 <Button variant="outline" shape="pill" className="px-8 py-3.5" onClick={loadMore}>
-                  Load more venues
-                </Button>
+                  {t("extra.t526")}</Button>
               </div>
             )}
           </div>
@@ -725,11 +717,9 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
               </div>
 
               <h2 className="text-xl font-bold text-[#121415] mb-2 tracking-tight">
-                Venue is Currently Closed
-              </h2>
+                {t("extra.t527")}</h2>
               <p className="text-sm font-medium text-[#4A4E51] leading-relaxed mb-6">
-                <strong className="text-[#121415]">{interceptedVenue.name}</strong> is not accepting instant walk-ins right now. You can still make an advance booking for a future date, but immediate service is not guaranteed.
-              </p>
+                <strong className="text-[#121415]">{interceptedVenue.name}</strong> {t("extra.t528")}</p>
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button

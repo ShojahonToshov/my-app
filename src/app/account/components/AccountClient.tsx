@@ -66,12 +66,12 @@ export function KarmaTooltip({ karma }: { karma: number }) {
     <div className="relative inline-block">
       <button type="button" onClick={() => setIsOpen(!isOpen)} onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)} className="group bg-[#F5F5F4] px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-[#DCDCDA] shadow-sm shrink-0 h-8 cursor-pointer hover:bg-white hover:shadow-md transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
         <Star className="w-3.5 h-3.5 fill-[#8A2532] text-[#8A2532] shrink-0 group-hover:rotate-[72deg] group-hover:scale-110 transition-transform duration-500" />
-        <span className="text-xs uppercase tracking-widest font-bold text-[#121415] whitespace-nowrap">Karma: {karma}%</span>
+        <span className="text-xs uppercase tracking-widest font-bold text-[#121415] whitespace-nowrap">{useI18nStore.getState().t("extra.t357")}{karma}%</span>
       </button>
       <AnimatePresence>
         {isOpen && (
           <motion.div initial={{ opacity: 0, y: 5, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 5, scale: 0.95 }} transition={{ duration: 0.2 }} className="absolute right-0 mt-2 w-64 p-4 bg-white rounded-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.15)] border border-[#DCDCDA] z-[99999] text-left">
-            <p className="text-xs font-semibold text-[#121415] mb-1">Reliability Score ({karma}%)</p>
+            <p className="text-xs font-semibold text-[#121415] mb-1">{useI18nStore.getState().t("extra.t516")}{karma}%)</p>
             <p className="text-[11px] text-[#4A4E51] font-medium leading-relaxed">{useI18nStore.getState().t("extra.t225")}</p>
           </motion.div>
         )}
@@ -345,8 +345,7 @@ export function FavoritesList({ initialVenues, currentUserId }: { initialVenues:
           </div>
           <h3 className="text-xl font-semibold text-[#121415] mb-2 tracking-tight">{t("extra.t67")}</h3>
           <p className="text-[#4A4E51] font-medium mb-8 max-w-sm leading-relaxed">
-            When you interact with venues or book services, they will appear right here.
-          </p>
+            {t("extra.t409")}</p>
           <div className="mt-2 w-full flex justify-center">
             <Link href="/search" className="h-12 px-8 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{t("extra.t68")}</Link>
           </div>
