@@ -25,6 +25,9 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
     onVerifyRef.current = onVerify;
   }, [onVerify]);
 
+  const lastVerifiedCodeRef = React.useRef<string>('');
+  const formRef = React.useRef<HTMLFormElement>(null);
+
   useEffect(() => {
     if (autoFillCode) {
       setCode(autoFillCode);
@@ -33,15 +36,11 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
 
   useEffect(() => {
     if (code.length === 6 && !isVerifying && code !== lastVerifiedCodeRef.current) {
-      const timerId = setTimeout(async () => {
+      // Small delay to allow the state to render into the input field
+      const timerId = setTimeout(() => {
         lastVerifiedCodeRef.current = code;
-        setIsVerifying(true);
-        try {
-          await onVerifyRef.current(code);
-        } catch (err) {
-          console.error("[OtpInput] onVerify error:", err);
-        } finally {
-          setIsVerifying(false);
+        if (formRef.current) {
+          formRef.current.requestSubmit();
         }
       }, 50);
       return () => clearTimeout(timerId);
@@ -85,7 +84,7 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
         <span className="font-medium text-gray-700">{phone}</span>
       </p>
 
-      <form onSubmit={handleSubmit} className="w-full max-w-sm">
+      <form ref={formRef} onSubmit={handleSubmit} className="w-full max-w-sm">
         <div className="mb-6">
           <label htmlFor="otp-code" className="sr-only">Enter code</label>
           <input
