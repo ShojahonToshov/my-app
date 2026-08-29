@@ -36,11 +36,15 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
 
   useEffect(() => {
     if (code.length === 6 && !isVerifying && code !== lastVerifiedCodeRef.current) {
-      // Small delay to allow the state to render into the input field
-      const timerId = setTimeout(() => {
+      const timerId = setTimeout(async () => {
         lastVerifiedCodeRef.current = code;
-        if (formRef.current) {
-          formRef.current.requestSubmit();
+        setIsVerifying(true);
+        try {
+          await onVerifyRef.current(code);
+        } catch (err) {
+          console.error("[OtpInput] Auto-verify error:", err);
+        } finally {
+          setIsVerifying(false);
         }
       }, 50);
       return () => clearTimeout(timerId);
