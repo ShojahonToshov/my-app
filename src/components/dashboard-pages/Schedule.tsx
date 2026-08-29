@@ -536,8 +536,8 @@ export default function Schedule() {
     }
     
     if (!isSlotActive) {
-      // You could block booking here, but often admins want the ability to bypass
-      // toast.info("Note: This slot is outside regular working hours.");
+      toast.info("This slot is unavailable (day off or outside working hours)");
+      return;
     }
     setSelectedDateStr(date);
     setSelectedTime(time);
@@ -546,6 +546,7 @@ export default function Schedule() {
     if (!newService) setNewService(knownServices[0] || "");
     setIsBookingModalOpen(true);
   };
+
 
   const getStatusColor = (status: string) => {
     switch(status) {
@@ -679,9 +680,10 @@ export default function Schedule() {
                               </div>
                             ) : (
                               <div 
-                                className={`w-full h-full min-h-[80px] flex flex-col gap-1.5 ${isSlotActive ? 'cursor-pointer' : ''}`}
+                                className={`w-full h-full min-h-[80px] flex flex-col gap-1.5 ${isSlotActive ? 'cursor-pointer' : 'cursor-not-allowed pointer-events-none'}`}
                                 onClick={() => openModalForSlot(date.id, time, isSlotActive)}
                               >
+
                                 {apptsInSlot.map(appt => (
                                   <div 
                                     key={appt.id} 
