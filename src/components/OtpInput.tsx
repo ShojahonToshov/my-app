@@ -25,12 +25,11 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
     onVerifyRef.current = onVerify;
   }, [onVerify]);
 
-  const lastVerifiedCodeRef = React.useRef<string>('');
   const formRef = React.useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (autoFillCode) {
-      setCode(autoFillCode);
+      setCode(String(autoFillCode));
     }
   }, [autoFillCode]);
 
