@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/Button";
 
 interface OtpInputProps {
-  onVerify: (code: string) => void;
+  onVerify: (code: string) => void | Promise<void>;
   phone: string;
   autoFillCode?: string;
 }
@@ -17,12 +17,34 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
   const [code, setCode] = useState<string>('');
   const [timeLeft, setTimeLeft] = useState<number>(30);
   const [canResend, setCanResend] = useState<boolean>(false);
+  const [isVerifying, setIsVerifying] = useState<boolean>(false);
+  const onVerifyRef = React.useRef(onVerify);
+  const lastVerifiedCodeRef = React.useRef<string>('');
+
+  useEffect(() => {
+    onVerifyRef.current = onVerify;
+  }, [onVerify]);
 
   useEffect(() => {
     if (autoFillCode) {
       setCode(autoFillCode);
     }
   }, [autoFillCode]);
+
+  useEffect(() => {
+    if (code.length === 6 && !isVerifying && code !== lastVerifiedCodeRef.current) {
+      lastVerifiedCodeRef.current = code;
+      const timerId = setTimeout(async () => {
+        setIsVerifying(true);
+        try {
+          await onVerifyRef.current(code);
+        } finally {
+          setIsVerifying(false);
+        }
+      }, 50);
+      return () => clearTimeout(timerId);
+    }
+  }, [code, isVerifying]);
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -40,10 +62,15 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
     setCanResend(false);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (code.length === 6) {
-      onVerify(code);
+    if (code.length === 6 && !isVerifying) {
+      setIsVerifying(true);
+      try {
+        await onVerify(code);
+      } finally {
+        setIsVerifying(false);
+      }
     }
   };
 
@@ -67,8 +94,9 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
             value={code}
             onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
             placeholder={useI18nStore.getState().t("extra.t329")}
-            className="w-full text-center text-2xl tracking-widest p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#121415] focus:border-transparent outline-none transition-all"
+            className="w-full text-center text-2xl tracking-widest p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#121415] focus:border-transparent outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             required
+            disabled={isVerifying}
           />
         </div>
 
@@ -76,9 +104,9 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
           type="submit"
           variant="secondary"
           className="w-full mb-4 py-3"
-          disabled={code.length !== 6}
+          disabled={code.length !== 6 || isVerifying}
         >
-          {t("extra.t399")}</Button>
+          {isVerifying ? "Verifying..." : t("extra.t399")}</Button>
       </form>
 
       <div className="text-sm text-center">
