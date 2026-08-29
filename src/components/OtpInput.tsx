@@ -1,4 +1,6 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/Button";
 
@@ -59,7 +61,7 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
             maxLength={6}
             value={code}
             onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-            placeholder="Enter code"
+            placeholder={useI18nStore.getState().t("extra.t329")}
             className="w-full text-center text-2xl tracking-widest p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#121415] focus:border-transparent outline-none transition-all"
             required
           />

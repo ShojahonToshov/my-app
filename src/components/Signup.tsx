@@ -17,9 +17,10 @@ import { createClient } from "@/utils/supabase/client";
 type StepType = "form" | "otp";
 
 import { useI18nStore } from "@/stores/i18nStore";
+import { useI18n } from "@/hooks/useI18n";
 
 export default function Signup() {
-  const { t } = useI18nStore();
+  const { t } = useI18n();
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || "customer";
   
@@ -149,10 +150,10 @@ export default function Signup() {
                   <Input
                     id="firstName"
                     name="firstName"
-                    label="First Name"
+                    label={useI18nStore.getState().t("extra.t289")}
                     type="text"
                     icon={User}
-                    placeholder="Jane"
+                    placeholder={t("extra.t54")}
                     value={formData.firstName}
                     onChange={handleChange}
                     required
@@ -163,9 +164,9 @@ export default function Signup() {
                   <Input
                     id="lastName"
                     name="lastName"
-                    label="Last Name"
+                    label={useI18nStore.getState().t("extra.t293")}
                     type="text"
-                    placeholder="Doe"
+                    placeholder={t("extra.t55")}
                     value={formData.lastName}
                     onChange={handleChange}
                     required
@@ -177,7 +178,7 @@ export default function Signup() {
               <PhoneInput
                 id="phone"
                 name="phone"
-                label="Phone Number"
+                label={useI18nStore.getState().t("extra.t297")}
                 placeholder="+998 90 123 45 67"
                 value={formData.phone}
                 onChange={(val) => setFormData({ ...formData, phone: val })}
@@ -188,7 +189,7 @@ export default function Signup() {
               <Input
                 id="password"
                 name="password"
-                label="Create Password"
+                label={useI18nStore.getState().t("extra.t288")}
                 type={showPassword ? "text" : "password"}
                 icon={Lock}
                 actionIcon={showPassword ? EyeOff : Eye}

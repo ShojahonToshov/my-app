@@ -1,3 +1,4 @@
+import { useI18nStore } from "@/stores/i18nStore";
 import React from "react";
 import Link from "next/link";
 import {
@@ -134,13 +135,13 @@ export default async function AccountPage(props: { searchParams: Promise<{ [key:
           <div className="flex items-center gap-3 shrink-0">
             <Link href="/search" className="hidden sm:flex h-9 px-4 bg-[#121415] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-[#1E2123] transition-all items-center justify-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
               <Plus className="w-4 h-4 shrink-0" />
-              <span>Book</span>
+              <span>{useI18nStore.getState().t("extra.t188")}</span>
             </Link>
             <div className="w-px h-6 bg-[#DCDCDA] hidden sm:block mx-1 shrink-0" />
             <KarmaTooltip karma={clientKarma} />
             <div className="w-px h-6 bg-[#DCDCDA] hidden sm:block mx-1 shrink-0" />
             <NotificationsDropdown />
-            <Link href="/settings" aria-label="Settings" className="p-2.5 text-[#4A4E51] hover:text-[#121415] rounded-full hover:bg-white border border-transparent hover:border-[#DCDCDA] transition-all active:scale-95 shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
+            <Link href="/settings" aria-label={useI18nStore.getState().t("extra.t161")} className="p-2.5 text-[#4A4E51] hover:text-[#121415] rounded-full hover:bg-white border border-transparent hover:border-[#DCDCDA] transition-all active:scale-95 shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
               <Settings className="w-5 h-5" />
             </Link>
           </div>
@@ -160,7 +161,7 @@ export default async function AccountPage(props: { searchParams: Promise<{ [key:
                     <div className="min-w-0 flex-1 pr-4">
                       <div className="bg-[#8A2532]/10 px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 w-max mb-4">
                         <div className="w-2 h-2 rounded-full bg-[#8A2532] animate-pulse shrink-0" />
-                        <span className="text-[10px] uppercase tracking-widest font-bold text-[#8A2532]">Active Booking</span>
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-[#8A2532]">{useI18nStore.getState().t("extra.t166")}</span>
                       </div>
                       <h2 className="text-3xl font-semibold text-[#121415] tracking-tight">{booking.date} at {booking.time}</h2>
                       <p className="text-[#4A4E51] font-medium mt-2 flex items-center gap-1.5">
@@ -176,19 +177,19 @@ export default async function AccountPage(props: { searchParams: Promise<{ [key:
                     </div>
                     <div className="flex items-center gap-2 bg-[#E8EFE9] px-3 py-1.5 rounded-lg border border-[#4A6B53]/20 w-max shrink-0">
                       <Timer className="w-4 h-4 text-[#4A6B53] shrink-0" />
-                      <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A6B53]">Confirmed</span>
+                      <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A6B53]">{useI18nStore.getState().t("extra.t123")}</span>
                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Link href={`/ticket?id=${booking.id}`} className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-xl font-medium text-sm shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:bg-[#731E29] transition-all flex items-center justify-center gap-2 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2">
-                      <span>LiveTracker</span>
+                      <span>{useI18nStore.getState().t("extra.t139")}</span>
                       <ArrowRight className="w-4 h-4 shrink-0" />
                     </Link>
                     <BookingActions bookingId={booking.id} />
                   </div>
                 </AnimatedListItem>
               )) : (
-                <EmptyState icon={Calendar} title="No active bookings" action={<Link href="/search" className="h-12 px-8 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Find a venue</Link>} />
+                <EmptyState icon={Calendar} title={useI18nStore.getState().t("extra.t131")} action={<Link href="/search" className="h-12 px-8 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{useI18nStore.getState().t("extra.t242")}</Link>} />
               )}
             </AnimatedList>
           )}
@@ -201,16 +202,16 @@ export default async function AccountPage(props: { searchParams: Promise<{ [key:
             <AnimatedList className="space-y-4">
               {historyList.length > 0 ? historyList.map((booking) => (
                 <AnimatedListItem key={String(booking.id)} className="bg-white rounded-2xl p-6 md:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.08)] transition-all relative group hover:ring-2 hover:ring-[#121415]/5">
-                  <Link href={`/ticket?id=${booking.id}`} className="absolute inset-0 z-10 rounded-2xl" aria-label="View ticket" />
+                  <Link href={`/ticket?id=${booking.id}`} className="absolute inset-0 z-10 rounded-2xl" aria-label={useI18nStore.getState().t("extra.t315")} />
                   
                   <div className="flex-1 min-w-0 relative z-0">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A4E51] bg-[#F5F5F4] px-2.5 py-1 rounded-lg border border-[#DCDCDA]">{booking.date}</span>
                       {booking.status === 'cancelled' && (
-                        <span className="text-[10px] uppercase tracking-widest font-bold text-[#DC2626] bg-[#DC2626]/10 px-2.5 py-1 rounded-lg">Cancelled</span>
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-[#DC2626] bg-[#DC2626]/10 px-2.5 py-1 rounded-lg">{useI18nStore.getState().t("extra.t291")}</span>
                       )}
                       {(booking.status === 'completed' || booking.status === 'done') && (
-                        <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A6B53] bg-[#E8EFE9] px-2.5 py-1 rounded-lg border border-[#4A6B53]/20">Completed</span>
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A6B53] bg-[#E8EFE9] px-2.5 py-1 rounded-lg border border-[#4A6B53]/20">{useI18nStore.getState().t("extra.t233")}</span>
                       )}
                     </div>
                     <h3 className="font-semibold text-[#121415] text-xl tracking-tight leading-snug group-hover:text-[#8A2532] transition-colors">{booking.serviceName}</h3>
@@ -218,7 +219,7 @@ export default async function AccountPage(props: { searchParams: Promise<{ [key:
                   </div>
                   <div className="shrink-0 flex sm:flex-col items-center sm:items-end gap-3 sm:gap-2 relative z-20">
                     {booking.status === 'cancelled' ? (
-                      <span className="text-xs font-medium text-[#8B9194] px-2 py-1 bg-[#F5F5F4] rounded-lg border border-[#DCDCDA]/50">No review needed</span>
+                      <span className="text-xs font-medium text-[#8B9194] px-2 py-1 bg-[#F5F5F4] rounded-lg border border-[#DCDCDA]/50">{useI18nStore.getState().t("extra.t121")}</span>
                     ) : booking.isReviewed ? (
                       <div className="flex flex-col items-end gap-1.5">
                         <div className="flex gap-0.5">
@@ -234,13 +235,13 @@ export default async function AccountPage(props: { searchParams: Promise<{ [key:
                     <div className="flex items-center gap-4 mt-0 sm:mt-2">
                       <Link href={`/booking?id=${booking.venueId}`} className="text-sm font-medium text-[#121415] hover:text-[#8A2532] flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:underline rounded">
                         <RefreshCw className="w-4 h-4 text-[#4A4E51] shrink-0" />
-                        <span>Book again</span>
+                        <span>{useI18nStore.getState().t("extra.t153")}</span>
                       </Link>
                     </div>
                   </div>
                 </AnimatedListItem>
               )) : (
-                <EmptyState icon={History} title="No history yet" action={<Link href="/search" className="h-12 px-8 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">Find a venue</Link>} />
+                <EmptyState icon={History} title={useI18nStore.getState().t("extra.t167")} action={<Link href="/search" className="h-12 px-8 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1E2123] transition-all active:scale-95 inline-flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{useI18nStore.getState().t("extra.t242")}</Link>} />
               )}
             </AnimatedList>
           )}
@@ -251,7 +252,7 @@ export default async function AccountPage(props: { searchParams: Promise<{ [key:
       <Link
         href="/search"
         className="sm:hidden fixed bottom-6 right-6 w-14 h-14 bg-[#121415] text-white rounded-full flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.25)] z-50 hover:scale-105 active:scale-95 transition-transform outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2"
-        aria-label="New Booking"
+        aria-label={useI18nStore.getState().t("extra.t189")}
       >
         <Plus className="w-6 h-6" />
       </Link>

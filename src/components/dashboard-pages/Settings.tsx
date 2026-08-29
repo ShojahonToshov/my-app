@@ -1,5 +1,6 @@
 "use client";
 import { useI18nStore } from "@/stores/i18nStore";
+import { useI18n } from "@/hooks/useI18n";
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import {
@@ -60,10 +61,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm,
         <h2 className="text-2xl font-semibold text-[#121415] mb-2">{title}</h2>
         <p className="text-sm text-[#4A4E51] font-medium mb-6">{description}</p>
         <div className="flex gap-3 w-full">
-          <button type="button" onClick={onClose} className="flex-1 py-3 bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm transition-colors hover:bg-[#ECECEA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{useI18nStore.getState().t("app.t16")}</button>
-          <button type="button" onClick={onConfirm} className="flex-1 py-3 rounded-xl font-medium text-sm shadow-sm transition-all bg-[#dc2626] text-white hover:opacity-90 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]">
-            Delete
-          </button>
+          <button type="button" onClick={onClose} className="flex-1 py-3 bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm transition-colors hover:bg-[#ECECEA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{useI18n().t("app.t16")}</button>
+          <button type="button" onClick={onConfirm} className="flex-1 py-3 rounded-xl font-medium text-sm shadow-sm transition-all bg-[#dc2626] text-white hover:opacity-90 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]">{useI18nStore.getState().t("extra.t243")}</button>
         </div>
       </div>
     </div>
@@ -166,6 +165,7 @@ const CANCEL_WINDOWS = ["2 hours before", "12 hours before (Recommended)", "24 h
 const KARMA_THRESHOLDS = ["90%", "80% (Recommended)", "70%", "60%"];
 
 export default function Settings() {
+  const { t } = useI18n();
   const [activeTab, setActiveTab] = useState("profile");
 
   // Real state data for tab views
@@ -473,7 +473,7 @@ export default function Settings() {
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Settings</h1>
+              <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">{t("extra.t2")}</h1>
             </div>
             <p className="text-sm text-[#4A4E51] font-medium mt-1 hidden sm:block">
               Manage your business profile, operating hours, and staff
@@ -513,17 +513,17 @@ export default function Settings() {
             {activeTab === "profile" && (
               <div className="bg-white rounded-3xl p-8 shadow-sm border border-[#DCDCDA] animate-in fade-in duration-300">
                 <div className="mb-8">
-                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">About Business</h2>
-                  <p className="text-sm text-[#4A4E51] font-medium mt-1">This information will be displayed to customers on the booking page</p>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t4")}</h2>
+                  <p className="text-sm text-[#4A4E51] font-medium mt-1">{t("extra.t5")}</p>
                 </div>
 
                 <form onSubmit={handleProfileSubmit} className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-[#121415] mb-3">Business Logo</label>
+                    <label className="block text-sm font-medium text-[#121415] mb-3">{t("extra.t6")}</label>
                     <div className="flex items-center gap-6">
                       <button type="button" className="w-24 h-24 rounded-2xl bg-[#F5F5F4] border border-dashed border-[#DCDCDA] flex flex-col items-center justify-center text-[#8B9194] hover:bg-[#ECECEA] hover:border-[#121415] transition-colors cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
                         <ImagePlus className="w-6 h-6 mb-1 group-hover:text-[#121415] transition-colors" />
-                        <span className="text-xs font-medium">Upload</span>
+                        <span className="text-xs font-medium">{t("extra.t7")}</span>
                       </button>
                       <div className="text-sm text-[#4A4E51] font-medium max-w-xs leading-relaxed">
                         Recommended size: 512x512px. Formats: JPG, PNG. Max 2MB.
@@ -533,7 +533,7 @@ export default function Settings() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-[#121415] mb-2">Business Name</label>
+                      <label className="block text-sm font-medium text-[#121415] mb-2">{t("extra.t8")}</label>
                       <div className="relative">
                         <Store className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
                         <input required type="text" value={venueProfile.name} onChange={(e) => setVenueProfile({...venueProfile, name: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
@@ -541,17 +541,17 @@ export default function Settings() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-[#121415] mb-2">Address</label>
+                      <label className="block text-sm font-medium text-[#121415] mb-2">{t("extra.t9")}</label>
                       <div className="relative">
                         <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                        <input type="text" value={venueProfile.address} onChange={(e) => setVenueProfile({...venueProfile, address: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" placeholder="E.g., 123 Main St" />
+                        <input type="text" value={venueProfile.address} onChange={(e) => setVenueProfile({...venueProfile, address: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" placeholder={t("extra.t10")} />
                       </div>
                     </div>
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between mb-3">
-                      <label className="block text-sm font-medium text-[#121415]">Social Links</label>
+                      <label className="block text-sm font-medium text-[#121415]">{t("extra.t11")}</label>
                       <button 
                         type="button" 
                         onClick={() => setVenueProfile({...venueProfile, socialLinks: [...venueProfile.socialLinks, {platform: 'Instagram', value: ''}]})}
@@ -618,9 +618,9 @@ export default function Settings() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#121415] mb-2">About us</label>
+                    <label className="block text-sm font-medium text-[#121415] mb-2">{t("extra.t12")}</label>
                     <div className="relative">
-                      <textarea rows={4} value={venueProfile.description} onChange={(e) => setVenueProfile({...venueProfile, description: e.target.value})} className="w-full px-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all resize-none placeholder:text-[#8B9194]" placeholder="Tell your customers about your business..."></textarea>
+                      <textarea rows={4} value={venueProfile.description} onChange={(e) => setVenueProfile({...venueProfile, description: e.target.value})} className="w-full px-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all resize-none placeholder:text-[#8B9194]" placeholder={t("extra.t13")}></textarea>
                     </div>
                   </div>
 
@@ -637,8 +637,8 @@ export default function Settings() {
             {activeTab === "schedule" && (
               <div className="bg-white rounded-3xl p-8 shadow-sm border border-[#DCDCDA] animate-in fade-in duration-300">
                 <div className="mb-8">
-                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Working Hours</h2>
-                  <p className="text-sm text-[#4A4E51] font-medium mt-1">Configure working days and operating hours for online booking</p>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t14")}</h2>
+                  <p className="text-sm text-[#4A4E51] font-medium mt-1">{t("extra.t15")}</p>
                 </div>
 
                 <div className="space-y-3 mb-8">
@@ -689,8 +689,8 @@ export default function Settings() {
               <div className="animate-in fade-in duration-300">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
                   <div>
-                    <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Services & Pricing</h2>
-                    <p className="text-sm text-[#4A4E51] font-medium mt-1">Configure services visible in online booking</p>
+                    <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t16")}</h2>
+                    <p className="text-sm text-[#4A4E51] font-medium mt-1">{t("extra.t17")}</p>
                   </div>
                   <button type="button" onClick={() => openServiceModal()} className="bg-[#121415] text-white px-5 py-3 rounded-xl text-sm font-medium shadow-sm hover:opacity-90 transition-all flex justify-center items-center gap-2 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
                     <Plus className="w-4 h-4" /> Add Service
@@ -699,12 +699,12 @@ export default function Settings() {
 
                 <div className="space-y-3">
                   {services.length === 0 ? (
-                    <EmptyState icon={Scissors} title="Price list is empty" description="Add your first service for customers." />
+                    <EmptyState icon={Scissors} title={useI18nStore.getState().t("extra.t258")} description="Add your first service for customers." />
                   ) : (
                     services.map((service) => (
                       <div key={service.id} className={`flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border transition-all ${service.isActive ? "bg-white border-[#DCDCDA] shadow-sm" : "bg-[#F5F5F4] border-[#DCDCDA] opacity-60"}`}>
                         <div className="flex items-center gap-4 mb-4 sm:mb-0">
-                          <button type="button" onClick={() => handleToggleService(service.id)} aria-label="Toggle service status" className={`relative w-11 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 shrink-0 ${service.isActive ? "bg-[#4a6b53]" : "bg-[#DCDCDA]"}`}>
+                          <button type="button" onClick={() => handleToggleService(service.id)} aria-label={useI18nStore.getState().t("extra.t171")} className={`relative w-11 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 shrink-0 ${service.isActive ? "bg-[#4a6b53]" : "bg-[#DCDCDA]"}`}>
                             <span className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 shadow-sm ${service.isActive ? "translate-x-5" : "translate-x-0"}`}></span>
                           </button>
                           <div>
@@ -731,8 +731,8 @@ export default function Settings() {
               <div className="animate-in fade-in duration-300">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
                   <div>
-                    <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Team</h2>
-                    <p className="text-sm text-[#4A4E51] font-medium mt-1">Manage specialists and their availability</p>
+                    <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t3")}</h2>
+                    <p className="text-sm text-[#4A4E51] font-medium mt-1">{t("extra.t18")}</p>
                   </div>
                   <button type="button" onClick={() => { setIsMasterModalOpen(true); setSpecialistFormName(""); }} className="bg-[#121415] text-white px-5 py-3 rounded-xl text-sm font-medium shadow-sm hover:opacity-90 transition-all flex justify-center items-center gap-2 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95">
                     <UserPlus className="w-4 h-4" /> Add Specialist
@@ -741,7 +741,7 @@ export default function Settings() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {team.length === 0 ? (
-                     <div className="sm:col-span-2"><EmptyState icon={Users} title="No team members" description="Add specialists to start taking bookings." /></div>
+                     <div className="sm:col-span-2"><EmptyState icon={Users} title={useI18nStore.getState().t("extra.t252")} description="Add specialists to start taking bookings." /></div>
                   ) : (
                     team.map((member) => (
                       <div key={member.id} className={`p-5 rounded-2xl border transition-all flex flex-col justify-between ${member.isActive ? "bg-white border-[#DCDCDA] shadow-sm hover:shadow-md" : "bg-[#F5F5F4] border-[#DCDCDA] opacity-60"}`}>
@@ -759,8 +759,8 @@ export default function Settings() {
                         </div>
                         
                         <div className="flex items-center justify-between pt-4 border-t border-[#DCDCDA]">
-                          <span className="text-xs font-medium text-[#4A4E51]">Available for booking</span>
-                          <button type="button" onClick={() => handleToggleMaster(member.id)} aria-label="Toggle specialist status" className={`relative w-10 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 ${member.isActive ? "bg-[#4a6b53]" : "bg-[#DCDCDA]"}`}>
+                          <span className="text-xs font-medium text-[#4A4E51]">{t("extra.t19")}</span>
+                          <button type="button" onClick={() => handleToggleMaster(member.id)} aria-label={useI18nStore.getState().t("extra.t328")} className={`relative w-10 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 ${member.isActive ? "bg-[#4a6b53]" : "bg-[#DCDCDA]"}`}>
                             <span className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 shadow-sm ${member.isActive ? "translate-x-4" : "translate-x-0"}`}></span>
                           </button>
                         </div>
@@ -775,14 +775,14 @@ export default function Settings() {
             {activeTab === "policies" && (
               <div className="bg-white rounded-3xl p-8 shadow-sm border border-[#DCDCDA] animate-in fade-in duration-300">
                 <div className="mb-8">
-                  <h2 className="text-xl font-semibold text-[#121415] flex items-center gap-2"><ShieldAlert className="w-5 h-5 text-[#8A2532]" /> No-Show Protection</h2>
-                  <p className="text-sm text-[#4A4E51] font-medium mt-1">Set cancellation and deposit rules to eliminate empty calendar slots.</p>
+                  <h2 className="text-xl font-semibold text-[#121415] flex items-center gap-2"><ShieldAlert className="w-5 h-5 text-[#8A2532]" />{useI18nStore.getState().t("extra.t220")}</h2>
+                  <p className="text-sm text-[#4A4E51] font-medium mt-1">{t("extra.t20")}</p>
                 </div>
 
                 <div className="space-y-6">
                   <div className="p-5 rounded-2xl border border-[#DCDCDA] bg-[#F5F5F4]/50">
-                    <label className="block text-sm font-semibold text-[#121415] mb-1">Free Cancellation Window</label>
-                    <p className="text-xs text-[#4A4E51] font-medium mb-4">If a customer cancels past this window, their reliability karma rating will decrease.</p>
+                    <label className="block text-sm font-semibold text-[#121415] mb-1">{t("extra.t21")}</label>
+                    <p className="text-xs text-[#4A4E51] font-medium mb-4">{t("extra.t22")}</p>
                     <CustomSelect 
                       value={policies.cancelWindow || "12 hours before (Recommended)"} 
                       options={CANCEL_WINDOWS} 
@@ -795,8 +795,8 @@ export default function Settings() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-semibold text-[#121415] text-sm">Smart Karma Protection</span>
-                          <span className="px-2 py-0.5 rounded-md bg-[#4a6b53]/10 text-[#4a6b53] text-xs font-semibold">Recommended</span>
+                          <span className="font-semibold text-[#121415] text-sm">{t("extra.t23")}</span>
+                          <span className="px-2 py-0.5 rounded-md bg-[#4a6b53]/10 text-[#4a6b53] text-xs font-semibold">{t("extra.t24")}</span>
                         </div>
                         <p className="text-xs text-[#4A4E51] font-medium max-w-lg leading-relaxed">
                           Require card hold (deposit) only for first-time customers or those with karma score below {policies.karmaThreshold?.replace(' (Recommended)', '') || '80%'}. Loyal customers book in 1-click.
@@ -805,7 +805,7 @@ export default function Settings() {
                       <button
                         type="button"
                         onClick={() => setPolicies({...policies, requireCardForLowKarma: !policies.requireCardForLowKarma})} 
-                        aria-label="Toggle Smart Karma Protection"
+                        aria-label={useI18nStore.getState().t("extra.t223")}
                         className={`relative w-11 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 shrink-0 ${policies.requireCardForLowKarma ? "bg-[#8A2532]" : "bg-[#DCDCDA]"}`}
                       >
                         <span className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 shadow-sm ${policies.requireCardForLowKarma ? "translate-x-5" : "translate-x-0"}`}></span>
@@ -813,7 +813,7 @@ export default function Settings() {
                     </div>
                     {policies.requireCardForLowKarma && (
                       <div className="pt-4 mt-4 border-t border-[#DCDCDA]">
-                        <label className="block text-sm font-semibold text-[#121415] mb-2">Karma Threshold</label>
+                        <label className="block text-sm font-semibold text-[#121415] mb-2">{t("extra.t25")}</label>
                         <CustomSelect 
                           value={policies.karmaThreshold || "80% (Recommended)"} 
                           options={KARMA_THRESHOLDS} 
@@ -841,19 +841,19 @@ export default function Settings() {
       {isServiceModalOpen && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsServiceModalOpen(false)}>
           <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-            <button type="button" aria-label="Close" onClick={() => setIsServiceModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
+            <button type="button" aria-label={useI18nStore.getState().t("extra.t128")} onClick={() => setIsServiceModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">
               <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{editingServiceId ? "Edit Service" : "New Service"}</h2>
             </div>
             <form onSubmit={handleServiceSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Service Name</label>
+                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t26")}</label>
                 <div className="relative">
                   <Scissors className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
                   <input 
                     required 
                     type="text" 
-                    placeholder="E.g. Laser Hair Removal" 
+                    placeholder={t("extra.t27")} 
                     value={serviceFormName} 
                     onChange={(e) => setServiceFormName(e.target.value)} 
                     className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
@@ -876,14 +876,14 @@ export default function Settings() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Duration (min)</label>
+                  <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t28")}</label>
                   <div className="relative">
                     <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
                     <input required name="time" type="number" placeholder="45" value={serviceFormDuration} onChange={(e) => setServiceFormDuration(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Price (UZS)</label>
+                  <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t29")}</label>
                   <div className="relative">
                     <Banknote className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
                     <input required name="price" type="text" placeholder="80 000" value={serviceFormPrice} 
@@ -907,20 +907,20 @@ onChange={(e) => {
       {isMasterModalOpen && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsMasterModalOpen(false)}>
           <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-            <button type="button" aria-label="Close" onClick={() => setIsMasterModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
+            <button type="button" aria-label={useI18nStore.getState().t("extra.t128")} onClick={() => setIsMasterModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">
-              <h2 className="text-xl font-semibold text-[#121415] tracking-tight">Specialist</h2>
+              <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t30")}</h2>
             </div>
             <form onSubmit={handleSpecialistSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Full Name</label>
+                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{useI18nStore.getState().t("extra.t180")}</label>
                 <div className="relative">
                   <UserPlus className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-                  <input autoFocus required name="name" type="text" placeholder="Alexey K." value={specialistFormName} onChange={(e) => setSpecialistFormName(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                  <input autoFocus required name="name" type="text" placeholder={useI18nStore.getState().t("extra.t336")} value={specialistFormName} onChange={(e) => setSpecialistFormName(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">Role</label>
+                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t31")}</label>
                 <CustomSelect 
                   value={newStaffRole} 
                   options={ROLE_OPTIONS} 
@@ -941,9 +941,12 @@ onChange={(e) => {
         isOpen={deleteModalOpen} 
         onClose={() => setDeleteModalOpen(false)} 
         onConfirm={handleDeleteConfirm} 
-        title="Confirm Deletion" 
+        title={useI18nStore.getState().t("extra.t285")} 
         description={`Are you sure you want to delete "${itemToDelete?.name}"? This action cannot be undone.`} 
       />
     </div>
   );
 }
+
+
+

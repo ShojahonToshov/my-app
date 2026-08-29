@@ -1,4 +1,6 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
+
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -17,9 +19,7 @@ export default function PricingPage() {
             <Link href="/pricing" className="text-sm font-medium text-[#121415] hover:text-[#8A2532] transition-colors">
               Pricing
             </Link>
-            <Link href="/login" className="text-sm font-semibold text-[#121415] hover:text-[#8A2532] transition-colors">
-              Log in
-            </Link>
+            <Link href="/login" className="text-sm font-semibold text-[#121415] hover:text-[#8A2532] transition-colors">{useI18nStore.getState().t("extra.t106")}</Link>
           </div>
         </div>
       </nav>
@@ -53,7 +53,7 @@ export default function PricingPage() {
             className="bg-white rounded-2xl p-8 md:p-12 border border-[#DCDCDA] shadow-sm flex flex-col relative overflow-hidden group hover:shadow-md transition-shadow"
           >
             <div className="mb-10">
-              <h3 className="text-2xl font-bold text-[#121415] mb-2">Core</h3>
+              <h3 className="text-2xl font-bold text-[#121415] mb-2">{useI18nStore.getState().t("extra.t197")}</h3>
               <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-5xl font-bold text-[#121415] tracking-tight">$0</span>
                 <span className="text-[#8B9194] font-medium">/ forever</span>
@@ -68,7 +68,7 @@ export default function PricingPage() {
                 "Digital Live Ticket for customers",
                 "Kanban appointment dashboard",
                 "Verified authentic reviews",
-                <span key="limits">Generous weekly limits on paid features <br/><span className="text-sm font-normal text-[#8B9194] mt-1 inline-block">(Resets automatically every Monday)</span></span>
+                <span key="limits">{useI18nStore.getState().t("extra.t199")}<br/><span className="text-sm font-normal text-[#8B9194] mt-1 inline-block">(Resets automatically every Monday)</span></span>
               ].map((feature, i) => (
                 <div key={i} className="flex gap-4">
                   <CheckCircle2 className="w-6 h-6 text-[#121415] shrink-0" />
@@ -96,14 +96,14 @@ export default function PricingPage() {
             
             <div className="mb-10 relative z-10">
               <div className="flex justify-between items-start mb-2">
-                <h3 className="text-2xl font-bold text-white">Premium</h3>
+                <h3 className="text-2xl font-bold text-white">{useI18nStore.getState().t("extra.t134")}</h3>
                 <span className="px-3 py-1 bg-[#8A2532] text-white text-xs font-bold rounded-full uppercase tracking-wider shadow-sm">
                   RevShare
                 </span>
               </div>
               <div className="flex flex-col mb-4 space-y-1">
-                <span className="text-3xl font-bold text-white leading-tight tracking-tight">Zero upfront costs.</span>
-                <span className="text-xl font-semibold text-[#8B9194]">We earn when you earn.</span>
+                <span className="text-3xl font-bold text-white leading-tight tracking-tight">{useI18nStore.getState().t("extra.t193")}</span>
+                <span className="text-xl font-semibold text-[#8B9194]">{useI18nStore.getState().t("extra.t207")}</span>
               </div>
               <p className="text-[#8B9194] font-medium leading-relaxed">
                 For established businesses that demand total operational control and powerful no-show protection.

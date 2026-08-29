@@ -1,5 +1,6 @@
 "use client";
 import { useI18nStore } from "@/stores/i18nStore";
+import { useI18n } from "@/hooks/useI18n";
 import React, { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -59,7 +60,7 @@ const addMinutesToTimeStr = (timeStr: string, minsToAdd: number): string => {
 };
 
 export default function Dashboard() {
-  const { t } = useI18nStore();
+  const { t } = useI18n();
 
   const queryClient = useQueryClient();
   const [isMounted, setIsMounted] = useState(false);
@@ -512,8 +513,8 @@ export default function Dashboard() {
         {/* HEADER */}
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">Queue (Live)</h1>
-            <p className="text-sm text-[#4A4E51] font-medium mt-0.5">Real-time customer flow & queue management</p>
+            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t118")}</h1>
+            <p className="text-sm text-[#4A4E51] font-medium mt-0.5">{useI18nStore.getState().t("extra.t190")}</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -577,7 +578,7 @@ export default function Dashboard() {
             <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-sm flex flex-col justify-between min-w-0">
               <div className="flex items-center gap-2 text-[#4A4E51] mb-2 shrink-0">
                 <Scissors className="w-4 h-4" />
-                <span className="text-xs font-medium uppercase tracking-wider">Top Service</span>
+                <span className="text-xs font-medium uppercase tracking-wider">{useI18nStore.getState().t("extra.t224")}</span>
               </div>
               {isDashboardLoading ? <Skeleton className="w-24 h-6 mt-1" /> : <div className="text-xl font-semibold text-[#121415] truncate" title={topService}>{topService}</div>}
             </div>
@@ -585,7 +586,7 @@ export default function Dashboard() {
             <div className="bg-[#FFF4F4] p-5 rounded-2xl border border-[#FDE8E8] shadow-sm flex flex-col justify-between">
               <div className="flex items-center gap-2 text-[#8A2532] mb-2">
                 <AlertTriangle className="w-4 h-4" />
-                <span className="text-xs font-medium uppercase tracking-wider">Total Delay</span>
+                <span className="text-xs font-medium uppercase tracking-wider">{useI18nStore.getState().t("extra.t101")}</span>
               </div>
               {isDashboardLoading ? <Skeleton className="w-16 h-8" /> : <div className="text-3xl font-semibold text-[#8A2532]">{totalDelay} min</div>}
             </div>
@@ -686,8 +687,8 @@ export default function Dashboard() {
                     ))}
                     {!isBookingsLoading && filteredWaiting.length === 0 && (
                       <div className="flex flex-col items-center justify-center h-32 text-center border-2 border-dashed border-[#DCDCDA] rounded-2xl mx-1 bg-[#F5F5F4]/50">
-                        <span className="text-sm font-medium text-[#8B9194]">No guests waiting</span>
-                        <span className="text-[10px] text-[#8B9194]/70 mt-1 uppercase tracking-wider">Queue is clear</span>
+                        <span className="text-sm font-medium text-[#8B9194]">{useI18nStore.getState().t("extra.t239")}</span>
+                        <span className="text-[10px] text-[#8B9194]/70 mt-1 uppercase tracking-wider">{useI18nStore.getState().t("extra.t174")}</span>
                       </div>
                     )}
                     {provided.placeholder}
@@ -700,9 +701,7 @@ export default function Dashboard() {
             <div className="flex-1 min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#e8efe9]/50 border-[#4a6b53]/20">
               <div className="flex justify-between items-center mb-5 px-2">
                 <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-lg tracking-tight">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#4a6b53] animate-pulse"></span>
-                  In Chair
-                </h2>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#4a6b53] animate-pulse"></span>{useI18nStore.getState().t("extra.t263")}</h2>
                 <span className="text-xs font-medium text-[#4a6b53] bg-[#e8efe9] border border-[#4a6b53]/30 px-2.5 py-1 rounded-lg">
                   {isDashboardLoading ? "-" : filteredInChair.length}
                 </span>
@@ -769,8 +768,8 @@ export default function Dashboard() {
                     )}
                     {!isDashboardLoading && filteredInChair.length === 0 && (
                       <div className="flex flex-col items-center justify-center h-32 text-center border-2 border-dashed border-[#4a6b53]/30 rounded-2xl mx-1 bg-white/50">
-                        <span className="text-sm font-medium text-[#4a6b53]/70">All chairs are free</span>
-                        <span className="text-[10px] text-[#4a6b53]/50 mt-1 uppercase tracking-wider">Ready for work</span>
+                        <span className="text-sm font-medium text-[#4a6b53]/70">{useI18nStore.getState().t("extra.t201")}</span>
+                        <span className="text-[10px] text-[#4a6b53]/50 mt-1 uppercase tracking-wider">{useI18nStore.getState().t("extra.t159")}</span>
                       </div>
                     )}
                     {provided.placeholder}
@@ -854,7 +853,7 @@ export default function Dashboard() {
                     )}
                     {!isDashboardLoading && filteredCompleted.length === 0 && (
                       <div className="flex flex-col items-center justify-center h-32 text-center border-2 border-dashed border-[#DCDCDA]/50 rounded-xl mx-1">
-                        <span className="text-xs font-medium text-[#8B9194]">No completed yet</span>
+                        <span className="text-xs font-medium text-[#8B9194]">{useI18nStore.getState().t("extra.t148")}</span>
                       </div>
                     )}
                     {provided.placeholder}
@@ -885,13 +884,13 @@ export default function Dashboard() {
               <X className="w-4 h-4" />
             </button>
             <div className="p-8 pb-6 shrink-0">
-              <h2 className="text-2xl font-semibold text-[#121415] tracking-tight">New Appointment</h2>
-              <p className="text-sm text-[#4A4E51] font-medium mt-1">Add guest to the daily schedule</p>
+              <h2 className="text-2xl font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t162")}</h2>
+              <p className="text-sm text-[#4A4E51] font-medium mt-1">{useI18nStore.getState().t("extra.t241")}</p>
             </div>
             <form className="px-8 py-2" onSubmit={(e) => { e.preventDefault(); handleAddGuest(); }}>
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-[#121415] mb-2">Customer Name</label>
+                  <label className="block text-sm font-medium text-[#121415] mb-2">{useI18nStore.getState().t("extra.t164")}</label>
                   <div className="relative">
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
                     <input 
@@ -905,7 +904,7 @@ export default function Dashboard() {
                       }}
                       onFocus={() => setShowCustomerSuggestions(true)}
                       onBlur={() => setTimeout(() => setShowCustomerSuggestions(false), 200)}
-                      placeholder="e.g., Azamat" 
+                      placeholder={useI18nStore.getState().t("extra.t117")} 
                       className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
                     />
                     {showCustomerSuggestions && filteredCustomers.length > 0 && (
@@ -976,7 +975,7 @@ export default function Dashboard() {
                         <span className="font-medium text-sm">{s.name}</span>
                       </button>
                     )) : (
-                      <span className="text-sm text-[#8B9194]">No services added to business</span>
+                      <span className="text-sm text-[#8B9194]">{useI18nStore.getState().t("extra.t304")}</span>
                     )}
                   </div>
                 </div>

@@ -1,11 +1,13 @@
 "use client";
+
 import React, { useState, useRef, useEffect } from "react";
 import { Globe } from "lucide-react";
-import { useI18nStore, Language } from "@/stores/i18nStore";
+import { Language } from "@/stores/i18nStore";
+import { useI18n } from "@/hooks/useI18n";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LanguageSwitcher() {
-  const { language, setLanguage } = useI18nStore();
+  const { language, setLanguage, t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -30,7 +32,7 @@ export default function LanguageSwitcher() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-black/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
-        aria-label="Change language"
+        aria-label={t("extra.t50")}
       >
         <Globe className="w-5 h-5 text-[#4A4E51]" />
       </button>
@@ -68,3 +70,4 @@ export default function LanguageSwitcher() {
     </div>
   );
 }
+

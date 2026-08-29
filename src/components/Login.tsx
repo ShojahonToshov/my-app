@@ -13,9 +13,10 @@ import SignupRoleModal from "@/components/SignupRoleModal";
 type LoginType = "phone" | "email" | "name";
 
 import { useI18nStore } from "@/stores/i18nStore";
+import { useI18n } from "@/hooks/useI18n";
 
 export default function Login() {
-  const { t } = useI18nStore();
+  const { t } = useI18n();
   const { form, showPassword, setShowPassword, isSubmitting, handleSubmit } = useLogin("/search");
   const { register, formState: { errors }, setValue } = form;
   
@@ -146,12 +147,10 @@ export default function Login() {
               variant="secondary"
               className="w-full"
               isLoading={isSubmitting}
-            >
-              Log in
-            </Button>
+            >{useI18nStore.getState().t("extra.t106")}</Button>
 
             <p className="text-center text-sm text-[#4A4E51] font-medium mt-4 w-full">
-              <span className="mr-1">New to Elara?</span>
+              <span className="mr-1">{t("extra.t53")}</span>
               <button
                 type="button"
                 onClick={() => setIsRoleModalOpen(true)}

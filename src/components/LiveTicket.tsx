@@ -1,5 +1,6 @@
 "use client";
 import { useI18nStore } from "@/stores/i18nStore";
+import { useI18n } from "@/hooks/useI18n";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -130,7 +131,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 };
 
 export default function LiveTicket() {
-  const { t } = useI18nStore();
+  const { t } = useI18n();
 
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -251,7 +252,7 @@ export default function LiveTicket() {
   if (!bookingData) {
     return (
       <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-[#ECECEA] p-4 text-center">
-        <h2 className="text-xl font-semibold mb-2">Booking not found</h2>
+        <h2 className="text-xl font-semibold mb-2">{t("extra.t51")}</h2>
         <Link href="/account" className="text-sm font-medium text-[#4A4E51] underline">{t("app.t29")}</Link>
       </div>
     );
@@ -473,7 +474,7 @@ export default function LiveTicket() {
                     <textarea
                       value={reviewInput}
                       onChange={(e) => setReviewInput(e.target.value)}
-                      placeholder="Share your experience (optional)"
+                      placeholder={t("extra.t52")}
                       disabled={isSubmittingReview}
                       className="w-full min-h-[80px] p-3 text-sm rounded-xl border border-[#DCDCDA] bg-white text-[#121415] placeholder:text-[#A0A4A8] focus:outline-none focus:ring-2 focus:ring-[#121415] resize-none"
                     />
@@ -520,7 +521,7 @@ export default function LiveTicket() {
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}
         onConfirm={() => setIsCancelModalOpen(false)}
-        title="Cancel visit?"
+        title={useI18nStore.getState().t("extra.t109")}
         description="Canceling in advance helps professionals manage their time and maintains your reliability karma."
         confirmText="Yes, cancel"
         cancelText="Keep booking"

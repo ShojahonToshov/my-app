@@ -1,3 +1,4 @@
+import { useI18nStore } from "@/stores/i18nStore";
 import { Suspense } from 'react';
 import CustomerBooking from '@/components/CustomerBooking';
 import { createClient } from '@/utils/supabase/server';
@@ -15,7 +16,7 @@ export default async function Page(props: { searchParams: Promise<{ [key: string
   }
 
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">{useI18nStore.getState().t("extra.t331")}</div>}>
       <CustomerBooking />
     </Suspense>
   );

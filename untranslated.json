@@ -1,0 +1,1176 @@
+{
+  "src\\app\\(auth)\\login\\page.tsx": [
+    {
+      "line": 6,
+      "text": "Loading..."
+    }
+  ],
+  "src\\app\\(auth)\\signup\\page.tsx": [
+    {
+      "line": 6,
+      "text": "Loading..."
+    }
+  ],
+  "src\\app\\account\\components\\AccountClient.tsx": [
+    {
+      "line": 26,
+      "text": "Notifications"
+    },
+    {
+      "line": 34,
+      "text": "Notifications"
+    },
+    {
+      "line": 35,
+      "text": "Mark all read"
+    },
+    {
+      "line": 73,
+      "text": "Your karma reflects your attendance history. Staying above 90% ensures you can book without mandatory prepayments."
+    },
+    {
+      "line": 140,
+      "text": "Reschedule"
+    },
+    {
+      "line": 154,
+      "text": "Reschedule booking"
+    },
+    {
+      "line": 155,
+      "text": "Plans changed? Pick a new date and time for your visit."
+    },
+    {
+      "line": 159,
+      "text": "New Date"
+    },
+    {
+      "line": 169,
+      "text": "New Time"
+    },
+    {
+      "line": 180,
+      "text": "setRescheduleModalOpen(false)} className=\"flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]\">"
+    },
+    {
+      "line": 180,
+      "text": "Cancel"
+    },
+    {
+      "line": 193,
+      "text": "Confirm"
+    },
+    {
+      "line": 208,
+      "text": "Cancel Booking"
+    },
+    {
+      "line": 209,
+      "text": "Are you sure you want to cancel? This may affect your Karma score."
+    },
+    {
+      "line": 211,
+      "text": "setCancelModalOpen(false)} className=\"flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]\">"
+    },
+    {
+      "line": 211,
+      "text": "Keep it"
+    },
+    {
+      "line": 212,
+      "text": "Cancel Booking"
+    },
+    {
+      "line": 235,
+      "text": "Leave a review"
+    },
+    {
+      "line": 242,
+      "text": "Rate your visit"
+    },
+    {
+      "line": 243,
+      "text": "Venue:"
+    },
+    {
+      "line": 251,
+      "text": "What did you love? (optional)"
+    },
+    {
+      "line": 253,
+      "text": "setReviewModalOpen(false)} className=\"flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]\">"
+    },
+    {
+      "line": 253,
+      "text": "Cancel"
+    },
+    {
+      "line": 255,
+      "text": "Submit Review"
+    },
+    {
+      "line": 341,
+      "text": "No favorites yet"
+    },
+    {
+      "line": 346,
+      "text": "Explore directory"
+    }
+  ],
+  "src\\app\\account\\page.tsx": [
+    {
+      "line": 137,
+      "text": "Book"
+    },
+    {
+      "line": 143,
+      "text": "Settings"
+    },
+    {
+      "line": 163,
+      "text": "Active Booking"
+    },
+    {
+      "line": 179,
+      "text": "Confirmed"
+    },
+    {
+      "line": 184,
+      "text": "LiveTracker"
+    },
+    {
+      "line": 191,
+      "text": "Find a venue"
+    },
+    {
+      "line": 191,
+      "text": "No active bookings"
+    },
+    {
+      "line": 204,
+      "text": "View ticket"
+    },
+    {
+      "line": 210,
+      "text": "Cancelled"
+    },
+    {
+      "line": 213,
+      "text": "Completed"
+    },
+    {
+      "line": 221,
+      "text": "No review needed"
+    },
+    {
+      "line": 237,
+      "text": "Book again"
+    },
+    {
+      "line": 243,
+      "text": "Find a venue"
+    },
+    {
+      "line": 243,
+      "text": "No history yet"
+    },
+    {
+      "line": 254,
+      "text": "New Booking"
+    }
+  ],
+  "src\\app\\admin\\page.tsx": [
+    {
+      "line": 107,
+      "text": "Super Admin"
+    },
+    {
+      "line": 111,
+      "text": "Login"
+    },
+    {
+      "line": 121,
+      "text": "Password"
+    },
+    {
+      "line": 129,
+      "text": "Login"
+    },
+    {
+      "line": 141,
+      "text": "Platform Accounts"
+    },
+    {
+      "line": 168,
+      "text": "Account"
+    },
+    {
+      "line": 169,
+      "text": "Profile Details"
+    },
+    {
+      "line": 170,
+      "text": "Created At"
+    },
+    {
+      "line": 171,
+      "text": "Actions"
+    },
+    {
+      "line": 193,
+      "text": "Phone:"
+    },
+    {
+      "line": 195,
+      "text": "Not specified"
+    },
+    {
+      "line": 199,
+      "text": "Email:"
+    },
+    {
+      "line": 201,
+      "text": "Not specified"
+    },
+    {
+      "line": 205,
+      "text": "ID:"
+    },
+    {
+      "line": 213,
+      "text": "Name:"
+    },
+    {
+      "line": 214,
+      "text": "Role:"
+    },
+    {
+      "line": 217,
+      "text": "Business:"
+    },
+    {
+      "line": 222,
+      "text": "Show Raw Data"
+    },
+    {
+      "line": 239,
+      "text": "No profile data"
+    }
+  ],
+  "src\\app\\booking\\page.tsx": [
+    {
+      "line": 18,
+      "text": "Loading..."
+    }
+  ],
+  "src\\app\\design\\page.tsx": [
+    {
+      "line": 365,
+      "text": "Waiting"
+    },
+    {
+      "line": 386,
+      "text": "In Chair"
+    },
+    {
+      "line": 452,
+      "text": "Score"
+    },
+    {
+      "line": 501,
+      "text": "Scheduled for Today"
+    },
+    {
+      "line": 505,
+      "text": "Confirmed"
+    },
+    {
+      "line": 524,
+      "text": "Alexander Studio"
+    },
+    {
+      "line": 525,
+      "text": "Premium Hair Styling"
+    },
+    {
+      "line": 776,
+      "text": "Privacy Policy"
+    },
+    {
+      "line": 777,
+      "text": "Terms of Service"
+    }
+  ],
+  "src\\app\\onboarding\\page.tsx": [
+    {
+      "line": 6,
+      "text": "Loading..."
+    }
+  ],
+  "src\\app\\page.tsx": [
+    {
+      "line": 6,
+      "text": "Loading..."
+    }
+  ],
+  "src\\app\\pricing\\page.tsx": [
+    {
+      "line": 56,
+      "text": "Core"
+    },
+    {
+      "line": 71,
+      "text": "Generous weekly limits on paid features"
+    },
+    {
+      "line": 99,
+      "text": "Premium"
+    },
+    {
+      "line": 105,
+      "text": "Zero upfront costs."
+    },
+    {
+      "line": 106,
+      "text": "We earn when you earn."
+    }
+  ],
+  "src\\app\\search\\components\\SearchClient.tsx": [
+    {
+      "line": 648,
+      "text": "Next available:"
+    }
+  ],
+  "src\\app\\ticket\\page.tsx": [
+    {
+      "line": 6,
+      "text": "Loading..."
+    }
+  ],
+  "src\\app\\xxx\\page.tsx": [
+    {
+      "line": 17,
+      "text": "Button Interaction Sandbox"
+    },
+    {
+      "line": 27,
+      "text": "Highly physical buttons. Strongly springy on hover and tap. Perfect for mobile devices and tablets."
+    },
+    {
+      "line": 70,
+      "text": "On hover, the button \"takes off\" above the page and casts a soft, deep shadow. On click, it presses down."
+    },
+    {
+      "line": 113,
+      "text": "A very elegant micro-interaction: on hover, the text shifts and an arrow icon smoothly slides out. Looks highly technological."
+    },
+    {
+      "line": 122,
+      "text": "Sign up"
+    },
+    {
+      "line": 131,
+      "text": "Log in"
+    },
+    {
+      "line": 155,
+      "text": "On hover, a soft glow flares up around the button. Cool way to draw attention to the CTA (Call to action)."
+    },
+    {
+      "line": 188,
+      "text": "Stylish, sharp background fill animation from left to right. Often used in top design studios."
+    },
+    {
+      "line": 198,
+      "text": "Sign up"
+    },
+    {
+      "line": 207,
+      "text": "Log in"
+    },
+    {
+      "line": 217,
+      "text": "Explore Features"
+    }
+  ],
+  "src\\components\\AccountSettings.tsx": [
+    {
+      "line": 179,
+      "text": "Back to profile"
+    },
+    {
+      "line": 231,
+      "text": "Avatar Style"
+    },
+    {
+      "line": 251,
+      "text": "Your name"
+    },
+    {
+      "line": 255,
+      "text": "e.g. John Doe"
+    },
+    {
+      "line": 261,
+      "text": "Phone number"
+    },
+    {
+      "line": 270,
+      "text": "Email"
+    },
+    {
+      "line": 281,
+      "text": "Password"
+    },
+    {
+      "line": 296,
+      "text": "Enter new password"
+    }
+  ],
+  "src\\components\\dashboard-pages\\Analytics.tsx": [
+    {
+      "line": 154,
+      "text": "Analytics"
+    },
+    {
+      "line": 190,
+      "text": "Live Analytics"
+    },
+    {
+      "line": 214,
+      "text": "UZS"
+    },
+    {
+      "line": 244,
+      "text": "Cancellations"
+    },
+    {
+      "line": 264,
+      "text": "Avg Delay"
+    },
+    {
+      "line": 296,
+      "text": "Traffic Analysis"
+    },
+    {
+      "line": 366,
+      "text": "No services found for this period."
+    }
+  ],
+  "src\\components\\dashboard-pages\\Customers.tsx": [
+    {
+      "line": 199,
+      "text": "Customers Directory"
+    },
+    {
+      "line": 200,
+      "text": "Guest history & loyalty analytics"
+    },
+    {
+      "line": 204,
+      "text": "Add Customer"
+    },
+    {
+      "line": 220,
+      "text": "Search by name or phone..."
+    },
+    {
+      "line": 266,
+      "text": "Visits / LTV"
+    },
+    {
+      "line": 267,
+      "text": "Last Visit"
+    },
+    {
+      "line": 355,
+      "text": "Call"
+    },
+    {
+      "line": 358,
+      "text": "Message"
+    },
+    {
+      "line": 365,
+      "text": "Delete"
+    },
+    {
+      "line": 437,
+      "text": "Revenue (LTV)"
+    },
+    {
+      "line": 468,
+      "text": "New Guest"
+    },
+    {
+      "line": 478,
+      "text": "Customer name"
+    },
+    {
+      "line": 510,
+      "text": "Delete Customer?"
+    },
+    {
+      "line": 511,
+      "text": "Are you sure you want to remove this customer from the directory?"
+    }
+  ],
+  "src\\components\\dashboard-pages\\Dashboard.tsx": [
+    {
+      "line": 515,
+      "text": "Queue (Live)"
+    },
+    {
+      "line": 516,
+      "text": "Real-time customer flow & queue management"
+    },
+    {
+      "line": 580,
+      "text": "Top Service"
+    },
+    {
+      "line": 588,
+      "text": "Total Delay"
+    },
+    {
+      "line": 689,
+      "text": "No guests waiting"
+    },
+    {
+      "line": 690,
+      "text": "Queue is clear"
+    },
+    {
+      "line": 772,
+      "text": "All chairs are free"
+    },
+    {
+      "line": 773,
+      "text": "Ready for work"
+    },
+    {
+      "line": 857,
+      "text": "No completed yet"
+    },
+    {
+      "line": 888,
+      "text": "New Appointment"
+    },
+    {
+      "line": 889,
+      "text": "Add guest to the daily schedule"
+    },
+    {
+      "line": 894,
+      "text": "Customer Name"
+    },
+    {
+      "line": 908,
+      "text": "e.g., Azamat"
+    },
+    {
+      "line": 945,
+      "text": "setIsDropdownOpen(false)}>"
+    },
+    {
+      "line": 979,
+      "text": "No services added to business"
+    }
+  ],
+  "src\\components\\dashboard-pages\\DashboardSettings.tsx": [
+    {
+      "line": 187,
+      "text": "Security & Access"
+    },
+    {
+      "line": 204,
+      "text": "Current Plan"
+    },
+    {
+      "line": 205,
+      "text": "Manage your subscription and upgrade options."
+    },
+    {
+      "line": 213,
+      "text": "Free Plan"
+    },
+    {
+      "line": 214,
+      "text": "Basic Features"
+    },
+    {
+      "line": 226,
+      "text": "Business Security Info"
+    },
+    {
+      "line": 227,
+      "text": "Primary contact, recovery details, and authentication settings"
+    },
+    {
+      "line": 233,
+      "text": "Email (Google / Recovery)"
+    },
+    {
+      "line": 245,
+      "text": "Recovery Phone"
+    },
+    {
+      "line": 259,
+      "text": "Password"
+    },
+    {
+      "line": 295,
+      "text": "Payment Method"
+    },
+    {
+      "line": 296,
+      "text": "Manage your billing and payment details."
+    },
+    {
+      "line": 315,
+      "text": "Two-Factor Authentication"
+    },
+    {
+      "line": 316,
+      "text": "Add an extra layer of security to your account."
+    },
+    {
+      "line": 324,
+      "text": "Status"
+    },
+    {
+      "line": 341,
+      "text": "Session Management"
+    },
+    {
+      "line": 342,
+      "text": "Manage your active sessions and devices."
+    },
+    {
+      "line": 350,
+      "text": "Current Device"
+    },
+    {
+      "line": 351,
+      "text": "Active"
+    },
+    {
+      "line": 366,
+      "text": "Account deletion will permanently revoke CRM access and erase all data."
+    },
+    {
+      "line": 391,
+      "text": "Secure Payment"
+    },
+    {
+      "line": 392,
+      "text": "Card details are encrypted via PCI DSS standards. We never store your CVV."
+    },
+    {
+      "line": 397,
+      "text": "Card Number"
+    },
+    {
+      "line": 411,
+      "text": "Expiry Date"
+    },
+    {
+      "line": 416,
+      "text": "MM/YY"
+    },
+    {
+      "line": 424,
+      "text": "CVC/CVV"
+    },
+    {
+      "line": 454,
+      "text": "Enable 2FA"
+    },
+    {
+      "line": 455,
+      "text": "Enter the 6-digit code from your authenticator app to enable Two-Factor Authentication."
+    },
+    {
+      "line": 460,
+      "text": "Authentication Code"
+    },
+    {
+      "line": 486,
+      "text": "Log Out"
+    },
+    {
+      "line": 487,
+      "text": "Are you sure you want to log out of your current session?"
+    },
+    {
+      "line": 506,
+      "text": "Delete Account"
+    },
+    {
+      "line": 507,
+      "text": "This action is permanent and irreversible. All your data will be permanently erased."
+    },
+    {
+      "line": 512,
+      "text": "Type DELETE to confirm"
+    },
+    {
+      "line": 516,
+      "text": "DELETE"
+    }
+  ],
+  "src\\components\\dashboard-pages\\Schedule.tsx": [
+    {
+      "line": 573,
+      "text": "Manage appointments for the next 7 days"
+    },
+    {
+      "line": 611,
+      "text": "New Booking"
+    },
+    {
+      "line": 636,
+      "text": "Day Off"
+    },
+    {
+      "line": 738,
+      "text": "setIsBookingModalOpen(false)} className=\"absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95\">"
+    },
+    {
+      "line": 738,
+      "text": "Close"
+    },
+    {
+      "line": 741,
+      "text": "New Appointment"
+    },
+    {
+      "line": 748,
+      "text": "Client Name"
+    },
+    {
+      "line": 764,
+      "text": "e.g. John Doe"
+    },
+    {
+      "line": 802,
+      "text": "Staff Member"
+    },
+    {
+      "line": 862,
+      "text": "Cancel Appointment"
+    },
+    {
+      "line": 863,
+      "text": "Are you sure you want to cancel this booking? This action cannot be undone."
+    }
+  ],
+  "src\\components\\dashboard-pages\\Settings.tsx": [
+    {
+      "line": 477,
+      "text": "Settings"
+    },
+    {
+      "line": 508,
+      "text": "Loading settings..."
+    },
+    {
+      "line": 517,
+      "text": "About Business"
+    },
+    {
+      "line": 518,
+      "text": "This information will be displayed to customers on the booking page"
+    },
+    {
+      "line": 523,
+      "text": "Business Logo"
+    },
+    {
+      "line": 527,
+      "text": "Upload"
+    },
+    {
+      "line": 537,
+      "text": "Business Name"
+    },
+    {
+      "line": 545,
+      "text": "Address"
+    },
+    {
+      "line": 548,
+      "text": "E.g., 123 Main St"
+    },
+    {
+      "line": 555,
+      "text": "Social Links"
+    },
+    {
+      "line": 622,
+      "text": "About us"
+    },
+    {
+      "line": 624,
+      "text": "Tell your customers about your business..."
+    },
+    {
+      "line": 641,
+      "text": "Working Hours"
+    },
+    {
+      "line": 642,
+      "text": "Configure working days and operating hours for online booking"
+    },
+    {
+      "line": 693,
+      "text": "Services & Pricing"
+    },
+    {
+      "line": 694,
+      "text": "Configure services visible in online booking"
+    },
+    {
+      "line": 703,
+      "text": "Price list is empty"
+    },
+    {
+      "line": 703,
+      "text": "Add your first service for customers."
+    },
+    {
+      "line": 708,
+      "text": "Toggle service status"
+    },
+    {
+      "line": 719,
+      "text": "openServiceModal(service)} className=\"p-2.5 text-[#8B9194] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]\">"
+    },
+    {
+      "line": 735,
+      "text": "Team"
+    },
+    {
+      "line": 736,
+      "text": "Manage specialists and their availability"
+    },
+    {
+      "line": 745,
+      "text": "No team members"
+    },
+    {
+      "line": 745,
+      "text": "Add specialists to start taking bookings."
+    },
+    {
+      "line": 763,
+      "text": "Available for booking"
+    },
+    {
+      "line": 764,
+      "text": "Toggle specialist status"
+    },
+    {
+      "line": 779,
+      "text": "No-Show Protection"
+    },
+    {
+      "line": 780,
+      "text": "Set cancellation and deposit rules to eliminate empty calendar slots."
+    },
+    {
+      "line": 785,
+      "text": "Free Cancellation Window"
+    },
+    {
+      "line": 786,
+      "text": "If a customer cancels past this window, their reliability karma rating will decrease."
+    },
+    {
+      "line": 799,
+      "text": "Smart Karma Protection"
+    },
+    {
+      "line": 800,
+      "text": "Recommended"
+    },
+    {
+      "line": 809,
+      "text": "Toggle Smart Karma Protection"
+    },
+    {
+      "line": 817,
+      "text": "Karma Threshold"
+    },
+    {
+      "line": 845,
+      "text": "setIsServiceModalOpen(false)} className=\"absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95\">"
+    },
+    {
+      "line": 845,
+      "text": "Close"
+    },
+    {
+      "line": 851,
+      "text": "Service Name"
+    },
+    {
+      "line": 857,
+      "text": "E.g. Laser Hair Removal"
+    },
+    {
+      "line": 880,
+      "text": "Duration (min)"
+    },
+    {
+      "line": 887,
+      "text": "Price (UZS)"
+    },
+    {
+      "line": 911,
+      "text": "setIsMasterModalOpen(false)} className=\"absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95\">"
+    },
+    {
+      "line": 911,
+      "text": "Close"
+    },
+    {
+      "line": 913,
+      "text": "Specialist"
+    },
+    {
+      "line": 917,
+      "text": "Full Name"
+    },
+    {
+      "line": 920,
+      "text": "Alexey K."
+    },
+    {
+      "line": 924,
+      "text": "Role"
+    },
+    {
+      "line": 945,
+      "text": "Confirm Deletion"
+    }
+  ],
+  "src\\components\\DashboardLayout.tsx": [
+    {
+      "line": 128,
+      "text": "Queue (Live)"
+    },
+    {
+      "line": 137,
+      "text": "Schedule"
+    },
+    {
+      "line": 353,
+      "text": "Menu"
+    },
+    {
+      "line": 386,
+      "text": "Free"
+    }
+  ],
+  "src\\components\\Landing.tsx": [
+    {
+      "line": 242,
+      "text": "Language"
+    },
+    {
+      "line": 472,
+      "text": "Oct 24, 2024"
+    },
+    {
+      "line": 544,
+      "text": "Alexander Studio"
+    },
+    {
+      "line": 575,
+      "text": "Sarah Jenkins"
+    },
+    {
+      "line": 576,
+      "text": "Hair Coloring"
+    },
+    {
+      "line": 596,
+      "text": "Elena Rostova"
+    },
+    {
+      "line": 597,
+      "text": "Consultation"
+    },
+    {
+      "line": 631,
+      "text": "Staff: Michael"
+    },
+    {
+      "line": 632,
+      "text": "Michael Scott"
+    },
+    {
+      "line": 633,
+      "text": "Premium Cut & Beard"
+    },
+    {
+      "line": 671,
+      "text": "David Lin"
+    },
+    {
+      "line": 748,
+      "text": "Sarah Jenkins"
+    },
+    {
+      "line": 749,
+      "text": "Perfect"
+    },
+    {
+      "line": 760,
+      "text": "Michael Scott"
+    },
+    {
+      "line": 761,
+      "text": "Requires Deposit"
+    },
+    {
+      "line": 774,
+      "text": "Booking Confirmation"
+    },
+    {
+      "line": 779,
+      "text": "Your Karma score requires a non-refundable deposit to secure this booking."
+    }
+  ],
+  "src\\components\\LanguageSwitcher.tsx": [
+    {
+      "line": 33,
+      "text": "Change language"
+    }
+  ],
+  "src\\components\\LiveTicket.tsx": [
+    {
+      "line": 254,
+      "text": "Booking not found"
+    },
+    {
+      "line": 476,
+      "text": "Share your experience (optional)"
+    },
+    {
+      "line": 523,
+      "text": "Cancel visit?"
+    },
+    {
+      "line": 524,
+      "text": "Canceling in advance helps professionals manage their time and maintains your reliability karma."
+    }
+  ],
+  "src\\components\\Login.tsx": [
+    {
+      "line": 154,
+      "text": "New to Elara?"
+    }
+  ],
+  "src\\components\\map\\index.tsx": [
+    {
+      "line": 5,
+      "text": "Loading map..."
+    }
+  ],
+  "src\\components\\map\\Map.tsx": [
+    {
+      "line": 129,
+      "text": "OpenStreetMap"
+    }
+  ],
+  "src\\components\\Onboarding\\OnboardingWizard.tsx": [
+    {
+      "line": 44,
+      "text": "Suggestions"
+    },
+    {
+      "line": 256,
+      "text": "Business Name"
+    },
+    {
+      "line": 258,
+      "text": "e.g. Bella Salon"
+    },
+    {
+      "line": 272,
+      "text": "Address"
+    },
+    {
+      "line": 274,
+      "text": "123 Main St, City"
+    },
+    {
+      "line": 289,
+      "text": "Select a category"
+    },
+    {
+      "line": 307,
+      "text": "e.g. Men's Haircut"
+    },
+    {
+      "line": 315,
+      "text": "Price (UZS)"
+    },
+    {
+      "line": 330,
+      "text": "Duration (min)"
+    },
+    {
+      "line": 349,
+      "text": "Staff Name"
+    },
+    {
+      "line": 351,
+      "text": "e.g. John Doe"
+    },
+    {
+      "line": 358,
+      "text": "Select a role"
+    }
+  ],
+  "src\\components\\OtpInput.tsx": [
+    {
+      "line": 62,
+      "text": "Enter code"
+    }
+  ],
+  "src\\components\\Signup.tsx": [
+    {
+      "line": 152,
+      "text": "First Name"
+    },
+    {
+      "line": 155,
+      "text": "Jane"
+    },
+    {
+      "line": 166,
+      "text": "Last Name"
+    },
+    {
+      "line": 168,
+      "text": "Doe"
+    },
+    {
+      "line": 180,
+      "text": "Phone Number"
+    },
+    {
+      "line": 191,
+      "text": "Create Password"
+    }
+  ],
+  "src\\stores\\i18nStore.ts": [
+    {
+      "line": 12,
+      "text": "Promise"
+    }
+  ]
+}

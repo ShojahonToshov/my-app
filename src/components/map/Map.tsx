@@ -1,4 +1,6 @@
 'use client';
+import { useI18nStore } from "@/stores/i18nStore";
+
 
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
@@ -126,7 +128,7 @@ export default function Map({ venues, center = DEFAULT_CENTER, zoom = 6, activeV
         zoomControl={false}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">{useI18nStore.getState().t("extra.t330")}</a>'
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
         />
         <CustomZoomControl />

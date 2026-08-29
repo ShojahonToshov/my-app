@@ -1,4 +1,6 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -176,7 +178,7 @@ export default function AccountSettings() {
         className="absolute top-6 left-6 md:top-10 md:left-10 flex items-center gap-2 text-[#4A4E51] hover:text-[#121415] font-medium text-sm transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-lg p-1 z-20"
       >
         <ArrowLeft className="w-4 h-4 shrink-0" />
-        <span className="truncate">Back to profile</span>
+        <span className="truncate">{useI18nStore.getState().t("extra.t244")}</span>
       </Link>
 
       <motion.div
@@ -228,7 +230,7 @@ export default function AccountSettings() {
               ring={true}
             />
             <div className="flex flex-col gap-2">
-              <h3 className="text-sm font-semibold text-[#121415]">Avatar Style</h3>
+              <h3 className="text-sm font-semibold text-[#121415]">{useI18nStore.getState().t("extra.t230")}</h3>
               <p className="text-xs text-[#4A4E51] font-medium mb-1 max-w-[200px]">
                 Customize your appearance with a unique matte color palette.
               </p>
@@ -248,17 +250,17 @@ export default function AccountSettings() {
           <form onSubmit={handleSave} className="space-y-5 flex flex-col w-full mb-10">
             <Input
               id="account_name"
-              label="Your name"
+              label={useI18nStore.getState().t("extra.t168")}
               icon={User}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. John Doe"
+              placeholder={useI18nStore.getState().t("extra.t122")}
             />
 
             <PhoneInput
               id="account_phone"
               name="account_phone"
-              label="Phone number"
+              label={useI18nStore.getState().t("extra.t335")}
               value={phone}
               onChange={(val) => setPhone(val)}
               disabled
@@ -267,7 +269,7 @@ export default function AccountSettings() {
 
             <Input
               id="account_email"
-              label="Email"
+              label={useI18nStore.getState().t("extra.t254")}
               icon={Mail}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -278,7 +280,7 @@ export default function AccountSettings() {
             <Input
               id="account_password"
               name="account_password"
-              label="Password"
+              label={useI18nStore.getState().t("extra.t113")}
               type={showPassword ? "text" : "password"}
               icon={Lock}
               actionIcon={showPassword ? EyeOff : Eye}
@@ -293,7 +295,7 @@ export default function AccountSettings() {
                   setPassword(user?.user_metadata?.visible_password || "••••••••");
                 }
               }}
-              placeholder="Enter new password"
+              placeholder={useI18nStore.getState().t("extra.t253")}
               autoComplete="new-password"
             />
 

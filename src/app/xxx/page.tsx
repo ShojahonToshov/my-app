@@ -1,4 +1,6 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
+
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
@@ -14,7 +16,7 @@ export default function ButtonShowcasePage() {
   return (
     <div className={`min-h-screen bg-[#D8DADC] text-[#0B0C0D] ${customFont.className} p-10 md:p-20 flex flex-col gap-32`}>
       <div className="max-w-4xl">
-        <h1 className="text-4xl font-bold mb-4">Button Interaction Sandbox</h1>
+        <h1 className="text-4xl font-bold mb-4">{useI18nStore.getState().t("extra.t222")}</h1>
         <p className="text-[#25282B] text-lg">
           Here are 5 top concepts of hover-animations for buttons. All of them correspond to a premium design, but offer a different user experience (UX).
         </p>
@@ -24,7 +26,7 @@ export default function ButtonShowcasePage() {
       <section className="flex flex-col gap-8">
         <div className="border-b border-[#8D9195]/20 pb-4">
           <h2 className="text-2xl font-bold">1. Elastic Tactile (Apple / iOS Style)</h2>
-          <p className="text-[#25282B]">Highly physical buttons. Strongly springy on hover and tap. Perfect for mobile devices and tablets.</p>
+          <p className="text-[#25282B]">{useI18nStore.getState().t("extra.t308")}</p>
         </div>
         
         <div className="flex flex-wrap gap-8 items-center bg-[#F3F4F4] p-10 rounded-3xl border border-white shadow-sm">
@@ -34,9 +36,7 @@ export default function ButtonShowcasePage() {
             whileTap={{ scale: 0.92 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
             className="px-8 py-3.5 bg-[#151719] text-white text-[15px] font-bold rounded-full shadow-lg shadow-[#151719]/10"
-          >
-            Sign up
-          </motion.button>
+          >{useI18nStore.getState().t("extra.t130")}</motion.button>
 
           {/* Secondary */}
           <motion.button 
@@ -44,9 +44,7 @@ export default function ButtonShowcasePage() {
             whileTap={{ scale: 0.92 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
             className="px-8 py-3.5 bg-white text-[#0B0C0D] border border-[#8D9195]/20 text-[15px] font-bold rounded-full shadow-sm"
-          >
-            Log in
-          </motion.button>
+          >{useI18nStore.getState().t("extra.t106")}</motion.button>
 
           {/* Hero Ghost */}
           <div className="bg-[#151719] p-6 rounded-2xl flex gap-6 items-center">
@@ -67,7 +65,7 @@ export default function ButtonShowcasePage() {
       <section className="flex flex-col gap-8">
         <div className="border-b border-[#8D9195]/20 pb-4">
           <h2 className="text-2xl font-bold">2. Deep Lift 3D (Stripe / Vercel Style)</h2>
-          <p className="text-[#25282B]">On hover, the button "takes off" above the page and casts a soft, deep shadow. On click, it presses down.</p>
+          <p className="text-[#25282B]">{useI18nStore.getState().t("extra.t267")}</p>
         </div>
         
         <div className="flex flex-wrap gap-8 items-center bg-[#F3F4F4] p-10 rounded-3xl border border-white shadow-sm">
@@ -77,9 +75,7 @@ export default function ButtonShowcasePage() {
             whileTap={{ y: 2, boxShadow: "0 0px 0px 0px rgba(21,23,25,0)" }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="px-8 py-3.5 bg-[#151719] text-white text-[15px] font-bold rounded-full"
-          >
-            Sign up
-          </motion.button>
+          >{useI18nStore.getState().t("extra.t130")}</motion.button>
 
           {/* Secondary */}
           <motion.button 
@@ -87,9 +83,7 @@ export default function ButtonShowcasePage() {
             whileTap={{ y: 2, boxShadow: "0 0px 0px 0px rgba(0,0,0,0)" }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="px-8 py-3.5 bg-white text-[#0B0C0D] border border-[#8D9195]/20 text-[15px] font-bold rounded-full"
-          >
-            Log in
-          </motion.button>
+          >{useI18nStore.getState().t("extra.t106")}</motion.button>
 
           {/* Hero Ghost */}
           <div className="bg-[#151719] p-6 rounded-2xl flex gap-6 items-center">
@@ -110,7 +104,7 @@ export default function ButtonShowcasePage() {
       <section className="flex flex-col gap-8">
         <div className="border-b border-[#8D9195]/20 pb-4">
           <h2 className="text-2xl font-bold">3. Icon Reveal (Raycast Style)</h2>
-          <p className="text-[#25282B]">A very elegant micro-interaction: on hover, the text shifts and an arrow icon smoothly slides out. Looks highly technological.</p>
+          <p className="text-[#25282B]">{useI18nStore.getState().t("extra.t211")}</p>
         </div>
         
         <div className="flex flex-wrap gap-8 items-center bg-[#F3F4F4] p-10 rounded-3xl border border-white shadow-sm">
@@ -119,7 +113,7 @@ export default function ButtonShowcasePage() {
             whileTap={{ scale: 0.96 }}
             className="h-12 w-32 bg-[#151719] text-white text-[15px] font-bold rounded-full overflow-hidden relative group"
           >
-            <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 group-hover:-translate-x-3">Sign up</span>
+            <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 group-hover:-translate-x-3">{useI18nStore.getState().t("extra.t130")}</span>
             <ArrowRight className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
           </motion.button>
 
@@ -128,7 +122,7 @@ export default function ButtonShowcasePage() {
             whileTap={{ scale: 0.96 }}
             className="h-12 w-32 bg-white text-[#0B0C0D] border border-[#8D9195]/20 text-[15px] font-bold rounded-full overflow-hidden relative group"
           >
-            <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 group-hover:-translate-x-3">Log in</span>
+            <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 group-hover:-translate-x-3">{useI18nStore.getState().t("extra.t106")}</span>
             <ArrowRight className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-[#8D9195]" />
           </motion.button>
 
@@ -138,9 +132,7 @@ export default function ButtonShowcasePage() {
               whileTap={{ scale: 0.96 }}
               className="h-14 px-8 bg-transparent border border-white/30 text-white text-[15px] font-bold rounded-full overflow-hidden relative group hover:bg-white hover:text-[#151719] transition-colors duration-300"
             >
-              <span className="relative z-10 flex items-center gap-2 transition-transform duration-300 group-hover:-translate-x-2">
-                Explore Features
-              </span>
+              <span className="relative z-10 flex items-center gap-2 transition-transform duration-300 group-hover:-translate-x-2">{useI18nStore.getState().t("extra.t317")}</span>
               <ArrowRight className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
             </motion.button>
           </div>
@@ -152,7 +144,7 @@ export default function ButtonShowcasePage() {
       <section className="flex flex-col gap-8">
         <div className="border-b border-[#8D9195]/20 pb-4">
           <h2 className="text-2xl font-bold">4. Magnetic Glow (Web3 / AI Style)</h2>
-          <p className="text-[#25282B]">On hover, a soft glow flares up around the button. Cool way to draw attention to the CTA (Call to action).</p>
+          <p className="text-[#25282B]">{useI18nStore.getState().t("extra.t114")}</p>
         </div>
         
         <div className="flex flex-wrap gap-8 items-center bg-[#F3F4F4] p-10 rounded-3xl border border-white shadow-sm">
@@ -185,7 +177,7 @@ export default function ButtonShowcasePage() {
       <section className="flex flex-col gap-8">
         <div className="border-b border-[#8D9195]/20 pb-4">
           <h2 className="text-2xl font-bold">5. Swipe Fill (Editorial / High Fashion Style)</h2>
-          <p className="text-[#25282B]">Stylish, sharp background fill animation from left to right. Often used in top design studios.</p>
+          <p className="text-[#25282B]">{useI18nStore.getState().t("extra.t309")}</p>
         </div>
         
         <div className="flex flex-wrap gap-8 items-center bg-[#F3F4F4] p-10 rounded-3xl border border-white shadow-sm">
@@ -195,7 +187,7 @@ export default function ButtonShowcasePage() {
             className="px-8 py-3.5 bg-[#151719] text-white text-[15px] font-bold rounded-full overflow-hidden relative group"
           >
             <div className="absolute inset-0 w-full h-full bg-[#393E41] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]" />
-            <span className="relative z-10">Sign up</span>
+            <span className="relative z-10">{useI18nStore.getState().t("extra.t130")}</span>
           </motion.button>
 
           {/* Secondary */}
@@ -204,7 +196,7 @@ export default function ButtonShowcasePage() {
             className="px-8 py-3.5 bg-transparent border border-[#0B0C0D] text-[#0B0C0D] text-[15px] font-bold rounded-full overflow-hidden relative group"
           >
             <div className="absolute inset-0 w-full h-full bg-[#0B0C0D] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]" />
-            <span className="relative z-10 group-hover:text-white transition-colors duration-300 delay-100">Log in</span>
+            <span className="relative z-10 group-hover:text-white transition-colors duration-300 delay-100">{useI18nStore.getState().t("extra.t106")}</span>
           </motion.button>
 
           {/* Hero Outline */}
@@ -214,7 +206,7 @@ export default function ButtonShowcasePage() {
               className="px-8 py-3.5 bg-transparent border border-white text-white text-[15px] font-bold rounded-full overflow-hidden relative group"
             >
               <div className="absolute inset-0 w-full h-full bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]" />
-              <span className="relative z-10 group-hover:text-[#151719] transition-colors duration-300 delay-100">Explore Features</span>
+              <span className="relative z-10 group-hover:text-[#151719] transition-colors duration-300 delay-100">{useI18nStore.getState().t("extra.t317")}</span>
             </motion.button>
           </div>
         </div>

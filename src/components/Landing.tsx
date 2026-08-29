@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/Button";
 import useUser from "@/hooks/useUser";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useI18nStore } from "@/stores/i18nStore";
+import { useI18n } from "@/hooks/useI18n";
 
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
@@ -98,7 +99,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export default function Landing() {
   const [mounted, setMounted] = useState(false);
-  const { t } = useI18nStore();
+  const { t } = useI18n();
   
   useEffect(() => {
     const timer = setTimeout(() => setMounted(true), 0);
@@ -239,7 +240,7 @@ export default function Landing() {
 
                 <div className="flex items-center mb-4">
                    <LanguageSwitcher />
-                   <span className="ml-3 font-medium text-[#121415]">Language</span>
+                   <span className="ml-3 font-medium text-[#121415]">{t("extra.t35")}</span>
                 </div>
 
                 <Link
@@ -371,9 +372,7 @@ export default function Landing() {
                     </h2>
                     <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-white/10 rounded-xl border border-white/5 backdrop-blur-md max-w-full">
                       <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-white truncate">
-                        Confirmed
-                      </span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-white truncate">{useI18nStore.getState().t("extra.t123")}</span>
                     </div>
                   </div>
                 </div>
@@ -384,12 +383,8 @@ export default function Landing() {
                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A2532] bg-[#8A2532]/10 px-3 py-1 rounded-full mb-3 inline-flex">
                       Hair Salon
                     </span>
-                    <h1 className="text-xl font-semibold text-[#121415] tracking-tight leading-snug">
-                      Alexander Studio
-                    </h1>
-                    <p className="text-sm font-medium text-[#4A4E51] mt-1 leading-relaxed">
-                      Premium Hair Styling
-                    </p>
+                    <h1 className="text-xl font-semibold text-[#121415] tracking-tight leading-snug">{useI18nStore.getState().t("extra.t262")}</h1>
+                    <p className="text-sm font-medium text-[#4A4E51] mt-1 leading-relaxed">{useI18nStore.getState().t("extra.t198")}</p>
                   </div>
 
                   {/* Info Badge */}
@@ -439,9 +434,7 @@ export default function Landing() {
                       <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 bg-[#F5F5F4] border-[#DCDCDA]">
                         <CheckCircle2 className="w-4 h-4 text-[#DCDCDA]" />
                       </div>
-                      <span className="text-[9px] font-bold uppercase tracking-widest truncate text-[#787D80]">
-                        Completed
-                      </span>
+                      <span className="text-[9px] font-bold uppercase tracking-widest truncate text-[#787D80]">{useI18nStore.getState().t("extra.t233")}</span>
                     </div>
                   </div>
 
@@ -469,7 +462,7 @@ export default function Landing() {
                       </span>
                       <span className="text-sm font-semibold text-[#121415] flex items-center gap-1.5 truncate">
                         <Calendar className="w-4 h-4 text-[#4A4E51] shrink-0" />
-                        <span className="truncate">Oct 24, 2024</span>
+                        <span className="truncate">{t("extra.t36")}</span>
                       </span>
                     </div>
                   </div>
@@ -541,7 +534,7 @@ export default function Landing() {
                            A
                         </div>
                         <div className="space-y-0.5">
-                           <div className="text-sm md:text-base font-bold text-[#121415]">Alexander Studio</div>
+                           <div className="text-sm md:text-base font-bold text-[#121415]">{t("extra.t37")}</div>
                            <div className="text-xs font-medium text-[#4A6B53] flex items-center gap-1">
                              <div className="w-1.5 h-1.5 rounded-full bg-[#4A6B53]" />
                              Online & Accepting Bookings
@@ -560,9 +553,7 @@ export default function Landing() {
                      <div className="flex-1 min-w-[240px] max-w-[280px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#F5F5F4]/80 border-[#DCDCDA] snap-center">
                         <div className="flex justify-between items-center mb-5 px-1">
                            <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-sm tracking-tight">
-                              <span className="w-2.5 h-2.5 rounded-full bg-[#C89E23]"></span>
-                              Waiting
-                           </h2>
+                              <span className="w-2.5 h-2.5 rounded-full bg-[#C89E23]"></span>{useI18nStore.getState().t("extra.t144")}</h2>
                            <span className="text-[10px] font-medium text-[#121415] bg-white border border-[#DCDCDA] shadow-sm px-2 py-0.5 rounded-md">
                               2
                            </span>
@@ -572,8 +563,8 @@ export default function Landing() {
                               <div className="absolute top-0 left-0 w-1 h-full bg-[#C89E23]"></div>
                               <div className="flex justify-between items-start mb-2 pl-2">
                                  <div className="flex flex-col">
-                                    <span className="text-sm font-semibold text-[#121415] leading-tight">Sarah Jenkins</span>
-                                    <span className="text-[10px] font-medium text-[#4A4E51] mt-0.5">Hair Coloring</span>
+                                    <span className="text-sm font-semibold text-[#121415] leading-tight">{t("extra.t38")}</span>
+                                    <span className="text-[10px] font-medium text-[#4A4E51] mt-0.5">{t("extra.t39")}</span>
                                  </div>
                                  <div className="flex flex-col items-end">
                                     <span className="text-[11px] font-semibold text-[#121415]">14:00</span>
@@ -593,8 +584,8 @@ export default function Landing() {
                               <div className="absolute top-0 left-0 w-1 h-full bg-[#C89E23]"></div>
                               <div className="flex justify-between items-start mb-2 pl-2">
                                  <div className="flex flex-col">
-                                    <span className="text-sm font-semibold text-[#121415] leading-tight">Elena Rostova</span>
-                                    <span className="text-[10px] font-medium text-[#4A4E51] mt-0.5">Consultation</span>
+                                    <span className="text-sm font-semibold text-[#121415] leading-tight">{t("extra.t40")}</span>
+                                    <span className="text-[10px] font-medium text-[#4A4E51] mt-0.5">{t("extra.t41")}</span>
                                  </div>
                                  <div className="flex flex-col items-end">
                                     <span className="text-[11px] font-semibold text-[#121415]">14:30</span>
@@ -616,9 +607,7 @@ export default function Landing() {
                      <div className="flex-1 min-w-[240px] max-w-[280px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#e8efe9]/50 border-[#4a6b53]/20 snap-center">
                         <div className="flex justify-between items-center mb-5 px-1">
                            <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-sm tracking-tight">
-                              <span className="w-2.5 h-2.5 rounded-full bg-[#4a6b53] animate-pulse"></span>
-                              In Chair
-                           </h2>
+                              <span className="w-2.5 h-2.5 rounded-full bg-[#4a6b53] animate-pulse"></span>{useI18nStore.getState().t("extra.t263")}</h2>
                            <span className="text-[10px] font-medium text-[#4a6b53] bg-[#e8efe9] border border-[#4a6b53]/30 px-2 py-0.5 rounded-md">
                               1
                            </span>
@@ -628,9 +617,9 @@ export default function Landing() {
                               <div className="absolute top-0 left-0 w-1.5 h-full bg-[#4a6b53]"></div>
                               <div className="flex justify-between items-start mb-3 pl-2">
                                  <div className="flex flex-col">
-                                    <span className="text-[9px] font-medium text-[#4a6b53] uppercase tracking-wider mb-1">Staff: Michael</span>
-                                    <span className="text-sm font-semibold text-[#121415] tracking-tight leading-tight">Michael Scott</span>
-                                    <span className="text-[10px] font-medium text-[#4A4E51] mt-0.5">Premium Cut & Beard</span>
+                                    <span className="text-[9px] font-medium text-[#4a6b53] uppercase tracking-wider mb-1">{t("extra.t42")}</span>
+                                    <span className="text-sm font-semibold text-[#121415] tracking-tight leading-tight">{t("extra.t43")}</span>
+                                    <span className="text-[10px] font-medium text-[#4A4E51] mt-0.5">{t("extra.t44")}</span>
                                  </div>
                                  <div className="bg-[#F5F5F4] px-1.5 py-0.5 rounded-md border border-[#DCDCDA] text-[9px] font-medium text-[#4A4E51] flex items-center gap-1">
                                     <Clock className="w-2 h-2" /> 13:00
@@ -653,9 +642,7 @@ export default function Landing() {
                      {/* Column 3: Completed */}
                      <div className="flex-1 min-w-[200px] max-w-[240px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#ECECEA]/30 border-[#DCDCDA]/50 opacity-70 snap-center">
                         <div className="flex justify-between items-center mb-5 px-1">
-                           <h2 className="font-medium text-[#8B9194] flex items-center gap-2 text-[11px] uppercase tracking-widest">
-                              Completed
-                           </h2>
+                           <h2 className="font-medium text-[#8B9194] flex items-center gap-2 text-[11px] uppercase tracking-widest">{useI18nStore.getState().t("extra.t233")}</h2>
                            <span className="text-[10px] font-medium text-[#8B9194] bg-[#F5F5F4] border border-[#DCDCDA] px-2 py-0.5 rounded-md">
                               1
                            </span>
@@ -668,7 +655,7 @@ export default function Landing() {
                                        <CheckCircle2 className="w-3 h-3 text-[#8B9194]" />
                                     </div>
                                     <div className="flex flex-col">
-                                       <span className="text-[11px] font-medium text-[#121415] truncate max-w-[80px]">David Lin</span>
+                                       <span className="text-[11px] font-medium text-[#121415] truncate max-w-[80px]">{t("extra.t45")}</span>
                                        <div className="flex items-center gap-1 mt-0.5">
                                           <span className="text-[9px] font-medium text-[#8B9194]">12:00</span>
                                        </div>
@@ -745,8 +732,8 @@ export default function Landing() {
                     <div className="w-12 h-12 rounded-full bg-[#E5E9EA] flex items-center justify-center font-bold text-[#121415] text-lg">S</div>
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
-                        <h4 className="text-white font-bold">Sarah Jenkins</h4>
-                        <span className="text-[#4A6B53] text-xs font-bold px-2 py-1 bg-[#4A6B53]/10 rounded-full">Perfect</span>
+                        <h4 className="text-white font-bold">{t("extra.t38")}</h4>
+                        <span className="text-[#4A6B53] text-xs font-bold px-2 py-1 bg-[#4A6B53]/10 rounded-full">{t("extra.t46")}</span>
                       </div>
                       <p className="text-[#8B9194] text-xs mt-1">12 completed visits · 0 no-shows</p>
                     </div>
@@ -757,8 +744,8 @@ export default function Landing() {
                     <div className="w-12 h-12 rounded-full bg-[#E5E9EA] flex items-center justify-center font-bold text-[#121415] text-lg">M</div>
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
-                        <h4 className="text-white font-bold">Michael Scott</h4>
-                        <span className="text-[#8A2532] text-xs font-bold px-2 py-1 bg-[#8A2532]/10 rounded-full">Requires Deposit</span>
+                        <h4 className="text-white font-bold">{t("extra.t43")}</h4>
+                        <span className="text-[#8A2532] text-xs font-bold px-2 py-1 bg-[#8A2532]/10 rounded-full">{t("extra.t47")}</span>
                       </div>
                       <p className="text-[#8B9194] text-xs mt-1">2 completed visits · 1 no-show</p>
                     </div>
@@ -771,12 +758,12 @@ export default function Landing() {
                   {/* UX Mockup of payment required */}
                   <div className="bg-white p-5 rounded-2xl border border-[#DCDCDA] shadow-2xl transform -translate-x-4 -rotate-1 mt-8">
                      <div className="flex justify-between items-center mb-4">
-                       <span className="text-[#121415] font-bold text-sm">Booking Confirmation</span>
+                       <span className="text-[#121415] font-bold text-sm">{t("extra.t48")}</span>
                        <span className="text-[#121415] font-bold">$30.00</span>
                      </div>
                      <div className="flex gap-2 items-center mb-4 p-3 bg-[#F5F5F4] rounded-xl border border-[#DCDCDA]">
                        <ShieldCheck className="w-4 h-4 text-[#8A2532]" />
-                       <span className="text-xs text-[#4A4E51] font-medium leading-tight">Your Karma score requires a non-refundable deposit to secure this booking.</span>
+                       <span className="text-xs text-[#4A4E51] font-medium leading-tight">{t("extra.t49")}</span>
                      </div>
                      <Button variant="secondary" shape="pill" className="w-full text-xs">
                        Pay Deposit & Book
@@ -847,9 +834,7 @@ export default function Landing() {
                   <div className="px-6 py-3 rounded-full bg-white/10 text-white text-sm font-medium backdrop-blur-md select-none">
                     Modify time
                   </div>
-                  <div className="px-6 py-3 rounded-full bg-white/5 text-white/50 text-sm font-medium select-none">
-                    Cancel
-                  </div>
+                  <div className="px-6 py-3 rounded-full bg-white/5 text-white/50 text-sm font-medium select-none">{useI18nStore.getState().t("extra.t284")}</div>
                 </div>
               </div>
             </div>

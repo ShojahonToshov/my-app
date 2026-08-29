@@ -28,10 +28,11 @@ import Tooltip from "@/components/ui/Tooltip";
 import { usePathname } from "next/navigation";
 
 import { useI18nStore } from "@/stores/i18nStore";
+import { useI18n } from "@/hooks/useI18n";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { t } = useI18nStore();
+  const { t } = useI18n();
   const pathname = usePathname();
   
   const isActive = (href: string) => {
@@ -125,7 +126,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
             >
               <LayoutDashboard className="w-5 h-5 shrink-0" />
-              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Queue (Live)</span>
+              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>{t("extra.t32")}</span>
             </Link>
           </Tooltip>
           <Tooltip content="Schedule"  className="w-full">
@@ -134,7 +135,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               className={`w-full flex items-center py-3 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] font-medium border border-transparent overflow-hidden whitespace-nowrap ${isCollapsed ? "px-[18px]" : "px-4"} ${isActive('/dashboard/schedule') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}
             >
               <Calendar className="w-5 h-5 shrink-0" />
-              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>Schedule</span>
+              <span className={`ml-3 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>{useI18nStore.getState().t("extra.t125")}</span>
             </Link>
           </Tooltip>
           <Tooltip content={t("dashboard.customers")}  className="w-full">
@@ -218,9 +219,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         toast.success("All notifications read");
                       }}
                       className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
-                    >
-                      Mark all read
-                    </button>
+                    >{useI18nStore.getState().t("extra.t256")}</button>
                   </div>
                   <div className="max-h-[340px] overflow-y-auto">
                     {notifications.map((notif) => (
@@ -259,9 +258,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               />
               <div className={`ml-3 flex flex-col flex-1 min-w-0 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}>
                 <span className="text-sm font-medium text-[#121415] truncate">{displayName}</span>
-                <span className="text-xs font-medium text-[#4A4E51] truncate mt-0.5">
-                  Free
-                </span>
+                <span className="text-xs font-medium text-[#4A4E51] truncate mt-0.5">{useI18nStore.getState().t("extra.t231")}</span>
               </div>
             </Link>
           </Tooltip>
@@ -309,9 +306,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         toast.success("All notifications read");
                       }}
                       className="text-xs font-medium text-[#4A4E51] hover:text-[#121415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded"
-                    >
-                      Mark all read
-                    </button>
+                    >{useI18nStore.getState().t("extra.t256")}</button>
                   </div>
                   <div className="max-h-[300px] overflow-y-auto">
                     {notifications.map((notif) => (
@@ -350,7 +345,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="absolute inset-0 bg-[#121415]/40 backdrop-blur-sm animate-in fade-in"></div>
         <aside className="relative w-72 max-w-[80vw] bg-[#F5F5F4] h-full flex flex-col shadow-2xl animate-in slide-in-from-left duration-300">
           <div className="h-16 flex items-center justify-between px-6 border-b border-[#DCDCDA]">
-            <span className="text-xl font-medium text-[#121415] tracking-tight">Menu</span>
+            <span className="text-xl font-medium text-[#121415] tracking-tight">{t("extra.t33")}</span>
             <button
               type="button"
               className="p-2 bg-[#ECECEA] text-[#4A4E51] hover:text-[#121415] rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
@@ -360,11 +355,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
             <Link href="/dashboard" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
-              <LayoutDashboard className="w-5 h-5" /> Queue (Live)
-            </Link>
+              <LayoutDashboard className="w-5 h-5" />{useI18nStore.getState().t("extra.t118")}</Link>
             <Link href="/dashboard/schedule" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/schedule') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
-              <Calendar className="w-5 h-5" /> Schedule
-            </Link>
+              <Calendar className="w-5 h-5" />{useI18nStore.getState().t("extra.t125")}</Link>
             <Link href="/dashboard/customers" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/customers') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
               <Users className="w-5 h-5" />{t("dashboard.customers")}</Link>
             <Link href="/dashboard/analytics" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/analytics') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
@@ -383,7 +376,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               />
               <div className="flex flex-col min-w-0">
                 <span className="font-medium text-sm text-[#121415] truncate">{displayName}</span>
-                <span className="text-xs text-[#4A4E51] truncate mt-0.5">Free</span>
+                <span className="text-xs text-[#4A4E51] truncate mt-0.5">{t("extra.t34")}</span>
               </div>
             </Link>
             <button type="button" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[#4A4E51] hover:text-[#dc2626] hover:bg-white font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] active:scale-95">

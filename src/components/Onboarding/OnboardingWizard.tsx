@@ -1,4 +1,6 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
+import { useI18n } from "@/hooks/useI18n";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,6 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { MapPin, Store, Briefcase, ChevronDown, CheckCircle2, Scissors, Users, DollarSign, Clock } from "lucide-react";
 
 function OnboardingSuggestInput({ value, options, onChange, placeholder, icon: Icon }: { value: string, options: string[], onChange: (v: string) => void, placeholder: string, icon: any }) {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
@@ -41,7 +44,7 @@ function OnboardingSuggestInput({ value, options, onChange, placeholder, icon: I
 
       {isOpen && filteredOptions.length > 0 && (
         <div className="absolute z-[99999] w-full mt-2 bg-white border border-[#DCDCDA] rounded-xl shadow-lg max-h-56 overflow-y-auto py-1.5 animate-in fade-in zoom-in-95 duration-200">
-          <div className="px-4 py-2 text-xs font-semibold text-[#8B9194] uppercase tracking-wider">Suggestions</div>
+          <div className="px-4 py-2 text-xs font-semibold text-[#8B9194] uppercase tracking-wider">{t("extra.t56")}</div>
           {filteredOptions.map((opt) => (
             <button
               key={opt}
@@ -65,6 +68,7 @@ function OnboardingSuggestInput({ value, options, onChange, placeholder, icon: I
 }
 
 export default function OnboardingWizard() {
+  const { t } = useI18n();
   const router = useRouter();
   const { user, updateUser } = useUser();
   const supabase = createClient();
@@ -253,9 +257,9 @@ export default function OnboardingWizard() {
         <div className="space-y-4 w-full">
           <Input
             id="businessName"
-            label="Business Name"
+            label={useI18nStore.getState().t("extra.t306")}
             icon={Store}
-            placeholder="e.g. Bella Salon"
+            placeholder={t("extra.t57")}
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
           />
@@ -269,9 +273,9 @@ export default function OnboardingWizard() {
         <div className="space-y-4 w-full">
           <Input
             id="address"
-            label="Address"
+            label={useI18nStore.getState().t("extra.t183")}
             icon={MapPin}
-            placeholder="123 Main St, City"
+            placeholder={t("extra.t58")}
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
@@ -286,7 +290,7 @@ export default function OnboardingWizard() {
           <OnboardingSuggestInput
             value={category}
             onChange={(val) => setCategory(val)}
-            placeholder="Select a category"
+            placeholder={useI18nStore.getState().t("extra.t236")}
             icon={Briefcase}
             options={["Barbershop", "Beauty Salon", "Pet Grooming"]}
           />
@@ -304,7 +308,7 @@ export default function OnboardingWizard() {
           <OnboardingSuggestInput
             value={serviceName}
             onChange={(val) => setServiceName(val)}
-            placeholder="e.g. Men's Haircut"
+            placeholder={t("extra.t59")}
             icon={Scissors}
             options={["Men's Haircut", "Women's Haircut", "Beard Trim", "Manicure", "Pedicure", "Coloring", "Dog Grooming", "Cat Grooming"]}
           />
@@ -312,7 +316,7 @@ export default function OnboardingWizard() {
             <div className="flex-1">
               <Input
                 id="servicePrice"
-                label="Price (UZS)"
+                label={useI18nStore.getState().t("extra.t307")}
                 icon={DollarSign}
                 placeholder="100 000"
                 value={servicePrice}
@@ -327,7 +331,7 @@ export default function OnboardingWizard() {
             <div className="flex-1">
               <Input
                 id="serviceDuration"
-                label="Duration (min)"
+                label={useI18nStore.getState().t("extra.t327")}
                 icon={Clock}
                 placeholder="45"
                 value={serviceDuration}
@@ -346,16 +350,16 @@ export default function OnboardingWizard() {
         <div className="space-y-4 w-full">
           <Input
             id="staffName"
-            label="Staff Name"
+            label={useI18nStore.getState().t("extra.t157")}
             icon={Users}
-            placeholder="e.g. John Doe"
+            placeholder={t("extra.t60")}
             value={staffName}
             onChange={(e) => setStaffName(e.target.value)}
           />
           <OnboardingSuggestInput
             value={staffRole}
             onChange={(val) => setStaffRole(val)}
-            placeholder="Select a role"
+            placeholder={useI18nStore.getState().t("extra.t187")}
             icon={Briefcase}
             options={["Barber", "Stylist", "Nail Technician", "Groomer"]}
           />
@@ -432,3 +436,4 @@ export default function OnboardingWizard() {
     </div>
   );
 }
+

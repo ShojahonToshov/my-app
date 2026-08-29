@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import ElaraLogo from "@/components/ElaraLogo";
 import SignupRoleModal from "@/components/SignupRoleModal";
-import { useI18nStore } from "@/stores/i18nStore";
+import { useI18n } from "@/hooks/useI18n";
 
 export default function Footer() {
-  const { t } = useI18nStore();
+  const { t } = useI18n();
   const [signupModalOpen, setSignupModalOpen] = useState(false);
 
   return (

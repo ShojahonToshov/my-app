@@ -1,5 +1,5 @@
 "use client";
-import { useI18nStore } from "@/stores/i18nStore";
+import { useI18n } from "@/hooks/useI18n";
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -157,7 +157,7 @@ const defaultVenueData: VenueData = {
 
 
 export default function CustomerBooking() {
-  const { t } = useI18nStore();
+  const { t } = useI18n();
 
   const router = useRouter();
   const searchParams = useSearchParams();

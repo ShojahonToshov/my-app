@@ -1,4 +1,6 @@
 "use client";
+import { useI18nStore } from "@/stores/i18nStore";
+
 
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
@@ -192,17 +194,13 @@ export default function DesignConceptPage() {
                 whileTap={{ scale: 0.92 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className="px-6 py-3 text-[14px] font-bold text-[#0B0C0D] bg-white border border-[#8D9195]/20 text-center rounded-full shadow-sm cursor-pointer"
-              >
-                Log in
-              </motion.a>
+              >{useI18nStore.getState().t("extra.t106")}</motion.a>
               <motion.button 
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.92 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className="px-8 py-3 bg-[#151719] text-white text-[14px] font-bold rounded-full shadow-lg shadow-[#151719]/10"
-              >
-                Sign up
-              </motion.button>
+              >{useI18nStore.getState().t("extra.t130")}</motion.button>
             </div>
             <button 
               className="md:hidden p-3 rounded-full hover:bg-[#8D9195]/10 transition-colors mr-1"
@@ -362,7 +360,7 @@ export default function DesignConceptPage() {
                    >
                       <div className="flex items-center gap-3 mb-2">
                         <div className="w-3 h-3 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]" />
-                        <div className="text-[11px] font-bold text-[#0B0C0D] uppercase tracking-widest">Waiting</div>
+                        <div className="text-[11px] font-bold text-[#0B0C0D] uppercase tracking-widest">{useI18nStore.getState().t("extra.t144")}</div>
                       </div>
                       <div className="h-24 bg-white rounded-xl border border-[#8D9195]/10 shadow-sm p-4 flex flex-col justify-between">
                          <div className="w-1/2 h-3 bg-[#D8DADC] rounded-full" />
@@ -383,7 +381,7 @@ export default function DesignConceptPage() {
                    >
                       <div className="flex items-center gap-3 mb-2">
                         <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                        <div className="text-[11px] font-bold text-[#0B0C0D] uppercase tracking-widest">In Chair</div>
+                        <div className="text-[11px] font-bold text-[#0B0C0D] uppercase tracking-widest">{useI18nStore.getState().t("extra.t263")}</div>
                       </div>
                       <div className="h-28 bg-white rounded-xl border border-[#8D9195]/10 shadow-sm p-4 flex flex-col justify-between relative overflow-hidden">
                          <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500" />
@@ -449,7 +447,7 @@ export default function DesignConceptPage() {
                       >
                         98
                       </motion.div>
-                      <div className="text-[11px] text-[#25282B] uppercase tracking-widest font-bold mt-2">Score</div>
+                      <div className="text-[11px] text-[#25282B] uppercase tracking-widest font-bold mt-2">{useI18nStore.getState().t("extra.t217")}</div>
                     </div>
                  </div>
               </div>
@@ -498,11 +496,11 @@ export default function DesignConceptPage() {
                     {/* Ticket Header */}
                     <div className="bg-[#151719] text-white rounded-t-[2rem] p-8 text-center relative overflow-hidden shadow-inner">
                        <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/20 blur-3xl rounded-full" />
-                       <div className="text-[11px] uppercase tracking-widest font-bold text-white/60 mb-4">Scheduled for Today</div>
+                       <div className="text-[11px] uppercase tracking-widest font-bold text-white/60 mb-4">{useI18nStore.getState().t("extra.t152")}</div>
                        <div className="text-7xl font-bold tracking-tighter mb-6 relative z-10">14:00</div>
                        <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/10 rounded-full border border-white/20 backdrop-blur-md">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-[11px] font-bold tracking-widest uppercase">Confirmed</span>
+                          <span className="text-[11px] font-bold tracking-widest uppercase">{useI18nStore.getState().t("extra.t123")}</span>
                        </div>
                     </div>
                     
@@ -521,8 +519,8 @@ export default function DesignConceptPage() {
                          <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 bg-emerald-50 px-4 py-1.5 rounded-full mb-4 inline-block">
                            Hair Salon
                          </span>
-                         <h4 className="text-2xl font-bold text-[#0B0C0D] mb-2 tracking-tight">Alexander Studio</h4>
-                         <p className="text-[13px] font-bold text-[#25282B]">Premium Hair Styling</p>
+                         <h4 className="text-2xl font-bold text-[#0B0C0D] mb-2 tracking-tight">{useI18nStore.getState().t("extra.t262")}</h4>
+                         <p className="text-[13px] font-bold text-[#25282B]">{useI18nStore.getState().t("extra.t198")}</p>
                        </div>
                        
                        <div className="flex gap-3 mt-2">
@@ -689,14 +687,10 @@ export default function DesignConceptPage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/login" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">
-                    Log in
-                  </Link>
+                  <Link href="/login" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">{useI18nStore.getState().t("extra.t106")}</Link>
                 </li>
                 <li>
-                  <button className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded text-left">
-                    Sign up
-                  </button>
+                  <button className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded text-left">{useI18nStore.getState().t("extra.t130")}</button>
                 </li>
               </ul>
             </motion.div>
@@ -744,9 +738,7 @@ export default function DesignConceptPage() {
               </h4>
               <ul className="space-y-4 text-[14px] font-bold text-[#8D9195]">
                 <li>
-                  <a href="#" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">
-                    About us
-                  </a>
+                  <a href="#" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">{useI18nStore.getState().t("extra.t326")}</a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-[#0B0C0D] transition-colors duration-200 outline-none rounded">
@@ -773,8 +765,8 @@ export default function DesignConceptPage() {
         >
           <p>© {new Date().getFullYear()} Elara. All rights reserved.</p>
           <div className="flex gap-8">
-            <Link href="/privacy" className="hover:text-[#0B0C0D] transition-colors underline underline-offset-4">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-[#0B0C0D] transition-colors underline underline-offset-4">Terms of Service</Link>
+            <Link href="/privacy" className="hover:text-[#0B0C0D] transition-colors underline underline-offset-4">{useI18nStore.getState().t("extra.t259")}</Link>
+            <Link href="/terms" className="hover:text-[#0B0C0D] transition-colors underline underline-offset-4">{useI18nStore.getState().t("extra.t192")}</Link>
           </div>
         </motion.div>
       </footer>
