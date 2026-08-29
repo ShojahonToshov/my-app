@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   QrCode,
+  Ticket,
   ChevronDown
 } from "lucide-react";
 import Link from "next/link";
@@ -29,6 +30,22 @@ const customFont = Plus_Jakarta_Sans({
 
 // Extremely smooth easing curve
 const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 300, damping: 24 } }
+};
 
 // Increased logo size
 function AdaptedLogo() {
@@ -178,7 +195,7 @@ export default function DesignConceptPage() {
                   <motion.div
                     layoutId="activeNavPill"
                     className="absolute inset-0 bg-white rounded-full shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-white/60 -z-10"
-                    transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                    transition={{ type: "spring" as const, stiffness: 500, damping: 35 }}
                   />
                 )}
                 <span className="relative z-20">
@@ -195,13 +212,13 @@ export default function DesignConceptPage() {
                 href="/login" 
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.92 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                transition={{ type: "spring" as const, stiffness: 400, damping: 25 }}
                 className="px-6 py-3 text-[14px] font-bold text-[#0B0C0D] bg-white border border-[#8D9195]/20 text-center rounded-full shadow-sm cursor-pointer"
               >{useI18nStore.getState().t("extra.t106")}</motion.a>
               <motion.button 
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.92 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                transition={{ type: "spring" as const, stiffness: 400, damping: 25 }}
                 className="px-8 py-3 bg-[#151719] text-white text-[14px] font-bold rounded-full shadow-lg shadow-[#151719]/10"
               >{useI18nStore.getState().t("extra.t130")}</motion.button>
             </div>
@@ -267,7 +284,7 @@ export default function DesignConceptPage() {
                 href="/search"
                 whileHover={{ scale: 1.04, boxShadow: "0 0 40px rgba(255,255,255,0.2)" }}
                 whileTap={{ scale: 0.92 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                transition={{ type: "spring" as const, stiffness: 400, damping: 25 }}
                 className="h-16 px-10 bg-white text-[#151719] font-bold rounded-full flex items-center justify-center w-full sm:w-auto text-[16px] cursor-pointer"
               >
                 {t("extra.t430")}</motion.a>
@@ -275,7 +292,7 @@ export default function DesignConceptPage() {
                 href="#platform"
                 whileHover={{ scale: 1.04, backgroundColor: "rgba(255,255,255,0.1)" }}
                 whileTap={{ scale: 0.92 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                transition={{ type: "spring" as const, stiffness: 400, damping: 25 }}
                 className="h-16 px-10 bg-white/5 text-white font-bold rounded-full flex items-center justify-center border border-white/10 w-full sm:w-auto text-[16px] backdrop-blur-sm cursor-pointer"
               >
                 {t("extra.t431")}</motion.a>
@@ -308,225 +325,84 @@ export default function DesignConceptPage() {
           </motion.div>
         </section>
 
-        {/* BENTO GRID */}
-        <section id="platform" className="w-full max-w-[1400px] mx-auto px-6 py-40">
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "100px" }}
-            transition={{ duration: 1, ease: smoothEase }}
-            style={{ willChange: "transform, opacity" }}
-            className="mb-24 md:text-center max-w-4xl md:mx-auto"
-          >
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-[-0.03em] leading-tight mb-8 text-[#0B0C0D]">
-              {t("extra.t432")}<br /> {t("extra.t433")}</h2>
-            <p className="text-[#25282B] text-xl font-medium leading-relaxed max-w-2xl mx-auto">
-              {t("extra.t434")}</p>
+        {/* BENTO GRID (Replaced with Variant2LightSaaS) */}
+        <section id="platform" className="min-h-screen bg-[#E6E8EA] text-black py-32 px-6 relative overflow-hidden font-sans border-t border-neutral-300">
+      {/* Background glow adapted for light mode */}
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.1, 1],
+          opacity: [0.3, 0.5, 0.3]
+        }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-white blur-[120px] rounded-full pointer-events-none" 
+      />
+      
+      <div className="max-w-6xl mx-auto relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="mb-24 flex flex-col items-center text-center"
+        >
+          <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 text-black">
+            Everything you need,<br/>elegantly arranged.
+          </h2>
+          <p className="text-neutral-500 text-lg md:text-xl max-w-2xl leading-relaxed">
+            We stripped away the clutter to build a workspace that administrators<br className="hidden md:block"/>and professionals actually enjoy using.
+          </p>
+        </motion.div>
+
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
+          <motion.div variants={itemVariants} className="md:col-span-2 bg-white rounded-[2rem] p-10 hover:shadow-xl transition-all duration-300 group relative overflow-hidden shadow-sm">
+             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 group-hover:scale-125 group-hover:-rotate-12 transition-all duration-700 ease-out"><Ticket className="w-40 h-40 text-black" /></div>
+             <div className="relative z-10">
+               <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center mb-6 group-hover:bg-black transition-colors duration-300">
+                 <Ticket className="w-6 h-6 text-black group-hover:text-white transition-colors" />
+               </div>
+               <h3 className="text-2xl font-bold mb-3 text-black">Live Digital Ticket</h3>
+               <p className="text-neutral-500 max-w-md group-hover:text-neutral-700 transition-colors">No more waiting in the dark. Clients track their exact status in real-time, eliminating uncertainty and walk-outs.</p>
+             </div>
           </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[480px]">
-            
-            {/* Bento 1: Kanban Board */}
-            <motion.div 
-              initial={{ opacity: 0, y: 50, scale: 0.98 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "100px" }}
-              transition={{ duration: 1, delay: 0.1, ease: smoothEase }}
-              className="md:col-span-2 bg-[#F3F4F4] rounded-[2.5rem] border border-white shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] p-10 flex flex-col relative overflow-hidden group hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] transition-shadow duration-700"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent pointer-events-none" />
-              
-              <div className="relative z-10 w-full max-w-md">
-                <div className="w-14 h-14 rounded-2xl bg-white border border-[#8D9195]/20 flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform duration-500">
-                  <LayoutDashboard className="w-6 h-6 text-[#0B0C0D]" />
-                </div>
-                <h3 className="text-3xl font-bold tracking-tight text-[#0B0C0D] mb-4">
-                  {t("extra.t435")}</h3>
-                <p className="text-[#25282B] text-lg font-medium leading-relaxed">
-                  {t("extra.t436")}</p>
-              </div>
-              
-              <div className="absolute right-0 bottom-0 translate-x-12 translate-y-12 w-[500px] h-[360px] bg-[#D8DADC]/50 backdrop-blur-md rounded-tl-[2.5rem] border-t border-l border-white shadow-2xl p-8 flex flex-col gap-5 group-hover:-translate-x-6 group-hover:-translate-y-6 transition-transform duration-700 ease-out">
-                <div className="flex gap-5 h-full">
-                   <motion.div 
-                     animate={{ y: [0, -8, 0] }}
-                     transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                     className="flex-1 bg-[#F3F4F4] rounded-2xl p-5 border border-white shadow-md flex flex-col gap-4"
-                   >
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="w-3 h-3 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]" />
-                        <div className="text-[11px] font-bold text-[#0B0C0D] uppercase tracking-widest">{useI18nStore.getState().t("extra.t144")}</div>
-                      </div>
-                      <div className="h-24 bg-white rounded-xl border border-[#8D9195]/10 shadow-sm p-4 flex flex-col justify-between">
-                         <div className="w-1/2 h-3 bg-[#D8DADC] rounded-full" />
-                         <div className="flex justify-between items-center">
-                           <div className="w-1/3 h-2.5 bg-[#D8DADC] rounded-full" />
-                           <div className="w-8 h-8 rounded-full bg-[#151719] flex items-center justify-center shadow-lg">
-                              <Play className="w-3 h-3 text-white ml-0.5" />
-                           </div>
-                         </div>
-                      </div>
-                      <div className="h-24 bg-white rounded-xl border border-[#8D9195]/10 shadow-sm opacity-60" />
-                   </motion.div>
-                   
-                   <motion.div 
-                     animate={{ y: [0, -12, 0] }}
-                     transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-                     className="flex-1 bg-[#F3F4F4] rounded-2xl p-5 border border-white shadow-md flex flex-col gap-4"
-                   >
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                        <div className="text-[11px] font-bold text-[#0B0C0D] uppercase tracking-widest">{useI18nStore.getState().t("extra.t263")}</div>
-                      </div>
-                      <div className="h-28 bg-white rounded-xl border border-[#8D9195]/10 shadow-sm p-4 flex flex-col justify-between relative overflow-hidden">
-                         <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500" />
-                         <div className="w-2/3 h-3 bg-[#0B0C0D] rounded-full" />
-                         <div className="w-full py-2.5 bg-[#151719] rounded-full mt-auto flex justify-center items-center gap-2 shadow-lg">
-                            <CheckCircle2 className="w-4 h-4 text-white" />
-                         </div>
-                      </div>
-                   </motion.div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Bento 2: Karma System */}
-            <motion.div 
-              initial={{ opacity: 0, y: 50, scale: 0.98 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "100px" }}
-              transition={{ duration: 1, delay: 0.2, ease: smoothEase }}
-              style={{ willChange: "transform, opacity" }}
-              className="md:col-span-1 bg-[#F3F4F4] rounded-[2.5rem] border border-white shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] p-10 flex flex-col relative overflow-hidden group hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] transition-shadow duration-700"
-            >
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
-              
-              <div className="relative z-10">
-                <div className="w-14 h-14 rounded-2xl bg-white border border-[#8D9195]/20 flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform duration-500">
-                  <ShieldCheck className="w-6 h-6 text-[#0B0C0D]" />
-                </div>
-                <h3 className="text-3xl font-bold tracking-tight text-[#0B0C0D] mb-4">
-                  {t("extra.t437")}</h3>
-                <p className="text-[#25282B] text-lg font-medium leading-relaxed">
-                  {t("extra.t438")}</p>
-              </div>
-
-              <div className="absolute inset-x-0 bottom-0 p-10 flex justify-center">
-                 <div className="relative w-40 h-40 flex items-center justify-center">
-                    <div className="absolute inset-0 rounded-full bg-[#151719]/5 blur-xl group-hover:bg-[#151719]/10 transition-colors duration-1000" />
-                    <svg className="absolute inset-0 w-full h-full -rotate-90 drop-shadow-xl">
-                      <circle cx="80" cy="80" r="70" stroke="#8D9195" strokeWidth="6" fill="none" opacity="0.15" />
-                      <motion.circle 
-                        cx="80" cy="80" r="70" 
-                        stroke="#151719" 
-                        strokeWidth="6" 
-                        fill="none" 
-                        strokeDasharray="440"
-                        initial={{ strokeDashoffset: 440 }}
-                        whileInView={{ strokeDashoffset: 140 }}
-                        viewport={{ once: true, margin: "50px" }}
-                        transition={{ duration: 2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                        strokeLinecap="round"
-                        className="group-hover:strokeDashoffset-[80] transition-all duration-[1.5s] ease-out" 
-                      />
-                    </svg>
-                    <div className="text-center relative z-10">
-                      <motion.div 
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.8, type: "spring" }}
-                        className="text-5xl font-bold text-[#0B0C0D] tracking-tight"
-                      >
-                        98
-                      </motion.div>
-                      <div className="text-[11px] text-[#25282B] uppercase tracking-widest font-bold mt-2">{useI18nStore.getState().t("extra.t217")}</div>
-                    </div>
-                 </div>
-              </div>
-            </motion.div>
-
-            {/* Bento 3: Live Ticket */}
-            <motion.div 
-              initial={{ opacity: 0, y: 50, scale: 0.98 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "100px" }}
-              transition={{ duration: 1, delay: 0.3, ease: smoothEase }}
-              style={{ willChange: "transform, opacity" }}
-              className="md:col-span-3 bg-[#F3F4F4] rounded-[2.5rem] border border-white shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] p-10 md:p-16 flex flex-col md:flex-row items-center gap-16 relative overflow-hidden group hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] transition-shadow duration-700"
-            >
-              <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent pointer-events-none" />
-              
-              <div className="relative z-10 md:w-5/12 flex flex-col justify-center">
-                <div className="w-14 h-14 rounded-2xl bg-white border border-[#8D9195]/20 flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform duration-500">
-                  <Calendar className="w-6 h-6 text-[#0B0C0D]" />
-                </div>
-                <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-[#0B0C0D] mb-6 leading-tight">
-                  {t("extra.t439")}</h3>
-                <p className="text-[#25282B] text-xl font-medium leading-relaxed mb-10">
-                  {t("extra.t440")}</p>
-                <motion.button 
-                  whileHover={{ scale: 1.04, backgroundColor: "#ffffff" }}
-                  whileTap={{ scale: 0.92 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                  className="self-start text-[14px] font-bold text-[#151719] flex items-center gap-3 group/btn uppercase tracking-widest bg-white/50 px-6 py-3 rounded-full"
-                >
-                  {t("extra.t441")}<ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1.5 transition-transform" />
-                </motion.button>
-              </div>
-
-              {/* Realistic Ticket Mockup */}
-              <div className="relative md:w-7/12 w-full flex justify-center md:justify-end perspective-[1200px]">
-                 <motion.div 
-                   animate={{ y: [0, -15, 0] }}
-                   transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                   className="w-full max-w-[360px] bg-white rounded-[2rem] border border-[#8D9195]/20 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col transform-gpu rotate-y-[-8deg] rotate-x-[8deg] group-hover:rotate-y-0 group-hover:rotate-x-0 transition-transform duration-[1s] ease-out will-change-transform"
-                 >
-                    
-                    {/* Ticket Header */}
-                    <div className="bg-[#151719] text-white rounded-t-[2rem] p-8 text-center relative overflow-hidden shadow-inner">
-                       <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/20 blur-3xl rounded-full" />
-                       <div className="text-[11px] uppercase tracking-widest font-bold text-white/60 mb-4">{useI18nStore.getState().t("extra.t152")}</div>
-                       <div className="text-7xl font-bold tracking-tighter mb-6 relative z-10">14:00</div>
-                       <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/10 rounded-full border border-white/20 backdrop-blur-md">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-[11px] font-bold tracking-widest uppercase">{useI18nStore.getState().t("extra.t123")}</span>
-                       </div>
-                    </div>
-                    
-                    {/* Tear-off Line */}
-                    <div className="h-4 w-full bg-white relative flex items-center overflow-hidden">
-                       <div className="w-full border-t-[3px] border-dashed border-[#8D9195]/30" />
-                       {/* Left cutout */}
-                       <div className="absolute -left-3 w-6 h-6 rounded-full bg-[#F3F4F4] border-r border-[#8D9195]/20 shadow-inner" />
-                       {/* Right cutout */}
-                       <div className="absolute -right-3 w-6 h-6 rounded-full bg-[#F3F4F4] border-l border-[#8D9195]/20 shadow-inner" />
-                    </div>
-
-                    {/* Ticket Body */}
-                    <div className="p-8 text-center flex flex-col gap-6 bg-white rounded-b-[2rem]">
-                       <div>
-                         <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 bg-emerald-50 px-4 py-1.5 rounded-full mb-4 inline-block">
-                           {t("extra.t370")}</span>
-                         <h4 className="text-2xl font-bold text-[#0B0C0D] mb-2 tracking-tight">{useI18nStore.getState().t("extra.t262")}</h4>
-                         <p className="text-[13px] font-bold text-[#25282B]">{useI18nStore.getState().t("extra.t198")}</p>
-                       </div>
-                       
-                       <div className="flex gap-3 mt-2">
-                          <button className="flex-1 py-3.5 rounded-full border border-[#8D9195]/30 bg-[#F3F4F4] text-[#0B0C0D] text-[13px] font-bold flex items-center justify-center gap-2 hover:bg-[#8D9195]/10 transition-colors">
-                            <Navigation className="w-4 h-4" /> {t("app.t35")}</button>
-                          <button className="w-12 h-12 rounded-full border border-[#8D9195]/30 bg-white flex items-center justify-center hover:bg-[#8D9195]/10 transition-colors">
-                            <QrCode className="w-5 h-5 text-[#0B0C0D]" />
-                          </button>
-                       </div>
-                    </div>
-
-                 </motion.div>
-              </div>
-            </motion.div>
-
-          </div>
-        </section>
+          <motion.div variants={itemVariants} className="bg-white rounded-[2rem] p-10 hover:shadow-xl transition-all duration-300 relative overflow-hidden group shadow-sm">
+             <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center mb-6 group-hover:bg-black transition-colors duration-300">
+               <ShieldCheck className="w-6 h-6 text-black group-hover:text-white transition-colors" />
+             </div>
+             <h3 className="text-2xl font-bold mb-3 text-black">Karma System</h3>
+             <p className="text-neutral-500 group-hover:text-neutral-700 transition-colors">Stop losing money to no-shows. Smart deposits and dynamic client scoring protect your time.</p>
+          </motion.div>
+          <motion.div variants={itemVariants} className="bg-white rounded-[2rem] p-10 hover:shadow-xl transition-all duration-300 relative overflow-hidden group shadow-sm">
+             <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center mb-6 group-hover:bg-black transition-colors duration-300">
+               <Calendar className="w-6 h-6 text-black group-hover:text-white transition-colors" />
+             </div>
+             <h3 className="text-2xl font-bold mb-3 text-black">Instant Availability</h3>
+             <p className="text-neutral-500 group-hover:text-neutral-700 transition-colors">Skip the back-and-forth. Clients see exactly when you are free and secure their spot instantly.</p>
+          </motion.div>
+          <motion.div variants={itemVariants} className="md:col-span-2 bg-white rounded-[2rem] p-10 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[320px] group shadow-sm">
+             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 group-hover:scale-125 group-hover:-rotate-12 transition-all duration-700 ease-out"><LayoutDashboard className="w-40 h-40 text-black" /></div>
+             <div className="relative z-10">
+               <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center mb-6 group-hover:bg-black transition-colors duration-300">
+                 <LayoutDashboard className="w-6 h-6 text-black group-hover:text-white transition-colors" />
+               </div>
+               <h3 className="text-2xl font-bold mb-3 text-black">Visual Kanban Flow</h3>
+               <p className="text-neutral-500 max-w-md group-hover:text-neutral-700 transition-colors">Take total control of your workspace. Drag and drop clients seamlessly through your entire service pipeline.</p>
+             </div>
+             <div className="flex items-end gap-3 h-28 mt-8 opacity-80 group-hover:opacity-100 transition-all duration-500 relative z-10">
+               <motion.div className="w-full bg-neutral-200 group-hover:bg-neutral-300 rounded-t-lg transition-colors" initial={{ height: "10%" }} whileInView={{ height: "40%" }} transition={{ delay: 0.2, duration: 0.8, type: "spring" as const }} viewport={{ once: true }} />
+               <motion.div className="w-full bg-neutral-200 group-hover:bg-neutral-300 rounded-t-lg transition-colors" initial={{ height: "10%" }} whileInView={{ height: "60%" }} transition={{ delay: 0.3, duration: 0.8, type: "spring" as const }} viewport={{ once: true }} />
+               <motion.div className="w-full bg-black rounded-t-lg shadow-lg group-hover:shadow-[0_0_20px_rgba(0,0,0,0.2)] transition-shadow" initial={{ height: "10%" }} whileInView={{ height: "90%" }} transition={{ delay: 0.4, duration: 0.8, type: "spring" as const }} viewport={{ once: true }} />
+               <motion.div className="w-full bg-neutral-200 group-hover:bg-neutral-300 rounded-t-lg transition-colors" initial={{ height: "10%" }} whileInView={{ height: "50%" }} transition={{ delay: 0.5, duration: 0.8, type: "spring" as const }} viewport={{ once: true }} />
+             </div>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
 
         {/* ENHANCED FAQ SECTION (Full Width) */}
         <section id="faq" className="w-full bg-[#F3F4F4] border-y border-white shadow-[0_10px_40px_rgba(0,0,0,0.02)] py-32 px-6 relative z-20">
@@ -584,14 +460,14 @@ export default function DesignConceptPage() {
               <motion.button 
                 whileHover={{ scale: 1.04, boxShadow: "0 20px 40px -15px rgba(21,23,25,0.4)" }}
                 whileTap={{ scale: 0.92 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                transition={{ type: "spring" as const, stiffness: 400, damping: 25 }}
                 className="h-16 px-12 bg-[#151719] text-white font-bold rounded-full text-[16px] w-full sm:w-auto"
               >
                 {t("extra.t450")}</motion.button>
               <motion.button 
                 whileHover={{ scale: 1.04, backgroundColor: "rgba(255,255,255,0.5)" }}
                 whileTap={{ scale: 0.92 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                transition={{ type: "spring" as const, stiffness: 400, damping: 25 }}
                 className="h-16 px-10 bg-white text-[#0B0C0D] font-bold rounded-full border border-[#8D9195]/30 w-full sm:w-auto flex items-center justify-center gap-2 text-[16px] shadow-sm"
               >
                 {t("extra.t451")}</motion.button>
@@ -623,7 +499,7 @@ export default function DesignConceptPage() {
                 href="#"
                 whileHover={{ scale: 1.1, backgroundColor: "#0B0C0D", color: "#ffffff", borderColor: "#0B0C0D" }}
                 whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                transition={{ type: "spring" as const, stiffness: 400, damping: 25 }}
                 className="w-11 h-11 rounded-full bg-white flex items-center justify-center text-[#25282B] shadow-sm border border-[#8D9195]/15 cursor-pointer"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
@@ -632,7 +508,7 @@ export default function DesignConceptPage() {
                 href="#"
                 whileHover={{ scale: 1.1, backgroundColor: "#0B0C0D", color: "#ffffff", borderColor: "#0B0C0D" }}
                 whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                transition={{ type: "spring" as const, stiffness: 400, damping: 25 }}
                 className="w-11 h-11 rounded-full bg-white flex items-center justify-center text-[#25282B] shadow-sm border border-[#8D9195]/15 cursor-pointer"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
@@ -641,7 +517,7 @@ export default function DesignConceptPage() {
                 href="#"
                 whileHover={{ scale: 1.1, backgroundColor: "#0B0C0D", color: "#ffffff", borderColor: "#0B0C0D" }}
                 whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                transition={{ type: "spring" as const, stiffness: 400, damping: 25 }}
                 className="w-11 h-11 rounded-full bg-white flex items-center justify-center text-[#25282B] shadow-sm border border-[#8D9195]/15 cursor-pointer"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>

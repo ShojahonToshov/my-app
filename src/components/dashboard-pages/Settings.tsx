@@ -588,8 +588,8 @@ export default function Settings() {
                               <Link className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
                               <input 
                                 aria-label="Social link"
-                                name={`social-link-${index}`}
-                                id={`social-link-${index}`}
+                                name={`social-link-${idx}`}
+                                id={`social-link-${idx}`}
                                 type="text" 
                                 value={link.value} 
                                 onChange={(e) => {
