@@ -261,10 +261,15 @@ export default function DesignConceptPage() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, ease: smoothEase }}
-              className="text-6xl md:text-8xl lg:text-[7.5rem] font-bold tracking-[-0.04em] leading-[0.95] mb-8 bg-gradient-to-b from-white via-white to-white/40 bg-clip-text text-transparent"
+              className="text-6xl md:text-8xl lg:text-[7.5rem] font-bold tracking-[-0.04em] leading-[0.95] mb-8 flex flex-col"
             >
-              {t("extra.t427")}<br/>
-              {t("extra.t428")}</motion.h1>
+              <span className="text-white relative z-10">
+                {t("extra.t427")}
+              </span>
+              <span className="bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent relative z-0 pb-2 -mt-1">
+                {t("extra.t428")}
+              </span>
+            </motion.h1>
 
             <motion.p 
               initial={{ opacity: 0, y: 30 }}
@@ -345,7 +350,7 @@ export default function DesignConceptPage() {
           transition={{ duration: 0.6 }}
           className="mb-24 flex flex-col items-center text-center"
         >
-          <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 text-black">
+          <h2 className="text-5xl md:text-7xl font-bold tracking-tight pb-3 mb-3 bg-gradient-to-b from-black via-black to-black/40 bg-clip-text text-transparent">
             Everything you need,<br/>elegantly arranged.
           </h2>
           <p className="text-neutral-500 text-lg md:text-xl max-w-2xl leading-relaxed">
