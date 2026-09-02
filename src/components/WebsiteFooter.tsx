@@ -142,7 +142,7 @@ export function WebsiteFooter() {
         transition={{ duration: 1, delay: 0.4, ease: smoothEase }}
         className="max-w-7xl mx-auto pt-8 border-t border-[#8D9195]/20 flex flex-col md:flex-row items-center justify-between text-[13px] font-bold text-[#8D9195] gap-4"
       >
-        <p>c {new Date().getFullYear()} {t("extra.t458")}</p>
+        <p>&copy; {new Date().getFullYear()} {t("extra.t458")}</p>
         <div className="flex gap-8">
           <Link href="/privacy" className="hover:text-[#0B0C0D] transition-colors">{t("extra.t259")}</Link>
           <Link href="/terms" className="hover:text-[#0B0C0D] transition-colors">{t("extra.t192")}</Link>

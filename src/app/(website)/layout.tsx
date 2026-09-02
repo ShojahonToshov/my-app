@@ -12,7 +12,9 @@ export default function WebsiteLayout({
 }) {
   return (
     <div className={"flex flex-col min-h-screen relative font-sans " + customFont.className}>
-      <WebsiteHeader />
+      <React.Suspense fallback={null}>
+        <WebsiteHeader />
+      </React.Suspense>
       <div className="flex-1">
         {children}
       </div>

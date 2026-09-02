@@ -15,9 +15,10 @@ const customFont = Outfit({
 });
 
 type LoginType = "phone" | "email" | "name";
+import { Suspense } from "react";
 const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-export default function DesignLoginPage() {
+function DesignLoginContent() {
   const { t } = useI18n();
   const [loginType, setLoginType] = useState<LoginType>("phone");
   const [showPassword, setShowPassword] = useState(false);
@@ -192,5 +193,13 @@ export default function DesignLoginPage() {
       </motion.div>
     </div>
     </>
+  );
+}
+
+export default function DesignLoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#D8DADC]" />}>
+      <DesignLoginContent />
+    </Suspense>
   );
 }

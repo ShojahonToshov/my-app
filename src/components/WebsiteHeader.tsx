@@ -7,8 +7,14 @@ import { AdaptedLogo } from "@/components/AdaptedLogo";
 import { useI18n } from "@/hooks/useI18n";
 import SignupRoleModal from "@/components/SignupRoleModal";
 
+import { usePathname } from "next/navigation";
+
 export function WebsiteHeader() {
+  const pathname = usePathname();
   const { t } = useI18n();
+
+  if (pathname === "/designsearch") return null;
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [roleModalOpen, setRoleModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("platform");

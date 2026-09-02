@@ -101,6 +101,14 @@ function FaqItem({ question, answer, delay }: { question: string; answer: string
 }
 
 export default function DesignConceptPage() {
+  return (
+    <React.Suspense fallback={<div className="min-h-screen bg-[#D8DADC]" />}>
+      <DesignConceptContent />
+    </React.Suspense>
+  );
+}
+
+function DesignConceptContent() {
   const { t } = useI18n();
 
   const [mounted, setMounted] = useState(false);

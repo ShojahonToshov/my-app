@@ -14,9 +14,11 @@ const customFont = Outfit({
   display: "swap"
 });
 
+import { Suspense } from "react";
+
 const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-export default function DesignSignupPage() {
+function DesignSignupContent() {
   const { t } = useI18n();
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || "customer";
@@ -147,5 +149,13 @@ export default function DesignSignupPage() {
 
       </motion.div>
     </div>
+  );
+}
+
+export default function DesignSignupPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#D8DADC]" />}>
+      <DesignSignupContent />
+    </Suspense>
   );
 }
