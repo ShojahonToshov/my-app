@@ -572,7 +572,7 @@ export default function Schedule() {
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 md:h-20 shrink-0 sticky top-0 z-[99999] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">{t("app.t46")}</h1>
-            <p className="text-sm text-[#4A4E51] font-medium mt-0.5">{useI18nStore.getState().t("extra.t319")}</p>
+            <p className="text-sm text-[#4A4E51] font-medium mt-0.5">{t("extra.t319")}</p>
           </div>
 
           <div className="flex items-center gap-4">
@@ -610,7 +610,7 @@ export default function Schedule() {
               }} 
               className="bg-[#121415] text-white px-5 py-2.5 rounded-xl text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
             >
-              <Plus className="w-4 h-4" /> <span className="hidden sm:inline">{useI18nStore.getState().t("extra.t189")}</span>
+              <Plus className="w-4 h-4" /> <span className="hidden sm:inline">{t("extra.t189")}</span>
             </button>
           </div>
         </header>
@@ -635,7 +635,7 @@ export default function Schedule() {
                             <div className={`text-sm font-medium capitalize ${isDayActive ? 'text-[#121415]' : 'text-[#8B9194]'}`}>{date.day}</div>
                             <div className="text-xs font-semibold text-[#8B9194]">{date.dateNum} {date.month}</div>
                           </div>
-                          {!isDayActive && <div className="text-[10px] text-[#8B9194] font-medium uppercase mt-0.5">{useI18nStore.getState().t("extra.t260")}</div>}
+                          {!isDayActive && <div className="text-[10px] text-[#8B9194] font-medium uppercase mt-0.5">{t("extra.t260")}</div>}
                         </th>
                       );
                     })}
@@ -738,17 +738,17 @@ export default function Schedule() {
       {isBookingModalOpen && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsBookingModalOpen(false)}>
           <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={(e) => e.stopPropagation()}>
-            <button type="button" aria-label={useI18nStore.getState().t("extra.t128")} onClick={() => setIsBookingModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
+            <button type="button" aria-label={t("extra.t128")} onClick={() => setIsBookingModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             
             <div className="p-6 border-b border-[#DCDCDA]">
-              <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t162")}</h2>
+              <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t162")}</h2>
             </div>
             
             <form className="p-6 space-y-4" onSubmit={handleAddAppointment}>
               
               {/* Row 1: Guest */}
               <div>
-                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{useI18nStore.getState().t("extra.t266")}</label>
+                <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t266")}</label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
                   <input 
@@ -764,7 +764,7 @@ export default function Schedule() {
                     }}
                     onFocus={() => setShowCustomerSuggestions(true)}
                     onBlur={() => setTimeout(() => setShowCustomerSuggestions(false), 200)}
-                    placeholder={useI18nStore.getState().t("extra.t122")} 
+                    placeholder={t("extra.t122")} 
                     className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
                   />
                   {showCustomerSuggestions && filteredCustomers.length > 0 && (
@@ -802,7 +802,7 @@ export default function Schedule() {
                 </div>
                 
                 <div>
-                  <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{useI18nStore.getState().t("extra.t219")}</label>
+                  <label className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t219")}</label>
                   <CustomSelect 
                     icon={User}
                     value={newStaff}
@@ -861,7 +861,7 @@ export default function Schedule() {
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={confirmDelete}
-        title={useI18nStore.getState().t("extra.t216")}
+        title={t("extra.t216")}
         description="Are you sure you want to cancel this booking? This action cannot be undone."
         confirmText={t("extra.t62")}
         cancelText={t("extra.t498")}

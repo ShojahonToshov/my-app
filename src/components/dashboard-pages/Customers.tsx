@@ -46,6 +46,7 @@ interface ConfirmModalProps {
 }
 
 const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }: ConfirmModalProps) => {
+  const { t } = useI18n();
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={onClose}>
@@ -57,7 +58,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }: Confir
         <p className="text-sm text-[#4A4E51] font-medium mb-6">{description}</p>
         <div className="flex gap-3 w-full mt-2">
           <button type="button" onClick={onClose} className="flex-1 py-3 bg-white text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm hover:bg-[#F5F5F4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">{useI18n().t("app.t16")}</button>
-          <button type="button" onClick={onConfirm} className="flex-1 py-3 rounded-xl font-medium text-sm text-white transition-all shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] bg-[#dc2626] hover:opacity-90">{useI18nStore.getState().t("extra.t243")}</button>
+          <button type="button" onClick={onConfirm} className="flex-1 py-3 rounded-xl font-medium text-sm text-white transition-all shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] bg-[#dc2626] hover:opacity-90">{t("extra.t243")}</button>
         </div>
       </div>
     </div>
@@ -65,14 +66,15 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, description }: Confir
 };
 // -------------------------------------------------------------
 
-const TABS = [
-  { id: "all", label: "All" },
-  { id: "regular", label: "Regulars" },
-  { id: "new", label: useI18nStore.getState().t("app.t14") }
-];
-
 export default function Customers() {
   const { t } = useI18n();
+
+  const TABS = [
+    { id: "all", label: "All" },
+    { id: "regular", label: "Regulars" },
+    { id: "new", label: t("app.t14") }
+  ];
+
   const queryClient = useQueryClient();
   const supabase = createClient();
   const customerService = new CustomerService(supabase);
@@ -195,8 +197,8 @@ export default function Customers() {
         {/* HEADER */}
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t226")}</h1>
-            <p className="text-sm text-[#4A4E51] font-medium mt-0.5">{useI18nStore.getState().t("extra.t246")}</p>
+            <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">{t("extra.t226")}</h1>
+            <p className="text-sm text-[#4A4E51] font-medium mt-0.5">{t("extra.t246")}</p>
           </div>
           <div className="flex items-center gap-3">
             <button type="button" onClick={() => setModal(true)} className="bg-[#121415] text-white px-5 py-2.5 rounded-xl text-sm font-medium shadow-sm hover:shadow-md transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95">
@@ -216,7 +218,7 @@ export default function Customers() {
                 type="text" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={useI18nStore.getState().t("extra.t172")} 
+                placeholder={t("extra.t172")} 
                 className="w-full pl-12 pr-10 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium placeholder:text-[#8B9194] focus:outline-none focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 shadow-sm transition-all" 
               />
               {searchQuery && (
@@ -262,8 +264,8 @@ export default function Customers() {
                     </th>
                     <th className="py-3 px-6">{t("app.t43")}</th>
                     <th className="py-3 px-6">{t("app.t44")}</th>
-                    <th className="py-3 px-6">{useI18nStore.getState().t("extra.t311")}</th>
-                    <th className="py-3 px-6">{useI18nStore.getState().t("extra.t127")}</th>
+                    <th className="py-3 px-6">{t("extra.t311")}</th>
+                    <th className="py-3 px-6">{t("extra.t127")}</th>
                     <th className="py-3 px-6 text-right">{t("app.t45")}</th>
                   </tr>
                 </thead>
@@ -339,7 +341,7 @@ export default function Customers() {
                       </td>
                       <td className="py-3 px-6">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider border ${customer.statusColor}`}>
-                          {customer.status === "regular" ? t("extra.t477") : useI18nStore.getState().t("app.t14")}
+                          {customer.status === "regular" ? t("extra.t477") : t("app.t14")}
                         </span>
                       </td>
                       <td className="py-3 px-6">
@@ -351,17 +353,17 @@ export default function Customers() {
                       <td className="py-3 px-6 text-[#4A4E51] font-medium">{customer.lastVisit}</td>
                       <td className="py-3 px-6 text-right">
                         <div className="flex items-center justify-end gap-1 transition-opacity">
-                          <button type="button" onClick={() => toast.info("Feature coming soon")} className="p-2 text-[#4A4E51] hover:text-[#4a6b53] hover:bg-[#e8efe9] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]" title={useI18nStore.getState().t("extra.t169")}>
+                          <button type="button" onClick={() => toast.info("Feature coming soon")} className="p-2 text-[#4A4E51] hover:text-[#4a6b53] hover:bg-[#e8efe9] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]" title={t("extra.t169")}>
                             <PhoneCall className="w-4 h-4" />
                           </button>
-                          <button type="button" onClick={() => toast.info("Feature coming soon")} className="p-2 text-[#4A4E51] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]" title={useI18nStore.getState().t("extra.t181")}>
+                          <button type="button" onClick={() => toast.info("Feature coming soon")} className="p-2 text-[#4A4E51] hover:text-[#121415] hover:bg-[#F5F5F4] rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]" title={t("extra.t181")}>
                             <MessageCircle className="w-4 h-4" />
                           </button>
                           <div className="w-px h-4 bg-[#DCDCDA] mx-1"></div>
                           <button type="button" onClick={() => {
                             setCustomerToDelete(customer.id);
                             setDeleteModalOpen(true);
-                          }} className="p-2 text-[#4A4E51] hover:text-[#dc2626] hover:bg-[#dc2626]/10 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]" title={useI18nStore.getState().t("extra.t243")}>
+                          }} className="p-2 text-[#4A4E51] hover:text-[#dc2626] hover:bg-[#dc2626]/10 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]" title={t("extra.t243")}>
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
@@ -423,7 +425,7 @@ export default function Customers() {
                           </div>
                         </div>
                         <span className={`inline-flex px-2 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider border ${customer.statusColor}`}>
-                          {customer.status === "regular" ? t("extra.t477") : useI18nStore.getState().t("app.t14")}
+                          {customer.status === "regular" ? t("extra.t477") : t("app.t14")}
                         </span>
                       </div>
                       
@@ -433,16 +435,16 @@ export default function Customers() {
                           <p className="font-semibold text-[#121415]">{customer.visits}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">{useI18nStore.getState().t("extra.t221")}</p>
+                          <p className="text-[10px] font-medium text-[#8B9194] uppercase tracking-widest">{t("extra.t221")}</p>
                           <p className="font-semibold text-[#121415]">{customer.ltv}</p>
                         </div>
                       </div>
 
                       <div className="flex gap-2">
                         <button type="button" onClick={() => toast.info("Feature coming soon")} className="flex-1 py-2.5 bg-[#e8efe9] hover:opacity-90 text-[#4a6b53] border border-[#4a6b53]/30 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a6b53]">
-                          <PhoneCall className="w-4 h-4" />{useI18nStore.getState().t("extra.t169")}</button>
+                          <PhoneCall className="w-4 h-4" />{t("extra.t169")}</button>
                         <button type="button" onClick={() => toast.info("Feature coming soon")} className="flex-1 py-2.5 bg-[#F5F5F4] hover:bg-[#DCDCDA] text-[#121415] border border-[#DCDCDA] rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-                          <MessageCircle className="w-4 h-4" />{useI18nStore.getState().t("extra.t181")}</button>
+                          <MessageCircle className="w-4 h-4" />{t("extra.t181")}</button>
                       </div>
                     </div>
                   ))
@@ -462,7 +464,7 @@ export default function Customers() {
               <X className="w-4 h-4" />
             </button>
             <div className="p-8 pb-4 shrink-0">
-              <h2 className="text-2xl font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t103")}</h2>
+              <h2 className="text-2xl font-semibold text-[#121415] tracking-tight">{t("extra.t103")}</h2>
             </div>
             <form className="px-8 pb-8 space-y-5" onSubmit={handleAddCustomer}>
               <div className="relative">
@@ -472,7 +474,7 @@ export default function Customers() {
                   type="text" 
                   value={newCustomerName}
                   onChange={e => setNewClientName(e.target.value)}
-                  placeholder={useI18nStore.getState().t("extra.t170")} 
+                  placeholder={t("extra.t170")} 
                   className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" 
                 />
               </div>
@@ -504,7 +506,7 @@ export default function Customers() {
             deleteCustomerMutation.mutate(customerToDelete);
           }
         }} 
-        title={useI18nStore.getState().t("extra.t272")} 
+        title={t("extra.t272")} 
         description="Are you sure you want to remove this customer from the directory?" 
       />
     </div>

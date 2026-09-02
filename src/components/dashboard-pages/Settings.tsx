@@ -51,6 +51,7 @@ interface ConfirmModalProps {
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm, title, description }) => {
+  const { t } = useI18n();
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" onClick={onClose}>
@@ -62,7 +63,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm,
         <p className="text-sm text-[#4A4E51] font-medium mb-6">{description}</p>
         <div className="flex gap-3 w-full">
           <button type="button" onClick={onClose} className="flex-1 py-3 bg-[#F5F5F4] text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm transition-colors hover:bg-[#ECECEA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{useI18n().t("app.t16")}</button>
-          <button type="button" onClick={onConfirm} className="flex-1 py-3 rounded-xl font-medium text-sm shadow-sm transition-all bg-[#dc2626] text-white hover:opacity-90 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]">{useI18nStore.getState().t("extra.t243")}</button>
+          <button type="button" onClick={onConfirm} className="flex-1 py-3 rounded-xl font-medium text-sm shadow-sm transition-all bg-[#dc2626] text-white hover:opacity-90 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]">{t("extra.t243")}</button>
         </div>
       </div>
     </div>
@@ -146,14 +147,6 @@ function CustomSelect({ value, options, onChange, className, iconMap }: CustomSe
 }
 // ---------------------------------------------
 
-const TABS = [
-  { id: "profile", label: useI18nStore.getState().t("extra.t368"), icon: Store },
-  { id: "schedule", label: "Working Hours", icon: CalendarClock },
-  { id: "services", label: "Services", icon: Scissors },
-  { id: "team", label: "Team", icon: Users },
-  { id: "policies", label: "No-Show Protection", icon: ShieldAlert },
-];
-
 const TIME_OPTIONS = Array.from({ length: 36 }).map((_, i) => {
   const t = (i + 12) * 30; 
   return `${Math.floor(t / 60).toString().padStart(2, '0')}:${(t % 60).toString().padStart(2, '0')}`;
@@ -163,9 +156,17 @@ const ROLE_OPTIONS = ["Barber", "Senior Barber", "Top Specialist"];
 const STANDARD_SERVICES = ["Men's Haircut", "Haircut + Beard", "Beard Trim", "Kids Haircut", "Buzz Cut", "Hair Coloring", "Head Shave", "Face Massage", "Styling"];
 const CANCEL_WINDOWS = ["2 hours before", "12 hours before (Recommended)", "24 hours before", "Allow anytime"];
 const KARMA_THRESHOLDS = ["90%", "80% (Recommended)", "70%", "60%"];
-
 export default function Settings() {
   const { t } = useI18n();
+
+  const TABS = [
+    { id: "profile", label: t("extra.t368"), icon: Store },
+    { id: "schedule", label: "Working Hours", icon: CalendarClock },
+    { id: "services", label: "Services", icon: Scissors },
+    { id: "team", label: "Team", icon: Users },
+    { id: "policies", label: "No-Show Protection", icon: ShieldAlert },
+  ];
+
   const [activeTab, setActiveTab] = useState("profile");
 
   // Real state data for tab views
@@ -696,12 +697,12 @@ export default function Settings() {
 
                 <div className="space-y-3">
                   {services.length === 0 ? (
-                    <EmptyState icon={Scissors} title={useI18nStore.getState().t("extra.t258")} description="Add your first service for customers." />
+                    <EmptyState icon={Scissors} title={t("extra.t258")} description="Add your first service for customers." />
                   ) : (
                     services.map((service) => (
                       <div key={service.id} className={`flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border transition-all ${service.isActive ? "bg-white border-[#DCDCDA] shadow-sm" : "bg-[#F5F5F4] border-[#DCDCDA] opacity-60"}`}>
                         <div className="flex items-center gap-4 mb-4 sm:mb-0">
-                          <button type="button" onClick={() => handleToggleService(service.id)} aria-label={useI18nStore.getState().t("extra.t171")} className={`relative w-11 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 shrink-0 ${service.isActive ? "bg-[#4a6b53]" : "bg-[#DCDCDA]"}`}>
+                          <button type="button" onClick={() => handleToggleService(service.id)} aria-label={t("extra.t171")} className={`relative w-11 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 shrink-0 ${service.isActive ? "bg-[#4a6b53]" : "bg-[#DCDCDA]"}`}>
                             <span className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 shadow-sm ${service.isActive ? "translate-x-5" : "translate-x-0"}`}></span>
                           </button>
                           <div>
@@ -737,7 +738,7 @@ export default function Settings() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {team.length === 0 ? (
-                     <div className="sm:col-span-2"><EmptyState icon={Users} title={useI18nStore.getState().t("extra.t252")} description="Add specialists to start taking bookings." /></div>
+                     <div className="sm:col-span-2"><EmptyState icon={Users} title={t("extra.t252")} description="Add specialists to start taking bookings." /></div>
                   ) : (
                     team.map((member) => (
                       <div key={member.id} className={`p-5 rounded-2xl border transition-all flex flex-col justify-between ${member.isActive ? "bg-white border-[#DCDCDA] shadow-sm hover:shadow-md" : "bg-[#F5F5F4] border-[#DCDCDA] opacity-60"}`}>
@@ -756,7 +757,7 @@ export default function Settings() {
                         
                         <div className="flex items-center justify-between pt-4 border-t border-[#DCDCDA]">
                           <span className="text-xs font-medium text-[#4A4E51]">{t("extra.t19")}</span>
-                          <button type="button" onClick={() => handleToggleMaster(member.id)} aria-label={useI18nStore.getState().t("extra.t328")} className={`relative w-10 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 ${member.isActive ? "bg-[#4a6b53]" : "bg-[#DCDCDA]"}`}>
+                          <button type="button" onClick={() => handleToggleMaster(member.id)} aria-label={t("extra.t328")} className={`relative w-10 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 ${member.isActive ? "bg-[#4a6b53]" : "bg-[#DCDCDA]"}`}>
                             <span className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 shadow-sm ${member.isActive ? "translate-x-4" : "translate-x-0"}`}></span>
                           </button>
                         </div>
@@ -771,7 +772,7 @@ export default function Settings() {
             {activeTab === "policies" && (
               <div className="bg-white rounded-3xl p-8 shadow-sm border border-[#DCDCDA] animate-in fade-in duration-300">
                 <div className="mb-8">
-                  <h2 className="text-xl font-semibold text-[#121415] flex items-center gap-2"><ShieldAlert className="w-5 h-5 text-[#8A2532]" />{useI18nStore.getState().t("extra.t220")}</h2>
+                  <h2 className="text-xl font-semibold text-[#121415] flex items-center gap-2"><ShieldAlert className="w-5 h-5 text-[#8A2532]" />{t("extra.t220")}</h2>
                   <p className="text-sm text-[#4A4E51] font-medium mt-1">{t("extra.t20")}</p>
                 </div>
 
@@ -801,7 +802,7 @@ export default function Settings() {
                       <button
                         type="button"
                         onClick={() => setPolicies({...policies, requireCardForLowKarma: !policies.requireCardForLowKarma})} 
-                        aria-label={useI18nStore.getState().t("extra.t223")}
+                        aria-label={t("extra.t223")}
                         className={`relative w-11 h-6 rounded-full transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2 shrink-0 ${policies.requireCardForLowKarma ? "bg-[#8A2532]" : "bg-[#DCDCDA]"}`}
                       >
                         <span className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 shadow-sm ${policies.requireCardForLowKarma ? "translate-x-5" : "translate-x-0"}`}></span>
@@ -836,7 +837,7 @@ export default function Settings() {
       {isServiceModalOpen && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsServiceModalOpen(false)}>
           <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-            <button type="button" aria-label={useI18nStore.getState().t("extra.t128")} onClick={() => setIsServiceModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
+            <button type="button" aria-label={t("extra.t128")} onClick={() => setIsServiceModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">
               <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{editingServiceId ? t("extra.t507") : t("extra.t508")}</h2>
             </div>
@@ -904,16 +905,16 @@ onChange={(e) => {
       {isMasterModalOpen && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm" role="dialog" aria-modal="true" onClick={() => setIsMasterModalOpen(false)}>
           <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-            <button type="button" aria-label={useI18nStore.getState().t("extra.t128")} onClick={() => setIsMasterModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
+            <button type="button" aria-label={t("extra.t128")} onClick={() => setIsMasterModalOpen(false)} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F5F5F4] hover:bg-[#ECECEA] flex items-center justify-center text-[#4A4E51] hover:text-[#121415] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] focus-visible:ring-offset-2 active:scale-95"><X className="w-4 h-4" /></button>
             <div className="p-6 border-b border-[#DCDCDA]">
               <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t30")}</h2>
             </div>
             <form onSubmit={handleSpecialistSubmit} className="p-6 space-y-4">
               <div>
-                <label htmlFor="staff-name" className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{useI18nStore.getState().t("extra.t180")}</label>
+                <label htmlFor="staff-name" className="block text-xs font-medium text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t180")}</label>
                 <div className="relative">
                   <UserPlus className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B9194]" />
-                  <input id="staff-name" autoFocus required name="name" type="text" placeholder={useI18nStore.getState().t("extra.t336")} value={specialistFormName} onChange={(e) => setSpecialistFormName(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
+                  <input id="staff-name" autoFocus required name="name" type="text" placeholder={t("extra.t336")} value={specialistFormName} onChange={(e) => setSpecialistFormName(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl font-medium text-[#121415] focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" />
                 </div>
               </div>
               <div>
@@ -937,12 +938,13 @@ onChange={(e) => {
         isOpen={deleteModalOpen} 
         onClose={() => setDeleteModalOpen(false)} 
         onConfirm={handleDeleteConfirm} 
-        title={useI18nStore.getState().t("extra.t285")} 
+        title={t("extra.t285")} 
         description={`Are you sure you want to delete "${itemToDelete?.name}"? This action cannot be undone.`} 
       />
     </div>
   );
 }
+
 
 
 

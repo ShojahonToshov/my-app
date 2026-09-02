@@ -521,7 +521,7 @@ export default function LiveTicket() {
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}
         onConfirm={() => setIsCancelModalOpen(false)}
-        title={useI18nStore.getState().t("extra.t109")}
+        title={t("extra.t109")}
         description="Canceling in advance helps professionals manage their time and maintains your reliability karma."
         confirmText={t("extra.t391")}
         cancelText={t("extra.t392")}

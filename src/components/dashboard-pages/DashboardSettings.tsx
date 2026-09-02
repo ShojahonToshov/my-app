@@ -189,7 +189,7 @@ export default function DashboardSettings() {
         <header className="bg-[#F5F5F4]/90 backdrop-blur-md border-b border-[#DCDCDA] px-6 md:px-10 py-4 md:py-0 h-auto md:h-20 shrink-0 sticky top-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t160")}</h1>
+              <h1 className="text-2xl font-semibold text-[#121415] tracking-tight">{t("extra.t160")}</h1>
             </div>
             <p className="text-sm text-[#4A4E51] font-medium mt-1 hidden sm:block">
               Business security, recovery, and authentication settings
@@ -206,8 +206,8 @@ export default function DashboardSettings() {
               {/* 1. Subscription & Plan */}
               <div className="p-6 sm:p-8 border-b border-[#DCDCDA] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">{useI18nStore.getState().t("extra.t209")}</h3>
-                  <p className="text-sm text-[#4A4E51] font-medium">{useI18nStore.getState().t("extra.t279")}</p>
+                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">{t("extra.t209")}</h3>
+                  <p className="text-sm text-[#4A4E51] font-medium">{t("extra.t279")}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex items-center gap-3 p-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl">
@@ -215,8 +215,8 @@ export default function DashboardSettings() {
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                     </div>
                     <div className="flex flex-col pr-4">
-                      <span className="text-sm font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t320")}</span>
-                      <span className="text-[10px] text-[#8A2532] font-bold mt-0.5 uppercase">{useI18nStore.getState().t("extra.t283")}</span>
+                      <span className="text-sm font-semibold text-[#121415] tracking-tight">{t("extra.t320")}</span>
+                      <span className="text-[10px] text-[#8A2532] font-bold mt-0.5 uppercase">{t("extra.t283")}</span>
                     </div>
                   </div>
                   <Link href="/pricing" className="px-5 py-2.5 bg-[#8A2532] text-white font-semibold text-sm rounded-xl hover:bg-[#6b1c26] transition-colors shadow-sm active:scale-95 shrink-0 inline-flex items-center justify-center">
@@ -227,14 +227,14 @@ export default function DashboardSettings() {
               {/* 2. Business Security Info */}
               <div className="p-6 sm:p-8 border-b border-[#DCDCDA]">
                 <div className="mb-6">
-                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t228")}</h2>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t228")}</h2>
                   <p className="text-sm text-[#4A4E51] font-medium mt-1">Primary contact, recovery details, and authentication settings</p>
                 </div>
 
                 <form className="space-y-6" onSubmit={handleSaveSecurity}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-[#121415] mb-2">{useI18nStore.getState().t("extra.t255")}</label>
+                      <label className="block text-sm font-medium text-[#121415] mb-2">{t("extra.t255")}</label>
                       <div className="relative">
                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
                         <input
@@ -246,7 +246,7 @@ export default function DashboardSettings() {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-[#121415] mb-2">{useI18nStore.getState().t("extra.t274")}</label>
+                      <label className="block text-sm font-medium text-[#121415] mb-2">{t("extra.t274")}</label>
                       <PhoneInput
                         id="business_recovery_phone"
                         name="business_recovery_phone"
@@ -260,7 +260,7 @@ export default function DashboardSettings() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#121415] mb-2">{useI18nStore.getState().t("extra.t113")}</label>
+                    <label className="block text-sm font-medium text-[#121415] mb-2">{t("extra.t113")}</label>
                     <div className="relative">
                       <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
                       <input
@@ -296,8 +296,8 @@ export default function DashboardSettings() {
               {/* 2. Payment Method */}
               <div className="p-6 sm:p-8 border-b border-[#DCDCDA] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">{useI18nStore.getState().t("extra.t108")}</h3>
-                  <p className="text-sm text-[#4A4E51] font-medium">{useI18nStore.getState().t("extra.t115")}</p>
+                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">{t("extra.t108")}</h3>
+                  <p className="text-sm text-[#4A4E51] font-medium">{t("extra.t115")}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex items-center gap-3 p-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl">
@@ -315,8 +315,8 @@ export default function DashboardSettings() {
               {/* 3. Security (2FA) */}
               <div className="p-6 sm:p-8 border-b border-[#DCDCDA] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">{useI18nStore.getState().t("extra.t100")}</h3>
-                  <p className="text-sm text-[#4A4E51] font-medium">{useI18nStore.getState().t("extra.t154")}</p>
+                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">{t("extra.t100")}</h3>
+                  <p className="text-sm text-[#4A4E51] font-medium">{t("extra.t154")}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex items-center gap-3 p-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl min-w-[140px]">
@@ -324,14 +324,14 @@ export default function DashboardSettings() {
                       <Key className={`w-4 h-4 ${is2FAEnabled ? 'text-[#4a6b53]' : 'text-[#4A4E51]'}`} />
                     </div>
                     <div className="flex flex-col pr-4">
-                      <span className="text-sm font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t245")}</span>
+                      <span className="text-sm font-semibold text-[#121415] tracking-tight">{t("extra.t245")}</span>
                       <span className={`text-[10px] font-medium mt-0.5 uppercase ${is2FAEnabled ? 'text-[#4a6b53]' : 'text-[#8B9194]'}`}>
                         {is2FAEnabled ? t("extra.t491") : t("extra.t492")}
                       </span>
                     </div>
                   </div>
                   {!is2FAEnabled && (
-                    <button type="button" onClick={() => setActiveModal("2fa")} className="px-5 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm rounded-xl hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-colors shadow-sm active:scale-95 shrink-0">{useI18nStore.getState().t("extra.t202")}</button>
+                    <button type="button" onClick={() => setActiveModal("2fa")} className="px-5 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm rounded-xl hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-colors shadow-sm active:scale-95 shrink-0">{t("extra.t202")}</button>
                   )}
                 </div>
               </div>
@@ -339,8 +339,8 @@ export default function DashboardSettings() {
               {/* 4. Session Management */}
               <div className="p-6 sm:p-8 border-b border-[#DCDCDA] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">{useI18nStore.getState().t("extra.t248")}</h3>
-                  <p className="text-sm text-[#4A4E51] font-medium">{useI18nStore.getState().t("extra.t143")}</p>
+                  <h3 className="text-lg font-semibold text-[#121415] tracking-tight mb-1">{t("extra.t248")}</h3>
+                  <p className="text-sm text-[#4A4E51] font-medium">{t("extra.t143")}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex items-center gap-3 p-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl min-w-[140px]">
@@ -348,8 +348,8 @@ export default function DashboardSettings() {
                       <ShieldCheck className="w-4 h-4 text-[#4a6b53]" />
                     </div>
                     <div className="flex flex-col pr-4">
-                      <span className="text-sm font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t146")}</span>
-                      <span className="text-[10px] text-[#4a6b53] font-medium mt-0.5 uppercase">{useI18nStore.getState().t("extra.t318")}</span>
+                      <span className="text-sm font-semibold text-[#121415] tracking-tight">{t("extra.t146")}</span>
+                      <span className="text-[10px] text-[#4a6b53] font-medium mt-0.5 uppercase">{t("extra.t318")}</span>
                     </div>
                   </div>
                   <button type="button" onClick={() => setActiveModal("logout")} className="px-5 py-2.5 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm rounded-xl hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-colors shadow-sm flex items-center justify-center gap-2 active:scale-95 shrink-0">
@@ -362,9 +362,9 @@ export default function DashboardSettings() {
                 <div>
                   <h3 className="text-lg font-semibold text-[#dc2626] tracking-tight mb-1 flex items-center gap-2">
                     <ShieldAlert className="w-5 h-5" /> {t("extra.t493")}</h3>
-                  <p className="text-sm text-[#991b1b] font-medium">{useI18nStore.getState().t("extra.t232")}</p>
+                  <p className="text-sm text-[#991b1b] font-medium">{t("extra.t232")}</p>
                 </div>
-                <button type="button" onClick={() => setActiveModal("delete")} className="w-full sm:w-auto px-5 py-2.5 bg-white text-[#dc2626] hover:bg-[#dc2626]/10 border border-[#dc2626] rounded-xl font-medium text-sm transition-colors shadow-sm active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]">{useI18nStore.getState().t("extra.t310")}</button>
+                <button type="button" onClick={() => setActiveModal("delete")} className="w-full sm:w-auto px-5 py-2.5 bg-white text-[#dc2626] hover:bg-[#dc2626]/10 border border-[#dc2626] rounded-xl font-medium text-sm transition-colors shadow-sm active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626]">{t("extra.t310")}</button>
               </div>
 
             </div>
@@ -385,13 +385,13 @@ export default function DashboardSettings() {
                   <div className="w-12 h-12 bg-[#F5F5F4] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#DCDCDA]">
                     <CreditCard className="w-6 h-6 text-[#121415]" />
                   </div>
-                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t212")}</h2>
-                  <p className="text-xs text-[#4A4E51] font-medium mt-2">{useI18nStore.getState().t("extra.t136")}</p>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t212")}</h2>
+                  <p className="text-xs text-[#4A4E51] font-medium mt-2">{t("extra.t136")}</p>
                 </div>
                 <form className="px-8 pb-8 flex-1 overflow-y-auto" onSubmit={handleUpdateCard}>
                   <div className="p-5 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl space-y-4">
                     <div>
-                      <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">{useI18nStore.getState().t("extra.t234")}</label>
+                      <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t234")}</label>
                       <input 
                         type="text" 
                         inputMode="numeric"
@@ -405,12 +405,12 @@ export default function DashboardSettings() {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">{useI18nStore.getState().t("extra.t112")}</label>
+                        <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t112")}</label>
                         <input 
                           type="text" 
                           inputMode="numeric"
                           autoComplete="off"
-                          placeholder={useI18nStore.getState().t("extra.t140")} 
+                          placeholder={t("extra.t140")} 
                           maxLength={5}
                           value={inputExpiry}
                           onChange={handleExpiryChange}
@@ -418,7 +418,7 @@ export default function DashboardSettings() {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">{useI18nStore.getState().t("extra.t321")}</label>
+                        <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider">{t("extra.t321")}</label>
                         <input 
                           type="text" 
                           inputMode="numeric"
@@ -447,13 +447,13 @@ export default function DashboardSettings() {
                   <div className="w-12 h-12 bg-[#F5F5F4] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#DCDCDA]">
                     <Key className="w-6 h-6 text-[#121415]" />
                   </div>
-                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t202")}</h2>
-                  <p className="text-xs text-[#4A4E51] font-medium mt-2">{useI18nStore.getState().t("extra.t141")}</p>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t202")}</h2>
+                  <p className="text-xs text-[#4A4E51] font-medium mt-2">{t("extra.t141")}</p>
                 </div>
                 <form className="px-8 pb-8 flex-1 overflow-y-auto" onSubmit={handleEnable2FA}>
                   <div className="p-5 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl space-y-4">
                     <div>
-                      <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider text-center">{useI18nStore.getState().t("extra.t218")}</label>
+                      <label className="block text-xs font-semibold text-[#4A4E51] mb-2 uppercase tracking-wider text-center">{t("extra.t218")}</label>
                       <input 
                         type="text" 
                         inputMode="numeric"
@@ -478,12 +478,12 @@ export default function DashboardSettings() {
                   <div className="w-12 h-12 bg-[#F5F5F4] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#DCDCDA]">
                     <LogOut className="w-6 h-6 text-[#121415]" />
                   </div>
-                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t229")}</h2>
-                  <p className="text-xs text-[#4A4E51] font-medium mt-2">{useI18nStore.getState().t("extra.t111")}</p>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t229")}</h2>
+                  <p className="text-xs text-[#4A4E51] font-medium mt-2">{t("extra.t111")}</p>
                 </div>
                 <div className="px-8 pb-8 flex items-center gap-3">
-                  <button type="button" onClick={() => setActiveModal(null)} className="flex-1 py-3.5 bg-white border border-[#DCDCDA] text-[#121415] rounded-xl font-medium text-sm shadow-sm hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{useI18nStore.getState().t("extra.t284")}</button>
-                  <button type="button" onClick={handleLogout} className="flex-1 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:bg-[#2A2E30] transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{useI18nStore.getState().t("extra.t229")}</button>
+                  <button type="button" onClick={() => setActiveModal(null)} className="flex-1 py-3.5 bg-white border border-[#DCDCDA] text-[#121415] rounded-xl font-medium text-sm shadow-sm hover:bg-[#F5F5F4] hover:border-[#121415]/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{t("extra.t284")}</button>
+                  <button type="button" onClick={handleLogout} className="flex-1 py-3.5 bg-[#121415] text-white rounded-xl font-medium text-sm shadow-sm hover:bg-[#2A2E30] transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">{t("extra.t229")}</button>
                 </div>
               </>
             )}
@@ -494,17 +494,17 @@ export default function DashboardSettings() {
                   <div className="w-12 h-12 bg-[#fef2f2] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#fca5a5]">
                     <ShieldAlert className="w-6 h-6 text-[#dc2626]" />
                   </div>
-                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{useI18nStore.getState().t("extra.t310")}</h2>
-                  <p className="text-xs text-[#991b1b] font-medium mt-2">{useI18nStore.getState().t("extra.t280")}</p>
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">{t("extra.t310")}</h2>
+                  <p className="text-xs text-[#991b1b] font-medium mt-2">{t("extra.t280")}</p>
                 </div>
                 <form className="px-8 pb-8 flex-1 overflow-y-auto" onSubmit={handleDeleteAccount}>
                   <div className="p-5 bg-[#fef2f2] border border-[#fca5a5] rounded-2xl space-y-4">
                     <div>
-                      <label className="block text-xs font-semibold text-[#991b1b] mb-2 uppercase tracking-wider">{useI18nStore.getState().t("extra.t264")}</label>
+                      <label className="block text-xs font-semibold text-[#991b1b] mb-2 uppercase tracking-wider">{t("extra.t264")}</label>
                       <input 
                         type="text" 
                         autoComplete="off"
-                        placeholder={useI18nStore.getState().t("extra.t186")} 
+                        placeholder={t("extra.t186")} 
                         value={deleteConfirmText}
                         onChange={(e) => setDeleteConfirmText(e.target.value)}
                         className="w-full bg-white border border-[#fca5a5] px-4 py-3 rounded-xl font-medium text-[#121415] outline-none focus:border-[#dc2626] focus:ring-2 focus:ring-[#dc2626]/10 transition-all text-sm placeholder:text-[#fca5a5]" 

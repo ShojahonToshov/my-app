@@ -145,7 +145,7 @@ export default function Login() {
               variant="secondary"
               className="w-full"
               isLoading={isSubmitting}
-            >{useI18nStore.getState().t("extra.t106")}</Button>
+            >{t("extra.t106")}</Button>
 
             <p className="text-center text-sm text-[#4A4E51] font-medium mt-4 w-full">
               <span className="mr-1">{t("extra.t53")}</span>

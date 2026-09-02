@@ -188,7 +188,7 @@ export default function Analytics() {
               <Sparkles className="w-5 h-5" />
             </div>
             <div className="flex-1 pt-0.5">
-              <h3 className="text-sm font-semibold tracking-tight text-[#121415] mb-1">{useI18nStore.getState().t("extra.t296")}</h3>
+              <h3 className="text-sm font-semibold tracking-tight text-[#121415] mb-1">{t("extra.t296")}</h3>
               <p className="text-xs font-medium text-[#4a6b53] leading-relaxed">
                 Viewing real-time data for the selected period. Revenue is calculated dynamically based on completed appointments.
               </p>
@@ -212,7 +212,7 @@ export default function Analytics() {
                 <Skeleton className="w-24 h-8" />
               ) : (
                 <div className="text-3xl font-semibold text-[#121415] tracking-tight truncate">
-                  {currentData.kpi.revenue} <span className="text-sm font-medium text-[#8B9194]">{useI18nStore.getState().t("extra.t107")}</span>
+                  {currentData.kpi.revenue} <span className="text-sm font-medium text-[#8B9194]">{t("extra.t107")}</span>
                 </div>
               )}
             </div>
@@ -242,7 +242,7 @@ export default function Analytics() {
               <div className="flex items-center justify-between gap-2 text-[#8A2532] mb-4">
                 <div className="flex items-center gap-2">
                   <CalendarX className="w-4 h-4" /> 
-                  <span className="text-xs font-medium uppercase tracking-wider">{useI18nStore.getState().t("extra.t200")}</span>
+                  <span className="text-xs font-medium uppercase tracking-wider">{t("extra.t200")}</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium bg-[#F5F5F4] text-[#4A4E51] border border-[#DCDCDA]">
                   {t("extra.t470")}</span>
@@ -261,7 +261,7 @@ export default function Analytics() {
               <div className="flex items-center justify-between gap-2 text-[#4A4E51] mb-4">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" /> 
-                  <span className="text-xs font-medium uppercase tracking-wider">{useI18nStore.getState().t("extra.t173")}</span>
+                  <span className="text-xs font-medium uppercase tracking-wider">{t("extra.t173")}</span>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#e8efe9] text-[#4a6b53] border border-[#4a6b53]/30">
                   {t("extra.t471")}</span>
@@ -291,7 +291,7 @@ export default function Analytics() {
                 </div>
                 <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-[#4A4E51] bg-[#F5F5F4] px-3 py-1.5 rounded-xl border border-[#DCDCDA]">
                   <BarChart3 className="w-3.5 h-3.5" />
-                  <span>{useI18nStore.getState().t("extra.t182")}</span>
+                  <span>{t("extra.t182")}</span>
                 </div>
               </div>
 
@@ -359,7 +359,7 @@ export default function Analytics() {
                     </div>
                   ))
                 ) : currentData.services.length === 0 ? (
-                  <div className="text-sm text-[#4A4E51] text-center pt-10">{useI18nStore.getState().t("extra.t249")}</div>
+                  <div className="text-sm text-[#4A4E51] text-center pt-10">{t("extra.t249")}</div>
                 ) : (
                   currentData.services.map((service, idx) => (
                     <div key={idx} className="p-4 bg-[#F5F5F4] rounded-xl border border-[#DCDCDA] flex flex-col gap-3 hover:bg-white hover:border-[#121415]/20 hover:shadow-sm transition-all group">

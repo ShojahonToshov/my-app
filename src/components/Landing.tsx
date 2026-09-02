@@ -371,7 +371,7 @@ export default function Landing() {
                     </h2>
                     <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-white/10 rounded-xl border border-white/5 backdrop-blur-md max-w-full">
                       <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-white truncate">{useI18nStore.getState().t("extra.t123")}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-white truncate">{t("extra.t123")}</span>
                     </div>
                   </div>
                 </div>
@@ -381,8 +381,8 @@ export default function Landing() {
                   <div className="text-center mb-8 min-w-0 w-full flex flex-col items-center">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A2532] bg-[#8A2532]/10 px-3 py-1 rounded-full mb-3 inline-flex">
                       {t("extra.t370")}</span>
-                    <h1 className="text-xl font-semibold text-[#121415] tracking-tight leading-snug">{useI18nStore.getState().t("extra.t262")}</h1>
-                    <p className="text-sm font-medium text-[#4A4E51] mt-1 leading-relaxed">{useI18nStore.getState().t("extra.t198")}</p>
+                    <h1 className="text-xl font-semibold text-[#121415] tracking-tight leading-snug">{t("extra.t262")}</h1>
+                    <p className="text-sm font-medium text-[#4A4E51] mt-1 leading-relaxed">{t("extra.t198")}</p>
                   </div>
 
                   {/* Info Badge */}
@@ -431,7 +431,7 @@ export default function Landing() {
                       <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 bg-[#F5F5F4] border-[#DCDCDA]">
                         <CheckCircle2 className="w-4 h-4 text-[#DCDCDA]" />
                       </div>
-                      <span className="text-[9px] font-bold uppercase tracking-widest truncate text-[#787D80]">{useI18nStore.getState().t("extra.t233")}</span>
+                      <span className="text-[9px] font-bold uppercase tracking-widest truncate text-[#787D80]">{t("extra.t233")}</span>
                     </div>
                   </div>
 
@@ -546,7 +546,7 @@ export default function Landing() {
                      <div className="flex-1 min-w-[240px] max-w-[280px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#F5F5F4]/80 border-[#DCDCDA] snap-center">
                         <div className="flex justify-between items-center mb-5 px-1">
                            <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-sm tracking-tight">
-                              <span className="w-2.5 h-2.5 rounded-full bg-[#C89E23]"></span>{useI18nStore.getState().t("extra.t144")}</h2>
+                              <span className="w-2.5 h-2.5 rounded-full bg-[#C89E23]"></span>{t("extra.t144")}</h2>
                            <span className="text-[10px] font-medium text-[#121415] bg-white border border-[#DCDCDA] shadow-sm px-2 py-0.5 rounded-md">
                               2
                            </span>
@@ -596,7 +596,7 @@ export default function Landing() {
                      <div className="flex-1 min-w-[240px] max-w-[280px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#e8efe9]/50 border-[#4a6b53]/20 snap-center">
                         <div className="flex justify-between items-center mb-5 px-1">
                            <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-sm tracking-tight">
-                              <span className="w-2.5 h-2.5 rounded-full bg-[#4a6b53] animate-pulse"></span>{useI18nStore.getState().t("extra.t263")}</h2>
+                              <span className="w-2.5 h-2.5 rounded-full bg-[#4a6b53] animate-pulse"></span>{t("extra.t263")}</h2>
                            <span className="text-[10px] font-medium text-[#4a6b53] bg-[#e8efe9] border border-[#4a6b53]/30 px-2 py-0.5 rounded-md">
                               1
                            </span>
@@ -629,7 +629,7 @@ export default function Landing() {
                      {/* Column 3: Completed */}
                      <div className="flex-1 min-w-[200px] max-w-[240px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#ECECEA]/30 border-[#DCDCDA]/50 opacity-70 snap-center">
                         <div className="flex justify-between items-center mb-5 px-1">
-                           <h2 className="font-medium text-[#8B9194] flex items-center gap-2 text-[11px] uppercase tracking-widest">{useI18nStore.getState().t("extra.t233")}</h2>
+                           <h2 className="font-medium text-[#8B9194] flex items-center gap-2 text-[11px] uppercase tracking-widest">{t("extra.t233")}</h2>
                            <span className="text-[10px] font-medium text-[#8B9194] bg-[#F5F5F4] border border-[#DCDCDA] px-2 py-0.5 rounded-md">
                               1
                            </span>
@@ -819,7 +819,7 @@ export default function Landing() {
                   <div className="px-6 py-3 rounded-full bg-white/10 text-white text-sm font-medium backdrop-blur-md select-none">
                     Modify time
                   </div>
-                  <div className="px-6 py-3 rounded-full bg-white/5 text-white/50 text-sm font-medium select-none">{useI18nStore.getState().t("extra.t284")}</div>
+                  <div className="px-6 py-3 rounded-full bg-white/5 text-white/50 text-sm font-medium select-none">{t("extra.t284")}</div>
                 </div>
               </div>
             </div>

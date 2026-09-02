@@ -25,7 +25,7 @@ export class CustomerService {
     }
 
     // 1. Fetch manual customers explicitly belonging to this business
-    let manualQuery = this.supabase.from('business_customers').select('*').eq('business_id', businessId);
+    const manualQuery = this.supabase.from('business_customers').select('*').eq('business_id', businessId);
     const { data: manualData, error: manualError } = await manualQuery;
     if (manualError) throw manualError;
 

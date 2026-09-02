@@ -236,7 +236,7 @@ const handleLoginComplete = async (ctx: MyContext) => {
     if (!identifier) throw new Error("No login identifier provided");
 
     // Mimic AuthService logic
-    let isPhone = auth.loginType === 'phone' || identifier.startsWith('+') || /^\d+$/.test(identifier.replace(/\D/g, ''));
+    const isPhone = auth.loginType === 'phone' || identifier.startsWith('+') || /^\d+$/.test(identifier.replace(/\D/g, ''));
     if (isPhone && !identifier.startsWith('+')) identifier = '+' + identifier;
 
     const authOpts = isPhone ? { phone: identifier, password: auth.password! } : { email: identifier, password: auth.password! };

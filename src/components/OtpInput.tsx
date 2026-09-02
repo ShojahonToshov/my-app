@@ -104,7 +104,7 @@ export default function OtpInput({ onVerify, phone, autoFillCode }: OtpInputProp
             maxLength={6}
             value={code}
             onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-            placeholder={useI18nStore.getState().t("extra.t329")}
+            placeholder={t("extra.t329")}
             className="w-full text-center text-2xl tracking-widest p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#121415] focus:border-transparent outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             required
             disabled={isVerifying}

@@ -150,7 +150,7 @@ export default function Signup() {
                   <Input
                     id="firstName"
                     name="firstName"
-                    label={useI18nStore.getState().t("extra.t289")}
+                    label={t("extra.t289")}
                     type="text"
                     icon={User}
                     placeholder={t("extra.t54")}
@@ -164,7 +164,7 @@ export default function Signup() {
                   <Input
                     id="lastName"
                     name="lastName"
-                    label={useI18nStore.getState().t("extra.t293")}
+                    label={t("extra.t293")}
                     type="text"
                     placeholder={t("extra.t55")}
                     value={formData.lastName}
@@ -178,7 +178,7 @@ export default function Signup() {
               <PhoneInput
                 id="phone"
                 name="phone"
-                label={useI18nStore.getState().t("extra.t297")}
+                label={t("extra.t297")}
                 placeholder="+998 90 123 45 67"
                 value={formData.phone}
                 onChange={(val) => setFormData({ ...formData, phone: val })}
@@ -189,7 +189,7 @@ export default function Signup() {
               <Input
                 id="password"
                 name="password"
-                label={useI18nStore.getState().t("extra.t288")}
+                label={t("extra.t288")}
                 type={showPassword ? "text" : "password"}
                 icon={Lock}
                 actionIcon={showPassword ? EyeOff : Eye}
