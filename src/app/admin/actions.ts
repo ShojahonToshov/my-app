@@ -70,3 +70,26 @@ export async function deleteAllAdminUsers() {
 
   return true;
 }
+
+export async function approveBusinessPending(userId: string) {
+  const supabase = getAdminSupabase();
+  const { error } = await supabase
+    .from("profiles")
+    .update({ role: "business" })
+    .eq("id", userId);
+  
+  if (error) throw error;
+  
+  // Update the user_metadata role to business as well
+  const { data: user, error: userError } = await supabase.auth.admin.getUserById(userId);
+  if (!userError && user?.user) {
+    await supabase.auth.admin.updateUserById(userId, {
+      user_metadata: {
+        ...user.user.user_metadata,
+        role: "business"
+      }
+    });
+  }
+
+  return true;
+}

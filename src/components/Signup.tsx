@@ -109,7 +109,7 @@ export default function Signup() {
         await supabase.auth.refreshSession();
         
         setTimeout(() => {
-          window.location.href = role === "business" ? "/dashboard" : "/search";
+          window.location.href = role === "business" ? "/waiting" : "/search";
         }, 500);
       } else {
         throw new Error("No user returned from verification");

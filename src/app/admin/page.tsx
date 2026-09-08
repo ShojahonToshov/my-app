@@ -6,7 +6,7 @@ import { useI18nStore } from "@/stores/i18nStore";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { getAdminUsers, deleteAdminUser, deleteAllAdminUsers } from "./actions";
+import { getAdminUsers, deleteAdminUser, deleteAllAdminUsers, approveBusinessPending } from "./actions";
 
 export interface AdminUser {
   id: string;
@@ -92,6 +92,15 @@ export default function AdminPage() {
       setModalConfig({ isOpen: false, mode: 'single' });
     } catch (e: unknown) {
       alert("Failed to delete: " + (e instanceof Error ? e.message : "Unknown error"));
+    }
+  };
+
+  const handleApprove = async (userId: string) => {
+    try {
+      await approveBusinessPending(userId);
+      setUsers(users.map(u => u.id === userId ? { ...u, profile: { ...u.profile, role: "business" } } : u));
+    } catch (e: unknown) {
+      alert("Failed to approve: " + (e instanceof Error ? e.message : "Unknown error"));
     }
   };
 
@@ -245,6 +254,16 @@ export default function AdminPage() {
                         <span className="text-gray-400 text-[11px]">{new Date(user.created_at).toLocaleTimeString()}</span>
                       </td>
                       <td className="px-6 py-4 align-top text-right">
+                        {user.profile?.role === 'business_pending' && (
+                          <Button 
+                            variant="secondary" 
+                            size="sm"
+                            className="mr-2"
+                            onClick={() => handleApprove(user.id)}
+                          >
+                            Approve
+                          </Button>
+                        )}
                         <Button 
                           variant="danger" 
                           size="sm"

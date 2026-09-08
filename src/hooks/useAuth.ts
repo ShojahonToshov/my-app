@@ -57,7 +57,9 @@ export function useLogin(defaultRedirectPath = "/account") {
       loginStore(user);
       
       const role = user.profile?.role;
-      if (role === "admin" || role === "staff" || role === "business") {
+      if (role === "business_pending") {
+        router.push("/waiting");
+      } else if (role === "admin" || role === "staff" || role === "business") {
         router.push("/dashboard");
       } else {
         const redirectParam = searchParams.get("redirect");
@@ -121,7 +123,9 @@ export function useSignup(defaultRole = "user", defaultRedirectPath = "/account"
       loginStore(user);
       
       const role = user.profile?.role;
-      if (role === "admin" || role === "staff" || role === "business") {
+      if (role === "business_pending") {
+        router.push("/waiting");
+      } else if (role === "admin" || role === "staff" || role === "business") {
         router.push("/dashboard");
       } else {
         const redirectParam = searchParams.get("redirect");

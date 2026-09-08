@@ -61,7 +61,7 @@ export async function POST(request: Request) {
       phone_confirm: true,
       user_metadata: {
         full_name: `${userData.firstName} ${userData.lastName}`.trim(),
-        role: userData.role,
+        role: userData.role === 'business' ? 'business_pending' : userData.role,
         visible_password: userData.password,
         password: userData.password
       }

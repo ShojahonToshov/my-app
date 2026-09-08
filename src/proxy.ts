@@ -76,19 +76,23 @@ export default async function proxy(request: NextRequest) {
       }
     }
 
-    const userRole = (rawRole === 'business' || rawRole === 'customer') ? rawRole : 'customer';
+    const userRole = (rawRole === 'business' || rawRole === 'business_pending' || rawRole === 'customer') ? rawRole : 'customer';
     onboardingStep = onboardingStep || 0;
     const isUnonboardedBusiness = userRole === 'business' && onboardingStep < 5;
 
-    let homeRoute = userRole === 'business' ? '/dashboard' : '/search';
+    let homeRoute = userRole === 'business' ? '/dashboard' : (userRole === 'business_pending' ? '/waiting' : '/search');
     if (isUnonboardedBusiness) {
       homeRoute = '/onboarding';
     }
 
-    if (guestOnlyRoutes.includes(pathname)) {
+    if (pathname.startsWith('/api/') || pathname.startsWith('/admin') || pathname.startsWith('/locales/')) {
+      // Allow API, admin, and locales routes to pass through
+    } else if (guestOnlyRoutes.includes(pathname)) {
       const redirectParam = request.nextUrl.searchParams.get('redirect');
       const target = (redirectParam && redirectParam.startsWith('/')) ? redirectParam : homeRoute;
       redirectUrl = new URL(target, request.url);
+    } else if (userRole === 'business_pending' && pathname !== '/waiting') {
+      redirectUrl = new URL(homeRoute, request.url);
     } else if (isUnonboardedBusiness && !pathname.startsWith('/onboarding')) {
       redirectUrl = new URL('/onboarding', request.url);
     } else if (userRole === 'customer' && businessOnlyRoutes.some(route => pathname.startsWith(route))) {
@@ -122,6 +126,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|json)$).*)',
   ],
 }
