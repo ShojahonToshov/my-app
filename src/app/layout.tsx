@@ -22,7 +22,6 @@ export const metadata: Metadata = {
     default: "Elara",
   },
   description: "Elara Platform",
-  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
