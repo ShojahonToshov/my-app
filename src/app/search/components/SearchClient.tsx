@@ -118,6 +118,7 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
   const [mobileView, setMobileView]         = useState<"list" | "map">("list");
   const [mobileSearchQuery,   setMobileSearchQuery]   = useState("");
   const [mobileLocationQuery, setMobileLocationQuery] = useState("");
+  const [activeVenueId, setActiveVenueId]             = useState<string | undefined>(undefined);
 
   // Sort dropdown — close on outside click
   const sortRef = useRef<HTMLDivElement>(null);
@@ -522,7 +523,12 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
                   const isSaved = savedIds.has(venue.id);
                   return (
                     <motion.div key={venue.id} variants={fadeUp}>
-                      <Card className="group hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.09)] transition-all duration-300 cursor-pointer flex flex-col sm:flex-row h-auto">
+                      <Card 
+                        id={`venue-card-${venue.id}`}
+                        onMouseEnter={() => setActiveVenueId(venue.id)}
+                        onMouseLeave={() => setActiveVenueId(undefined)}
+                        className={`group transition-all duration-300 cursor-pointer flex flex-col sm:flex-row h-auto ${activeVenueId === venue.id ? "shadow-[0_20px_60px_-10px_rgba(0,0,0,0.09)] ring-2 ring-[#8A2532]/20 border-[#8A2532]/20" : "hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.09)]"}`}
+                      >
                         {/* Image */}
                         <div className="relative w-full sm:w-[280px] md:w-[320px] h-[240px] sm:h-auto shrink-0 overflow-hidden p-3 pb-0 sm:pb-3 sm:pr-0">
                           <div className="w-full h-full rounded-2xl overflow-hidden relative bg-[#DCDCDA]">
@@ -681,7 +687,17 @@ export default function SearchClient({ initialVenues }: { initialVenues: any[] }
           {/* Right: Interactive Virtual Map */}
           <div className={`${mobileView === "map" ? "block" : "hidden"} lg:block w-full lg:w-[45%] xl:w-[40%] relative mt-2 lg:mt-0`}>
             <div className="lg:sticky lg:top-[160px] h-[500px] lg:h-[calc(100vh-180px)] min-h-[500px] w-full">
-              <DynamicMap venues={filtered} />
+              <DynamicMap 
+                venues={filtered} 
+                activeVenueId={activeVenueId} 
+                onVenueClick={(id) => {
+                  setActiveVenueId(id);
+                  const el = document.getElementById(`venue-card-${id}`);
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+                }}
+              />
             </div>
           </div>
 
