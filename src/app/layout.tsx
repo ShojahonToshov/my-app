@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { Toaster } from "sonner";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 
 
 const geistSans = Geist({
@@ -20,7 +21,24 @@ export const metadata: Metadata = {
     template: "%s | Elara",
     default: "Elara",
   },
-  description: "Elara",
+  description: "Elara Platform",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Elara",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport = {
+  themeColor: "#121415",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -54,6 +72,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }
           }}
         />
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
