@@ -182,16 +182,16 @@ export default function AccountSettings() {
         variants={fadeUp}
         initial="hidden"
         animate="show"
-        className="w-full max-w-[540px] flex flex-col shrink-0 mt-12 md:mt-0"
+        className="w-full max-w-[540px] flex flex-col shrink-0 mt-4 md:mt-0"
       >
-        <Card className="p-8 md:p-12 relative overflow-hidden">
+        <Card className="p-5 md:p-10 relative overflow-hidden">
           <AnimatePresence>
             {success && (
               <motion.div 
                 initial={{ opacity: 0, y: -20 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 exit={{ opacity: 0, y: -20 }}
-                className="absolute top-0 left-0 right-0 bg-[#4A6B53] text-white px-6 py-3 flex items-center gap-2 text-sm font-medium z-10"
+                className="absolute top-0 left-0 right-0 bg-[#4A6B53] text-white px-5 py-2.5 flex items-center gap-2 text-sm font-medium z-10"
               >
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
                 <p>{success}</p>
@@ -202,7 +202,7 @@ export default function AccountSettings() {
                 initial={{ opacity: 0, y: -20 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 exit={{ opacity: 0, y: -20 }}
-                className="absolute top-0 left-0 right-0 bg-[#8A2532] text-white px-6 py-3 flex items-center gap-2 text-sm font-medium z-10"
+                className="absolute top-0 left-0 right-0 bg-[#8A2532] text-white px-5 py-2.5 flex items-center gap-2 text-sm font-medium z-10"
               >
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <p>{error}</p>
@@ -210,23 +210,23 @@ export default function AccountSettings() {
             )}
           </AnimatePresence>
 
-          <div className="mb-8 w-full mt-2">
-            <h1 className="text-2xl sm:text-3xl font-semibold mb-2 text-[#121415] tracking-tight">
+          <div className="mb-5 w-full mt-1">
+            <h1 className="text-xl sm:text-2xl font-semibold mb-1 text-[#121415] tracking-tight">
               {t("extra.t338")}</h1>
-            <p className="text-sm text-[#4A4E51] font-medium leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#4A4E51] font-medium leading-relaxed">
               {t("extra.t339")}</p>
           </div>
           
-          <div className="flex items-center gap-6 mb-8 p-5 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl">
+          <div className="flex items-center gap-4 mb-5 p-4 bg-[#F5F5F4] border border-[#DCDCDA] rounded-2xl">
             <Avatar 
               name={name || "Guest"} 
               src={avatarUrl || null} 
-              size="xl" 
+              size="lg" 
               ring={true}
             />
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1.5">
               <h3 className="text-sm font-semibold text-[#121415]">{t("extra.t230")}</h3>
-              <p className="text-xs text-[#4A4E51] font-medium mb-1 max-w-[200px]">
+              <p className="text-[10px] sm:text-xs text-[#4A4E51] font-medium max-w-[200px]">
                 Customize your appearance with a unique matte color palette.
               </p>
               <Button 
@@ -235,13 +235,13 @@ export default function AccountSettings() {
                 size="sm"
                 icon={Dices}
                 onClick={handleGenerateAvatar}
-                className="w-max shadow-sm active:scale-95"
+                className="w-max shadow-sm active:scale-95 h-8 text-xs py-0"
               >
                 {t("extra.t340")}</Button>
             </div>
           </div>
 
-          <form onSubmit={handleSave} className="space-y-5 flex flex-col w-full mb-10">
+          <form onSubmit={handleSave} className="space-y-3 flex flex-col w-full mb-6">
             <Input
               id="account_name"
               label={t("extra.t168")}
@@ -296,7 +296,7 @@ export default function AccountSettings() {
             <Button 
               type="submit" 
               variant="secondary" 
-              className="w-full mt-2 active:scale-95 disabled:opacity-70" 
+              className="w-full mt-1 active:scale-95 disabled:opacity-70 h-11" 
               icon={loading ? Loader2 : Save}
               disabled={loading}
             >
@@ -304,21 +304,21 @@ export default function AccountSettings() {
             </Button>
           </form>
 
-          <div className="border-t border-[#DCDCDA] pt-8 flex flex-col sm:flex-row gap-3 w-full">
+          <div className="border-t border-[#DCDCDA] pt-5 flex flex-col sm:flex-row gap-3 w-full">
             <Button
               onClick={handleLogout}
               type="button"
               variant="outline"
               
               icon={LogOut}
-              className="flex-1 h-12"
+              className="flex-1 h-11"
             >
               {t("extra.t343")}</Button>
 
             <Button 
               type="button"
               variant="danger" 
-              className="flex-1 active:scale-95" 
+              className="flex-1 active:scale-95 h-11" 
               icon={isDeleting ? Loader2 : ShieldAlert}
               onClick={handleDeleteAccount}
               disabled={isDeleting}

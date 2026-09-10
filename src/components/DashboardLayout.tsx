@@ -349,7 +349,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="flex items-center justify-between h-[56px]">
           <Link
             href="/dashboard"
-            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full active:scale-95 transition-all focus-visible:outline-none rounded-2xl ${isActive('/dashboard') && pathname === '/dashboard' ? 'text-[#121415]' : 'text-[#8B9194] hover:text-[#4A4E51]'}`}
+            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full transition-colors focus-visible:outline-none rounded-2xl ${isActive('/dashboard') && pathname === '/dashboard' ? 'text-[#121415]' : 'text-[#8B9194] hover:text-[#4A4E51]'}`}
           >
             <div className={`flex items-center justify-center w-14 h-8 rounded-full transition-colors ${isActive('/dashboard') && pathname === '/dashboard' ? 'bg-[#DCDCDA]/40' : 'bg-transparent'}`}>
               <LayoutDashboard className={`w-5 h-5 ${isActive('/dashboard') && pathname === '/dashboard' ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
@@ -359,7 +359,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           
           <Link
             href="/dashboard/schedule"
-            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full active:scale-95 transition-all focus-visible:outline-none rounded-2xl ${isActive('/dashboard/schedule') ? 'text-[#121415]' : 'text-[#8B9194] hover:text-[#4A4E51]'}`}
+            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full transition-colors focus-visible:outline-none rounded-2xl ${isActive('/dashboard/schedule') ? 'text-[#121415]' : 'text-[#8B9194] hover:text-[#4A4E51]'}`}
           >
             <div className={`flex items-center justify-center w-14 h-8 rounded-full transition-colors ${isActive('/dashboard/schedule') ? 'bg-[#DCDCDA]/40' : 'bg-transparent'}`}>
               <Calendar className={`w-5 h-5 ${isActive('/dashboard/schedule') ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
@@ -369,7 +369,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <Link
             href="/dashboard/customers"
-            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full active:scale-95 transition-all focus-visible:outline-none rounded-2xl ${isActive('/dashboard/customers') ? 'text-[#121415]' : 'text-[#8B9194] hover:text-[#4A4E51]'}`}
+            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full transition-colors focus-visible:outline-none rounded-2xl ${isActive('/dashboard/customers') ? 'text-[#121415]' : 'text-[#8B9194] hover:text-[#4A4E51]'}`}
           >
             <div className={`flex items-center justify-center w-14 h-8 rounded-full transition-colors ${isActive('/dashboard/customers') ? 'bg-[#DCDCDA]/40' : 'bg-transparent'}`}>
               <Users className={`w-5 h-5 ${isActive('/dashboard/customers') ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
@@ -379,7 +379,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <Link
             href="/dashboard/analytics"
-            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full active:scale-95 transition-all focus-visible:outline-none rounded-2xl ${isActive('/dashboard/analytics') ? 'text-[#121415]' : 'text-[#8B9194] hover:text-[#4A4E51]'}`}
+            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full transition-colors focus-visible:outline-none rounded-2xl ${isActive('/dashboard/analytics') ? 'text-[#121415]' : 'text-[#8B9194] hover:text-[#4A4E51]'}`}
           >
             <div className={`flex items-center justify-center w-14 h-8 rounded-full transition-colors ${isActive('/dashboard/analytics') ? 'bg-[#DCDCDA]/40' : 'bg-transparent'}`}>
               <BarChart3 className={`w-5 h-5 ${isActive('/dashboard/analytics') ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
@@ -389,7 +389,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <Link
             href="/dashboard/settings"
-            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full active:scale-95 transition-all focus-visible:outline-none rounded-2xl ${isActive('/dashboard/settings') ? 'text-[#121415]' : 'text-[#8B9194] hover:text-[#4A4E51]'}`}
+            className={`flex-1 flex flex-col items-center justify-center gap-1 h-full transition-colors focus-visible:outline-none rounded-2xl ${isActive('/dashboard/settings') ? 'text-[#121415]' : 'text-[#8B9194] hover:text-[#4A4E51]'}`}
           >
             <div className={`flex items-center justify-center w-14 h-8 rounded-full transition-colors ${isActive('/dashboard/settings') ? 'bg-[#DCDCDA]/40' : 'bg-transparent'}`}>
               <Settings className={`w-5 h-5 ${isActive('/dashboard/settings') ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />

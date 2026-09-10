@@ -266,12 +266,12 @@ export default function LiveTicket() {
         variants={fadeUp}
         initial="hidden"
         animate="show"
-        className="w-full max-w-[420px] flex flex-col items-center z-10 pt-16 md:pt-0"
+        className="w-full max-w-[420px] flex flex-col items-center z-10 pt-4 md:pt-0"
       >
         {/* Ticket Container */}
         <div className="bg-white rounded-[2.2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] p-2 w-full flex flex-col min-w-0">
           {/* Top Dark Card Section */}
-          <div className={`text-white rounded-[1.8rem] p-8 text-center relative overflow-hidden shrink-0 transition-colors duration-500 ${
+          <div className={`text-white rounded-[1.8rem] p-5 md:p-8 text-center relative overflow-hidden shrink-0 transition-colors duration-500 ${
             (() => {
               const isCompleted = bookingData.status === t("extra.t387") || bookingData.status === 'done';
               const isInProgress = bookingData.status === 'in_progress';
@@ -288,7 +288,7 @@ export default function LiveTicket() {
             <div className="absolute top-[-50%] left-[-20%] w-[140%] h-[200%] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent pointer-events-none opacity-50" />
 
             <div className="relative z-10">
-              <p className="text-[10px] uppercase tracking-widest font-bold text-white/70 mb-2 truncate">
+              <p className="text-[10px] uppercase tracking-widest font-bold text-white/70 mb-1 truncate">
                 {(() => {
                   const isCompleted = bookingData.status === t("extra.t387") || bookingData.status === 'done';
                   if (isCompleted) return 'Completed at';
@@ -299,12 +299,12 @@ export default function LiveTicket() {
                   return t("extra.t369");
                 })()}
               </p>
-              <h2 className="text-6xl sm:text-7xl font-semibold mb-6 tracking-tighter text-white truncate w-full">
+              <h2 className="text-5xl sm:text-6xl md:text-7xl font-semibold mb-3 tracking-tighter text-white truncate w-full">
                 {bookingData.time}
               </h2>
-              <div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-white/10 rounded-xl border border-white/5 backdrop-blur-md max-w-full">
-                <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-white truncate">
+              <div className="inline-flex items-center justify-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-white/10 rounded-xl border border-white/5 backdrop-blur-md max-w-full">
+                <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4 text-white shrink-0" />
+                <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-white truncate">
                   {(() => {
                     const isCompleted = bookingData.status === t("extra.t387") || bookingData.status === 'done';
                     if (isCompleted) return 'All done';
@@ -320,23 +320,23 @@ export default function LiveTicket() {
           </div>
 
           {/* Bottom Info Section */}
-          <div className="p-6 pt-8 pb-4 flex flex-col min-w-0 w-full">
-            <div className="text-center mb-8 min-w-0 w-full flex flex-col items-center">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A2532] bg-[#8A2532]/10 px-3 py-1 rounded-full mb-3 inline-flex">
+          <div className="p-4 md:p-6 pt-5 md:pt-8 pb-3 md:pb-4 flex flex-col min-w-0 w-full">
+            <div className="text-center mb-5 min-w-0 w-full flex flex-col items-center">
+              <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-[#8A2532] bg-[#8A2532]/10 px-2 py-0.5 rounded-full mb-2 inline-flex">
                 {bookingData.venueCategory}
               </span>
-              <h1 className="text-xl font-semibold text-[#121415] tracking-tight leading-snug">
+              <h1 className="text-lg md:text-xl font-semibold text-[#121415] tracking-tight leading-snug truncate w-full">
                 {bookingData.venueName}
               </h1>
-              <p className="text-sm font-medium text-[#4A4E51] mt-1 leading-relaxed">
+              <p className="text-xs md:text-sm font-medium text-[#4A4E51] mt-0.5 leading-relaxed truncate w-full">
                 {bookingData.serviceName}
               </p>
             </div>
 
             {/* Info Badge */}
-            <div className="p-4 rounded-2xl mb-8 text-center bg-[#F5F5F4] border border-[#DCDCDA]">
-              <p className="text-xs font-medium text-[#121415] leading-relaxed flex items-center justify-center gap-2">
-                <Info className="w-4 h-4 text-[#8A2532] shrink-0" />
+            <div className="p-3 rounded-xl md:rounded-2xl mb-5 text-center bg-[#F5F5F4] border border-[#DCDCDA]">
+              <p className="text-[10px] md:text-xs font-medium text-[#121415] leading-relaxed flex items-center justify-center gap-1.5">
+                <Info className="w-3.5 h-3.5 text-[#8A2532] shrink-0" />
                 <span>
                   The professional will be available exactly on time. See you
                   soon!
@@ -345,7 +345,7 @@ export default function LiveTicket() {
             </div>
 
             {/* Stepper */}
-            <div className="grid grid-cols-4 mb-10 px-1 shrink-0 w-full relative z-0">
+            <div className="grid grid-cols-4 mb-6 px-1 shrink-0 w-full relative z-0">
               {(() => {
                 const isCompleted = bookingData.status === t("extra.t387") || bookingData.status === 'done';
                 const isInProgress = bookingData.status === 'in_progress';
@@ -358,57 +358,57 @@ export default function LiveTicket() {
                 return (
                   <>
                     {/* Step 1: Upcoming */}
-                    <div className="relative flex flex-col items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 ${
+                    <div className="relative flex flex-col items-center gap-1.5">
+                      <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shrink-0 border-2 ${
                         stateLevel > 1 
                           ? 'bg-[#121415] border-[#121415]' 
                           : stateLevel === 1 
                             ? 'bg-white border-[#121415] shadow-[0_0_12px_rgba(18,20,21,0.15)] animate-pulse' 
                             : 'bg-[#F5F5F4] border-[#DCDCDA]'
                       }`}>
-                        {stateLevel > 1 ? <CheckCircle className="w-4 h-4 text-white" /> : <Calendar className={`w-4 h-4 ${stateLevel === 1 ? 'text-[#121415]' : 'text-[#DCDCDA]'}`} />}
+                        {stateLevel > 1 ? <CheckCircle className="w-3.5 h-3.5 text-white" /> : <Calendar className={`w-3.5 h-3.5 ${stateLevel === 1 ? 'text-[#121415]' : 'text-[#DCDCDA]'}`} />}
                       </div>
-                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel >= 1 ? 'text-[#121415]' : 'text-[#787D80]'}`}>{t("app.t30")}</span>
+                      <span className={`text-[8px] md:text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel >= 1 ? 'text-[#121415]' : 'text-[#787D80]'}`}>{t("app.t30")}</span>
                     </div>
 
                     {/* Step 2: Queue */}
-                    <div className="relative flex flex-col items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 ${
+                    <div className="relative flex flex-col items-center gap-1.5">
+                      <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shrink-0 border-2 ${
                         stateLevel > 2 
                           ? 'bg-[#121415] border-[#121415]' 
                           : stateLevel === 2 
                             ? 'bg-white border-[#C89E23] shadow-[0_0_12px_rgba(200,158,35,0.15)] animate-pulse' 
                             : 'bg-[#F5F5F4] border-[#DCDCDA]'
                       }`}>
-                        {stateLevel > 2 ? <CheckCircle className="w-4 h-4 text-white" /> : <MoreHorizontal className={`w-4 h-4 ${stateLevel === 2 ? 'text-[#C89E23]' : 'text-[#DCDCDA]'}`} />}
+                        {stateLevel > 2 ? <CheckCircle className="w-3.5 h-3.5 text-white" /> : <MoreHorizontal className={`w-3.5 h-3.5 ${stateLevel === 2 ? 'text-[#C89E23]' : 'text-[#DCDCDA]'}`} />}
                       </div>
-                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 2 ? 'text-[#C89E23]' : stateLevel > 2 ? 'text-[#121415]' : 'text-[#787D80]'}`}>{t("app.t31")}</span>
+                      <span className={`text-[8px] md:text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 2 ? 'text-[#C89E23]' : stateLevel > 2 ? 'text-[#121415]' : 'text-[#787D80]'}`}>{t("app.t31")}</span>
                     </div>
 
                     {/* Step 3: In Chair */}
-                    <div className="relative flex flex-col items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 ${
+                    <div className="relative flex flex-col items-center gap-1.5">
+                      <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shrink-0 border-2 ${
                         stateLevel > 3 
                           ? 'bg-[#121415] border-[#121415]' 
                           : stateLevel === 3 
                             ? 'bg-white border-[#4A6B53] shadow-[0_0_12px_rgba(74,107,83,0.15)] animate-pulse' 
                             : 'bg-[#F5F5F4] border-[#DCDCDA]'
                       }`}>
-                        {stateLevel > 3 ? <CheckCircle className="w-4 h-4 text-white" /> : <Scissors className={`w-4 h-4 ${stateLevel === 3 ? 'text-[#4A6B53]' : 'text-[#DCDCDA]'}`} />}
+                        {stateLevel > 3 ? <CheckCircle className="w-3.5 h-3.5 text-white" /> : <Scissors className={`w-3.5 h-3.5 ${stateLevel === 3 ? 'text-[#4A6B53]' : 'text-[#DCDCDA]'}`} />}
                       </div>
-                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 3 ? 'text-[#4A6B53]' : stateLevel > 3 ? 'text-[#121415]' : 'text-[#787D80]'}`}>{t("app.t32")}</span>
+                      <span className={`text-[8px] md:text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 3 ? 'text-[#4A6B53]' : stateLevel > 3 ? 'text-[#121415]' : 'text-[#787D80]'}`}>{t("app.t32")}</span>
                     </div>
 
                     {/* Step 4: Completed */}
-                    <div className="relative flex flex-col items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 ${
+                    <div className="relative flex flex-col items-center gap-1.5">
+                      <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shrink-0 border-2 ${
                         stateLevel === 4 
                           ? 'bg-white border-[#8A2532] shadow-[0_0_12px_rgba(138,37,50,0.15)] animate-pulse' 
                           : 'bg-[#F5F5F4] border-[#DCDCDA]'
                       }`}>
-                        <CheckCircle2 className={`w-4 h-4 ${stateLevel === 4 ? 'text-[#8A2532]' : 'text-[#DCDCDA]'}`} />
+                        <CheckCircle2 className={`w-3.5 h-3.5 ${stateLevel === 4 ? 'text-[#8A2532]' : 'text-[#DCDCDA]'}`} />
                       </div>
-                      <span className={`text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 4 ? 'text-[#8A2532]' : 'text-[#787D80]'}`}>{t("app.t33")}</span>
+                      <span className={`text-[8px] md:text-[9px] font-bold uppercase tracking-widest truncate ${stateLevel === 4 ? 'text-[#8A2532]' : 'text-[#787D80]'}`}>{t("app.t33")}</span>
                     </div>
                   </>
                 );
@@ -416,14 +416,14 @@ export default function LiveTicket() {
             </div>
 
             {/* Details */}
-            <div className="space-y-4 mb-8 bg-[#F5F5F4] p-5 rounded-2xl border border-[#DCDCDA] flex flex-col min-w-0 w-full">
-              <div className="flex items-center justify-between gap-4 min-w-0">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#4A4E51] shrink-0">{t("app.t21")}</span>
+            <div className="space-y-3 mb-6 bg-[#F5F5F4] p-4 rounded-xl flex flex-col min-w-0 w-full">
+              <div className="flex items-center justify-between gap-3 min-w-0">
+                <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-[#4A4E51] shrink-0">{t("app.t21")}</span>
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-full bg-white border border-[#DCDCDA] flex items-center justify-center text-[10px] font-bold text-[#121415] shrink-0">
+                  <div className="w-5 h-5 rounded-full bg-white border border-[#DCDCDA] flex items-center justify-center text-[9px] font-bold text-[#121415] shrink-0">
                     {bookingData.staffName.substring(0, 2).toUpperCase()}
                   </div>
-                  <span className="text-sm font-semibold text-[#121415] truncate">
+                  <span className="text-xs md:text-sm font-semibold text-[#121415] truncate">
                     {bookingData.staffName}
                   </span>
                 </div>
@@ -431,10 +431,10 @@ export default function LiveTicket() {
 
               <div className="w-full h-px bg-[#DCDCDA] shrink-0" />
 
-              <div className="flex items-center justify-between gap-4 min-w-0">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#4A4E51] shrink-0">{t("app.t34")}</span>
-                <span className="text-sm font-semibold text-[#121415] flex items-center gap-1.5 truncate">
-                  <Calendar className="w-4 h-4 text-[#4A4E51] shrink-0" />
+              <div className="flex items-center justify-between gap-3 min-w-0">
+                <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-[#4A4E51] shrink-0">{t("app.t34")}</span>
+                <span className="text-xs md:text-sm font-semibold text-[#121415] flex items-center gap-1.5 truncate">
+                  <Calendar className="w-3.5 h-3.5 text-[#4A4E51] shrink-0" />
                   <span className="truncate">{bookingData.date}</span>
                 </span>
               </div>
