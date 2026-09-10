@@ -127,80 +127,16 @@ export function AccountTabs({ upcomingCount }: { upcomingCount: number }) {
 
 export function BookingActions({ bookingId }: { bookingId: string }) {
   const { t } = useI18n();
-  const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
-  const [newDate, setNewDate] = useState("");
-  const [newTime, setNewTime] = useState("");
-  const [isRescheduling, setIsRescheduling] = useState(false);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const router = useRouter();
-  useLockBodyScroll(cancelModalOpen || rescheduleModalOpen);
+  useLockBodyScroll(cancelModalOpen);
 
   return (
     <>
-      <div className="flex gap-4 sm:w-1/2">
-        <button onClick={() => setRescheduleModalOpen(true)} className="flex-1 h-12 px-4 bg-white border border-[#DCDCDA] text-[#121415] font-medium text-sm hover:bg-[#F5F5F4] rounded-xl transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]">
-          <RefreshCw className="w-4 h-4 text-[#4A4E51] shrink-0" />
-          <span>{useI18nStore.getState().t("extra.t178")}</span>
-        </button>
-        <button onClick={() => setCancelModalOpen(true)} className="w-12 h-12 shrink-0 bg-white border border-[#DCDCDA] text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5 hover:border-[#DC2626]/30 rounded-full transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]">
-          <X className="w-5 h-5 shrink-0" />
-        </button>
-      </div>
-
-      <AnimatePresence>
-        {rescheduleModalOpen && (
-          <motion.div variants={modalBackdrop} initial="hidden" animate="show" exit="exit" className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-md" onClick={() => setRescheduleModalOpen(false)}>
-            <motion.div variants={modalContent} className="bg-white w-[480px] max-w-full rounded-2xl p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col relative outline-none" onClick={(e) => e.stopPropagation()}>
-              <div className="w-14 h-14 rounded-full bg-[#F5F5F4] text-[#121415] flex items-center justify-center mb-6 border border-[#DCDCDA] shrink-0">
-                <CalendarDays className="w-6 h-6" />
-              </div>
-              <h2 className="text-2xl font-semibold text-[#121415] mb-2 tracking-tight">{useI18nStore.getState().t("extra.t277")}</h2>
-              <p className="text-sm text-[#4A4E51] font-medium mb-8 leading-relaxed">{useI18nStore.getState().t("extra.t194")}</p>
-              
-              <div className="flex gap-4 mb-8">
-                <div className="flex-1">
-                  <label className="block text-xs font-semibold text-[#4A4E51] uppercase tracking-wider mb-2">{useI18nStore.getState().t("extra.t257")}</label>
-                  <input
-                    type="date"
-                    value={newDate}
-                    onChange={(e) => setNewDate(e.target.value)}
-                    min={new Date().toISOString().split('T')[0]}
-                    className="w-full h-12 px-4 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-sm font-medium outline-none focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all duration-300 text-[#121415]"
-                  />
-                </div>
-                <div className="flex-1">
-                  <label className="block text-xs font-semibold text-[#4A4E51] uppercase tracking-wider mb-2">{useI18nStore.getState().t("extra.t313")}</label>
-                  <input
-                    type="time"
-                    value={newTime}
-                    onChange={(e) => setNewTime(e.target.value)}
-                    className="w-full h-12 px-4 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-sm font-medium outline-none focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 transition-all duration-300 text-[#121415]"
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 w-full">
-                <button onClick={() => setRescheduleModalOpen(false)} className="flex-1 h-12 px-6 bg-white text-[#121415] border border-[#DCDCDA] rounded-xl font-medium text-sm hover:bg-[#F5F5F4] transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 shrink-0 whitespace-nowrap min-w-[120px]"><span className="truncate block">{t("extra.t65")}</span></button>
-                <button 
-                  disabled={isRescheduling || !newDate || !newTime} 
-                  onClick={async () => { 
-                    setIsRescheduling(true); 
-                    const supabase = createClient(); 
-                    const { error } = await supabase.from('bookings').update({ date: newDate, time: newTime }).eq('id', bookingId); 
-                    if (error) { toast.error('Failed to reschedule booking'); } 
-                    else { toast.success('Booking rescheduled'); setRescheduleModalOpen(false); router.refresh(); } 
-                    setIsRescheduling(false); 
-                  }} 
-                  className="flex-1 h-12 px-6 bg-[#121415] text-white rounded-xl font-medium text-sm hover:bg-[#1E2123] shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all flex items-center justify-center active:scale-95 shrink-0 whitespace-nowrap min-w-[120px] disabled:opacity-50"
-                >
-                  {isRescheduling ? <Loader2 className="w-5 h-5 animate-spin shrink-0" /> : <span className="truncate block">{useI18nStore.getState().t("extra.t196")}</span>}
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <button onClick={() => setCancelModalOpen(true)} className="w-12 h-12 shrink-0 bg-white border border-[#DCDCDA] text-[#4A4E51] hover:text-[#DC2626] hover:bg-[#DC2626]/5 hover:border-[#DC2626]/30 rounded-full transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]">
+        <X className="w-5 h-5 shrink-0" />
+      </button>
 
       <AnimatePresence>
         {cancelModalOpen && (

@@ -176,13 +176,7 @@ export default function AccountSettings() {
 
   return (
     <div className="min-h-[100dvh] bg-[#ECECEA] flex items-center justify-center font-sans selection:bg-[#8A2532] selection:text-white p-4 sm:p-6 relative text-[#121415] pb-24">
-      <Link
-        href="/account"
-        className="absolute top-6 left-6 md:top-10 md:left-10 flex items-center gap-2 text-[#4A4E51] hover:text-[#121415] font-medium text-sm transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-lg p-1 z-20"
-      >
-        <ArrowLeft className="w-4 h-4 shrink-0" />
-        <span className="truncate">{t("extra.t244")}</span>
-      </Link>
+
 
       <motion.div
         variants={fadeUp}

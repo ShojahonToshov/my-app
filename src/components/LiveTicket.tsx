@@ -260,14 +260,7 @@ export default function LiveTicket() {
 
   return (
     <div className="min-h-[100dvh] flex flex-col font-sans bg-[#ECECEA] text-[#121415] selection:bg-[#8A2532] selection:text-white relative overflow-hidden items-center justify-center p-4">
-      {/* Navigation */}
-      <Link
-        href="/account"
-        className="absolute top-6 left-6 md:top-10 md:left-10 flex items-center gap-2 text-[#4A4E51] hover:text-[#121415] font-medium text-sm transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#121415] rounded-lg p-1 z-50"
-      >
-        <ArrowLeft className="w-4 h-4 shrink-0" />
-        <span className="truncate">{t("app.t29")}</span>
-      </Link>
+
 
       <motion.div
         variants={fadeUp}
