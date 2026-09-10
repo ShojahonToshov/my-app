@@ -180,7 +180,7 @@ export default async function AccountPage(props: { searchParams: Promise<{ [key:
                       <span className="text-[10px] uppercase tracking-widest font-bold text-[#4A6B53]">{useI18nStore.getState().t("extra.t123")}</span>
                     </div>
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex flex-row gap-3 w-full mt-2">
                     <Link href={`/ticket?id=${booking.id}`} className="flex-1 h-12 px-6 bg-[#8A2532] text-white rounded-xl font-medium text-sm shadow-[0_8px_20px_rgba(138,37,50,0.2)] hover:bg-[#731E29] transition-all flex items-center justify-center gap-2 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#8A2532] focus-visible:ring-offset-2">
                       <span>{useI18nStore.getState().t("extra.t139")}</span>
                       <ArrowRight className="w-4 h-4 shrink-0" />

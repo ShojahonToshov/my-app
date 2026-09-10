@@ -291,6 +291,3 @@ export function FavoritesList({ initialVenues, currentUserId }: { initialVenues:
     </AnimatedList>
   );
 }
-
-
-

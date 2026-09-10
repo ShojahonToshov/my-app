@@ -617,10 +617,10 @@ export default function Dashboard() {
           </div>
 
           {/* KANBAN BOARD */}
-          <div className="flex-1 flex gap-6 px-6 md:px-10 pb-10 overflow-x-auto items-start touch-pan-x">
+          <div className="flex-1 flex flex-col lg:flex-row gap-6 px-6 md:px-10 pb-10 lg:overflow-x-auto items-stretch lg:items-start lg:touch-pan-x">
             
             {/* COLUMN 1: WAITING */}
-            <div className="flex-1 min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#F5F5F4]/80 border-[#DCDCDA]">
+            <div className="w-full lg:flex-1 lg:min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#F5F5F4]/80 border-[#DCDCDA]">
               <div className="flex justify-between items-center mb-5 px-2">
                 <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-lg tracking-tight">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#C89E23]"></span>{t("app.t40")}</h2>
@@ -696,7 +696,7 @@ export default function Dashboard() {
             </div>
 
             {/* COLUMN 2: IN CHAIR */}
-            <div className="flex-1 min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#e8efe9]/50 border-[#4a6b53]/20">
+            <div className="w-full lg:flex-1 lg:min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#e8efe9]/50 border-[#4a6b53]/20">
               <div className="flex justify-between items-center mb-5 px-2">
                 <h2 className="font-semibold text-[#121415] flex items-center gap-2 text-lg tracking-tight">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#4a6b53] animate-pulse"></span>{t("extra.t263")}</h2>
@@ -775,7 +775,7 @@ export default function Dashboard() {
             </div>
 
             {/* COLUMN 3: COMPLETED */}
-            <div className="flex-1 min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#ECECEA]/30 border-[#DCDCDA]/50 opacity-70 hover:opacity-100">
+            <div className="w-full lg:flex-1 lg:min-w-[300px] flex flex-col rounded-2xl border p-4 shadow-sm transition-colors duration-200 bg-[#ECECEA]/30 border-[#DCDCDA]/50 opacity-70 hover:opacity-100">
               <div className="flex justify-between items-center mb-5 px-2">
                 <h2 className="font-medium text-[#8B9194] flex items-center gap-2 text-sm uppercase tracking-widest">{t("app.t33")}</h2>
                 <span className="text-xs font-medium text-[#8B9194] bg-[#F5F5F4] border border-[#DCDCDA] px-2.5 py-1 rounded-lg">
