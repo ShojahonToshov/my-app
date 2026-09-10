@@ -47,9 +47,10 @@ export default async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   let redirectUrl: URL | null = null;
 
-  const guestOnlyRoutes = ['/', '/login', '/signup'];
+  const guestOnlyRoutes = ['/', '/login', '/signup', '/designlogin', '/designsignup'];
   const customerOnlyRoutes = ['/account', '/booking', '/settings'];
   const businessOnlyRoutes = ['/dashboard', '/onboarding'];
+  const adminOnlyRoutes = ['/admin'];
   const customerOrGuestRoutes = ['/search', '/ticket'];
 
   if (!mergedUser) {
@@ -62,6 +63,11 @@ export default async function proxy(request: NextRequest) {
       redirectUrl.searchParams.set('redirect', targetPath);
     }
   } else {
+    if (pathname.startsWith('/api/') || pathname.startsWith('/locales/') || pathname.startsWith('/admin')) {
+      // Allow API, locales, and admin routes to pass through immediately, saving DB query
+      return supabaseResponse;
+    }
+
     let rawRole = mergedUser.app_metadata?.role as string;
     let onboardingStep = (mergedUser.app_metadata?.onboarding_step as number);
 
@@ -76,18 +82,20 @@ export default async function proxy(request: NextRequest) {
       }
     }
 
-    const userRole = (rawRole === 'business' || rawRole === 'business_pending' || rawRole === 'customer') ? rawRole : 'customer';
+    const userRole = (rawRole === 'business' || rawRole === 'business_pending' || rawRole === 'customer' || rawRole === 'admin' || rawRole === 'staff') ? rawRole : 'customer';
     onboardingStep = onboardingStep || 0;
     const isUnonboardedBusiness = userRole === 'business' && onboardingStep < 5;
 
-    let homeRoute = userRole === 'business' ? '/dashboard' : (userRole === 'business_pending' ? '/waiting' : '/search');
+    let homeRoute = '/account'; // default for customer
+    if (userRole === 'business') homeRoute = '/dashboard';
+    else if (userRole === 'business_pending') homeRoute = '/waiting';
+    else if (userRole === 'admin' || userRole === 'staff') homeRoute = '/dashboard'; // Admins usually use dashboard or admin panel
+
     if (isUnonboardedBusiness) {
       homeRoute = '/onboarding';
     }
 
-    if (pathname.startsWith('/api/') || pathname.startsWith('/admin') || pathname.startsWith('/locales/')) {
-      // Allow API, admin, and locales routes to pass through
-    } else if (guestOnlyRoutes.includes(pathname)) {
+    if (guestOnlyRoutes.includes(pathname)) {
       const redirectParam = request.nextUrl.searchParams.get('redirect');
       const target = (redirectParam && redirectParam.startsWith('/')) ? redirectParam : homeRoute;
       redirectUrl = new URL(target, request.url);
@@ -97,10 +105,13 @@ export default async function proxy(request: NextRequest) {
       redirectUrl = new URL('/onboarding', request.url);
     } else if (userRole === 'customer' && businessOnlyRoutes.some(route => pathname.startsWith(route))) {
       redirectUrl = new URL(homeRoute, request.url);
-    } else if (userRole === 'business' && (
+    } else if ((userRole === 'business' || userRole === 'admin' || userRole === 'staff') && (
       customerOnlyRoutes.some(route => pathname.startsWith(route)) ||
       customerOrGuestRoutes.some(route => pathname.startsWith(route))
     )) {
+      // Note: we let admins bypass if we wanted, but standard behavior keeps them on business/admin routes
+      // If we want admins to access customer routes, we can remove 'admin'/'staff' from this condition.
+      // But for now, keep them out of customer routes like standard business.
       redirectUrl = new URL(homeRoute, request.url);
     }
   }
