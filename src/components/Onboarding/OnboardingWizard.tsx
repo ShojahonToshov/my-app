@@ -8,6 +8,7 @@ import useUser from "@/hooks/useUser";
 import AuthService from "@/services/customer/AuthService";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
+import AddressAutocompleteInput from "./AddressAutocompleteInput";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { MapPin, Store, Briefcase, ChevronDown, CheckCircle2, Scissors, Users, DollarSign, Clock } from "lucide-react";
@@ -81,6 +82,8 @@ export default function OnboardingWizard() {
   const [businessName, setBusinessName] = useState("");
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
 
   // Service Data
   const [serviceName, setServiceName] = useState("");
@@ -114,6 +117,8 @@ export default function OnboardingWizard() {
           setBusinessName(data.name || "");
           setCategory(data.category || "");
           setAddress(data.address || "");
+          setLat(data.lat || null);
+          setLng(data.lng || null);
         }
       } catch (err) {
         // Business not found yet
@@ -154,7 +159,8 @@ export default function OnboardingWizard() {
       if (step === 1) {
         // Step 2: Location and Phone
         if (!address.trim()) throw new Error("Please enter an address");
-        await supabase.from("businesses").update({ address }).eq("id", businessId);
+        if (lat === null || lng === null) throw new Error("Please select a valid address from the dropdown suggestions");
+        await supabase.from("businesses").update({ address, lat, lng }).eq("id", businessId);
       }
 
       if (step === 2) {
@@ -271,13 +277,15 @@ export default function OnboardingWizard() {
       subtitle: "Where can customers find you?",
       content: (
         <div className="space-y-4 w-full">
-          <Input
-            id="address"
-            label={t("extra.t183")}
-            icon={MapPin}
-            placeholder={t("extra.t58")}
+          <AddressAutocompleteInput
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(val, newLat, newLng) => {
+              setAddress(val);
+              setLat(newLat);
+              setLng(newLng);
+            }}
+            placeholder={t("extra.t58")}
+            icon={MapPin}
           />
         </div>
       )

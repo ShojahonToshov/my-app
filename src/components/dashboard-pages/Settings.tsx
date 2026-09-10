@@ -9,6 +9,7 @@ import {
   ChevronDown, CheckCircle2, ShieldAlert, Save, ShieldCheck, Globe, Link, Send, MessageCircle, Music
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
+import AddressAutocompleteInput from "@/components/Onboarding/AddressAutocompleteInput";
 
 const Instagram: React.FC<{ className?: string }> = ({ className }) => (
   <svg
@@ -170,7 +171,7 @@ export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
 
   // Real state data for tab views
-  const [venueProfile, setVenueProfile] = useState<{name: string; phone: string; address: string; description: string; socialLinks: {platform: string; value: string}[]}>({ name: '', phone: '', address: '', description: '', socialLinks: [] });
+  const [venueProfile, setVenueProfile] = useState<{name: string; phone: string; address: string; lat: number | null; lng: number | null; description: string; socialLinks: {platform: string; value: string}[]}>({ name: '', phone: '', address: '', lat: null, lng: null, description: '', socialLinks: [] });
   const [policies, setPolicies] = useState({ cancelWindow: "12 hours before (Recommended)", requireCardForLowKarma: true, karmaThreshold: "80% (Recommended)", autoBlacklist: false });
   const [services, setServices] = useState<any[]>([]);
   const [team, setTeam] = useState<any[]>([]);
@@ -207,6 +208,8 @@ export default function Settings() {
           name: business.name || '',
           phone: businessPhone,
           address: business.address || '',
+          lat: business.lat || null,
+          lng: business.lng || null,
           description: business.description || '',
           socialLinks: initialSocialLinks
         });
@@ -274,6 +277,8 @@ export default function Settings() {
         name: venueProfile.name,
         phone: venueProfile.phone,
         address: venueProfile.address,
+        lat: venueProfile.lat,
+        lng: venueProfile.lng,
         description: venueProfile.description,
         social_links: venueProfile.socialLinks
       }).eq('id', businessId);
@@ -543,10 +548,17 @@ export default function Settings() {
 
                     <div>
                       <label htmlFor="venue-address" className="block text-sm font-medium text-[#121415] mb-2">{t("extra.t9")}</label>
-                      <div className="relative">
-                        <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B9194]" />
-                        <input id="venue-address" name="venue-address" type="text" value={venueProfile.address} onChange={(e) => setVenueProfile({...venueProfile, address: e.target.value})} className="w-full pl-12 pr-4 py-3 bg-[#F5F5F4] border border-[#DCDCDA] rounded-xl text-[#121415] font-medium focus:bg-white focus:border-[#121415] focus:ring-2 focus:ring-[#121415]/10 outline-none transition-all placeholder:text-[#8B9194]" placeholder={t("extra.t10")} />
-                      </div>
+                      <AddressAutocompleteInput
+                        value={venueProfile.address}
+                        onChange={(val, newLat, newLng) => setVenueProfile({
+                          ...venueProfile,
+                          address: val,
+                          lat: newLat,
+                          lng: newLng
+                        })}
+                        placeholder={t("extra.t10")}
+                        icon={MapPin}
+                      />
                     </div>
                   </div>
 

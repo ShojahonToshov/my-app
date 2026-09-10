@@ -17,7 +17,7 @@ export default async function SearchPage() {
     category: b.category ?? "General",
     rating: b.rating ?? 5,
     reviews: b.reviews_count ?? 0,
-    coordinates: b.coordinates ?? { x: 0, y: 0 },
+    coordinates: (b.lat != null && b.lng != null) ? [b.lat, b.lng] : { x: 0, y: 0 },
     address: b.address ?? "",
     distance: "1 km",
     image: b.image_url ?? "",
