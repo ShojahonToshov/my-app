@@ -44,6 +44,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMobileNotifications, setShowMobileNotifications] = useState(false);
   
@@ -330,6 +331,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <button
             type="button"
+            onClick={() => setMobileMenuOpen(true)}
             className="p-2 bg-white text-[#121415] rounded-xl border border-[#DCDCDA] hover:bg-[#F5F5F4] transition-colors ml-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
           >
             <Menu className="w-5 h-5" />
@@ -337,50 +339,73 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </div>
 
-      {/* MOBILE MENU (hidden by default via 'hidden' class) */}
-      <div className="hidden md:hidden fixed inset-0 z-50 flex">
-        <div className="absolute inset-0 bg-[#121415]/40 backdrop-blur-sm animate-in fade-in"></div>
-        <aside className="relative w-72 max-w-[80vw] bg-[#F5F5F4] h-full flex flex-col shadow-2xl animate-in slide-in-from-left duration-300">
-          <div className="h-16 flex items-center justify-between px-6 border-b border-[#DCDCDA]">
-            <span className="text-xl font-medium text-[#121415] tracking-tight">{t("extra.t33")}</span>
-            <button
-              type="button"
-              className="p-2 bg-[#ECECEA] text-[#4A4E51] hover:text-[#121415] rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
+      {/* MOBILE MENU */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <div className="md:hidden fixed inset-0 z-[9999] flex">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute inset-0 bg-[#121415]/40 backdrop-blur-sm"
+              onClick={() => setMobileMenuOpen(false)}
+            />
+            <motion.aside 
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="relative w-72 max-w-[80vw] bg-[#F5F5F4] h-full flex flex-col shadow-2xl"
             >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-          <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-            <Link href="/dashboard" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
-              <LayoutDashboard className="w-5 h-5" />{t("extra.t118")}</Link>
-            <Link href="/dashboard/schedule" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/schedule') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
-              <Calendar className="w-5 h-5" />{t("extra.t125")}</Link>
-            <Link href="/dashboard/customers" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/customers') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
-              <Users className="w-5 h-5" />{t("dashboard.customers")}</Link>
-            <Link href="/dashboard/analytics" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/analytics') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
-              <BarChart3 className="w-5 h-5" />{t("dashboard.analytics")}</Link>
-            <Link href="/dashboard/settings" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/settings') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
-              <Settings className="w-5 h-5" />{t("dashboard.settings")}</Link>
-
-          </nav>
-          <div className="p-4 border-t border-[#DCDCDA] flex flex-col gap-2">
-            <Link href="/dashboard/profile" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-left hover:bg-[#ECECEA] group">
-              <Avatar
-                name={displayName}
-                src={avatarUrl || null}
-                size="sm"
-                className="shrink-0 group-hover:scale-105 transition-transform"
-              />
-              <div className="flex flex-col min-w-0">
-                <span className="font-medium text-sm text-[#121415] truncate">{displayName}</span>
-                <span className="text-xs text-[#4A4E51] truncate mt-0.5">{t("extra.t34")}</span>
+              <div className="h-16 flex items-center justify-between px-6 border-b border-[#DCDCDA]">
+                <span className="text-xl font-medium text-[#121415] tracking-tight">{t("extra.t33")}</span>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 bg-[#ECECEA] text-[#4A4E51] hover:text-[#121415] rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-            </Link>
-            <button type="button" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[#4A4E51] hover:text-[#dc2626] hover:bg-white font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] active:scale-95">
-              <LogOut className="w-5 h-5" />{t("dashboard.logout")}</button>
+              <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+                <Link onClick={() => setMobileMenuOpen(false)} href="/dashboard" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard') && pathname === '/dashboard' ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
+                  <LayoutDashboard className="w-5 h-5" />{t("extra.t118")}
+                </Link>
+                <Link onClick={() => setMobileMenuOpen(false)} href="/dashboard/schedule" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/schedule') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
+                  <Calendar className="w-5 h-5" />{t("extra.t125")}
+                </Link>
+                <Link onClick={() => setMobileMenuOpen(false)} href="/dashboard/customers" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/customers') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
+                  <Users className="w-5 h-5" />{t("dashboard.customers")}
+                </Link>
+                <Link onClick={() => setMobileMenuOpen(false)} href="/dashboard/analytics" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/analytics') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
+                  <BarChart3 className="w-5 h-5" />{t("dashboard.analytics")}
+                </Link>
+                <Link onClick={() => setMobileMenuOpen(false)} href="/dashboard/settings" className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-95 font-medium border border-transparent ${isActive('/dashboard/settings') ? 'bg-[#121415] text-white shadow-md' : 'text-[#4A4E51] hover:text-[#121415] hover:bg-[#ECECEA]'}`}>
+                  <Settings className="w-5 h-5" />{t("dashboard.settings")}
+                </Link>
+              </nav>
+              <div className="p-4 border-t border-[#DCDCDA] flex flex-col gap-2">
+                <Link onClick={() => setMobileMenuOpen(false)} href="/dashboard/profile" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#121415] active:scale-[0.98] border border-transparent text-left hover:bg-[#ECECEA] group">
+                  <Avatar
+                    name={displayName}
+                    src={avatarUrl || null}
+                    size="sm"
+                    className="shrink-0 group-hover:scale-105 transition-transform"
+                  />
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-medium text-sm text-[#121415] truncate">{displayName}</span>
+                    <span className="text-xs text-[#4A4E51] truncate mt-0.5">{t("extra.t34")}</span>
+                  </div>
+                </Link>
+                <button type="button" className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[#4A4E51] hover:text-[#dc2626] hover:bg-white font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] active:scale-95">
+                  <LogOut className="w-5 h-5" />{t("dashboard.logout")}
+                </button>
+              </div>
+            </motion.aside>
           </div>
-        </aside>
-      </div>
+        )}
+      </AnimatePresence>
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col h-full overflow-y-auto relative md:pt-0 pt-16 bg-[#ECECEA]">

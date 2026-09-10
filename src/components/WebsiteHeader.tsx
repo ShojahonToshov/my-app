@@ -79,6 +79,56 @@ export function WebsiteHeader() {
           </button>
         </div>
       </nav>
+      
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-24 inset-x-4 bg-[#F3F4F4]/95 backdrop-blur-3xl border border-white/60 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 md:hidden pointer-events-auto z-50"
+          >
+            <div className="flex flex-col gap-2">
+              {[
+                { id: "platform", label: t("extra.t426") },
+                { id: "faq", label: "FAQ" },
+                { id: "cta", label: "Get Started" },
+              ].map((tab) => (
+                <a
+                  key={tab.id}
+                  href={`#${tab.id}`}
+                  onClick={() => {
+                    setActiveSection(tab.id);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="px-4 py-3 text-[16px] font-bold rounded-2xl text-[#25282B] hover:bg-white hover:text-[#0B0C0D] transition-colors"
+                >
+                  {tab.label}
+                </a>
+              ))}
+            </div>
+            <div className="h-px w-full bg-[#D8DADC]" />
+            <div className="flex flex-col gap-3 mt-2">
+              <a 
+                href="/designlogin" 
+                className="w-full py-4 text-[15px] font-bold tracking-wide text-[#0B0C0D] bg-white border border-[#8D9195]/20 text-center rounded-2xl shadow-sm"
+              >
+                {t("extra.t106")}
+              </a>
+              <button 
+                onClick={() => {
+                  setRoleModalOpen(true);
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full py-4 bg-[#151719] text-white text-[15px] font-bold tracking-wide rounded-2xl shadow-lg"
+              >
+                {t("extra.t130")}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
     </>
   );

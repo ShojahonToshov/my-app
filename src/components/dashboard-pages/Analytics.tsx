@@ -146,7 +146,7 @@ export default function Analytics() {
   }, [analyticsData, activeTab]);
 
   return (
-    <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white">
+    <div className="flex h-full bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white">
       <div className="flex-1 flex flex-col overflow-hidden relative">
         
         {/* HEADER */}

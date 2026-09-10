@@ -191,7 +191,7 @@ export default function Customers() {
   };
 
   return (
-    <div className="flex h-[100dvh] bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white relative">
+    <div className="flex h-full bg-[#ECECEA] font-sans text-[#121415] selection:bg-[#8A2532] selection:text-white relative">
       <div className="flex-1 flex flex-col overflow-hidden">
         
         {/* HEADER */}
