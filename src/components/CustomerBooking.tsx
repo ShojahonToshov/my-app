@@ -25,11 +25,16 @@ import {
   Map,
   Send,
   MessageCircle,
-  Music
+  Music,
+  QrCode,
+  Download,
+  Copy,
+  X
 } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { DynamicMap } from "@/components/map";
+import { QRCodeCanvas } from 'qrcode.react';
 
 const Instagram: React.FC<{ className?: string }> = ({ className }) => (
   <svg
@@ -302,6 +307,36 @@ export default function CustomerBooking() {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
   const [bookedTimes, setBookedTimes] = useState<string[]>([]);
+
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [venueUrl, setVenueUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setVenueUrl(window.location.href);
+    }
+  }, [venueId]);
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(venueUrl);
+    toast.success(t("extra.t366") || "Link copied to clipboard!");
+  };
+
+  const handleDownloadQR = () => {
+    const canvas = document.getElementById('venue-qr-code') as HTMLCanvasElement;
+    if (canvas) {
+      const pngUrl = canvas
+        .toDataURL("image/png")
+        .replace("image/png", "image/octet-stream");
+      let downloadLink = document.createElement("a");
+      downloadLink.href = pngUrl;
+      downloadLink.download = `${venueData.name.replace(/\s+/g, '_')}_QR.png`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      toast.success(t("extra.t367") || "QR code downloaded successfully!");
+    }
+  };
 
   useEffect(() => {
     async function fetchBookedTimes() {
@@ -945,8 +980,17 @@ export default function CustomerBooking() {
               className="bg-white p-6 md:p-10 rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] mb-8 space-y-10"
             >
               <section>
-                <h2 className="text-xl font-semibold text-[#121415] mb-4 tracking-tight">
-                  {t("extra.t12")}</h2>
+                <div className="flex items-center justify-between mb-4 gap-4">
+                  <h2 className="text-xl font-semibold text-[#121415] tracking-tight">
+                    {t("extra.t12")}</h2>
+                  <button
+                    onClick={() => setShowQRModal(true)}
+                    className="flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-[#F5F5F4] rounded-lg transition-colors text-sm font-medium text-[#121415] border border-[#DCDCDA] shadow-sm active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-[#121415]"
+                  >
+                    <QrCode className="w-4 h-4 shrink-0" />
+                    <span className="whitespace-nowrap">QR Code</span>
+                  </button>
+                </div>
                 <p className="text-[#4A4E51] font-medium leading-relaxed text-sm md:text-base whitespace-pre-wrap">
                   {venueData.about.description}
                 </p>
@@ -1125,6 +1169,80 @@ export default function CustomerBooking() {
           )}
         </AnimatePresence>
       </motion.div>
+
+      {/* QR Code Modal */}
+      <AnimatePresence>
+        {showQRModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121415]/40 backdrop-blur-sm"
+            onClick={() => setShowQRModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl p-6 md:p-8 shadow-2xl w-full max-w-sm relative flex flex-col items-center border border-[#DCDCDA]"
+            >
+              <button
+                onClick={() => setShowQRModal(false)}
+                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-[#F5F5F4] text-[#4A4E51] hover:bg-[#E5E5E4] hover:text-[#121415] transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="w-12 h-12 rounded-full bg-[#F5F5F4] flex items-center justify-center mb-4 border border-[#DCDCDA]">
+                <QrCode className="w-6 h-6 text-[#121415]" />
+              </div>
+              
+              <h3 className="text-xl font-semibold text-[#121415] text-center mb-1 tracking-tight px-6">
+                {venueData.name}
+              </h3>
+              <p className="text-sm text-[#4A4E51] text-center mb-8 font-medium">
+                {t("extra.t368") || "Scan to book an appointment"}
+              </p>
+
+              <div className="bg-white p-4 rounded-2xl shadow-sm border border-[#DCDCDA] mb-8">
+                {venueUrl && (
+                  <QRCodeCanvas
+                    id="venue-qr-code"
+                    value={venueUrl}
+                    size={200}
+                    bgColor={"#ffffff"}
+                    fgColor={"#121415"}
+                    level={"H"}
+                    includeMargin={false}
+                  />
+                )}
+              </div>
+
+              <div className="flex w-full gap-3">
+                <Button
+                  onClick={handleCopyLink}
+                  variant="secondary"
+                  shape="rounded"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 border border-[#DCDCDA]"
+                >
+                  <Copy className="w-4 h-4" />
+                  <span className="text-sm">{t("extra.t369") || "Copy Link"}</span>
+                </Button>
+                <Button
+                  onClick={handleDownloadQR}
+                  variant="primary"
+                  shape="rounded"
+                  className="flex-1 flex items-center justify-center gap-2 py-3"
+                >
+                  <Download className="w-4 h-4" />
+                  <span className="text-sm">{t("extra.t370") || "Save QR"}</span>
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Sticky Mobile CTA */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-xl border-t border-[#DCDCDA] z-50">

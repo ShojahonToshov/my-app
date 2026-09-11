@@ -1,7 +1,6 @@
-const CACHE_NAME = 'elara-pwa-cache-v1';
+const CACHE_NAME = 'elara-pwa-cache-v2';
 
 const PRECACHE_ASSETS = [
-  '/',
   '/icon-192.png',
   '/icon-512.png',
 ];
@@ -50,9 +49,10 @@ self.addEventListener('fetch', (event) => {
           });
         }
         return networkResponse;
-      }).catch(() => {
+      }).catch((error) => {
         // Fallback for failed network requests (e.g., offline)
-        // In a real app, you might want to return a custom offline page here
+        console.error('Fetch failed:', error);
+        return new Response('Network error', { status: 408, headers: { 'Content-Type': 'text/plain' } });
       });
     })
   );
